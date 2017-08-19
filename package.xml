@@ -46,6 +46,7 @@
   <exec_depend>roscpp</exec_depend>
   <exec_depend>rospy</exec_depend>
   <exec_depend>std_msgs</exec_depend>
+  <depend>rviz_camera_stream</depend>
   <depend>access_teleop_msgs</depend>
 
 
