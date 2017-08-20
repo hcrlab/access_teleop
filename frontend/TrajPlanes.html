@@ -48,7 +48,7 @@
       host : 'localhost',
       width : rightForearmWidth,
       height : rightForearmWidth,
-      topic : '/r_forearm_cam/image_raw'
+      topic : '/rviz1/camera1/image'
     });
 
     // Create the head viewer.
@@ -57,7 +57,7 @@
       host : 'localhost',
       width : headWidth,
       height : headWidth,
-      topic : '/wide_stereo/left/image_raw'
+      topic : '/rviz1/camera2/image'
     });
 
     // Create the left forearm viewer.
@@ -66,7 +66,7 @@
       host : 'localhost',
       width : leftForearmWidth,
       height : leftForearmWidth,
-      topic : '/l_forearm_cam/image_raw'
+      topic : '/head_camera/rgb/image_raw'
     });
 
 
