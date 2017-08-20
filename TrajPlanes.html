@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<link rel="stylesheet" type="text/css"
+  href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css" />
+<link rel="stylesheet" href="style.css">
+<script src="http://cdn.robotwebtools.org/threejs/current/three.js"></script>
+<script src="http://cdn.robotwebtools.org/EventEmitter2/current/eventemitter2.min.js"></script>
+
+<script src="http://cdn.robotwebtools.org/roslibjs/current/roslib.min.js"></script>
+<script src="http://cdn.robotwebtools.org/ros3djs/current/ros3d.min.js"></script>
+
+<script src="http://cdn.robotwebtools.org/mjpegcanvasjs/current/mjpegcanvas.js"></script>
+<script src="http://cdn.robotwebtools.org/keyboardteleopjs/current/keyboardteleop.js"></script>
+
+<script>
+  /**
+   * Setup all visualization elements when the page is loaded. 
+   */
+
+  function init() {
+
+   var ros = new ROSLIB.Ros({
+      url : 'ws://localhost:9090'
+    });
+
+    // Dynamic Canvas Sizes
+    var elmntmjpegRightForearm = document.getElementById("mjpegRightForearm");
+    var rightForearmWidth=elmntmjpegRightForearm.clientWidth;
+    var rightForearmHeight=elmntmjpegRightForearm.clientHeight;
+
+    var elmntmjpegHead = document.getElementById("mjpegHead");
+    var headWidth=elmntmjpegHead.clientWidth;
+    var headHeight=elmntmjpegHead.clientHeight;
+
+    var elmntmjpegLeftForearm = document.getElementById("mjpegLeftForearm");
+    var leftForearmWidth=elmntmjpegLeftForearm.clientWidth;
+    var leftForearmHeight=elmntmjpegLeftForearm.clientHeight;
+
+    // Create the right forearm viewer.
+    var forearmRViewer = new MJPEGCANVAS.Viewer({
+      divID : 'mjpegRightForearm',
+      host : 'localhost',
+      width : rightForearmWidth,
+      height : rightForearmWidth,
+      topic : '/r_forearm_cam/image_raw'
+    });
+
+    // Create the head viewer.
+    var headViewer = new MJPEGCANVAS.Viewer({
+      divID : 'mjpegHead',
+      host : 'localhost',
+      width : headWidth,
+      height : headWidth,
+      topic : '/wide_stereo/left/image_raw'
+    });
+
+    // Create the left forearm viewer.
+    var forearmLViewer = new MJPEGCANVAS.Viewer({
+      divID : 'mjpegLeftForearm',
+      host : 'localhost',
+      width : leftForearmWidth,
+      height : leftForearmWidth,
+      topic : '/l_forearm_cam/image_raw'
+    });
+
+
+    init_flag = false;
+  }
+
+
+
+</script>
+
+
+<title>Trajectory Plane Robot GUI</title>
+</head>
+
+<body onload="init()">
+
+<div class="container-fluid">
+  <div class="row">
+    <div id="mjpegRightForearm" class="col-sm-4"><h1>Right</h1></div>
+    <div id="mjpegHead" class="col-sm-4"><h1>Head</h1></div>
+    <div id="mjpegLeftForearm" class="col-sm-4"><h1>Left</h1></div>
+  </div>
+</div>
+
+</body>
+</html>

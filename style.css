@@ -1,0 +1,20 @@
+body {
+    background-color: white;
+}
+
+canvas{
+	background-color: red;
+	margin-left: -15px;
+}
+
+#mjpegRightForearm{
+	background-color: red;
+}
+
+#mjpegHead{
+	background-color: green;
+}
+
+#mjpegLeftForearm{
+	background-color: blue;
+}
