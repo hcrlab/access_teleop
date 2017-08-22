@@ -9,14 +9,4 @@
 
   <node pkg="access_teleop" name="gripper_teleop" type="access_gripper_teleop.py" />
 
-  <group ns="camera1">
-  <node pkg="tf" type="static_transform_publisher" name="camera_broadcaster"
-      args="0.0 0.0 2.5 0 0 3.14159 odom camera1 10" />
-  </group>
-
-  <group ns="camera2">
-  <node pkg="tf" type="static_transform_publisher" name="camera_broadcaster"
-      args="0.0 -1.5 0 0 0 -1.57 odom camera2 10" />
-  </group>
-
 </launch>
