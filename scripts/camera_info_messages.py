@@ -42,21 +42,21 @@ camera2 = {header: {seq: 0, stamp: {secs: 0, nsecs: 0}, frame_id: 'camera2'},
       binning_x: 0, binning_y: 0,
       roi: {x_offset: 0, y_offset: 0, height: 720, width: 1280, do_rectify: false}}
 """
-camera2.header.seq = 1
+camera2.header.seq = 0
 camera2.header.stamp.secs = 0
 camera2.header.stamp.nsecs = 0
 camera2.header.frame_id = 'camera2'
-camera2.height = 720
-camera2.width = 1280
+camera2.height = 480
+camera2.width = 640
 camera2.distortion_model = 'plumb_bob'
 camera2.D = [0]
-camera2.K = [300.0, 0.0, 640, 0.0, 300.0, 360.0, 0.0, 0.0, 1.0]
+camera2.K = [500.0, 0.0, 320, 0.0, 500.0, 240.0, 0.0, 0.0, 1.0]
 camera2.R = [1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0]
-camera2.P = [300.0, 0.0, 640, 0.0, 0.0, 300, 360, 0.0, 0.0, 0.0, 1.0, 0.0]
+camera2.P = [500.0, 0.0, 320, 0.0, 0.0, 500, 240, 0.0, 0.0, 0.0, 1.0, 0.0]
 camera2.binning_x = 0
 camera2.binning_y = 0
 camera2.roi.x_offset = 0
 camera2.roi.y_offset = 0
-camera2.roi.height = 720
-camera2.roi.width = 1280
+camera2.roi.height = 480
+camera2.roi.width = 640
 camera2.roi.do_rectify = False
