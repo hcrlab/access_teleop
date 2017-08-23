@@ -3,54 +3,33 @@
  */
 
 /**
- * Setup all visualization elements when the page is loaded.
+ * An App self adds 3 camera streams, and the controlers to move the robot
  */
-
-var script = document.createElement('script');
-script.src = 'http://code.jquery.com/jquery-1.11.0.min.js';
-script.type = 'text/javascript';
-document.getElementsByTagName('head')[0].appendChild(script);
-
-
-function showCoords(evt){
-    if(prevX && prevY){
-        xMid = document.getElementById("camera1").clientWidth / 2;
-        yMid = document.getElementById("camera2").clientHeight / 2;
-        console.log("The delta x is " + (evt.offsetX - prevX) + " and the delta y is " + (evt.offsetY - prevY));
-        console.log("The x coord is " + (evt.offsetX - xMid) + " and the y coord is " + (evt.offsetY - yMid));
-    }
-    prevX = evt.offsetX;
-    prevY = evt.offsetY;
-}
-
-$(document).ready(function () {
-    $('body').click(function (ev) {
-        mouseX = ev.pageX;
-        mouseY = ev.pageY
-        var color = '#1daeae';
-        var size = '2px';
-        $("body").append($('<div></div>')
-            .css('position', 'absolute')
-            .css('top', mouseY + 'px')
-            .css('left', mouseX + 'px')
-            .css('width', size)
-            .css('height', size)
-            .css('background-color', color));
-    });
-});
 
 App = function () {
 
-    var that = this;
+    // Set self to be this so that you can add variables to this inside a callback
+    var self = this;
 
-    var ros = new ROSLIB.Ros({
+    // Set up ros
+    this.ros = new ROSLIB.Ros({
         url : 'ws://localhost:9090'
     });
 
-    ros.on('connection', function () {
-        that.arm = new Arm(ros);
-        //that.head = new Head(ros);
-    })
+
+    this.ros.on('error', function(error) {
+        console.log('Error connecting to websocket server.');
+    });
+
+    self.arm = new Arm(this.ros);
+    //self.head = new Head(ros);
+    //self.gripper = new Gripper(ros);
+
+
+
+
+    // Adds 3 canvas image streams
+    // --------------------------------------------------------------------------------
 
     // Dynamic Canvas Sizes
     var elmntmjpegRightForearm = document.getElementById("camera1");
@@ -95,10 +74,10 @@ App = function () {
         topic : '/head_camera/rgb/image_raw'
     });
 
+    // ------------------------------------------------------------------------------------------
+
     init_flag = false;
 };
-function init() {
-    var app = new App();
-}
+
 
 
