@@ -18,85 +18,18 @@
 <script src="http://cdn.robotwebtools.org/mjpegcanvasjs/current/mjpegcanvas.js"></script>
 <script src="http://cdn.robotwebtools.org/keyboardteleopjs/current/keyboardteleop.js"></script>
 
-<script>
-  /**
-   * Setup all visualization elements when the page is loaded. 
-   */
-
-  function showCoords(evt){
-      console.log(
-          "clientX value: " + evt.clientX + "\n" +
-          "clientY value: " + evt.clientY + "\n"
-      );
-  }
-
-  function init() {
-
-   var ros = new ROSLIB.Ros({
-      url : 'ws://localhost:9090'
-    });
-
-    // Dynamic Canvas Sizes
-    var elmntmjpegRightForearm = document.getElementById("mjpegCamera1");
-    var rightForearmWidth=elmntmjpegRightForearm.clientWidth;
-    var rightForearmHeight=elmntmjpegRightForearm.clientHeight;
-
-
-    var elmntmjpegHead = document.getElementById("mjpegCamera2");
-    var headWidth=elmntmjpegHead.clientWidth;
-    var headHeight=elmntmjpegHead.clientHeight;
-    var camera2Height = "480";
-    var camera2Width = "640";
-
-    var elmntmjpegLeftForearm = document.getElementById("mjpegLeftForearm");
-    var leftForearmWidth=elmntmjpegLeftForearm.clientWidth;
-    var leftForearmHeight=elmntmjpegLeftForearm.clientHeight;
-
-    // Create the right forearm viewer.
-    var forearmRViewer = new MJPEGCANVAS.Viewer({
-      divID : 'mjpegCamera1',
-      host : 'localhost',
-      width : rightForearmWidth,
-      height : rightForearmHeight,
-      topic : '/rviz1/camera1/image'
-    });
-
-    // Create the head viewer.
-    var headViewer = new MJPEGCANVAS.Viewer({
-      divID : 'mjpegCamera2',
-      host : 'localhost',
-      width : headWidth,
-      height : headHeight,
-      topic : '/rviz1/camera2/image'
-    });
-
-    // Create the left forearm viewer.
-    var forearmLViewer = new MJPEGCANVAS.Viewer({
-      divID : 'mjpegLeftForearm',
-      host : 'localhost',
-      width : leftForearmWidth,
-      height : leftForearmWidth,
-      topic : '/head_camera/rgb/image_raw'
-    });
-
-
-    init_flag = false;
-  }
-
-
-
-</script>
-
+<script src="app.js"></script>
+<script src="arm.js"></script>
 
 <title>Trajectory Plane Robot GUI</title>
 </head>
 
-<body onload="init()" onmousedown="showCoords(event)">
+<body onload="init()">
 
 <div class="container-fluid">
   <div class="row">
-    <div id="mjpegCamera1" class="col-sm-4"><h1>Right</h1></div>
-    <div id="mjpegCamera2" class="col-sm-4"><h1>Head</h1></div>
+    <div id="camera1" class="col-sm-4, js_arm_div"><h1>Right</h1></div>
+    <div id="camera2" class="col-sm-4 js_arm_div"><h1>Head</h1></div>
     <div id="mjpegLeftForearm" class="col-sm-4"><h1>Left</h1></div>
   </div>
 </div>

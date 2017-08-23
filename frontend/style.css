@@ -7,13 +7,13 @@ canvas{
 	margin-left: -15px;
 }
 
-#mjpegCamera1{
+#camera1{
 	background-color: red;
 	height: 480px;
 	width: 640px;
 }
 
-#mjpegCamera2{
+#camera2{
 	background-color: green;
 	height: 480px;
 	width: 640px;
@@ -23,4 +23,5 @@ canvas{
 	background-color: blue;
 	height: 300px;
 	width: 300px;
+
 }
