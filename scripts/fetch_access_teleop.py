@@ -129,7 +129,7 @@ class MoveByDelta(object):
 
     def callback(self, data):
         ps = self._move_group.get_current_pose()
-        x_distance, y_distance = dpx_to_distance(data.delta_x, data.delta_y, data.camera_name, ps, true)
+        x_distance, y_distance = dpx_to_distance(data.delta_x, data.delta_y, data.camera_name, ps, True)
         ps2 = modified_stamped_pose(x_distance, y_distance, data.camera_name, ps)
         error = self._arm.move_to_pose(ps2)
         if error is not None:
@@ -149,7 +149,7 @@ class MoveByAbsolute(object):
     def absolute_callback(self, data):
         print("We got the pixel with x of " + str(data.pixel_x) + " and y of " + str(data.pixel_y))
         ps = self._move_group.get_current_pose()
-        x_distance, y_distance = dpx_to_distance(data.pixel_x, data.pixel_y, data.camera_name, ps, True)
+        x_distance, y_distance = dpx_to_distance(data.pixel_x, data.pixel_y, data.camera_name, ps, False)
         add_marker(x_distance, y_distance, ps, data.camera_name, self)
 
 

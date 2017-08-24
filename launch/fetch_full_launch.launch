@@ -15,6 +15,6 @@
       args="-d $(find access_teleop)/config/access_teleop_config.rviz"
       if="$(arg use_rviz)" />
 	
-  <node pkg="access_teleop" output="screen" name="gripper_teleop" type="access_gripper_teleop.py" />
+  <node pkg="access_teleop" output="screen" name="gripper_teleop" type="fetch_access_teleop.py" />
 
 </launch>
