@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css"
+          href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css" />
+    <link rel="stylesheet" href="style.css">
+    <script src="http://cdn.robotwebtools.org/threejs/current/three.js"></script>
+    <script src="http://cdn.robotwebtools.org/EventEmitter2/current/eventemitter2.min.js"></script>
+
+    <script src="http://cdn.robotwebtools.org/roslibjs/current/roslib.min.js"></script>
+    <script src="http://cdn.robotwebtools.org/ros3djs/current/ros3d.min.js"></script>
+
+    <script src="http://cdn.robotwebtools.org/mjpegcanvasjs/current/mjpegcanvas.js"></script>
+    <script src="http://cdn.robotwebtools.org/keyboardteleopjs/current/keyboardteleop.js"></script>
+
+    <script src="./bower_components/nipplejs/dist/nipplejs.min.js"></script>
+
+    <script>
+        var dynamic = nipplejs.create({
+            zone: document.getElementById('camera1'),
+            color: 'blue'
+        });
+    </script>
+
+    <script src="arm.js"></script>
+    <script src="app.js"></script>
+    <script src="dragToMove.js"></script>
+
+    <title>Trajectory Plane Robot GUI</title>
+</head>
+
+<body onload="init()">
+
+<div class="container-fluid">
+    <div class="row">
+        <div id="camera1" class="col-sm-4, js_arm_div"><h1>Right</h1></div>
+        <div id="camera2" class="col-sm-4 js_arm_div"><h1>Head</h1></div>
+        <div id="mjpegLeftForearm" class="col-sm-4"><h1>Left</h1></div>
+    </div>
+</div>
+
+</body>
+</html>
