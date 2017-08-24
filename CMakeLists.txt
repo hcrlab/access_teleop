@@ -13,6 +13,7 @@ find_package(catkin REQUIRED COMPONENTS
   std_msgs
   access_teleop_msgs
   rviz_camera_stream
+  fetch_api
 )
 
 ## System dependencies are found with CMake's conventions

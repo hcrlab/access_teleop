@@ -48,6 +48,7 @@
   <exec_depend>std_msgs</exec_depend>
   <depend>rviz_camera_stream</depend>
   <depend>access_teleop_msgs</depend>
+  <depend>fetch_api</depend>
 
 
   <!-- The export tag contains other, unspecified, tags -->
