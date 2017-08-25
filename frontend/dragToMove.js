@@ -2,28 +2,13 @@
  * Created by timadamson on 8/23/17.
  */
 
-// Public variables
-    var downX;
-    var downY;
-
 // Adds jQuery to the html
 var script = document.createElement('script');
 script.src = 'http://code.jquery.com/jquery-1.11.0.min.js';
 script.type = 'text/javascript';
 document.getElementsByTagName('head')[0].appendChild(script);
 
-// Prints to the console the coords of the user click
-function showCoords(evt){
-    if(prevX && prevY){
-        xMid = document.getElementById("camera1").clientWidth / 2;
-        yMid = document.getElementById("camera2").clientHeight / 2;
-        console.log("The delta x is " + (evt.offsetX - prevX) + " and the delta y is " + (evt.offsetY - prevY));
-        console.log("The x coord is " + (evt.offsetX - xMid) + " and the y coord is " + (evt.offsetY - yMid));
-    }
-    prevX = evt.offsetX;
-    prevY = evt.offsetY;
-}
-
+/*
 // Adds a colored div when body is clicked
 $(document).ready(function () {
     $('body').click(function (ev) {
@@ -40,7 +25,11 @@ $(document).ready(function () {
             .css('background-color', color));
     });
 });
+*/
 
+// Public variables
+var downX;
+var downY;
 var cmdVelTopic;
 var twist;
 
@@ -118,8 +107,8 @@ function pubMessage() {
     var angularZ = 0.0;
 
     // get values from text input fields. Note for simplicity we are not validating.
-    linearX = 0 + Number(document.getElementById('linearXText').value);
-    angularZ = 0 + Number(document.getElementById('angularZText').value);
+    linearX = Number(document.getElementById('linearXText').value);
+    angularZ = Number(document.getElementById('angularZText').value);
 
     // Set the appropriate values on the message object
     twist.linear.x = linearX;
