@@ -5,8 +5,9 @@ Panels:
     Property Tree Widget:
       Expanded:
         - /Global Options1
+        - /InteractiveMarkers1
       Splitter Ratio: 0.5
-    Tree Height: 254
+    Tree Height: 335
   - Class: rviz/Selection
     Name: Selection
   - Class: rviz/Tool Properties
@@ -54,122 +55,6 @@ Visualization Manager:
       Radius: 0.1
       Reference Frame: <Fixed Frame>
       Value: true
-    - Class: rviz/TF
-      Enabled: true
-      Frame Timeout: 15
-      Frames:
-        All Enabled: true
-        base_link:
-          Value: true
-        bellows_link:
-          Value: true
-        bellows_link2:
-          Value: true
-        camera1:
-          Value: true
-        camera2:
-          Value: true
-        elbow_flex_link:
-          Value: true
-        estop_link:
-          Value: true
-        forearm_roll_link:
-          Value: true
-        gripper_link:
-          Value: true
-        head_camera_depth_frame:
-          Value: true
-        head_camera_depth_optical_frame:
-          Value: true
-        head_camera_link:
-          Value: true
-        head_camera_rgb_frame:
-          Value: true
-        head_camera_rgb_optical_frame:
-          Value: true
-        head_pan_link:
-          Value: true
-        head_tilt_link:
-          Value: true
-        l_gripper_finger_link:
-          Value: true
-        l_wheel_link:
-          Value: true
-        laser_link:
-          Value: true
-        map:
-          Value: true
-        odom:
-          Value: true
-        r_gripper_finger_link:
-          Value: true
-        r_wheel_link:
-          Value: true
-        shoulder_lift_link:
-          Value: true
-        shoulder_pan_link:
-          Value: true
-        torso_fixed_link:
-          Value: true
-        torso_lift_link:
-          Value: true
-        upperarm_roll_link:
-          Value: true
-        wrist_flex_link:
-          Value: true
-        wrist_roll_link:
-          Value: true
-      Marker Scale: 1
-      Name: TF
-      Show Arrows: true
-      Show Axes: true
-      Show Names: true
-      Tree:
-        map:
-          camera1:
-            {}
-          camera2:
-            {}
-        odom:
-          base_link:
-            estop_link:
-              {}
-            l_wheel_link:
-              {}
-            laser_link:
-              {}
-            r_wheel_link:
-              {}
-            torso_fixed_link:
-              {}
-            torso_lift_link:
-              bellows_link:
-                {}
-              bellows_link2:
-                {}
-              head_pan_link:
-                head_tilt_link:
-                  head_camera_link:
-                    head_camera_depth_frame:
-                      head_camera_depth_optical_frame:
-                        {}
-                    head_camera_rgb_frame:
-                      head_camera_rgb_optical_frame:
-                        {}
-              shoulder_pan_link:
-                shoulder_lift_link:
-                  upperarm_roll_link:
-                    elbow_flex_link:
-                      forearm_roll_link:
-                        wrist_flex_link:
-                          wrist_roll_link:
-                            gripper_link:
-                              l_gripper_finger_link:
-                                {}
-                              r_gripper_finger_link:
-                                {}
-      Update Interval: 0
-      Value: true
     - Background Color: 0; 0; 0
       Camera Info Topic: /camera1/camera_info
       Class: rviz_camera_stream/CameraPub
@@ -186,8 +71,8 @@ Visualization Manager:
         Grid: true
         Image1: true
         Image2: true
+        InteractiveMarkers: true
         RobotModel: true
-        TF: true
         Value: true
     - Class: rviz/Image
       Enabled: true
@@ -217,8 +102,8 @@ Visualization Manager:
         Grid: true
         Image1: true
         Image2: true
+        InteractiveMarkers: true
         RobotModel: true
-        TF: true
         Value: true
     - Class: rviz/Image
       Enabled: true
@@ -373,10 +258,19 @@ Visualization Manager:
       Update Interval: 0
       Value: true
       Visual Enabled: true
+    - Class: rviz/InteractiveMarkers
+      Enable Transparency: true
+      Enabled: true
+      Name: InteractiveMarkers
+      Show Axes: false
+      Show Descriptions: true
+      Show Visual Aids: false
+      Update Topic: /im_server/update
+      Value: true
   Enabled: true
   Global Options:
     Background Color: 48; 48; 90
-    Fixed Frame: odom
+    Fixed Frame: base_link
     Frame Rate: 30
   Name: root
   Tools:
@@ -397,7 +291,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 2.56141
+      Distance: 7.45654
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.06
         Stereo Focal Distance: 1
@@ -409,22 +303,22 @@ Visualization Manager:
         Z: 0
       Name: Current View
       Near Clip Distance: 0.01
-      Pitch: 0.680204
+      Pitch: 0.784796
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 1.36542
+      Yaw: 3.01042
     Saved: ~
 Window Geometry:
   Displays:
     collapsed: false
-  Height: 1003
+  Height: 1176
   Hide Left Dock: false
   Hide Right Dock: true
   Image1:
     collapsed: false
   Image2:
     collapsed: false
-  QMainWindow State: 000000ff00000000fd00000004000000000000016a00000361fc020000000efb0000001200530065006c0065006300740069006f006e00000001e10000009b0000006400fffffffb0000001e0054006f006f006c002000500072006f007000650072007400690065007302000001ed000001df00000185000000a3fb000000120056006900650077007300200054006f006f02000001df000002110000018500000122fb000000200054006f006f006c002000500072006f0070006500720074006900650073003203000002880000011d000002210000017afb000000100044006900730070006c00610079007301000000280000018d000000dd00fffffffb0000002000730065006c0065006300740069006f006e00200062007500660066006500720200000138000000aa0000023a00000294fb00000014005700690064006500530074006500720065006f02000000e6000000d2000003ee0000030bfb0000000c004b0069006e0065006300740200000186000001060000030c00000261fb0000000c00430061006d00650072006100000002d6000000160000000000000000fb0000001200430061006d0065007200610050007500620100000199000000920000000000000000fb0000001200430061006d006500720061005000750062010000022b000000c10000000000000000fb0000001200430061006d006500720061005000750062010000022b000000c10000000000000000fb0000000c0049006d006100670065003101000001bb000000ca0000001600fffffffb0000000c0049006d0061006700650032010000028b000000fe0000001600ffffff000000010000010f00000348fc0200000003fb0000001e0054006f006f006c002000500072006f00700065007200740069006500730100000041000000780000000000000000fb0000000a00560069006500770073000000004100000348000000b000fffffffb0000001200530065006c0065006300740069006f006e010000025a000000b200000000000000000000000200000490000000a9fc0100000001fb0000000a00560069006500770073030000004e00000080000002e10000019700000003000004f80000003efc0100000002fb0000000800540069006d00650100000000000004f8000002f600fffffffb0000000800540069006d00650100000000000004500000000000000000000003880000036100000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
+  QMainWindow State: 000000ff00000000fd00000004000000000000016a0000040efc020000000efb0000001200530065006c0065006300740069006f006e00000001e10000009b0000006400fffffffb0000001e0054006f006f006c002000500072006f007000650072007400690065007302000001ed000001df00000185000000a3fb000000120056006900650077007300200054006f006f02000001df000002110000018500000122fb000000200054006f006f006c002000500072006f0070006500720074006900650073003203000002880000011d000002210000017afb000000100044006900730070006c0061007900730100000028000001de000000dd00fffffffb0000002000730065006c0065006300740069006f006e00200062007500660066006500720200000138000000aa0000023a00000294fb00000014005700690064006500530074006500720065006f02000000e6000000d2000003ee0000030bfb0000000c004b0069006e0065006300740200000186000001060000030c00000261fb0000000c00430061006d00650072006100000002d6000000160000000000000000fb0000001200430061006d0065007200610050007500620100000199000000920000000000000000fb0000001200430061006d006500720061005000750062010000022b000000c10000000000000000fb0000001200430061006d006500720061005000750062010000022b000000c10000000000000000fb0000000c0049006d0061006700650031010000020c000000f20000001600fffffffb0000000c0049006d00610067006500320100000304000001320000001600ffffff000000010000010f00000348fc0200000003fb0000001e0054006f006f006c002000500072006f00700065007200740069006500730100000041000000780000000000000000fb0000000a00560069006500770073000000004100000348000000b000fffffffb0000001200530065006c0065006300740069006f006e010000025a000000b200000000000000000000000200000490000000a9fc0100000001fb0000000a00560069006500770073030000004e00000080000002e100000197000000030000073f0000003efc0100000002fb0000000800540069006d006501000000000000073f000002f600fffffffb0000000800540069006d00650100000000000004500000000000000000000005cf0000040e00000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
   Selection:
     collapsed: false
   Time:
@@ -433,6 +327,6 @@ Window Geometry:
     collapsed: false
   Views:
     collapsed: true
-  Width: 1272
-  X: 68
-  Y: 14
+  Width: 1855
+  X: 65
+  Y: 24
