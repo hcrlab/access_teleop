@@ -22,8 +22,8 @@ Arm = function (ros) {
     this.moveArmByDelta = function (deltaX, deltaY, cameraName) {
         var deltaPX = new ROSLIB.Message({
             camera_name: cameraName,
-            delta_x: deltaX,
-            delta_y: deltaY
+            delta_x: parseInt(deltaX),
+            delta_y: parseInt(deltaY)
         });
         delta.publish(deltaPX);
     };
