@@ -12,6 +12,7 @@ canvas{
 	background-color: red;
 	height: 480px;
 	width: 640px;
+	float: left;
 }
 
 #camera2{
