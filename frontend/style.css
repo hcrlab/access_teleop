@@ -10,20 +10,13 @@ canvas{
 
 #camera1{
 	background-color: red;
-	height: 480px;
-	width: 640px;
-	float: left;
 }
 
 #camera2{
 	background-color: green;
-	height: 480px;
-	width: 640px;
+
 }
 
 #mjpegLeftForearm{
 	background-color: blue;
-	height: 300px;
-	width: 300px;
-
 }

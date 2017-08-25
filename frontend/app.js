@@ -34,18 +34,26 @@ App = function () {
     // Dynamic Canvas Sizes
     var elmntmjpegRightForearm = document.getElementById("camera1");
     var rightForearmWidth=elmntmjpegRightForearm.clientWidth;
-    var rightForearmHeight=elmntmjpegRightForearm.clientHeight;
+    var rightForearmHeight=rightForearmWidth;
 
 
     var elmntmjpegHead = document.getElementById("camera2");
     var headWidth=elmntmjpegHead.clientWidth;
-    var headHeight=elmntmjpegHead.clientHeight;
-    var camera2Height = "480";
-    var camera2Width = "640";
+    var headHeight=headWidth;
+//    var camera2Height = "480";
+//    var camera2Width = "640";
 
     var elmntmjpegLeftForearm = document.getElementById("mjpegLeftForearm");
     var leftForearmWidth=elmntmjpegLeftForearm.clientWidth;
     var leftForearmHeight=elmntmjpegLeftForearm.clientHeight;
+
+    var paper1 = Snap( "#svg1" ); //use element created above
+
+
+    var x = document.createElement("CANVAS");
+    var ctx = x.getContext("2d");
+    ctx.fillStyle = "#FF0000";
+    ctx.fillRect(0, 0, 150, 100);
 
     // Create the right forearm viewer.
     var forearmRViewer = new MJPEGCANVAS.Viewer({
@@ -53,7 +61,9 @@ App = function () {
         host : 'localhost',
         width : rightForearmWidth,
         height : rightForearmHeight,
-        topic : '/rviz1/camera1/image'
+        topic : '/r_forearm_cam/image_raw',
+//        topic : '/rviz1/camera1/image'
+        overlay: x
     });
 
     // Create the head viewer.
@@ -62,7 +72,8 @@ App = function () {
         host : 'localhost',
         width : headWidth,
         height : headHeight,
-        topic : '/rviz1/camera2/image'
+        topic : '/wide_stereo/left/image_raw'
+//        topic : '/rviz1/camera2/image'
     });
 
     // Create the left forearm viewer.
@@ -71,7 +82,8 @@ App = function () {
         host : 'localhost',
         width : leftForearmWidth,
         height : leftForearmWidth,
-        topic : '/head_camera/rgb/image_raw'
+        topic : '/l_forearm_cam/image_raw'
+//        topic : '/head_camera/rgb/image_raw'
     });
 
     // ------------------------------------------------------------------------------------------
