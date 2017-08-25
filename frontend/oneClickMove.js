@@ -8,17 +8,6 @@ script.src = 'http://code.jquery.com/jquery-1.11.0.min.js';
 script.type = 'text/javascript';
 document.getElementsByTagName('head')[0].appendChild(script);
 
-// Prints to the console the coords of the user click
-function showCoords(evt){
-    if(prevX && prevY){
-        xMid = document.getElementById("camera1").clientWidth / 2;
-        yMid = document.getElementById("camera2").clientHeight / 2;
-        console.log("The delta x is " + (evt.offsetX - prevX) + " and the delta y is " + (evt.offsetY - prevY));
-        console.log("The x coord is " + (evt.offsetX - xMid) + " and the y coord is " + (evt.offsetY - yMid));
-    }
-    prevX = evt.offsetX;
-    prevY = evt.offsetY;
-}
 
 // Adds a colored div when body is clicked
 $(document).ready(function () {
@@ -40,9 +29,21 @@ $(document).ready(function () {
 function init() {
     var arm_div = document.querySelectorAll('.js_arm_div');
     this.app = new App();
+    var self = this;
 
     app.ros.on('connection', function () {
         console.log("We are connected!");
+
+        arm_div.forEach(function(element)
+        {
+            element.onmousemove = function (e) {
+                e = e || window.event;
+                var elementId = (e.target || e.srcElement).parentElement.id;
+                console.log(elementId);
+                self.app.arm.moveArmByAbsolute(e.offsetX, e.offsetY, elementId);
+            };
+
+        });
 
     });
 
