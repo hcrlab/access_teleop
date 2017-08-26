@@ -1,4 +1,7 @@
 /**
+ * Created by timadamson on 8/25/17.
+ */
+/**
  * Created by timadamson on 8/24/17.
  */
 
@@ -7,6 +10,31 @@ var downX;
 var downY;
 var cmdVelTopic;
 var twist;
+
+/*
+ Function.prototype.throttle = function (milliseconds, context) {
+ var baseFunction = this,
+ lastEventTimestamp = null,
+ limit = milliseconds;
+
+ return function () {
+ var self = context || this,
+ args = arguments,
+ now = Date.now();
+
+ if (!lastEventTimestamp || now - lastEventTimestamp >= limit) {
+ lastEventTimestamp = now;
+ baseFunction.apply(self, args);
+ }
+ };
+ };
+ */
+
+var latestPositionX;
+var latestPositionY;
+var latestTargetX;
+var latestTargetY;
+var lastInterval;
 
 function init() {
     var arm_div = document.querySelectorAll('.js_arm_div');
@@ -23,10 +51,37 @@ function init() {
 
         manager.on('added', function(evt, nipple){
             nipple.on('move', function (evt, data) {
-                var delta = data.position.x - evt.target.position.x;
-                console.log("x is : " + delta );
-                app.arm.moveArmByDelta(delta, 0 , 'camera1');
-            });
+                latestPositionX = data.position.x;
+                latestPositionY = data.position.y;
+                latestTargetX = evt.target.position.x;
+                latestTargetY = evt.target.position.y;
+                var deltaX = latestPositionX - latestTargetX;
+                var deltaY = latestPositionY - latestTargetY;
+
+
+                console.log("x is : " + deltaX + "\n" + "and y is :" + deltaY );
+                app.arm.moveArmByDelta(deltaX, deltaY , 'camera1');
+
+
+                if(lastInterval) {
+                    clearInterval(lastInterval);
+                }
+
+                lastInterval = setInterval(function () {
+                    var deltaX = latestPositionX - latestTargetX;
+                    var deltaY = latestPositionY - latestTargetY;
+
+
+                    console.log("x is : " + deltaX + "\n" + "and y is :" + deltaY );
+                    app.arm.moveArmByDelta(deltaX/2, deltaY/2 , 'camera1');
+
+                }, 1000);
+
+            }.throttle(1000));
+        }).on('removed', function (evt, nipple) {
+            if(lastInterval) {
+                clearInterval(lastInterval);
+            }
         });
 
     });

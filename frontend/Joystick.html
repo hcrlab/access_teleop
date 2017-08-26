@@ -1,13 +1,10 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8" />
+<html><head>
+    <meta charset="utf-8">
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <link rel="stylesheet" type="text/css"
-          href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css" />
+    <link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css">
     <link rel="stylesheet" href="style.css">
     <script src="http://cdn.robotwebtools.org/threejs/current/three.js"></script>
     <script src="http://cdn.robotwebtools.org/EventEmitter2/current/eventemitter2.min.js"></script>
@@ -19,7 +16,7 @@
     <script src="http://cdn.robotwebtools.org/keyboardteleopjs/current/keyboardteleop.js"></script>
 
     <script src="./bower_components/nipplejs/dist/nipplejs.min.js"></script>
-
+    <script src="./bower_components/limit.js/limit.js"></script>
 
 
     <script src="arm.js"></script>
@@ -33,12 +30,12 @@
 
 <div class="container-fluid">
     <div class="row">
-        <div id="camera1" class="col-sm-4, js_arm_div"><h1>Right</h1></div>
-        <div id="camera2" class="col-sm-4 js_arm_div"><h1>Head</h1></div>
-        <div id="mjpegLeftForearm" class="col-sm-4"><h1>Left</h1></div>
+        <div id="camera1" class="col-sm-4, js_arm_div" style="touch-action: none;"><h1>Right</h1><canvas width="640" height="480" style="background: rgb(170, 170, 170);"></canvas><div class="nipple collection_0" id="nipple_0_15" style="position: absolute; opacity: 1; display: block; z-index: 999; transition: opacity 250ms; left: 379px; top: 140px;"><div class="back" style="position: absolute; display: block; width: 100px; height: 100px; margin-left: -50px; margin-top: -50px; background: blue; opacity: 0.5; border-radius: 50%;"></div><div class="front" style="width: 50px; height: 50px; position: absolute; display: block; margin-left: -25px; margin-top: -25px; background: blue; opacity: 0.5; border-radius: 50%; transition: none; left: -40.0873px; top: 29.8833px;"></div></div></div>
+        <div id="camera2" class="col-sm-4 js_arm_div"><h1>Head</h1><canvas width="640" height="480" style="background: rgb(170, 170, 170);"></canvas></div>
+        <div id="mjpegLeftForearm" class="col-sm-4"><h1>Left</h1><canvas width="300" height="300" style="background: rgb(170, 170, 170);"></canvas></div>
     </div>
 </div>
 
 
-</body>
-</html>
+
+</body></html>
