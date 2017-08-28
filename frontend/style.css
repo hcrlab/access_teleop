@@ -3,11 +3,35 @@ body {
 	cursor: default;
 }
 
-canvas{
-	background-color: red;
-	margin-left: -15px;
+button{
+    fontSize: 36px;
+    height = 30px;
+    position: absolute;
+    z-index: 3;
 }
 
+.buttonRL{
+    -moz-transform: rotate(90deg);
+    -webkit-transform: rotate(90deg);
+    -o-transform: rotate(90deg);
+    -ms-transform: rotate(90deg);
+}
+canvas{
+	background-color: red;
+	margin-left: -20px;
+}
+svg{
+    position: absolute;
+    z-index: 6;
+	background: transparent;
+	left:5px;
+
+	top:5px;
+}
+buttonUp{
+    position: absolute;
+    z-index: 6;
+}
 #camera1{
 	background-color: red;
 }
