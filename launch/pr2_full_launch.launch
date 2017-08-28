@@ -3,7 +3,7 @@
   <arg name="use_rviz" default="true" />
 
 <!-- Launch Gazebo -->
-  <include file="$(find pr2_gazebo)/launch/pr2_empty_world.launch" />
+  <include file="$(find gazebo_ros)/launch/pr2_empty_world.launch" />
 
 <!-- Launch Moveit! -->
   <include file="$(find pr2_moveit_config)/launch/move_group.launch" />
