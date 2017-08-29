@@ -75,9 +75,11 @@ function init() {
                     console.log("x is : " + deltaX + "\n" + "and y is :" + deltaY );
                     app.arm.moveArmByDelta(deltaX/2, deltaY/2 , 'camera1');
 
-                }, 1000);
+                }, 100);
 
-            }.throttle(1000));
+
+
+            });
         }).on('removed', function (evt, nipple) {
             if(lastInterval) {
                 clearInterval(lastInterval);
