@@ -8,6 +8,8 @@
 
 App = function () {
 
+    w3.includeHTML(); // This line is necessary to allow html imports
+
     // Set self to be this so that you can add variables to this inside a callback
     var self = this;
 
@@ -22,9 +24,28 @@ App = function () {
     });
 
     self.arm = new Arm(this.ros);
+    self.gripper = new Gripper(this.ros);
     //self.head = new Head(ros);
-    //self.gripper = new Gripper(ros);
 
+
+    // Set up the gripper event handlers
+    // Calls itself after definition
+    this.initGripperListeners = function () {
+        var arm_div = document.querySelectorAll('.js_arm_div');
+        arm_div.forEach(function(element){
+            element.addEventListener('contextmenu', function(ev){
+                ev.preventDefault();
+                if(self.gripper.getCurrentPosition() == self.gripper.PositionEnum.CLOSED ||
+                    self.gripper.getCurrentPosition() == self.gripper.PositionEnum.PARTLY_CLOSED) {
+                    self.gripper.open();
+                }
+                else {
+                    self.gripper.close();
+                }
+               return false;
+            }, false);
+        });
+    };
 
 
 

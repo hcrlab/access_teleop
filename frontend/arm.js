@@ -38,8 +38,4 @@ Arm = function (ros) {
         absolute.publish(absolutePX);
     };
 
-    /*
-
-    */
-
 };

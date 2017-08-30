@@ -41,22 +41,28 @@ function init() {
     app.ros.on('connection', function () {
         console.log("We are connected!");
 
+        self.app.initGripperListeners(); // Adds the right click listeners when ros is connected
+
         arm_div.forEach(function(element)
         {
             element.onmousedown = function (e) {
                 e = e || window.event;
-                var elementId = (e.target || e.srcElement).parentElement.id;
-                console.log(elementId);
-                downX = e.offsetX;
-                downY = e.offsetY;
+                if(e.which == 1) { //This will only be true on a left click
+                    var elementId = (e.target || e.srcElement).parentElement.id;
+                    console.log(elementId);
+                    downX = e.offsetX;
+                    downY = e.offsetY;
+                }
             };
 
             element.onmouseup = function (e) {
                 e = e || window.event;
-                var elementId = (e.target || e.srcElement).parentElement.id;
-                console.log(elementId);
-                console.log("offsetX :" + e.offsetX + " offsetY : " + e.offsetY);
-                self.app.arm.moveArmByDelta(e.offsetX - downX, e.offsetY - downY, elementId);
+                if(e.which == 1) { //This will only be true on a left click
+                    var elementId = (e.target || e.srcElement).parentElement.id;
+                    console.log(elementId);
+                    console.log("offsetX :" + e.offsetX + " offsetY : " + e.offsetY);
+                    self.app.arm.moveArmByDelta(e.offsetX - downX, e.offsetY - downY, elementId);
+                }
             };
 
         });
