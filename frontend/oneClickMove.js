@@ -9,23 +9,6 @@ script.type = 'text/javascript';
 document.getElementsByTagName('head')[0].appendChild(script);
 
 
-// Adds a colored div when body is clicked
-$(document).ready(function () {
-    $('body').click(function (ev) {
-        mouseX = ev.pageX;
-        mouseY = ev.pageY;
-        var color = '#1daeae';
-        var size = '2px';
-        $("body").append($('<div></div>')
-            .css('position', 'absolute')
-            .css('top', mouseY + 'px')
-            .css('left', mouseX + 'px')
-            .css('width', size)
-            .css('height', size)
-            .css('background-color', color));
-    });
-});
-
 function init() {
     var arm_div = document.querySelectorAll('.js_arm_div');
     this.app = new App();
@@ -34,13 +17,28 @@ function init() {
     app.ros.on('connection', function () {
         console.log("We are connected!");
 
+        app.initGripperListeners();
+
         arm_div.forEach(function(element)
         {
-            element.onmousemove = function (e) {
-                e = e || window.event;
-                var elementId = (e.target || e.srcElement).parentElement.id;
-                console.log(elementId);
-                self.app.arm.moveArmByAbsolute(e.offsetX, e.offsetY, elementId);
+            element.onclick = function (e) {
+
+                arm_div.forEach(function (arm_element) {
+                    if (!arm_element.onmousemove) {
+                        arm_element.style.cursor = 'crosshair';
+                        arm_element.onmousemove = function (e) {
+                            e = e || window.event;
+                            var elementId = (e.target || e.srcElement).parentElement.id;
+                            console.log(elementId);
+                            self.app.arm.moveArmByAbsolute(e.offsetX, e.offsetY, elementId);
+                        };
+                    }
+                    else {
+                        arm_element.onmousemove = undefined;
+                        arm_element.style.cursor = 'default';
+                        console.log("removing onmousemove event handeler");
+                    }
+                });
             };
 
         });
