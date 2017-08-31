@@ -27,3 +27,8 @@ canvas{
 	width: 300px;
 
 }
+
+div{
+	border-style: solid;
+	border-color: #2423cb;
+}

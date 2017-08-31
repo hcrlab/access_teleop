@@ -14,6 +14,8 @@ function init() {
     this.app = new App();
     var self = this;
 
+    GripperDisplay();
+
     app.ros.on('connection', function () {
         console.log("We are connected!");
 

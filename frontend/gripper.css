@@ -1,0 +1,56 @@
+.gripper-ctrl-cont {
+    position: absolute;
+    bottom: 0%;
+    height: 16%;
+    width: 30%;
+}
+
+.gripper-ctrl-cont.r-arm-ctrl{
+    right: 0%;
+}
+
+.gripper-ctrl-cont.l-arm-ctrl{
+    left: 0%;
+}
+
+.gripper-ctrl-cont > .gripper-slider {
+    width: 86%;
+    height: 25%;
+    margin-left: 7%;
+}
+
+.gripper-slider div.ui-slider-range{
+    pointer-events: none;
+}
+
+.gripper-ctrl-cont  span.ui-slider-handle {
+    height: 160%;
+    width: 10%;
+    top: -30%;
+    margin-left: -5%; /* width/2 */
+    background: rgba(42,42,42,1);
+    border: 2px solid rgba(82,82,82,0.87);
+}
+
+.grab {
+    margin-top: 5%;
+    width: 20%;
+    height: auto;
+}
+.gripper-ctrl-cont.r-arm-ctrl > .grab {
+    margin-left: 9%;
+}
+
+label[for=release-right] {
+    margin-top: 5%;
+    width:70%;
+    height: auto;
+    margin-left: 15%;
+}
+
+label[for=release-left] {
+    margin-top: 5%;
+    width:70%;
+    height: auto;
+    margin-left: 15%;
+}
