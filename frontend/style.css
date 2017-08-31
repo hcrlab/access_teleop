@@ -4,11 +4,12 @@ body {
 }
 
 button{
-    fontSize: 36px;
-    height = 30px;
     position: absolute;
     z-index: 3;
+	background-color: transparent;
+	height:45px;
 }
+
 
 .buttonRL{
     -moz-transform: rotate(90deg);
@@ -17,8 +18,14 @@ button{
     -ms-transform: rotate(90deg);
 }
 canvas{
-	background-color: red;
-	margin-left: -20px;
+	margin-left: -18px;
+	border-style: solid;
+}
+
+div {
+    -webkit-column-gap: 40px; /* Chrome, Safari, Opera */
+    -moz-column-gap: 40px; /* Firefox */
+    column-gap: 40px;
 }
 svg{
     position: absolute;
@@ -32,15 +39,16 @@ buttonUp{
     position: absolute;
     z-index: 6;
 }
-#camera1{
+
+.title1{
 	background-color: red;
 }
 
-#camera2{
+.title2{
 	background-color: green;
 
 }
 
-#mjpegLeftForearm{
+.title3{
 	background-color: blue;
 }
