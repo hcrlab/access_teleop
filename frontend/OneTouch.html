@@ -3,11 +3,11 @@
 <head>
     <meta charset="utf-8" />
 
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css"
           href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css" />
     <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="gripper.css">
 
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
@@ -18,12 +18,16 @@
     <script src="http://cdn.robotwebtools.org/roslibjs/current/roslib.min.js"></script>
     <script src="http://cdn.robotwebtools.org/ros3djs/current/ros3d.min.js"></script>
 
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
     <script src="http://cdn.robotwebtools.org/mjpegcanvasjs/current/mjpegcanvas.js"></script>
     <script src="http://cdn.robotwebtools.org/keyboardteleopjs/current/keyboardteleop.js"></script>
 
     <script src="https://www.w3schools.com/lib/w3.js"></script> <!-- Allows html imports -->
 
-    <script src="gt_gripper.js"></script>
+    <script src="/bower_components/arrive/src/arrive.js"></script>
+
     <script src="arm.js"></script>
     <script src="gripper.js"></script>
     <script src="app.js"></script>
@@ -55,6 +59,6 @@
     <div w3-include-html="gripper.html"></div>
 
 
-
 </body>
+<script src="gripper_gui.js"></script>
 </html>

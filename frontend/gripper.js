@@ -5,6 +5,8 @@
 
 Gripper = function (ros) {
 
+    this.gripperGUI = new GripperGUI(this);
+
     var self = this;
 
     this.MIN_EFFORT = 35;
@@ -31,7 +33,8 @@ Gripper = function (ros) {
 
     // A function for sending a goal to the gripper_action
     this.moveGripper = function (position, max_effort) {
-        console.log("trying to move gripper");
+        position = (position > self.OPEN_POS)? self.OPEN_POS : position;
+        position = (position < self.CLOSED_POS)? self.CLOSED_POS : position;
         var goal = new ROSLIB.Goal({
             actionClient: gripper_controller,
             goalMessage: {
@@ -43,6 +46,7 @@ Gripper = function (ros) {
         });
         goal.on('feedback', function(feedback){
             console.log('Feedback: ' + feedback.position);
+            self.gripperGUI.adjustGUI(feedback.position);
             currentPosNum = feedback.position;
         });
         goal.on('result', function(result){

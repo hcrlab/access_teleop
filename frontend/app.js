@@ -8,7 +8,6 @@
 
 App = function () {
 
-    w3.includeHTML(); // This line is necessary to allow html imports
 
     // Set self to be this so that you can add variables to this inside a callback
     var self = this;
@@ -23,14 +22,14 @@ App = function () {
         console.log('Error connecting to websocket server.');
     });
 
-    self.arm = new Arm(this.ros);
-    self.gripper = new Gripper(this.ros);
+    this.arm = new Arm(this.ros);
+    this.gripper = new Gripper(this.ros);
     //self.head = new Head(ros);
 
 
     // Set up the gripper event handlers
     // Calls itself after definition
-    this.initGripperListeners = function () {
+    this.initRightClickGripper = function () {
         var arm_div = document.querySelectorAll('.js_arm_div');
         arm_div.forEach(function(element){
             element.addEventListener('contextmenu', function(ev){
