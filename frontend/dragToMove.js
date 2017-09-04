@@ -41,7 +41,7 @@ function init() {
     app.ros.on('connection', function () {
         console.log("We are connected!");
 
-        self.app.initGripperListeners(); // Adds the right click listeners when ros is connected
+        app.initRightClickGripper(); // This adds the right click gripper listener
 
         arm_div.forEach(function(element)
         {
