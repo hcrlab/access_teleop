@@ -29,8 +29,8 @@ App = function () {
 
     this.arm = new Arm(this.ros);
     this.gripper = new Gripper(this.ros);
+    this.cloudFreezer = new CloudFreezer(this.ros);
     //self.head = new Head(ros);
-
 
     // Set up the gripper event handlers
     // Calls itself after definition
@@ -49,6 +49,21 @@ App = function () {
                return false;
             }, false);
         });
+    };
+
+    this.addCloudFreezer = function(){
+        var feedback = document.querySelector("#feedback");
+
+        var freezeButton = document.createElement("button");
+        freezeButton.innerHTML = "Freeze Point Cloud";
+        freezeButton.onclick = this.cloudFreezer.freezeCloud;
+
+        var unfreezeButton = document.createElement("button");
+        unfreezeButton.innerHTML = "Real Time Point Cloud";
+        unfreezeButton.onclick = this.cloudFreezer.unfreezeCloud;
+
+        feedback.appendChild(freezeButton);
+        feedback.appendChild(unfreezeButton);
     };
 
 

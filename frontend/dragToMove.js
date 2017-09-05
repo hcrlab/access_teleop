@@ -42,6 +42,7 @@ function init() {
         console.log("We are connected!");
 
         app.initRightClickGripper(); // This adds the right click gripper listener
+        app.addCloudFreezer();
 
         arm_div.forEach(function(element)
         {
