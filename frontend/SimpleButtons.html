@@ -2,13 +2,11 @@
 <html>
 <head>
     <meta charset="utf-8" />
-
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <link rel="stylesheet" type="text/css"
-          href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css" />
     <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
     <script src="http://cdn.robotwebtools.org/threejs/current/three.js"></script>
     <script src="http://cdn.robotwebtools.org/EventEmitter2/current/eventemitter2.min.js"></script>
 
@@ -16,38 +14,54 @@
     <script src="http://cdn.robotwebtools.org/ros3djs/current/ros3d.min.js"></script>
 
     <script src="http://cdn.robotwebtools.org/mjpegcanvasjs/current/mjpegcanvas.js"></script>
-    <script src="http://cdn.robotwebtools.org/keyboardteleopjs/current/keyboardteleop.js"></script>
 
-    <script src="snap.svg-min.js"></script>
-
-    <script src="arm.js"></script>
-    <script src="simple.js"></script>
     <script src="oneClickMove.js"></script>
-
-    <title>Simple Buttons Robot GUI</title>
+    <script src="arm.js"></script>
+    <script src="traj.js"></script>
+ <title>Simple Buttons GUI</title>
 </head>
 
 <body onload="init()">
 
-    <h2>Simple Buttons Robot GUI</h2>
+    <h2 id="title">Simple Buttons GUI</h2>
 
-    <div class="container-fluid">
-        <div class="row">
-    <!-- Each "cell" has col-[widht in percents] class -->
-            <div class="col-xs-6 col-sm-4 title1">Right</div>
-            <div class="col-xs-6 col-sm-4 title2">Head</div>
-            <div class="col-xs-6 col-sm-4 title3">Left</div>
-        </div>
-    <div class="row">
-  <div id="camera1" class="col-xs-6 col-sm-4 js_arm_div">
 
+<div class="container-fluid">
+<div class="row no-gutter">
+  <div id="first" class="col-sm-4">
+    <div class="card title1">
+      <div class="card-block">
+          <a id="top" href="#cam1" data-toggle="collapse1" class="btn btn-primary">Top</a>
+       <div id="cam1" class="collapse1">
+
+        <div id="camera1" class="js_arm_div"></div></div>
+      </div>
+    </div>
+  </div>
+  <div id="second"class="col-sm-4">
+    <div class="card title2">
+      <div class="card-block">
+
+        <a id="side" href="#cam2" data-toggle="collapse2" class="btn btn-primary">Side</a>
+       <div id="cam2" class="collapse2">
+        <div id="camera2" class="js_arm_div"></div> </div>
+      </div>
+    </div>
+  </div>
+    <div id="third" class="col-sm-4">
+    <div class="card title3">
+      <div class="card-block">
+        <a id="head" href="#cam3" data-toggle="collapse3" class="btn btn-primary">Head</a>
+       <div id="cam3" class="collapse3">
+        <div id="camera3" class="js_arm_div"></div>
+       </div>
+    </div>
+  </div>
 </div>
-  <div id="camera2" class="col-xs-6 col-sm-4 js_arm_div"></div>
-  <!-- Optional: clear the XS cols if their content doesn't match in height -->
-  <div class="clearfix visible-xs-block"></div>
-  <div id="mjpegLeftForearm" class="col-xs-6 col-sm-4 js_arm_div"></div>
 </div>
 
+<script>
+</script>
 <div class="panel">
     <p>Enter positive or negative numeric decimal values in the spin boxes below</p>
     <table>
@@ -60,5 +74,6 @@
 </div>
 
 </div>
+
 </body>
 </html>
