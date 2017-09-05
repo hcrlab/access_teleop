@@ -143,7 +143,7 @@ class MoveByDelta(object):
         ps = self._move_group.get_current_pose()
         x_distance, y_distance = dpx_to_distance(data.delta_x, data.delta_y, data.camera_name, ps, True)
         ps2 = delta_modified_stamped_pose(x_distance, y_distance, data.camera_name, ps)
-        error = self._arm.move_to_pose(ps2)
+        error = self._arm.move_to_pose(ps2, allowed_planning_time=1.0)
         if error is not None:
             rospy.logerr(error)
 
