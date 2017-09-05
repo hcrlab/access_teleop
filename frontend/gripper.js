@@ -27,7 +27,7 @@ Gripper = function (ros) {
     // Set up the gripper publisher
     var gripper_controller = new ROSLIB.ActionClient({
        ros: ros,
-       serverName: 'gripper_controller/gripper_action',
+       serverName: 'gripper_controller/gripper_action', // If robot has 2 arms, make sure to choose the appropriate one
        actionName : 'control_msgs/GripperCommandAction'
     });
 
