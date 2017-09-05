@@ -197,6 +197,7 @@ $(document).ready(function(){
     });
 });
 
+
 function init() {
     var arm_div = document.querySelectorAll('.js_arm_div');
     this.app = new App();
