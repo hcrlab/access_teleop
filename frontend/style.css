@@ -8,6 +8,7 @@ button{
     z-index: 4;
 	background-color: transparent;
 }
+
 #rotate{
   vertical-align:top;
   transform:rotate(7deg);
@@ -27,12 +28,14 @@ input{
 }
 .card {
     /* Add shadows to create the "card" effect */
-    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    box-shadow: 0 2px 1px 0 rgba(0,0,0,0.2);
     transition: 0.3s;
 }
 
 /* On mouse-over, add a deeper shadow */
 .card:hover {
+
+	background-color: yellow;
 }
 
 canvas{

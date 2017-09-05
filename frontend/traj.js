@@ -25,26 +25,21 @@ App = function () {
     //self.head = new Head(ros);
     //self.gripper = new Gripper(ros);
 
-
-
-
     // Adds 3 canvas image streams
     // --------------------------------------------------------------------------------
 
     // Dynamic Canvas Sizes
     var elmntmjpegRightForearm = document.getElementById("camera1");
-    var rightForearmWidth=elmntmjpegRightForearm.clientWidth;
+    var rightForearmWidth=$("#cam1").outerWidth();
     var rightForearmHeight=rightForearmWidth;
 
 
     var elmntmjpegHead = document.getElementById("camera2");
-    var headWidth=elmntmjpegHead.clientWidth;
+    var headWidth=$("#cam2").outerWidth();
     var headHeight=headWidth;
-//    var camera2Height = "480";
-//    var camera2Width = "640";
 
     var elmntmjpegLeftForearm = document.getElementById("camera3");
-    var leftForearmWidth=elmntmjpegLeftForearm.clientWidth;
+    var leftForearmWidth=$("#cam3").outerWidth();
     var leftForearmHeight=elmntmjpegLeftForearm.clientHeight;
 
 
@@ -79,13 +74,17 @@ var camera1 = document.getElementById("camera1");
 var camera2 = document.getElementById("camera2");
 var camera3 = document.getElementById("camera3");
 
+var titleWeb = document.getElementById("title");
+var titleWebH = titleWeb.offsetHeight;
 
+var btnTop = document.getElementById("top");
+var btnTopH = btnTop.offsetHeight;
+
+var btnUpH = camera1.offsetHeight + titleWebH + btnTopH;
 var upBTN = document.createElement("button");
 upBTN.innerHTML="<img src=\"img/upArrow.png\">";
 upBTN.id='up';
 upBTN.title='\u2191Up\u2191';
-upBTN.style.left=(camera1.offsetWidth - 95)/2 + "px";
-upBTN.style.top= (camera1.offsetHeight)/4 + "px";
 var body = document.getElementsByTagName("body")[0];
 body.appendChild(upBTN);
 
@@ -95,9 +94,8 @@ downBTN.id='down';
 downBTN.title='\u2193Down\u2193';
 downBTN.className = "button";
 downBTN.style.left=(camera1.offsetWidth - 95)/2 + "px";
-downBTN.style.top= (camera1.offsetHeight + 28)/1 + "px";
+downBTN.style.top= (btnUpH - titleWebH/1.5)/1 + "px";
 body.appendChild(downBTN);
-
 
 var leftBTN = document.createElement("button");
 leftBTN.innerHTML = "<img src=\"img/greenLeftArrow.png\">";
@@ -105,7 +103,8 @@ leftBTN.id='left';
 leftBTN.title='\u2190Left\u2190';
 leftBTN.className = "button";
 leftBTN.style.left=0 + "px";
-leftBTN.style.top= (camera1.offsetHeight + 60)/2 + "px";
+leftBTN.style.top= (btnUpH)/2 + "px";
+leftBTN.style.width=55 + "px";
 leftBTN.style.height=80 + "px";
 body.appendChild(leftBTN);
 
@@ -114,8 +113,8 @@ rotateRightBTN.innerHTML = "<img src=\"img/rotateClockwiseRight.png\">";
 rotateRightBTN.id='rotateRight';
 rotateRightBTN.title='\u21BBRotate Right\u21BB';
 rotateRightBTN.className = "button";
-rotateRightBTN.style.left=57 + "px";
-rotateRightBTN.style.top= (camera1.offsetHeight + 60)/2 + "px";
+rotateRightBTN.style.left=55 + "px";
+rotateRightBTN.style.top= (btnUpH)/2 + "px";
 rotateRightBTN.style.height=80 + "px";
 body.appendChild(rotateRightBTN);
 
@@ -124,9 +123,10 @@ rightBTN.innerHTML = "<img src=\"img/greenRightArrow.png\">";
 rightBTN.id='right';
 rightBTN.title='\u2192Right\u2192';
 rightBTN.className = "button";
-rightBTN.style.left=(camera1.offsetWidth - 57) + "px";
-rightBTN.style.top= (camera1.offsetHeight + 60)/2 + "px";
+rightBTN.style.width=55 + "px";
 rightBTN.style.height=80 + "px";
+rightBTN.style.left= camera1.offsetWidth - titleWebH - 55/4+ "px";
+rightBTN.style.top= (btnUpH)/2 + "px";
 body.appendChild(rightBTN);
 
 
@@ -135,8 +135,10 @@ rotateLeftBTN.innerHTML = "<img src=\"img/rotateAntiClockwiseLeft.png\">";
 rotateLeftBTN.id='rotateLeft';
 rotateLeftBTN.title='\u21BARotate Left\u21BA';
 rotateLeftBTN.className = "button";
-rotateLeftBTN.style.left=(camera1.offsetWidth - 120) + "px";
-rotateLeftBTN.style.top= (camera1.offsetHeight + 60)/2 + "px";
+rotateLeftBTN.style.width=65 + "px";
+rotateLeftBTN.style.height=80 + "px";
+rotateLeftBTN.style.left=camera1.offsetWidth - titleWebH - 75+ "px";
+rotateLeftBTN.style.top= (btnUpH)/2 + "px";
 rotateLeftBTN.style.height=80 + "px";
 body.appendChild(rotateLeftBTN);
 
@@ -174,39 +176,14 @@ camera2.addEventListener("mouseout", hideButtons);
 camera3.addEventListener("mouseover", showButtons);
 camera3.addEventListener("mouseout", hideButtons);
 
-$('#top').on('hidden.bs.collapse', '.collapse', function (e) {
-    alert('Event fired on #' + e.currentTarget.id);
-});
-    $("#top").on('show.bs.collapse', function(){
-        alert('The collapsible content is about to be shown.');
-    });
-    $(".collapse").on('shown.bs.collapse', function(){
-        alert('The collapsible content is now fully shown.');
-    });
-    $(".collapse").on('hide.bs.collapse', function(){
-        alert('The collapsible content is about to be hidden.');
-    });
-    $(".collapse").on('hidden.bs.collapse', function(){
-        alert('The collapsible content is now hidden.');
-    });
-$("#top").click(function(){
-
-    if($(this).hasClass('active')){
-
-    } else {
-        $(this).addClass('active');
-
-    }
-
-});
-
 function showButtons() {
-if (this.id == "camera1") {
-}
 
 switch(this.id) {
     case "camera1":
-        $("#title1").css("color", "yellow");
+        $("#cam1").css("color", "yellow");
+
+upBTN.style.left=(camera1.offsetWidth - 95)/2 + "px";
+upBTN.style.top= (btnUpH)/4 + "px";
         $("#up").show();
         $("#down").show();
         $("#left").show();
@@ -215,8 +192,8 @@ switch(this.id) {
         $("#rotateLeft").show();
         break;
     case "camera2":
-        $("#title2").css("color", "yellow");
-      //  $("#up").show();
+        $("#cam2").css("color", "yellow");
+             //$("#up").show();
       //  $("#down").show();
       //  $("#left").show();
       //  $("#right").show();
