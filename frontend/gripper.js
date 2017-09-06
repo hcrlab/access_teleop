@@ -5,8 +5,6 @@
 
 Gripper = function (ros) {
 
-    this.gripperGUI = new GripperGUI(this);
-
     var self = this;
 
     this.MIN_EFFORT = 35;
@@ -46,7 +44,9 @@ Gripper = function (ros) {
         });
         goal.on('feedback', function(feedback){
             console.log('Feedback: ' + feedback.position);
-            self.gripperGUI.adjustGUI(feedback.position);
+            if(self.gripperGUI) {
+                self.gripperGUI.adjustGUI(feedback.position);
+            }
             currentPosNum = feedback.position;
         });
         goal.on('result', function(result){

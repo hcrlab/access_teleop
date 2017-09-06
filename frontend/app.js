@@ -88,7 +88,7 @@ App = function () {
 
     var elmntmjpegLeftForearm = document.getElementById("camera3");
     var leftForearmWidth=elmntmjpegLeftForearm.clientWidth;
-    var leftForearmHeight=elmntmjpegLeftForearm.clientHeight;
+    var leftForearmHeight=leftForearmWidth;
 
     // Create the right forearm viewer.
     var forearmRViewer = new MJPEGCANVAS.Viewer({
@@ -110,10 +110,10 @@ App = function () {
 
     // Create the left forearm viewer.
     var forearmLViewer = new MJPEGCANVAS.Viewer({
-        divID : 'mjpegLeftForearm',
+        divID : 'camera3',
         host : 'localhost',
         width : leftForearmWidth,
-        height : leftForearmWidth,
+        height : leftForearmHeight,
         topic : '/head_camera/rgb/image_raw'
     });
 

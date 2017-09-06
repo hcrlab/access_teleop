@@ -3,13 +3,13 @@
  * This file creates the gripper's ui. It uses a double slider to make both fingers, and has then both move when one is moved
  */
 
-w3.includeHTML(); // This line is necessary to allow html imports
 var $slider;
 
 // This is the double slider for the gripper
 $(document).arrive("#slider-range", function () {
     $( function() {
         $slider = $( "#slider-range" ); //This will create the slider jQuery object as soon as the element is ready
+        app.gripper.gripperGUI = new GripperGUI(app.gripper); //This has to be here, because otherwise the element wil not be loaded
     });
 });
 
