@@ -2,9 +2,6 @@
  * Created by timadamson on 8/23/17.
  */
 
-<<<<<<< HEAD
-=======
->>>>>>> c61e667349775abc4ee3ed8204fc4cfeebf1fbda
 function init() {
     var arm_div = document.querySelectorAll('.js_arm_div');
     this.app = new App();
