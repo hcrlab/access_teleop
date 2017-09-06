@@ -31,29 +31,21 @@ App = function () {
     // Adds 3 canvas image streams
     // --------------------------------------------------------------------------------
 
-    var cameraHeight = "480";
-    var cameraWidth = "640";
     // Dynamic Canvas Sizes
     var elmntmjpegRightForearm = document.getElementById("camera1");
-    var rightForearmWidth=cameraWidth;
-    var rightForearmHeight=cameraHeight;
+    var rightForearmWidth=elmntmjpegRightForearm.clientWidth;
+    var rightForearmHeight=elmntmjpegRightForearm.clientHeight;
 
 
     var elmntmjpegHead = document.getElementById("camera2");
-    var headWidth=cameraWidth;
-    var headHeight=cameraHeight;
+    var headWidth=elmntmjpegHead.clientWidth;
+    var headHeight=elmntmjpegHead.clientHeight;
+    var camera2Height = "480";
+    var camera2Width = "640";
 
     var elmntmjpegLeftForearm = document.getElementById("mjpegLeftForearm");
     var leftForearmWidth=elmntmjpegLeftForearm.clientWidth;
     var leftForearmHeight=elmntmjpegLeftForearm.clientHeight;
-
-    var paper1 = Snap( "#svg1" ); //use element created above
-
-
-    var x = document.createElement("CANVAS");
-    var ctx = x.getContext("2d");
-    ctx.fillStyle = "#FF0000";
-    ctx.fillRect(0, 0, 150, 100);
 
     // Create the right forearm viewer.
     var forearmRViewer = new MJPEGCANVAS.Viewer({
@@ -61,9 +53,7 @@ App = function () {
         host : 'localhost',
         width : rightForearmWidth,
         height : rightForearmHeight,
-//        topic : '/r_forearm_cam/image_raw',
-        topic : '/rviz1/camera1/image',
-        overlay: x
+        topic : '/rviz1/camera1/image'
     });
 
     // Create the head viewer.
@@ -72,8 +62,7 @@ App = function () {
         host : 'localhost',
         width : headWidth,
         height : headHeight,
-        topic : '/wide_stereo/left/image_raw'
-//        topic : '/rviz1/camera2/image'
+        topic : '/rviz1/camera2/image'
     });
 
     // Create the left forearm viewer.
@@ -82,8 +71,7 @@ App = function () {
         host : 'localhost',
         width : leftForearmWidth,
         height : leftForearmWidth,
-        topic : '/l_forearm_cam/image_raw'
-//        topic : '/head_camera/rgb/image_raw'
+        topic : '/head_camera/rgb/image_raw'
     });
 
     // ------------------------------------------------------------------------------------------
