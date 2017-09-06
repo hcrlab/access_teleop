@@ -36,15 +36,13 @@ App = function () {
 
     // Dynamic Canvas Sizes
     var elmntmjpegRightForearm = document.getElementById("camera1");
-    var rightForearmWidth=cameraWidth;
-    var rightForearmHeight=cameraHeight;
+    var camera1Width=cameraWidth;
+    var camera1Height=cameraHeight;
 
 
     var elmntmjpegHead = document.getElementById("camera2");
-    var headWidth=cameraWidth;
-    var headHeight=cameraHeight;
-    var camera2Height = "480";
-    var camera2Width = "640";
+    var camera2Width = cameraWidth;
+    var camera2Height = cameraHeight;
 
     var elmntmjpegLeftForearm = document.getElementById("camera3");
     var leftForearmWidth=elmntmjpegLeftForearm.clientWidth;
@@ -54,8 +52,8 @@ App = function () {
     var forearmRViewer = new MJPEGCANVAS.Viewer({
         divID : 'camera1',
         host : 'localhost',
-        width : rightForearmWidth,
-        height : rightForearmHeight,
+        width : camera1Width,
+        height : camera1Height,
         topic : '/rviz1/camera1/image'
     });
 
@@ -63,14 +61,14 @@ App = function () {
     var headViewer = new MJPEGCANVAS.Viewer({
         divID : 'camera2',
         host : 'localhost',
-        width : headWidth,
-        height : headHeight,
+        width : camera2Width,
+        height : camera2Height,
         topic : '/rviz1/camera2/image'
     });
 
     // Create the left forearm viewer.
     var forearmLViewer = new MJPEGCANVAS.Viewer({
-        divID : 'mjpegLeftForearm',
+        divID : 'camera3',
         host : 'localhost',
         width : leftForearmWidth,
         height : leftForearmWidth,

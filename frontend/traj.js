@@ -16,7 +16,7 @@ function init() {
     });
 
 
-    
+
     var camera1 = document.getElementById("camera1");
     var camera2 = document.getElementById("camera2");
     var camera3 = document.getElementById("camera3");
