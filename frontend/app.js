@@ -61,8 +61,8 @@ App = function () {
         host : 'localhost',
         width : rightForearmWidth,
         height : rightForearmHeight,
-        topic : '/r_forearm_cam/image_raw',
-//        topic : '/rviz1/camera1/image'
+//        topic : '/r_forearm_cam/image_raw',
+        topic : '/rviz1/camera1/image',
         overlay: x
     });
 
