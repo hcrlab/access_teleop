@@ -16,8 +16,6 @@ function init() {
 
     app.ros.on('connection', function () {
         console.log("We are connected!");
-
-
     });
 
 
