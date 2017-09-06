@@ -7,8 +7,8 @@ import fetch_api
 import camera_info_messages
 from moveit_commander import MoveGroupCommander
 from image_geometry import PinholeCameraModel
-from tf import TransformBroadcaster
-from geometry_msgs.msg import Pose, PoseStamped
+from tf import TransformBroadcaster, transformations
+from geometry_msgs.msg import Pose, PoseStamped, Quaternion
 from interactive_markers.interactive_marker_server import InteractiveMarkerServer
 from visualization_msgs.msg import InteractiveMarker, InteractiveMarkerControl, InteractiveMarkerFeedback
 from visualization_msgs.msg import Marker
@@ -16,7 +16,7 @@ from visualization_msgs.msg import Marker
 camera_info_mapping = {'camera1': camera_info_messages.camera1, 'camera2': camera_info_messages.camera2}
 transform_broadcaster_mapping = {'camera1': ((0.5, 0, 3), (1, 0, 0, 0), rospy.Time(10), 'camera1', 'base_link'),
                                 'camera2': ((0.3, -1.5, 0.5), (-0.70711, 0, 0, 0.70711), rospy.Time(10), 'camera2', 'base_link')}
-
+orientation_mapping = {'camera1': 2, 'camera2': 1}
 
 def wait_for_time():
     """Wait for simulated time to begin.
@@ -24,6 +24,14 @@ def wait_for_time():
     while rospy.Time().now().to_sec() == 0:
         pass
 
+
+def quat_array_to_quat(quat_array):
+    new_quat = Quaternion()
+    new_quat.x = quat_array[0]
+    new_quat.y = quat_array[1]
+    new_quat.z = quat_array[2]
+    new_quat.w = quat_array[3]
+    return new_quat
 
 def publish_camera_transforms():
     for key in transform_broadcaster_mapping:
@@ -141,6 +149,9 @@ class MoveByDelta(object):
 
     def callback(self, data):
         ps = self._move_group.get_current_pose()
+        #rpy = self._move_group.get_current_rpy()
+        #new_quat_array = transformations.quaternion_from_euler(rpy[0], rpy[1], rpy[2], "sxyz")
+        #ps.pose.orientation = quat_array_to_quat(new_quat_array)
         x_distance, y_distance = dpx_to_distance(data.delta_x, data.delta_y, data.camera_name, ps, True)
         ps2 = delta_modified_stamped_pose(x_distance, y_distance, data.camera_name, ps)
         error = self._arm.move_to_pose(ps2, allowed_planning_time=1.0)
@@ -153,7 +164,7 @@ class MoveByAbsolute(object):
         self._arm = arm
         self._gripper = gripper
         self._move_group = move_group
-        self._im_server = InteractiveMarkerServer('im_server', q_size=10)
+        self._im_server = InteractiveMarkerServer('im_server', q_size=2)
 
     def start(self):
         rospy.Subscriber('/access_teleop/absolute', PX, self.absolute_callback, queue_size=1)
