@@ -16,6 +16,7 @@
     "tests"
   ],
   "dependencies": {
-    "nipplejs": "^0.6.7"
+    "nipplejs": "^0.6.7",
+    "arrive": "^2.4.1"
   }
 }
