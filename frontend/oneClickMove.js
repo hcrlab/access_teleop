@@ -2,13 +2,6 @@
  * Created by timadamson on 8/23/17.
  */
 
-// Adds jQuery to the html
-var script = document.createElement('script');
-script.src = 'http://code.jquery.com/jquery-1.11.0.min.js';
-script.type = 'text/javascript';
-document.getElementsByTagName('head')[0].appendChild(script);
-
-
 function init() {
     var arm_div = document.querySelectorAll('.js_arm_div');
     this.app = new App();
