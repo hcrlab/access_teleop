@@ -3,27 +3,73 @@ body {
 	cursor: default;
 }
 
+button{
+    position: absolute;
+    z-index: 4;
+	background-color: transparent;
+}
+
+#rotate{
+  vertical-align:top;
+  transform:rotate(7deg);
+  -ms-transform:rotate(-90deg); /* IE 9 */
+  -moz-transform:rotate(-90deg); /* Firefox */
+  -webkit-transform:rotate(-90deg); /* Safari and Chrome */
+  -o-transform:rotate(-90deg); /* Opera */
+  }
+
+
+
+input{
+  cursor:pointer;
+  min-height:30px;
+  position:relative;
+
+}
+.card {
+    /* Add shadows to create the "card" effect */
+    box-shadow: 0 2px 1px 0 rgba(0,0,0,0.2);
+    transition: 0.3s;
+}
+
+/* On mouse-over, add a deeper shadow */
+.card:hover {
+
+	background-color: yellow;
+}
+
 canvas{
-	background-color: red;
-	margin-left: -15px;
+
+	border-style: solid;
+}
+.row.no-gutter {
+  margin-left: -18px;
+  margin-right: 0px;
 }
 
-#camera1{
-	background-color: red;
-	height: 480px;
-	width: 640px;
-	float: left;
+.row.no-gutter [class*='col-']:not(:first-child),
+.row.no-gutter [class*='col-']:not(:last-child) {
+  padding-right: 10px;
+  padding-left: 4px;
+}
+svg{
+    position: absolute;
+    z-index: 6;
+	background: transparent;
+	left:5px;
+
+	top:5px;
 }
 
-#camera2{
+.title1{
+	background-color: red;
+}
+
+.title2{
 	background-color: green;
-	height: 480px;
-	width: 640px;
+
 }
 
-#mjpegLeftForearm{
+.title3{
 	background-color: blue;
-	height: 300px;
-	width: 300px;
-
 }
