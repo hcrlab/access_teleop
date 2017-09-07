@@ -68,7 +68,7 @@ def dpx_to_distance(dx, dy, camera_name, current_ps, offset):
         return big_x, big_y
 
 
-def modified_stamped_pose(x_distance, y_distance, camera_name, original_pose_stamped):
+def delta_modified_stamped_pose(x_distance, y_distance, camera_name, original_pose_stamped):
     modified_ps = original_pose_stamped
     if camera_name == 'camera1':
         original_pose_stamped.pose.position.x += x_distance  # These directions came from looking at the cameras in rviz
@@ -80,6 +80,18 @@ def modified_stamped_pose(x_distance, y_distance, camera_name, original_pose_sta
         raise ValueError('Did not pass in a valid camera_name')
     return modified_ps
 
+
+def absolute_modified_stamped_pose(x_distance, y_distance, camera_name, original_pose_stamped):
+    modified_ps = original_pose_stamped
+    if camera_name == 'camera1':
+        modified_ps.pose.position.x = transform_broadcaster_mapping['camera1'][0][0] + x_distance
+        modified_ps.pose.position.y = transform_broadcaster_mapping['camera1'][0][1] - y_distance
+    elif camera_name == 'camera2':
+        modified_ps.pose.position.x = transform_broadcaster_mapping['camera2'][0][0] + x_distance
+        modified_ps.pose.position.z = transform_broadcaster_mapping['camera2'][0][2] - y_distance
+    else:
+        raise ValueError('Did not pass in a valid camera_name')
+    return modified_ps
 
 def add_marker(x_distance, y_distance, ps, camera_name, self):
     controls = InteractiveMarkerControl()
@@ -115,7 +127,7 @@ def add_marker(x_distance, y_distance, ps, camera_name, self):
     int_marker.controls.append(controls)
     self._im_server.insert(int_marker)
     self._im_server.applyChanges()
-    print("Changes should now be applied")
+    print("Marker changes should now be applied")
 
 
 class MoveByDelta(object):
@@ -125,13 +137,13 @@ class MoveByDelta(object):
         self._move_group = move_group
 
     def start(self):
-        rospy.Subscriber('/access_teleop/delta', DeltaPX, self.callback)
+        rospy.Subscriber('/access_teleop/delta', DeltaPX, self.callback, queue_size=1)
 
     def callback(self, data):
         ps = self._move_group.get_current_pose()
         x_distance, y_distance = dpx_to_distance(data.delta_x, data.delta_y, data.camera_name, ps, True)
-        ps2 = modified_stamped_pose(x_distance, y_distance, data.camera_name, ps)
-        error = self._arm.move_to_pose(ps2)
+        ps2 = delta_modified_stamped_pose(x_distance, y_distance, data.camera_name, ps)
+        error = self._arm.move_to_pose(ps2, allowed_planning_time=1.0)
         if error is not None:
             rospy.logerr(error)
 
@@ -144,14 +156,17 @@ class MoveByAbsolute(object):
         self._im_server = InteractiveMarkerServer('im_server', q_size=10)
 
     def start(self):
-        rospy.Subscriber('/access_teleop/absolute', PX, self.absolute_callback)
+        rospy.Subscriber('/access_teleop/absolute', PX, self.absolute_callback, queue_size=1)
 
     def absolute_callback(self, data):
         print("We got the pixel with x of " + str(data.pixel_x) + " and y of " + str(data.pixel_y))
         ps = self._move_group.get_current_pose()
         x_distance, y_distance = dpx_to_distance(data.pixel_x, data.pixel_y, data.camera_name, ps, False)
-        add_marker(x_distance, y_distance, ps, data.camera_name, self)
-
+        #add_marker(x_distance, y_distance, ps, data.camera_name, self)
+        ps2 = absolute_modified_stamped_pose(x_distance, y_distance, data.camera_name, ps)
+        error = self._arm.move_to_pose(ps2, allowed_planning_time=1.0)
+        if error is not None:
+            rospy.logerr(error)
 
 def main():
     rospy.init_node('access_gripper_teleop')

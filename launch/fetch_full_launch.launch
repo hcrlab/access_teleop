@@ -15,6 +15,9 @@
       args="-d $(find access_teleop)/config/access_teleop_config.rviz"
       if="$(arg use_rviz)" />
 	
+  <!-- launch the point cloud saver to allow point cloud freezing -->
+  <node pkg="access_teleop" name="pointcloud_saver" type="access_pointcloud_pub.py" />
+
   <node pkg="access_teleop" output="screen" name="gripper_teleop" type="fetch_access_teleop.py" />
 
 </launch>

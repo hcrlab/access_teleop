@@ -73,3 +73,17 @@ svg{
 .title3{
 	background-color: blue;
 }
+
+div{
+	//border-style: solid;
+	border-color: #2423cb;
+}
+
+#gripper-container{
+	width:20em;
+	margin-left:10em;
+}
+
+.ui-slider .ui-slider-handle {
+	height:2.4em;
+}

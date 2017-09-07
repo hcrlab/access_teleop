@@ -8,6 +8,7 @@
 
 App = function () {
 
+
     // Set self to be this so that you can add variables to this inside a callback
     var self = this;
 
@@ -21,10 +22,49 @@ App = function () {
         console.log('Error connecting to websocket server.');
     });
 
-    self.arm = new Arm(this.ros);
-    //self.head = new Head(ros);
-    //self.gripper = new Gripper(ros);
+    this.ros.on('close', function (error) {
+       console.error('We lost connection with ROS. All is lost');
+       document.body.innerHTML = "The connection with ROS is broken. Please reconnect";
+    });
 
+    this.arm = new Arm(this.ros);
+    this.gripper = new Gripper(this.ros);
+    this.cloudFreezer = new CloudFreezer(this.ros);
+    //self.head = new Head(ros);
+
+    // Set up the gripper event handlers
+    // Calls itself after definition
+    this.initRightClickGripper = function () {
+        var arm_div = document.querySelectorAll('.js_arm_div');
+        arm_div.forEach(function(element){
+            element.addEventListener('contextmenu', function(ev){
+                ev.preventDefault();
+                if(self.gripper.getCurrentPosition() == self.gripper.PositionEnum.CLOSED ||
+                    self.gripper.getCurrentPosition() == self.gripper.PositionEnum.PARTLY_CLOSED) {
+                    self.gripper.open();
+                }
+                else {
+                    self.gripper.close();
+                }
+               return false;
+            }, false);
+        });
+    };
+
+    this.addCloudFreezer = function(){
+        var feedback = document.querySelector("#feedback");
+
+        var freezeButton = document.createElement("button");
+        freezeButton.innerHTML = "Freeze Point Cloud";
+        freezeButton.onclick = this.cloudFreezer.freezeCloud;
+
+        var unfreezeButton = document.createElement("button");
+        unfreezeButton.innerHTML = "Real Time Point Cloud";
+        unfreezeButton.onclick = this.cloudFreezer.unfreezeCloud;
+
+        feedback.appendChild(freezeButton);
+        feedback.appendChild(unfreezeButton);
+    };
 
 
 
@@ -46,7 +86,7 @@ App = function () {
 
     var elmntmjpegLeftForearm = document.getElementById("camera3");
     var leftForearmWidth=elmntmjpegLeftForearm.clientWidth;
-    var leftForearmHeight=elmntmjpegLeftForearm.clientHeight;
+    var leftForearmHeight=leftForearmWidth;
 
     // Create the right forearm viewer.
     var forearmRViewer = new MJPEGCANVAS.Viewer({
@@ -71,7 +111,7 @@ App = function () {
         divID : 'camera3',
         host : 'localhost',
         width : leftForearmWidth,
-        height : leftForearmWidth,
+        height : leftForearmHeight,
         topic : '/head_camera/rgb/image_raw'
     });
 
