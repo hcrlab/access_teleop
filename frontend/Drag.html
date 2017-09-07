@@ -26,12 +26,14 @@
 
     <script src="/bower_components/arrive/src/arrive.js"></script>
 
+    <!-- Common js files go here -->
+    <script src="common_js/arm.js"></script>
+    <script src="common_js/cloud_freezer.js"></script>
+    <script src="common_js/gripper.js"></script>
+    <script src="common_js/gripper_gui.js"></script>
+    <script src="common_js/app.js"></script>
 
-    <script src="arm.js"></script>
-    <script src="cloud_freezer.js"></script>
-    <script src="gripper.js"></script>
-    <script src="gripper_gui.js"></script>
-    <script src="app.js"></script>
+    <!-- Js files unique to this html page go here -->
     <script src="dragToMove.js"></script>
 
 
@@ -60,7 +62,7 @@
     <div id="feedback"></div>
 
 
-    <div w3-include-html="gripper.html"></div>
+    <div w3-include-html="common_html/gripper.html"></div>
     <script>w3.includeHTML(); // This line is necessary to allow html imports</script>
 
 </body>

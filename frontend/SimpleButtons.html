@@ -24,14 +24,17 @@
 
     <script src="/bower_components/arrive/src/arrive.js"></script>
 
+    <!-- Common js files go here -->
+    <script src="common_js/arm.js"></script>
+    <script src="common_js/cloud_freezer.js"></script>
+    <script src="common_js/gripper.js"></script>
+    <script src="common_js/gripper_gui.js"></script>
+    <script src="common_js/app.js"></script>
 
-    <script src="simple.js"></script>
-    <script src="gripper.js"></script>
-    <script src="gripper_gui.js"></script>
-    <script src="cloud_freezer.js"></script>
-    <script src="arm.js"></script>
-    <script src="app.js"></script>
- <title>Simple Buttons GUI</title>
+    <!-- Js files unique to this html page go here -->
+    <script src="simpleButtons.js"></script>
+
+    <title>Simple Buttons GUI</title>
 </head>
 
 <body onload="init()">
@@ -86,13 +89,10 @@
         <button id="sendMsg" type="button" onclick="pubMessage()">Publish Message</button>
     </div>
 
-    <div w3-include-html="gripper.html"></div>
-    <script>w3.includeHTML(); // This line is necessary to allow html imports</script>
-
-
     </div>
 
+    <div w3-include-html="common_html/gripper.html"></div>
+    <script>w3.includeHTML(); // This line is necessary to allow html imports</script>
+
 </body>
-
-
 </html>
