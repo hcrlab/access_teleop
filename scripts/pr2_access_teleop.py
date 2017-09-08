@@ -13,8 +13,8 @@ from visualization_msgs.msg import InteractiveMarker, InteractiveMarkerControl, 
 from visualization_msgs.msg import Marker
 
 camera_info_mapping = {'camera1': camera_info_messages.camera1, 'camera2': camera_info_messages.camera2}
-transform_broadcaster_mapping = {'camera1': ((0.5, 0, 3), (1, 0, 0, 0), rospy.Time(10), 'camera1', 'base_link'),
-                                'camera2': ((0.3, -1.5, 0.5), (-0.70711, 0, 0, 0.70711), rospy.Time(10), 'camera2', 'base_link')}
+transform_broadcaster_mapping = {'camera1': ((1, 0, 3), (1, 0, 0, 0), rospy.Time(10), 'camera1', 'base_link'),
+                                'camera2': ((0.5, -1.5, 0.5), (-0.70711, 0, 0, 0.70711), rospy.Time(10), 'camera2', 'base_link')}
 move_group_name = "right_arm"
 
 def wait_for_time():

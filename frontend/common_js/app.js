@@ -71,8 +71,8 @@ App = function () {
     // Adds 3 canvas image streams
     // --------------------------------------------------------------------------------
 
-    var cameraWidth = "640";
-    var cameraHeight = "480";
+    var cameraWidth = "342";
+    var cameraHeight = "342";
 
     // Dynamic Canvas Sizes
     var elmntmjpegRightForearm = document.getElementById("camera1");
@@ -83,8 +83,7 @@ App = function () {
     var elmntmjpegHead = document.getElementById("camera2");
     var headWidth=cameraWidth;
     var headHeight=cameraHeight;
-    var camera2Height = "480";
-    var camera2Width = "640";
+
 
     var elmntmjpegLeftForearm = document.getElementById("camera3");
     var leftForearmWidth=elmntmjpegLeftForearm.clientWidth;
