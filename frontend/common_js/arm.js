@@ -17,6 +17,12 @@ Arm = function (ros) {
        messageType: 'access_teleop_msgs/PX'
     });
 
+    var moveAndOrient = new ROSLIB.Topic({
+       ros: ros,
+        name: '/access_teleop/move_and_orient',
+        messageType: 'access_teleop_msgs/PXAndTheta'
+    });
+
 
     // A function for publishing to /access_teleop/delta
     this.moveArmByDelta = function (deltaX, deltaY, cameraName) {
@@ -36,6 +42,16 @@ Arm = function (ros) {
             pixel_y: absY
         });
         absolute.publish(absolutePX);
+    };
+
+    this.moveAndOrient = function (absX, absY, theta, cameraName) {
+        var absoluteAndTheta = new ROSLIB.Message({
+            camera_name: cameraName,
+            pixel_x: absX,
+            pixel_y: absY,
+            theta: theta
+        });
+        moveAndOrient.publish(absoluteAndTheta);
     };
 
 };

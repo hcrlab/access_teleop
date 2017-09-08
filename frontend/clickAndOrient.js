@@ -36,8 +36,8 @@ function init() {
                     console.log("offsetX :" + e.offsetX + " offsetY : " + e.offsetY);
                     var xDiff = e.offsetX - downX;
                     var yDiff = e.offsetY - downY;
-                    var angle = -Math.atan2(yDiff, xDiff);
-                    self.app.arm.moveArmByDelta(xDiff, yDiff, elementId);
+                    var angle = Math.atan2(yDiff, xDiff);
+                    self.app.arm.moveAndOrient(downX, downY, angle, elementId);
                     console.log("The angle we got is " + angle);
                 }
             };

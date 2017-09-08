@@ -2,7 +2,7 @@
 
 import rospy
 from pprint import pprint
-from access_teleop_msgs.msg import DeltaPX, PX
+from access_teleop_msgs.msg import DeltaPX, PX, PXAndTheta
 import fetch_api
 import camera_info_messages
 from moveit_commander import MoveGroupCommander
@@ -17,6 +17,7 @@ camera_info_mapping = {'camera1': camera_info_messages.camera1, 'camera2': camer
 transform_broadcaster_mapping = {'camera1': ((0.5, 0, 3), (1, 0, 0, 0), rospy.Time(10), 'camera1', 'base_link'),
                                 'camera2': ((0.3, -1.5, 0.5), (-0.70711, 0, 0, 0.70711), rospy.Time(10), 'camera2', 'base_link')}
 orientation_mapping = {'camera1': 2, 'camera2': 1}
+orientation_sign_mapping = {'camera1': -1, 'camera2': 1}
 
 def wait_for_time():
     """Wait for simulated time to begin.
@@ -149,9 +150,6 @@ class MoveByDelta(object):
 
     def callback(self, data):
         ps = self._move_group.get_current_pose()
-        #rpy = self._move_group.get_current_rpy()
-        #new_quat_array = transformations.quaternion_from_euler(rpy[0], rpy[1], rpy[2], "sxyz")
-        #ps.pose.orientation = quat_array_to_quat(new_quat_array)
         x_distance, y_distance = dpx_to_distance(data.delta_x, data.delta_y, data.camera_name, ps, True)
         ps2 = delta_modified_stamped_pose(x_distance, y_distance, data.camera_name, ps)
         error = self._arm.move_to_pose(ps2, allowed_planning_time=1.0)
@@ -179,6 +177,32 @@ class MoveByAbsolute(object):
         if error is not None:
             rospy.logerr(error)
 
+class MoveAndOrient(object):
+    def __init__(self, arm, gripper, move_group):
+        self._arm = arm
+        self._gripper = gripper
+        self._move_group = move_group
+
+    def start(self):
+        rospy.Subscriber('/access_teleop/move_and_orient', PXAndTheta, self.move_and_orient_callback, queue_size=1)
+
+    def move_and_orient_callback(self, data):
+        ps = self._move_group.get_current_pose()
+        rpy = self._move_group.get_current_rpy()
+        #rpy = [0,0,0]
+        print("The curent orientation for that camera is")
+        pprint(rpy)
+        rpy[orientation_mapping[data.camera_name]] = data.theta * orientation_sign_mapping[data.camera_name]
+        print("The new orientation of the gripper is ")
+        pprint(rpy)
+        new_quat_array = transformations.quaternion_from_euler(rpy[0], rpy[1], rpy[2], "sxyz")
+        ps.pose.orientation = quat_array_to_quat(new_quat_array)
+        x_distance, y_distance = dpx_to_distance(data.pixel_x, data.pixel_y, data.camera_name, ps, False)
+        ps2 = absolute_modified_stamped_pose(x_distance, y_distance, data.camera_name, ps)
+        error = self._arm.move_to_pose(ps2, allowed_planning_time=1.0)
+        if error is not None:
+            rospy.logerr(error)
+
 def main():
     rospy.init_node('access_gripper_teleop')
     wait_for_time()
@@ -192,6 +216,9 @@ def main():
 
     move_by_absolute = MoveByAbsolute(arm, gripper, move_group)
     move_by_absolute.start()
+
+    move_and_orient = MoveAndOrient(arm, gripper, move_group)
+    move_and_orient.start()
 
     rate = rospy.Rate(10)
     while not rospy.is_shutdown():
