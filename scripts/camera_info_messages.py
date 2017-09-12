@@ -28,8 +28,8 @@ camera1.binning_x = 0
 camera1.binning_y = 0
 camera1.roi.x_offset = 0
 camera1.roi.y_offset = 0
-camera1.roi.height = 480
-camera1.roi.width = 640
+camera1.roi.height = 342
+camera1.roi.width = 342
 camera1.roi.do_rectify = False
 
 """
@@ -57,6 +57,6 @@ camera2.binning_x = 0
 camera2.binning_y = 0
 camera2.roi.x_offset = 0
 camera2.roi.y_offset = 0
-camera2.roi.height = 480
-camera2.roi.width = 640
+camera2.roi.height = 342
+camera2.roi.width = 342
 camera2.roi.do_rectify = False

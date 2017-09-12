@@ -50,15 +50,32 @@ def publish_camera_info():
 
 def publish_gripper_pixels(camera_model, move_group):
     camera_model.fromCameraInfo(camera_info_mapping["camera1"])
-    x, y, z = getCameraDistances()
-    position = move_group.get_current_pose().pose.position
+    ps = move_group.get_current_pose()
+    #pprint(ps)
+    x, y, z = getCameraDistances("camera1", ps)
+    print(" x is " + str(x) + " and y is " + str(y) + " and z is " + str(z))
+    (u0, v0) = camera_model.project3dToPixel((0, 0, 1)) #This is the center of the camera
+    (u1, v1) = camera_model.project3dToPixel((x, y, z))
+    # camera_model.fromCameraInfo(camera_info_mapping["camera2"])
+    # (u2, v2) = camera_model.project3dToPixel((position.x, position.y, position.z))
+    print("u1 is " + str(u1 - u0) + " and v1 is " + str(v1 - v0))
+    # print(" and u2 is " + str(u2) + " and v2 is " + str(v2))
 
-    (u1, v1) = camera_model.project3dToPixel((position.x, position.y, position.z))
-    #camera_model.fromCameraInfo(camera_info_mapping["camera2"])
-    #(u2, v2) = camera_model.project3dToPixel((position.x, position.y, position.z))
-    print("u1 is " + str(u1) + " and v1 is " + str(v1))
-    #print(" and u2 is " + str(u2) + " and v2 is " + str(v2))
 
+def getCameraDistances(camera_name, ps):
+    if camera_name == "camera1":
+        camera_location = transform_broadcaster_mapping["camera1"][0]
+        z = camera_location[2] - ps.pose.position.z
+        x = ps.pose.position.x - camera_location[0]
+        y = ps.pose.position.y - camera_location[1]
+    elif camera_name == "camera2":
+        camera_location = transform_broadcaster_mapping["camera2"][0]
+        z = camera_location[1] - ps.pose.position.y
+        x = camera_location[0] - ps.pose.position.x
+        y = camera_location[2] - ps.pose.position.z
+    else:
+        raise ValueError('Did not pass in a valid camera_name')
+    return x,y,z
 
 def dpx_to_distance(dx, dy, camera_name, current_ps, offset):
     print("The dx is " + str(dx) + " the dy is " + str(dy) + " and the camera name is " + camera_name)
