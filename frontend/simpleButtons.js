@@ -27,7 +27,7 @@ function init() {
     upBTN1.innerHTML="<img src=\"img/blueUpArrow.png\">";
     upBTN1.id='up';
     upBTN1.title='\u2191Up\u2191';
-    upBTN1.style.left=(cameraWidth - 95)/2 + "px";
+    upBTN1.style.left=(cameraWidth - 80)/2 + "px";
     upBTN1.style.top= cameraHeight/4  + 10 + "px";
     var body = document.getElementsByTagName("body")[0];
     body.appendChild(upBTN1);
@@ -37,7 +37,7 @@ function init() {
     downBTN1.id='down';
     downBTN1.title='\u2193Down\u2193';
     downBTN1.className = "button";
-    downBTN1.style.left=(cameraWidth - 95)/2 + "px";
+    downBTN1.style.left=(cameraWidth - 80)/2 + "px";
     downBTN1.style.top= (cameraHeight- (-50))+ "px";
     body.appendChild(downBTN1);
 
@@ -46,7 +46,7 @@ function init() {
     leftBTN1.id='left';
     leftBTN1.title='\u2190Left\u2190';
     leftBTN1.className = "button";
-    leftBTN1.style.left=0 + "px";
+    leftBTN1.style.left=15 + "px";
     leftBTN1.style.top=(cameraHeight- (-90))/2 + "px";
     body.appendChild(leftBTN1);
 
@@ -55,7 +55,7 @@ function init() {
     rightBTN1.id='right';
     rightBTN1.title='\u2192Right\u2192';
     rightBTN1.className = "button";
-    rightBTN1.style.left=(cameraWidth -52)+ "px";
+    rightBTN1.style.left=(cameraWidth - 37)+ "px";
     rightBTN1.style.top= (cameraHeight- (-90))/2 + "px";
     body.appendChild(rightBTN1);
 
@@ -64,7 +64,7 @@ function init() {
     rotaterightBTN1.id = 'rotateRight';
     rotaterightBTN1.title = '\u21B6Rotate Right\u21B6';
     rotaterightBTN1.className = "button";
-    rotaterightBTN1.style.left =(cameraWidth -118)+ "px";
+    rotaterightBTN1.style.left =(cameraWidth -103)+ "px";
     rotaterightBTN1.style.top =(cameraHeight- (-90))/2 + "px";
     rotaterightBTN1.style.height = 80 + "px";
     body.appendChild(rotaterightBTN1);
@@ -76,7 +76,7 @@ function init() {
     rotateleftBTN1.className = "button";
     rotateleftBTN1.style.width = 65 + "px";
     rotateleftBTN1.style.height = 80 + "px";
-    rotateleftBTN1.style.left =  55 + "px";
+    rotateleftBTN1.style.left =  70 + "px";
     rotateleftBTN1.style.top = (cameraHeight- (-90))/2 + "px";
     rotateleftBTN1.style.height = 80 + "px";
     body.appendChild(rotateleftBTN1);
@@ -103,7 +103,7 @@ function init() {
     leftBTN2.id='left2';
     leftBTN2.title='\u2190Left\u2190';
     leftBTN2.className = "button";
-    leftBTN2.style.left=(cameraWidth- (-10)) + "px";
+    leftBTN2.style.left=(cameraWidth- (-20)) + "px";
     leftBTN2.style.top=(cameraHeight- (-90))/2 + "px";
     body.appendChild(leftBTN2);
 
@@ -112,7 +112,7 @@ function init() {
     rightBTN2.id='right2';
     rightBTN2.title='\u2192Right\u2192';
     rightBTN2.className = "button";
-    rightBTN2.style.left=(cameraWidth*2 - (48)) + "px";
+    rightBTN2.style.left=(cameraWidth*2 - (33)) + "px";
     rightBTN2.style.top= (cameraHeight- (-90))/2 + "px";
     body.appendChild(rightBTN2);
 
@@ -121,7 +121,7 @@ function init() {
     rotaterightBTN2.id = 'rotateRight2';
     rotaterightBTN2.title = '\u21B6Rotate Right\u21B6';
     rotaterightBTN2.className = "button";
-    rotaterightBTN2.style.left =(cameraWidth*2- (120)) + "px";
+    rotaterightBTN2.style.left =(cameraWidth*2- (105)) + "px";
     rotaterightBTN2.style.top =(cameraHeight- (-90))/2 + "px";
     rotaterightBTN2.style.height = 80 + "px";
     body.appendChild(rotaterightBTN2);
@@ -131,7 +131,7 @@ function init() {
     rotateleftBTN2.id = 'rotateLeft2';
     rotateleftBTN2.title = '\u21BARotate Left\u21BA';
     rotateleftBTN2.className = "button";
-    rotateleftBTN2.style.left =  (cameraWidth- (-65)) + "px";
+    rotateleftBTN2.style.left =  (cameraWidth- (-74)) + "px";
     rotateleftBTN2.style.top = (cameraHeight- (-90))/2 + "px";
     body.appendChild(rotateleftBTN2);
 
