@@ -121,7 +121,7 @@ function init() {
     rotaterightBTN2.id = 'rotateRight2';
     rotaterightBTN2.title = '\u21BBRotate Right\u21BB';
     rotaterightBTN2.className = "button";
-    rotaterightBTN2.style.left =(cameraWidth*2- (115)) + "px";
+    rotaterightBTN2.style.left =(cameraWidth*2- (120)) + "px";
     rotaterightBTN2.style.top =(cameraHeight- (-90))/2 + "px";
     rotaterightBTN2.style.height = 80 + "px";
     body.appendChild(rotaterightBTN2);
@@ -131,11 +131,8 @@ function init() {
     rotateleftBTN2.id = 'rotateLeft2';
     rotateleftBTN2.title = '\u21BARotate Left\u21BA';
     rotateleftBTN2.className = "button";
-    rotateleftBTN2.style.width = 65 + "px";
-    rotateleftBTN2.style.height = 80 + "px";
     rotateleftBTN2.style.left =  (cameraWidth- (-65)) + "px";
     rotateleftBTN2.style.top = (cameraHeight- (-90))/2 + "px";
-    rotateleftBTN2.style.height = 80 + "px";
     body.appendChild(rotateleftBTN2);
 
     upBTN1.addEventListener ("click", pubMoveMsg);
