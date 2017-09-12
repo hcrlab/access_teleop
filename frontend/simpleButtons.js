@@ -20,8 +20,8 @@ function init() {
 
     var elmnt = document.getElementById("camera1");
 
-    var cameraWidth = "342";
-    var cameraHeight = "342";
+    var cameraWidth = this.app.cameraWidth;
+    var cameraHeight = this.app.cameraHeight;
 
     var upBTN1 = document.createElement("button");
     upBTN1.innerHTML="<img src=\"img/blueUpArrow.png\">";
