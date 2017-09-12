@@ -55,6 +55,7 @@ function init() {
     downBTN1.className = "button";
     downBTN1.style.left=(cameraWidth - 80)/2 + "px";
     downBTN1.style.top= (cameraHeight- (-50))+ "px";
+    downBTN1.value = `${camera1Name},${0},${cam1Y}`;
     body.appendChild(downBTN1);
 
     var leftBTN1 = document.createElement("button");
@@ -64,6 +65,7 @@ function init() {
     leftBTN1.className = "button";
     leftBTN1.style.left=15 + "px";
     leftBTN1.style.top=(cameraHeight- (-90))/2 + "px";
+    leftBTN1.value = `${camera1Name},${-cam1X},${0}`;
     body.appendChild(leftBTN1);
 
     var rightBTN1 = document.createElement("button");
@@ -73,6 +75,7 @@ function init() {
     rightBTN1.className = "button";
     rightBTN1.style.left=(cameraWidth - 37)+ "px";
     rightBTN1.style.top= (cameraHeight- (-90))/2 + "px";
+    rightBTN1.value = `${camera1Name},${cam1X},${0}`;
     body.appendChild(rightBTN1);
 
     var rotaterightBTN1 = document.createElement("button");
