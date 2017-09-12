@@ -14,8 +14,8 @@ from visualization_msgs.msg import InteractiveMarker, InteractiveMarkerControl, 
 from visualization_msgs.msg import Marker
 
 camera_info_mapping = {'camera1': camera_info_messages.camera1, 'camera2': camera_info_messages.camera2}
-transform_broadcaster_mapping = {'camera1': ((1, -0.3, 3), (1, 0, 0, 0), rospy.Time(10), 'camera1', 'base_link'),
-                                'camera2': ((0.7, -1.5, 0.5), (-0.70711, 0, 0, 0.70711), rospy.Time(10), 'camera2', 'base_link')}
+transform_broadcaster_mapping = {'camera1': ((1.1, -0.3, 3), (1, 0, 0, 0), rospy.Time(10), 'camera1', 'base_link'),
+                                'camera2': ((1.3, -2.5, 0.5), (-0.70711, 0, 0, 0.70711), rospy.Time(10), 'camera2', 'base_link')}
 orientation_mapping = {'camera1': 2, 'camera2': 1}
 orientation_sign_mapping = {'camera1': -1, 'camera2': 1}
 
@@ -34,6 +34,7 @@ def quat_array_to_quat(quat_array):
     new_quat.w = quat_array[3]
     return new_quat
 
+
 def publish_camera_transforms():
     for key in transform_broadcaster_mapping:
         tb = TransformBroadcaster()
@@ -45,6 +46,18 @@ def publish_camera_info():
     for key in camera_info_mapping:
         pub = rospy.Publisher(key + '/camera_info', camera_info_messages.CameraInfo, queue_size=10)
         pub.publish(camera_info_mapping[key])
+
+
+def publish_gripper_pixels(camera_model, move_group):
+    camera_model.fromCameraInfo(camera_info_mapping["camera1"])
+    x, y, z = getCameraDistances()
+    position = move_group.get_current_pose().pose.position
+
+    (u1, v1) = camera_model.project3dToPixel((position.x, position.y, position.z))
+    #camera_model.fromCameraInfo(camera_info_mapping["camera2"])
+    #(u2, v2) = camera_model.project3dToPixel((position.x, position.y, position.z))
+    print("u1 is " + str(u1) + " and v1 is " + str(v1))
+    #print(" and u2 is " + str(u2) + " and v2 is " + str(v2))
 
 
 def dpx_to_distance(dx, dy, camera_name, current_ps, offset):
@@ -211,6 +224,8 @@ def main():
     gripper = fetch_api.Gripper()
     move_group = MoveGroupCommander("arm")
 
+    camera_model = PinholeCameraModel()
+
     move_by_delta = MoveByDelta(arm, gripper, move_group)
     move_by_delta.start()
 
@@ -224,6 +239,7 @@ def main():
     while not rospy.is_shutdown():
         publish_camera_transforms()
         publish_camera_info()
+        publish_gripper_pixels(camera_model, move_group)
         rate.sleep()
 
 
