@@ -23,12 +23,28 @@ function init() {
     var cameraWidth = "342";
     var cameraHeight = "342";
 
+    var camera1Name = "camera1";
+    var camera2Name = "camera2";
+
+    var cam1Div = document.getElementById("camera1");
+    var cam2Div = document.getElementById("camera2");
+
+    var cam1X = "50";
+    var cam1Y = "50";
+
+    var cam2X = "50";
+    var cam2Y = "50";
+
+
+
     var upBTN1 = document.createElement("button");
     upBTN1.innerHTML="<img src=\"img/blueUpArrow.png\">";
     upBTN1.id='up';
     upBTN1.title='\u2191Up\u2191';
+    upBTN1.className = "button";
     upBTN1.style.left=(cameraWidth - 95)/2 + "px";
     upBTN1.style.top= cameraHeight/4  + 10 + "px";
+    upBTN1.value = `${camera1Name},${0},${-cam1Y}`;
     var body = document.getElementsByTagName("body")[0];
     body.appendChild(upBTN1);
 
@@ -135,64 +151,16 @@ function init() {
     rotateleftBTN2.style.top = (cameraHeight- (-90))/2 + "px";
     body.appendChild(rotateleftBTN2);
 
-    upBTN1.addEventListener ("click", pubMoveMsg);
-    downBTN1.addEventListener ("click", pubMoveMsg);
-    leftBTN1.addEventListener ("click", pubMoveMsg);
-    rightBTN1.addEventListener ("click", pubMoveMsg);
-    rotaterightBTN1.addEventListener ("click", pubMoveMsg);
-    rotateleftBTN1.addEventListener ("click", pubMoveMsg);
-    upBTN2.addEventListener ("click", pubMoveMsg);
-    downBTN2.addEventListener ("click", pubMoveMsg);
-    leftBTN2.addEventListener ("click", pubMoveMsg);
-    rightBTN2.addEventListener ("click", pubMoveMsg);
-    rotaterightBTN2.addEventListener ("click", pubMoveMsg);
-    rotateleftBTN2.addEventListener ("click", pubMoveMsg);
+
+    var buttons = document.querySelectorAll(".button");
+    buttons.forEach(function (element) {
+        element.addEventListener ("click", pubMoveMsg);
+    });
 
 
-
-
-function pubMoveMsg() {
-    var comSel;
-    var expr = this.id;
-    switch (expr) {
-      case 'up':
-        comSel="Go Up 1";
-        break;
-      case 'up2':
-        comSel="Go Up 2";
-        break;
-      case 'down':
-        comSel="Go Down 1";
-        break;
-      case 'down2':
-        comSel="Go Down 2";
-        break;
-      case 'left':
-        comSel="Go Left 1";
-        break;
-      case 'left2':
-        comSel="Go Left 2";
-        break;
-      case 'right':
-        comSel="Go Right 1";
-        break;
-      case 'right2':
-        comSel="Go Right 2";
-        break;
-      case 'rotateRight':
-        comSel="Go Rotate Right 1";
-        break;
-      case 'rotateRight2':
-        comSel="Go Rotate Right 2";
-        break;
-      case 'rotateLeft':
-        comSel="Go Rotate Left";
-        break;
-      case 'rotateLeft2':
-        comSel="Go Rotate Left 2";
-        break;
+    function pubMoveMsg() {
+        var divData = this.value.split(",");
+        console.log(divData);
+        self.app.arm.moveArmByDelta(divData[1], divData[2], divData[0]);
     }
-
-    document.getElementById("cmdReceived").innerHTML = comSel;
-}
 }
