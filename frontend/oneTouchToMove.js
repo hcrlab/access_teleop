@@ -22,6 +22,8 @@ function init() {
                         arm_element.onmousemove = function (e) {
                             e = e || window.event;
                             var elementId = (e.target || e.srcElement).parentElement.id;
+                            var canvas = document.querySelector("#" + elementId + " canvas");
+                            var x_pixel = (self.app.backendCameraWidth / self.app.cameraWidth) * e.offsetX;
                             console.log(elementId);
                             self.app.arm.moveArmByAbsolute(e.offsetX, e.offsetY, elementId);
                         };
