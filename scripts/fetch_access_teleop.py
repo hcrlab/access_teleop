@@ -50,18 +50,17 @@ def publish_camera_info():
 
 
 def publish_gripper_pixels(camera_model1, camera_model2, move_group):
-    dataArray =[]
+    data_array =[]
     ps = move_group.get_current_pose()
 
     for camera in camera_names:
         camera_model1.fromCameraInfo(camera_info_mapping[camera])
         x, y, z = getCameraDistances(camera, ps)
         (u, v) = camera_model1.project3dToPixel((x, y, z))
-        dataArray.append([camera, int(u), int(v)])
+        data_array.append([camera, int(u), int(v)])
 
-    pprint(dataArray)
     pub = rospy.Publisher('/access_teleop/gripper_pixels', PX, queue_size=1)
-    for array in dataArray:
+    for array in data_array:
         px_msg = PX()
         px_msg.camera_name = array[0]
         px_msg.pixel_x = array[1]
@@ -86,29 +85,29 @@ def getCameraDistances(camera_name, ps):
 
 
 def dpx_to_distance(dx, dy, camera_name, current_ps, offset):
-    print("The dx is " + str(dx) + " the dy is " + str(dy) + " and the camera name is " + camera_name)
+    #print("The dx is " + str(dx) + " the dy is " + str(dy) + " and the camera name is " + camera_name)
 
     big_z_mappings = {'camera1': transform_broadcaster_mapping['camera1'][0][2] - current_ps.pose.position.z,
                       'camera2': transform_broadcaster_mapping['camera2'][0][1] - current_ps.pose.position.y}
 
-    print("The frame_id for the current pose is " + current_ps.header.frame_id)
+    #print("The frame_id for the current pose is " + current_ps.header.frame_id)
     camera_model = PinholeCameraModel()
     camera_model.fromCameraInfo(camera_info_mapping[camera_name])
     x, y, z = camera_model.projectPixelTo3dRay((dx, dy))
-    print " x : {} , y : {} , z : {}".format(x, y, z)
+    #print " x : {} , y : {} , z : {}".format(x, y, z)
     x_center, y_center, z_center = camera_model.projectPixelTo3dRay((0, 0))
     big_z = abs(big_z_mappings[camera_name])
-    print("The big_z for " + camera_name + " is " + str(big_z))
+    #print("The big_z for " + camera_name + " is " + str(big_z))
     big_x = (x / z) * big_z  # Use law of similar trianges to solve
     big_y = (y / z) * big_z
 
     big_x_center = (x_center / z_center) * big_z
     big_y_center = (y_center / z_center) * big_z
 
-    print("The x_center  is " + str(x_center) + " the y_center  is " + str(y_center) + " and the z_center is " + str(
-        z_center))
-    print(
-    "The x distance is " + str(big_x - big_x_center) + " the y distance is " + str(big_y - big_y_center) + " and the camera name is " + camera_name + "\n")
+    #print("The x_center  is " + str(x_center) + " the y_center  is " + str(y_center) + " and the z_center is " + str(
+    #    z_center))
+    #print(
+    #"The x distance is " + str(big_x - big_x_center) + " the y distance is " + str(big_y - big_y_center) + " and the camera name is " + camera_name + "\n")
     if offset:
         return big_x - big_x_center, big_y - big_y_center
     else:
@@ -206,7 +205,6 @@ class MoveByAbsolute(object):
         rospy.Subscriber('/access_teleop/absolute', PX, self.absolute_callback, queue_size=1)
 
     def absolute_callback(self, data):
-        print("We got the pixel with x of " + str(data.pixel_x) + " and y of " + str(data.pixel_y))
         ps = self._move_group.get_current_pose()
         x_distance, y_distance = dpx_to_distance(data.pixel_x, data.pixel_y, data.camera_name, ps, False)
         #add_marker(x_distance, y_distance, ps, data.camera_name, self)
@@ -214,6 +212,7 @@ class MoveByAbsolute(object):
         error = self._arm.move_to_pose(ps2, allowed_planning_time=1.0)
         if error is not None:
             rospy.logerr(error)
+
 
 class MoveAndOrient(object):
     def __init__(self, arm, gripper, move_group):
@@ -265,7 +264,7 @@ def main():
     while not rospy.is_shutdown():
         publish_camera_transforms()
         publish_camera_info()
-        publish_gripper_pixels(camera_model1, camera_model2, move_group)
+        #publish_gripper_pixels(camera_model1, camera_model2, move_group)
         rate.sleep()
 
 
