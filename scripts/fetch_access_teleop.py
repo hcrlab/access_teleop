@@ -14,11 +14,13 @@ from visualization_msgs.msg import InteractiveMarker, InteractiveMarkerControl, 
 from visualization_msgs.msg import Marker
 
 camera_info_mapping = {'camera1': camera_info_messages.camera1, 'camera2': camera_info_messages.camera2}
+
 transform_broadcaster_mapping = {'camera1': ((1.1, -0.3, 3), (1, 0, 0, 0), rospy.Time(10), 'camera1', 'base_link'),
                                 'camera2': ((1.3, -2.5, 0.5), (-0.70711, 0, 0, 0.70711), rospy.Time(10), 'camera2', 'base_link')}
 orientation_mapping = {'camera1': 2, 'camera2': 1}
 orientation_sign_mapping = {'camera1': -1, 'camera2': 1}
 camera_names = ['camera1', 'camera2']
+
 
 def wait_for_time():
     """Wait for simulated time to begin.

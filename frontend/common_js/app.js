@@ -71,8 +71,9 @@ App = function () {
     // Adds 3 canvas image streams
     // --------------------------------------------------------------------------------
 
-    this.cameraWidth = "360";
-    this.cameraHeight = "360";
+
+    this.cameraWidth = "342";
+    this.cameraHeight = "342";
 
     this.backendCameraWidth = "640";
     this.backendCameraHeight = "480";
