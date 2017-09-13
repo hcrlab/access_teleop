@@ -26,22 +26,26 @@ Arm = function (ros) {
 
     // A function for publishing to /access_teleop/delta
     this.moveArmByDelta = function (deltaX, deltaY, cameraName) {
-        var deltaPX = new ROSLIB.Message({
-            camera_name: cameraName,
-            delta_x: parseInt(deltaX),
-            delta_y: parseInt(deltaY)
-        });
-        delta.publish(deltaPX);
+        if(cameraName) {
+            var deltaPX = new ROSLIB.Message({
+                camera_name: cameraName,
+                delta_x: parseInt(deltaX),
+                delta_y: parseInt(deltaY)
+            });
+            delta.publish(deltaPX);
+        }
     };
 
     // A function for publishing to /access_teleop/absolute
     this.moveArmByAbsolute = function (absX, absY, cameraName) {
-        var absolutePX = new ROSLIB.Message({
-            camera_name: cameraName,
-            pixel_x: parseInt(absX),
-            pixel_y: parseInt(absY)
-        });
-        absolute.publish(absolutePX);
+        if(cameraName) {
+            var absolutePX = new ROSLIB.Message({
+                camera_name: cameraName,
+                pixel_x: parseInt(absX),
+                pixel_y: parseInt(absY)
+            });
+            absolute.publish(absolutePX);
+        }
     };
 
     this.moveAndOrient = function (absX, absY, theta, cameraName) {
