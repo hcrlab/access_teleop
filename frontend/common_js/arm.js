@@ -38,8 +38,8 @@ Arm = function (ros) {
     this.moveArmByAbsolute = function (absX, absY, cameraName) {
         var absolutePX = new ROSLIB.Message({
             camera_name: cameraName,
-            pixel_x: absX,
-            pixel_y: absY
+            pixel_x: parseInt(absX),
+            pixel_y: parseInt(absY)
         });
         absolute.publish(absolutePX);
     };

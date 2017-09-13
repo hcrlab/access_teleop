@@ -37,7 +37,9 @@ function init() {
                     var elementId = (e.target || e.srcElement).parentElement.id;
                     console.log(elementId);
                     console.log("offsetX :" + e.offsetX + " offsetY : " + e.offsetY);
-                    self.app.arm.moveArmByDelta(e.offsetX - downX, e.offsetY - downY, elementId);
+                    var x_pixel = (self.app.backendCameraWidth / self.app.cameraWidth) * (e.offsetX - downX);
+                    var y_pixel = (self.app.backendCameraHeight / self.app.cameraHeight) * (e.offsetY - downY);
+                    self.app.arm.moveArmByDelta(x_pixel, y_pixel, elementId);
                 }
             };
 

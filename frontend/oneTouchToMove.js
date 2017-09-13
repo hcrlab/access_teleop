@@ -22,10 +22,10 @@ function init() {
                         arm_element.onmousemove = function (e) {
                             e = e || window.event;
                             var elementId = (e.target || e.srcElement).parentElement.id;
-                            var canvas = document.querySelector("#" + elementId + " canvas");
                             var x_pixel = (self.app.backendCameraWidth / self.app.cameraWidth) * e.offsetX;
+                            var y_pixel = (self.app.backendCameraHeight / self.app.cameraHeight) * e.offsetY;
                             console.log(elementId);
-                            self.app.arm.moveArmByAbsolute(e.offsetX, e.offsetY, elementId);
+                            self.app.arm.moveArmByAbsolute(x_pixel, y_pixel, elementId);
                         };
                     }
                     else {
