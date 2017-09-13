@@ -18,6 +18,7 @@ transform_broadcaster_mapping = {'camera1': ((1.1, -0.3, 3), (1, 0, 0, 0), rospy
                                 'camera2': ((1.3, -2.5, 0.5), (-0.70711, 0, 0, 0.70711), rospy.Time(10), 'camera2', 'base_link')}
 orientation_mapping = {'camera1': 2, 'camera2': 1}
 orientation_sign_mapping = {'camera1': -1, 'camera2': 1}
+camera_names = ['camera1', 'camera2']
 
 def wait_for_time():
     """Wait for simulated time to begin.
@@ -48,18 +49,24 @@ def publish_camera_info():
         pub.publish(camera_info_mapping[key])
 
 
-def publish_gripper_pixels(camera_model, move_group):
-    camera_model.fromCameraInfo(camera_info_mapping["camera1"])
+def publish_gripper_pixels(camera_model1, camera_model2, move_group):
+    dataArray =[]
     ps = move_group.get_current_pose()
-    #pprint(ps)
-    x, y, z = getCameraDistances("camera1", ps)
-    print(" x is " + str(x) + " and y is " + str(y) + " and z is " + str(z))
-    (u0, v0) = camera_model.project3dToPixel((0, 0, 1)) #This is the center of the camera
-    (u1, v1) = camera_model.project3dToPixel((x, y, z))
-    # camera_model.fromCameraInfo(camera_info_mapping["camera2"])
-    # (u2, v2) = camera_model.project3dToPixel((position.x, position.y, position.z))
-    print("u1 is " + str(u1 - u0) + " and v1 is " + str(v1 - v0))
-    # print(" and u2 is " + str(u2) + " and v2 is " + str(v2))
+
+    for camera in camera_names:
+        camera_model1.fromCameraInfo(camera_info_mapping[camera])
+        x, y, z = getCameraDistances(camera, ps)
+        (u, v) = camera_model1.project3dToPixel((x, y, z))
+        dataArray.append([camera, int(u), int(v)])
+
+    pprint(dataArray)
+    pub = rospy.Publisher('/access_teleop/gripper_pixels', PX, queue_size=1)
+    for array in dataArray:
+        px_msg = PX()
+        px_msg.camera_name = array[0]
+        px_msg.pixel_x = array[1]
+        px_msg.pixel_y = array[2]
+        pub.publish(px_msg)
 
 
 def getCameraDistances(camera_name, ps):
@@ -67,7 +74,7 @@ def getCameraDistances(camera_name, ps):
         camera_location = transform_broadcaster_mapping["camera1"][0]
         z = camera_location[2] - ps.pose.position.z
         x = ps.pose.position.x - camera_location[0]
-        y = ps.pose.position.y - camera_location[1]
+        y = camera_location[1] - ps.pose.position.y
     elif camera_name == "camera2":
         camera_location = transform_broadcaster_mapping["camera2"][0]
         z = camera_location[1] - ps.pose.position.y
@@ -76,6 +83,7 @@ def getCameraDistances(camera_name, ps):
     else:
         raise ValueError('Did not pass in a valid camera_name')
     return x,y,z
+
 
 def dpx_to_distance(dx, dy, camera_name, current_ps, offset):
     print("The dx is " + str(dx) + " the dy is " + str(dy) + " and the camera name is " + camera_name)
@@ -241,7 +249,8 @@ def main():
     gripper = fetch_api.Gripper()
     move_group = MoveGroupCommander("arm")
 
-    camera_model = PinholeCameraModel()
+    camera_model1 = PinholeCameraModel()
+    camera_model2 = PinholeCameraModel()
 
     move_by_delta = MoveByDelta(arm, gripper, move_group)
     move_by_delta.start()
@@ -256,7 +265,7 @@ def main():
     while not rospy.is_shutdown():
         publish_camera_transforms()
         publish_camera_info()
-        publish_gripper_pixels(camera_model, move_group)
+        publish_gripper_pixels(camera_model1, camera_model2, move_group)
         rate.sleep()
 
 
