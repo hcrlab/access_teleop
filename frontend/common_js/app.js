@@ -72,8 +72,8 @@ App = function () {
     // --------------------------------------------------------------------------------
 
 
-    this.cameraWidth = "342";
-    this.cameraHeight = "342";
+    this.cameraWidth = "640";
+    this.cameraHeight = "480";
 
     this.backendCameraWidth = "640";
     this.backendCameraHeight = "480";

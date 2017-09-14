@@ -28,7 +28,7 @@
 
     <!-- Common js files go here -->
     <script src="common_js/arm.js"></script>
-    <script src="gripper_coords_listener.js"></script>
+    <script src="common_js/gripper_coords_listener.js"></script>
     <script src="common_js/cloud_freezer.js"></script>
     <script src="common_js/gripper.js"></script>
     <script src="common_js/gripper_gui.js"></script>
@@ -45,17 +45,20 @@
 
 <div class="container-fluid">
     <div class="row">
-        <div id="camera1" class="col-sm-4, js_arm_div">
-            <svg height="500" width="500" style="z-index: 1">
-                <circle cx="50" cy="50" r="40" stroke="red" stroke-width="3" fill="none" style="z-index: 100" />
+        <h1>Right</h1>
+        <div id="camera1" class="col-sm-4, js_arm_div camera-div">
+            <svg class="circle-overlay" style="z-index: 1">
+                <circle cx="50" cy="50" r="40" stroke="red" stroke-width="10" fill="none" style="z-index: 100" />
             </svg>
-            <h1>Right</h1></div>
-        <div id="camera2" class="col-sm-4 js_arm_div">
-            <svg height="500" width="500" style="z-index: 1">
-                <circle cx="50" cy="50" r="40" stroke="red" stroke-width="3" fill="none" style="z-index: 100" />
+        </div>
+        <h1>Head</h1>
+        <div id="camera2" class="col-sm-4 js_arm_div camera-div">
+            <svg class="circle-overlay" style="z-index: 1">
+                <circle cx="50" cy="50" r="40" stroke="red" stroke-width="10" fill="none" style="z-index: 100" />
             </svg>
-            <h1>Head</h1></div>
-        <div id="camera3" class="col-sm-4"><h1>Left</h1></div>
+        </div>
+        <h1>Left</h1>
+        <div id="camera3" class="col-sm-4 camera-div"></div>
     </div>
 </div>
 

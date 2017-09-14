@@ -39,8 +39,7 @@ input{
 }
 
 canvas{
-
-	border-style: solid;
+	/*border-style: solid; */
 }
 .row.no-gutter {
   margin-left: -18px;
@@ -57,7 +56,6 @@ svg{
     z-index: 6;
 	background: transparent;
 	left:5px;
-
 	top:5px;
 }
 
@@ -75,8 +73,10 @@ svg{
 }
 
 div{
-	//border-style: solid;
+    /*
+	border-style: solid;
 	border-color: #2423cb;
+	*/
 }
 
 #gripper-container{
@@ -86,4 +86,17 @@ div{
 
 .ui-slider .ui-slider-handle {
 	height:2.4em;
+}
+
+svg.circle-overlay{
+    height: 100%;
+    width: 100%;
+    display: block;
+    float: left;
+}
+
+.camera-div{
+    display: inline-block;
+    height: 480px;
+    width: 640px;
 }
