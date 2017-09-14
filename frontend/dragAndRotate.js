@@ -11,6 +11,7 @@ var downY;
 var cmdVelTopic;
 var twist;
 var thetaDown;
+var downOnCircle = false;
 
 
 function init() {
@@ -51,6 +52,7 @@ function init() {
 
         circles.forEach(function(element){
             element.onmousedown = function (e) {
+                downOnCircle = true;
                 e = e || window.event;
                 if(e.which == 1) {
                     var elementId = (e.target || e.srcElement).parentElement.parentElement.id;
@@ -80,9 +82,10 @@ function init() {
             };
             element.onmouseup = function (e) {
                 e = e || window.event;
-                if(e.which == 1) {
+                if(e.which == 1 && downOnCircle) {
+                    downOnCircle = false;
                     var elementId = (e.target || e.srcElement).parentElement.parentElement.id;
-                    console.log("Mouse down on the circle with an id of " + elementId);
+                    console.log("Mouse up on the circle with an id of " + elementId);
                     if(elementId === "camera1"){
                         var deltaX = e.offsetX - self.app.coordsListener.cam1X;
                         var deltaY = e.offsetY - self.app.coordsListener.cam1Y;
@@ -105,7 +108,6 @@ function init() {
                     }
                     //var deltaX = e.offsetX - self.app.coordsListener.
                 }
-                console.log("Mouse up on the circle");
             };
         });
     });
