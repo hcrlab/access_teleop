@@ -56,8 +56,8 @@ Arm = function (ros) {
     this.moveAndOrient = function (absX, absY, theta, cameraName) {
         var absoluteAndTheta = new ROSLIB.Message({
             camera_name: cameraName,
-            pixel_x: absX,
-            pixel_y: absY,
+            pixel_x: parseInt(absX),
+            pixel_y: parseInt(absY),
             theta: theta
         });
         moveAndOrient.publish(absoluteAndTheta);
