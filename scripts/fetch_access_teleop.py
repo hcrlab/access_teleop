@@ -50,7 +50,7 @@ def publish_camera_info(publishers):
 
 
 def publish_gripper_pixels(camera_model, move_group, pub):
-    data_array =[]
+    data_array = []
     ps = move_group.get_current_pose()
 
     for camera in camera_names:
@@ -187,10 +187,14 @@ class MoveByDelta(object):
         ps = self._move_group.get_current_pose()
         x_distance, y_distance = dpx_to_distance(data.delta_x, data.delta_y, data.camera_name, ps, True)
         ps2 = delta_modified_stamped_pose(x_distance, y_distance, data.camera_name, ps)
-        error = self._arm.move_to_pose(ps2, allowed_planning_time=1.0)
-        if error is not None:
-            rospy.logerr(error)
-
+        pose_possible = self._arm.compute_ik(ps2, timeout=rospy.Duration(1))
+        print(pose_possible)
+        if pose_possible: #This check will prevent some edge poses, but will also save time
+            error = self._arm.move_to_pose(ps2, allowed_planning_time=1.0)
+            if error is not None:
+                rospy.logerr(error)
+            else:
+                print("We got there!")
 
 class MoveByAbsolute(object):
     def __init__(self, arm, move_group):
@@ -206,9 +210,12 @@ class MoveByAbsolute(object):
         x_distance, y_distance = dpx_to_distance(data.pixel_x, data.pixel_y, data.camera_name, ps, False)
         #add_marker(x_distance, y_distance, ps, data.camera_name, self)
         ps2 = absolute_modified_stamped_pose(x_distance, y_distance, data.camera_name, ps)
-        error = self._arm.move_to_pose(ps2, allowed_planning_time=1.0)
-        if error is not None:
-            rospy.logerr(error)
+        pose_possible = self._arm.compute_ik(ps2, timeout=rospy.Duration(1))
+        print(pose_possible)
+        if pose_possible: #This check will prevent some edge poses, but will also save time
+            error = self._arm.move_to_pose(ps2, allowed_planning_time=1.0)
+            if error is not None:
+                rospy.logerr(error)
 
 
 class MoveAndOrient(object):
