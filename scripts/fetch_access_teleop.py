@@ -38,30 +38,27 @@ def quat_array_to_quat(quat_array):
     return new_quat
 
 
-def publish_camera_transforms():
+def publish_camera_transforms(tb):
     for key in transform_broadcaster_mapping:
-        tb = TransformBroadcaster()
         transform_data = transform_broadcaster_mapping[key]
         tb.sendTransform(transform_data[0], transform_data[1], transform_data[2], transform_data[3], transform_data[4])
 
 
-def publish_camera_info():
-    for key in camera_info_mapping:
-        pub = rospy.Publisher(key + '/camera_info', camera_info_messages.CameraInfo, queue_size=10)
-        pub.publish(camera_info_mapping[key])
+def publish_camera_info(publishers):
+    for pub in publishers:
+        pub[1].publish(camera_info_mapping[pub[0]])
 
 
-def publish_gripper_pixels(camera_model1, camera_model2, move_group):
+def publish_gripper_pixels(camera_model, move_group, pub):
     data_array =[]
     ps = move_group.get_current_pose()
 
     for camera in camera_names:
-        camera_model1.fromCameraInfo(camera_info_mapping[camera])
+        camera_model.fromCameraInfo(camera_info_mapping[camera])
         x, y, z = getCameraDistances(camera, ps)
-        (u, v) = camera_model1.project3dToPixel((x, y, z))
+        (u, v) = camera_model.project3dToPixel((x, y, z))
         data_array.append([camera, int(u), int(v)])
 
-    pub = rospy.Publisher('/access_teleop/gripper_pixels', PX, queue_size=1)
     for array in data_array:
         px_msg = PX()
         px_msg.camera_name = array[0]
@@ -254,7 +251,7 @@ class Orient(object):
         #rpy = [0,0,0]
         print("The curent orientation for that camera is")
         pprint(rpy)
-        rpy[orientation_mapping[data.camera_name]] = data.theta * orientation_sign_mapping[data.camera_name]
+        rpy[orientation_mapping[data.camera_name]] += data.theta * orientation_sign_mapping[data.camera_name]
         print("The new orientation of the gripper is ")
         pprint(rpy)
         new_quat_array = transformations.quaternion_from_euler(rpy[0], rpy[1], rpy[2], "sxyz")
@@ -269,8 +266,16 @@ def main():
     arm = fetch_api.Arm()
     move_group = MoveGroupCommander("arm")
 
-    camera_model1 = PinholeCameraModel()
-    camera_model2 = PinholeCameraModel()
+    gripper_publisher = rospy.Publisher('/access_teleop/gripper_pixels', PX, queue_size=1)
+
+    info_pubs = []
+    for camera_name in camera_names:
+        info_pubs.append([camera_name,
+                          rospy.Publisher(camera_name + '/camera_info', camera_info_messages.CameraInfo, queue_size=10)])
+
+    tb = TransformBroadcaster()
+
+    camera_model = PinholeCameraModel()
 
     move_by_delta = MoveByDelta(arm, move_group)
     move_by_delta.start()
@@ -286,9 +291,9 @@ def main():
 
     rate = rospy.Rate(10)
     while not rospy.is_shutdown():
-        publish_camera_transforms()
-        publish_camera_info()
-        publish_gripper_pixels(camera_model1, camera_model2, move_group)
+        publish_camera_transforms(tb)
+        publish_camera_info(info_pubs)
+        publish_gripper_pixels(camera_model, move_group, gripper_publisher)
         rate.sleep()
 
 
