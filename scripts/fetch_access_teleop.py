@@ -2,7 +2,7 @@
 
 import rospy
 from pprint import pprint
-from access_teleop_msgs.msg import DeltaPX, PX, PXAndTheta
+from access_teleop_msgs.msg import DeltaPX, PX, PXAndTheta, Theta
 import fetch_api
 import camera_info_messages
 from moveit_commander import MoveGroupCommander
@@ -87,7 +87,7 @@ def getCameraDistances(camera_name, ps):
 
 
 def dpx_to_distance(dx, dy, camera_name, current_ps, offset):
-    #print("The dx is " + str(dx) + " the dy is " + str(dy) + " and the camera name is " + camera_name)
+    print("The dx is " + str(dx) + " the dy is " + str(dy) + " and the camera name is " + camera_name)
 
     big_z_mappings = {'camera1': transform_broadcaster_mapping['camera1'][0][2] - current_ps.pose.position.z,
                       'camera2': transform_broadcaster_mapping['camera2'][0][1] - current_ps.pose.position.y}
@@ -179,9 +179,8 @@ def add_marker(x_distance, y_distance, ps, camera_name, self):
 
 
 class MoveByDelta(object):
-    def __init__(self, arm, gripper, move_group):
+    def __init__(self, arm, move_group):
         self._arm = arm
-        self._gripper = gripper
         self._move_group = move_group
 
     def start(self):
@@ -197,9 +196,8 @@ class MoveByDelta(object):
 
 
 class MoveByAbsolute(object):
-    def __init__(self, arm, gripper, move_group):
+    def __init__(self, arm, move_group):
         self._arm = arm
-        self._gripper = gripper
         self._move_group = move_group
         self._im_server = InteractiveMarkerServer('im_server', q_size=2)
 
@@ -217,9 +215,8 @@ class MoveByAbsolute(object):
 
 
 class MoveAndOrient(object):
-    def __init__(self, arm, gripper, move_group):
+    def __init__(self, arm, move_group):
         self._arm = arm
-        self._gripper = gripper
         self._move_group = move_group
 
     def start(self):
@@ -242,31 +239,56 @@ class MoveAndOrient(object):
         if error is not None:
             rospy.logerr(error)
 
+
+class Orient(object):
+    def __init__(self, arm, move_group):
+        self._arm = arm
+        self._move_group = move_group
+
+    def start(self):
+        rospy.Subscriber('/access_teleop/orient', Theta, self.orient_callback, queue_size=1)
+
+    def orient_callback(self, data):
+        ps = self._move_group.get_current_pose()
+        rpy = self._move_group.get_current_rpy()
+        #rpy = [0,0,0]
+        print("The curent orientation for that camera is")
+        pprint(rpy)
+        rpy[orientation_mapping[data.camera_name]] = data.theta * orientation_sign_mapping[data.camera_name]
+        print("The new orientation of the gripper is ")
+        pprint(rpy)
+        new_quat_array = transformations.quaternion_from_euler(rpy[0], rpy[1], rpy[2], "sxyz")
+        ps.pose.orientation = quat_array_to_quat(new_quat_array)
+        error = self._arm.move_to_pose(ps, allowed_planning_time=1.0)
+        if error is not None:
+            rospy.logerr(error)
 def main():
     rospy.init_node('access_gripper_teleop')
     wait_for_time()
 
     arm = fetch_api.Arm()
-    gripper = fetch_api.Gripper()
     move_group = MoveGroupCommander("arm")
 
     camera_model1 = PinholeCameraModel()
     camera_model2 = PinholeCameraModel()
 
-    move_by_delta = MoveByDelta(arm, gripper, move_group)
+    move_by_delta = MoveByDelta(arm, move_group)
     move_by_delta.start()
 
-    move_by_absolute = MoveByAbsolute(arm, gripper, move_group)
+    move_by_absolute = MoveByAbsolute(arm, move_group)
     move_by_absolute.start()
 
-    move_and_orient = MoveAndOrient(arm, gripper, move_group)
+    move_and_orient = MoveAndOrient(arm, move_group)
     move_and_orient.start()
+
+    orient = Orient(arm, move_group)
+    orient.start()
 
     rate = rospy.Rate(10)
     while not rospy.is_shutdown():
         publish_camera_transforms()
         publish_camera_info()
-        #publish_gripper_pixels(camera_model1, camera_model2, move_group)
+        publish_gripper_pixels(camera_model1, camera_model2, move_group)
         rate.sleep()
 
 
