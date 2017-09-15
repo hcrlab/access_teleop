@@ -42,7 +42,7 @@ GripperGUI = function (gripper_controler) {
         if(document.getElementById("slider-range")){
             var leftFinger = (max - min - position) / 2;
             var rightFinger = max - leftFinger;
-            console.log("The left Finger position is " + leftFinger);
+            //console.log("The left Finger position is " + leftFinger);
             self.$slider.slider("values", 0, leftFinger ); // Second value is 0 because we are moving the left gripper
             self.$slider.slider("values", 1, rightFinger ); // Second value is 0 because we are moving the left gripper
         }

@@ -22,8 +22,10 @@ function init() {
                         arm_element.onmousemove = function (e) {
                             e = e || window.event;
                             var elementId = (e.target || e.srcElement).parentElement.id;
-                            console.log(elementId);
-                            self.app.arm.moveArmByAbsolute(e.offsetX, e.offsetY, elementId);
+                            var x_pixel = parseInt((self.app.backendCameraWidth / self.app.cameraWidth) * e.offsetX);
+                            var y_pixel = parseInt((self.app.backendCameraHeight / self.app.cameraHeight) * e.offsetY);
+                            console.log(elementId + " " + x_pixel + " " + y_pixel);
+                            self.app.arm.moveArmByAbsolute(x_pixel, y_pixel, elementId);
                         };
                     }
                     else {

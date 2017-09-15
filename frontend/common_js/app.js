@@ -73,8 +73,12 @@ App = function () {
     // Dynamic Canvas Sizes
     var camCanvas = document.getElementById("cam1");
 
-    this.cameraWidth = camCanvas.clientWidth;
-    this.cameraHeight = camCanvas.clientHeight;
+
+    this.cameraWidth = "640";
+    this.cameraHeight = "480";
+
+    this.backendCameraWidth = "640";
+    this.backendCameraHeight = "480";
 
     var elmntmjpegRightForearm = document.getElementById("camera1");
     var rightForearmWidth=this.cameraWidth;
