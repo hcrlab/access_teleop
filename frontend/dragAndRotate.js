@@ -19,6 +19,28 @@ function init() {
     var circles = document.querySelectorAll('circle');
     this.app = new App();
     this.app.coordsListener = new CoordsListener(this.app.ros);
+
+    this.app.handleGripperCoords  = function(message){
+        var circle;
+        var x_pixel = parseInt(message.pixel_x * (app.cameraWidth / app.backendCameraWidth));
+        var y_pixel = parseInt(message.pixel_y * (app.cameraHeight / app.backendCameraHeight));
+        if(message.camera_name ==="camera1") {
+            circle = document.querySelector("#camera1 circle");
+            circle.cx.baseVal.value = x_pixel;
+            circle.cy.baseVal.value = y_pixel;
+            self.cam1X = x_pixel;
+            self.cam1Y = y_pixel;
+        }
+        else if(message.camera_name ==="camera2"){
+            circle = document.querySelector("#camera2 circle");
+            circle.cx.baseVal.value = x_pixel;
+            circle.cy.baseVal.value = app.cameraHeight - y_pixel;
+            self.cam2X = x_pixel;
+            self.cam2Y = app.cameraHeight - y_pixel;
+        }
+        //console.log('Received message on ' + coords.name + ': ' + message.camera_name);
+    };
+
     var self = this;
 
     app.ros.on('connection', function () {
@@ -41,7 +63,6 @@ function init() {
                 e = e || window.event;
                 if(e.which == 1) { //This will only be true on a left click
                     var elementId = (e.target || e.srcElement).parentElement.id;
-                    console.log(elementId);
                     var x_pixel = (self.app.backendCameraWidth / self.app.cameraWidth) * (e.offsetX - downX);
                     var y_pixel = (self.app.backendCameraHeight / self.app.cameraHeight) * (e.offsetY - downY);
                     self.app.arm.moveArmByDelta(x_pixel, y_pixel, elementId);
@@ -101,6 +122,7 @@ function init() {
                         console.log("e.offsetY:" + e.offsetY + " and cam2Y:" + self.app.coordsListener.cam2Y);
                         var thetaUp = Math.atan2(deltaY, deltaX);
                         self.app.arm.orientByTheta(thetaUp - thetaDown, elementId);
+                        console.log("the change in theta is " + parseFloat(thetaUp - thetaDown));
                     }
                     else{
                         console.error("Camera name not found")
