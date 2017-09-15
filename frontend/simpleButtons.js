@@ -104,8 +104,10 @@ function init() {
     upBTN2.innerHTML="<img src=\"img/redUpArrow.png\">";
     upBTN2.id='up2';
     upBTN2.title='\u2191Up\u2191';
+    upBTN2.className = "button";
     upBTN2.style.left=(cameraWidth - 100)*2 + "px";
     upBTN2.style.top= cameraHeight/4  + 10 + "px";
+    upBTN2.value = `${camera2Name},${0},${-cam2Y}`;
     body.appendChild(upBTN2);
 
     var downBTN2 = document.createElement("button");
@@ -115,6 +117,7 @@ function init() {
     downBTN2.className = "button";
     downBTN2.style.left=(cameraWidth - 100)*2 + "px";
     downBTN2.style.top= (cameraHeight- (-50))+ "px";
+    downBTN2.value = `${camera2Name},${0},${cam2Y}`;
     body.appendChild(downBTN2);
 
     var leftBTN2 = document.createElement("button");
@@ -124,6 +127,7 @@ function init() {
     leftBTN2.className = "button";
     leftBTN2.style.left=(cameraWidth- (-20)) + "px";
     leftBTN2.style.top=(cameraHeight- (-90))/2 + "px";
+    leftBTN2.value = `${camera2Name},${-cam2X},${0}`;
     body.appendChild(leftBTN2);
 
     var rightBTN2 = document.createElement("button");
@@ -133,6 +137,7 @@ function init() {
     rightBTN2.className = "button";
     rightBTN2.style.left=(cameraWidth*2 - (33)) + "px";
     rightBTN2.style.top= (cameraHeight- (-90))/2 + "px";
+    rightBTN2.value = `${camera2Name},${cam2X},${0}`;
     body.appendChild(rightBTN2);
 
     var rotaterightBTN2 = document.createElement("button");
