@@ -16,6 +16,6 @@ ArmStatus = function(ros) {
     });
 
     arm_status.subscribe(function (message) {
-        console.log(message.data)
+        app.handleStatus(message)
     });
 };

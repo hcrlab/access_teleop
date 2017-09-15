@@ -10,7 +10,7 @@ function init() {
 
     var self = this;
 
-    this.app.changeCursor = function(message){
+    this.app.handleStatus = function(message){
         switch(message.data){
             case "moving":
                 console.log("moving");
