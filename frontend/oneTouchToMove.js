@@ -10,6 +10,28 @@ function init() {
 
     var self = this;
 
+    this.app.changeCursor = function(message){
+        switch(message.data){
+            case "moving":
+                console.log("moving");
+                arm_div.forEach(function(element){
+                    element.style.cursor = 'progress';
+                });
+                break;
+            case "unreachable":
+                arm_div.forEach(function(element){
+                   element.style.cursor = 'not-allowed';
+                });
+                break;
+            case "arrived":
+                arm_div.forEach(function(element){
+                    element.style.cursor = 'crosshair';
+                });
+        }
+    };
+
+
+
     app.ros.on('connection', function () {
         console.log("We are connected!");
 
@@ -22,6 +44,7 @@ function init() {
                 arm_div.forEach(function (arm_element) {
                     if (!arm_element.onmousemove) {
                         arm_element.style.cursor = 'crosshair';
+                        console.log("Making the cursor a crosshair");
                         arm_element.onmousemove = function (e) {
                             e = e || window.event;
                             var elementId = (e.target || e.srcElement).parentElement.id;
