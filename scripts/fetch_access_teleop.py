@@ -5,6 +5,7 @@ from pprint import pprint
 from access_teleop_msgs.msg import DeltaPX, PX, PXAndTheta, Theta
 import fetch_api
 import camera_info_messages
+from std_msgs.msg import String
 from moveit_commander import MoveGroupCommander
 from image_geometry import PinholeCameraModel
 from tf import TransformBroadcaster, transformations
@@ -196,11 +197,13 @@ class MoveByDelta(object):
             else:
                 print("We got there!")
 
+
 class MoveByAbsolute(object):
-    def __init__(self, arm, move_group):
+    def __init__(self, arm, move_group, status_pub):
         self._arm = arm
         self._move_group = move_group
         self._im_server = InteractiveMarkerServer('im_server', q_size=2)
+        self._status_pub = status_pub
 
     def start(self):
         rospy.Subscriber('/access_teleop/absolute', PX, self.absolute_callback, queue_size=1)
@@ -213,9 +216,14 @@ class MoveByAbsolute(object):
         pose_possible = self._arm.compute_ik(ps2, timeout=rospy.Duration(1))
         print(pose_possible)
         if pose_possible: #This check will prevent some edge poses, but will also save time
+            self._status_pub.publish("moving")
             error = self._arm.move_to_pose(ps2, allowed_planning_time=1.0)
             if error is not None:
                 rospy.logerr(error)
+            else:
+                self._status_pub.publish("arrived")
+        else:
+            self._status_pub.publish("unreachable")
 
 
 class MoveAndOrient(object):
@@ -273,8 +281,8 @@ def main():
     arm = fetch_api.Arm()
     move_group = MoveGroupCommander("arm")
 
+    status_publisher = rospy.Publisher('/access_teleop/arm_status', String, queue_size=1)
     gripper_publisher = rospy.Publisher('/access_teleop/gripper_pixels', PX, queue_size=1)
-
     info_pubs = []
     for camera_name in camera_names:
         info_pubs.append([camera_name,
@@ -287,7 +295,7 @@ def main():
     move_by_delta = MoveByDelta(arm, move_group)
     move_by_delta.start()
 
-    move_by_absolute = MoveByAbsolute(arm, move_group)
+    move_by_absolute = MoveByAbsolute(arm, move_group, status_publisher)
     move_by_absolute.start()
 
     move_and_orient = MoveAndOrient(arm, move_group)

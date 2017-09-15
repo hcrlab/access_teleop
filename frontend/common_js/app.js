@@ -79,12 +79,10 @@ App = function () {
     this.backendCameraHeight = "480";
 
     // Dynamic Canvas Sizes
-    var elmntmjpegRightForearm = document.getElementById("camera1");
     var rightForearmWidth=this.cameraWidth;
     var rightForearmHeight=this.cameraHeight;
 
 
-    var elmntmjpegHead = document.getElementById("camera2");
     var headWidth=this.cameraWidth;
     var headHeight=this.cameraHeight;
 
