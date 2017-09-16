@@ -13,11 +13,11 @@ function init() {
     this.app = new App();
     var self = this;
 
-    app.ros.on('connection', function () {
+    this.app.ros.on('connection', function () {
         console.log("We are connected!");
 
-        app.initRightClickGripper(); // This adds the right click gripper listener
-        app.addCloudFreezer();
+        self.app.initRightClickGripper(); // This adds the right click gripper listener
+        self.app.addCloudFreezer();
 
         arm_div.forEach(function(element)
         {

@@ -30,6 +30,8 @@ App = function () {
     this.arm = new Arm(this.ros);
     this.gripper = new Gripper(this.ros);
     this.cloudFreezer = new CloudFreezer(this.ros);
+    this.wristRoller = new WristRoller(this.ros);
+
     //self.head = new Head(ros);
 
     // Set up the gripper event handlers
@@ -66,7 +68,13 @@ App = function () {
         feedback.appendChild(unfreezeButton);
     };
 
-
+// This is the double slider for the gripper
+    $(document).arrive("#slider-range", function () {
+        $( function() {
+            $slider = $( "#slider-range" ); //This will create the slider jQuery object as soon as the element is ready
+            app.gripper.gripperGUI = new GripperGUI(app.gripper); //This has to be here, because otherwise the element wil not be loaded
+        });
+    });
 
     // Adds 3 canvas image streams
     // --------------------------------------------------------------------------------

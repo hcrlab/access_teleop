@@ -196,6 +196,7 @@ class MoveByDelta(object):
             else:
                 print("We got there!")
 
+
 class MoveByAbsolute(object):
     def __init__(self, arm, move_group):
         self._arm = arm
@@ -266,6 +267,24 @@ class Orient(object):
         error = self._arm.move_to_pose(ps, allowed_planning_time=1.0)
         if error is not None:
             rospy.logerr(error)
+
+
+class WristRoll(object):
+    def __init__(self, arm, move_group):
+        self._arm = arm
+        self._move_group = move_group
+
+    def start(self):
+        rospy.Subscriber('/access_teleop/wrist_roll', Theta, self.wrist_roll_callback, queue_size=1)
+
+    def wrist_roll_callback(self, data):
+        self._move_group.clear_pose_targets()
+        arm_values = self._move_group.get_current_joint_values()
+        arm_values[6] += data.theta
+        self._move_group.set_joint_value_target(arm_values)
+        self._move_group.go()
+
+
 def main():
     rospy.init_node('access_gripper_teleop')
     wait_for_time()
@@ -295,6 +314,9 @@ def main():
 
     orient = Orient(arm, move_group)
     orient.start()
+
+    wrist_roll = WristRoll(arm, move_group)
+    wrist_roll.start()
 
     rate = rospy.Rate(10)
     while not rospy.is_shutdown():
