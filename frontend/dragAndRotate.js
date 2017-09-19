@@ -92,7 +92,7 @@ function init() {
                         console.log("deltaX is " + deltaX + " and deltaY is " + deltaY);
                         var thetaUp = Math.atan2(deltaY, deltaX);
                       
-                        self.app.arm.orientByTheta(thetaDown - thetaUp, elementId);
+                        self.app.arm.orientByTheta(thetaUp - thetaDown, elementId);
 
                         console.log("Theta is " + thetaDown);
                     }
@@ -103,7 +103,7 @@ function init() {
                         console.log("e.offsetY:" + e.offsetY + " and cam2Y:" + self.app.coordsListener.cam2Y);
                         var thetaUp = Math.atan2(deltaY, deltaX);
 
-                        self.app.arm.orientByTheta(thetaDown - thetaUp, elementId);
+                        self.app.arm.orientByTheta(thetaUp - thetaDown, elementId);
                         console.log("Theta is " + thetaDown);
 
                     }
