@@ -34,10 +34,9 @@ function init() {
                     console.log(elementId);
                     console.log("Mouse down happend at x:" + downX + " , y:" + downY);
                     console.log("offsetX :" + e.offsetX + " offsetY : " + e.offsetY);
-                    var xDiff = e.offsetX - downX;
-                    var yDiff = e.offsetY - downY;
-                    var angle = Math.atan2(yDiff, xDiff);
-                    self.app.arm.moveAndOrient(downX, downY, angle, elementId);
+                    var angle = Math.atan2(e.offsetY - downY, e.offsetX - downX);
+                    console.log(angle);
+                    self.app.arm.moveAndOrient(e.offsetX, e.offsetY, angle, elementId);
                     console.log("The angle we got is " + angle);
                 }
             };

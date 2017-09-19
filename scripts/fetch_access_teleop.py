@@ -1,6 +1,7 @@
 #! /usr/bin/env python
 
 import rospy
+import math
 from pprint import pprint
 from access_teleop_msgs.msg import DeltaPX, PX, PXAndTheta, Theta
 import fetch_api
@@ -116,11 +117,11 @@ def dpx_to_distance(dx, dy, camera_name, current_ps, offset):
 def delta_modified_stamped_pose(x_distance, y_distance, camera_name, original_pose_stamped):
     modified_ps = original_pose_stamped
     if camera_name == 'camera1':
-        original_pose_stamped.pose.position.x += x_distance  # These directions came from looking at the cameras in rviz
-        original_pose_stamped.pose.position.y -= y_distance
+        modified_ps.pose.position.x += x_distance  # These directions came from looking at the cameras in rviz
+        modified_ps.pose.position.y -= y_distance
     elif camera_name == 'camera2':
-        original_pose_stamped.pose.position.x += x_distance
-        original_pose_stamped.pose.position.z -= y_distance
+        modified_ps.pose.position.x += x_distance
+        modified_ps.pose.position.z -= y_distance
     else:
         raise ValueError('Did not pass in a valid camera_name')
     return modified_ps
@@ -175,6 +176,21 @@ def add_marker(x_distance, y_distance, ps, camera_name, self):
     print("Marker changes should now be applied")
 
 
+def addSetback(setback, theta, camera_name, ps):
+    modified_ps = ps
+    delta_y = math.sin(theta) * setback
+    delta_x = math.cos(theta) * setback
+    if camera_name == 'camera1':
+        modified_ps.pose.position.y += delta_y
+    elif camera_name == 'camera2':
+        modified_ps.pose.position.z += delta_y
+    else:
+        raise ValueError('Did not pass in a valid camera_name')
+
+    modified_ps.pose.position.x -= delta_x
+    return modified_ps
+
+
 class MoveByDelta(object):
     def __init__(self, arm, move_group):
         self._arm = arm
@@ -223,6 +239,7 @@ class MoveAndOrient(object):
     def __init__(self, arm, move_group):
         self._arm = arm
         self._move_group = move_group
+        self.SETBACK = 0.15
 
     def start(self):
         rospy.Subscriber('/access_teleop/move_and_orient', PXAndTheta, self.move_and_orient_callback, queue_size=1)
@@ -240,7 +257,8 @@ class MoveAndOrient(object):
         ps.pose.orientation = quat_array_to_quat(new_quat_array)
         x_distance, y_distance = dpx_to_distance(data.pixel_x, data.pixel_y, data.camera_name, ps, False)
         ps2 = absolute_modified_stamped_pose(x_distance, y_distance, data.camera_name, ps)
-        error = self._arm.move_to_pose(ps2, allowed_planning_time=1.0)
+        ps3 = addSetback(self.SETBACK, data.theta, data.camera_name, ps2)
+        error = self._arm.move_to_pose(ps3, allowed_planning_time=1.0)
         if error is not None:
             rospy.logerr(error)
 
