@@ -50,7 +50,9 @@ function init() {
                             var elementId = (e.target || e.srcElement).parentElement.id;
                             var x_pixel = parseInt((self.app.backendCameraWidth / self.app.cameraWidth) * e.offsetX);
                             var y_pixel = parseInt((self.app.backendCameraHeight / self.app.cameraHeight) * e.offsetY);
+
                             //console.log(elementId + " " + x_pixel + " " + y_pixel);
+
                             self.app.arm.moveArmByAbsolute(x_pixel, y_pixel, elementId);
                         };
                     }
