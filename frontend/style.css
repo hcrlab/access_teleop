@@ -34,7 +34,6 @@ input{
 
 /* On mouse-over, add a deeper shadow */
 .card:hover {
-
 	background-color: yellow;
 }
 
