@@ -73,8 +73,14 @@ App = function () {
     // Dynamic Canvas Sizes
     //var camCanvas = document.getElementById("cam1");
 
-    this.cameraWidth = "360";
-    this.cameraHeight = "360";
+
+    this.cameraWidth = "640";
+    this.cameraHeight = "480";
+
+    this.backendCameraWidth = "640";
+    this.backendCameraHeight = "480";
+
+    // Dynamic Canvas Sizes
 
     var rightForearmWidth=this.cameraWidth;
     var rightForearmHeight=this.cameraHeight;

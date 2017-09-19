@@ -43,14 +43,14 @@ Gripper = function (ros) {
             }
         });
         goal.on('feedback', function(feedback){
-            console.log('Feedback: ' + feedback.position);
+            //console.log('Feedback: ' + feedback.position);
             if(self.gripperGUI) {
                 self.gripperGUI.adjustGUI(feedback.position);
             }
             currentPosNum = feedback.position;
         });
         goal.on('result', function(result){
-            console.log('Result reached goal: ' + result.reached_goal);
+            //console.log('Result reached goal: ' + result.reached_goal);
             if(position == self.OPEN_POS && result.reached_goal){
                 currentPosition = self.PositionEnum.OPEN;
             }
@@ -60,7 +60,7 @@ Gripper = function (ros) {
             else{
                 currentPosition = self.PositionEnum.PARTLY_CLOSED;
             }
-            console.log("The current position is : " + currentPosition);
+            //console.log("The current position is : " + currentPosition);
         });
         goal.send();
     };
