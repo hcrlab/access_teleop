@@ -35,6 +35,7 @@ var latestPositionY;
 var latestTargetX;
 var latestTargetY;
 var lastInterval;
+var cameras = ["camera1", "camera2"];
 
 function init() {
     var arm_div = document.querySelectorAll('.js_arm_div');
@@ -44,52 +45,47 @@ function init() {
     app.ros.on('connection', function () {
         console.log("We are connected!");
 
-        var manager = nipplejs.create({
-            zone: document.getElementById('camera1'),
-            color: 'blue'
-        });
+        cameras.forEach(function(camera_name){
+            console.log(camera_name);
 
-        manager.on('added', function(evt, nipple){
-            nipple.on('move', function (evt, data) {
-                latestPositionX = data.position.x;
-                latestPositionY = data.position.y;
-                latestTargetX = evt.target.position.x;
-                latestTargetY = evt.target.position.y;
-                var deltaX = latestPositionX - latestTargetX;
-                var deltaY = latestPositionY - latestTargetY;
+            var manager = nipplejs.create({
+                zone: document.getElementById(camera_name),
+                color: 'blue'
+            });
 
-
-                console.log("x is : " + deltaX + "\n" + "and y is :" + deltaY );
-                app.arm.moveArmByDelta(deltaX, deltaY , 'camera1');
-
-
-                if(lastInterval) {
-                    clearInterval(lastInterval);
-                }
-
-                lastInterval = setInterval(function () {
+            manager.on('added', function(evt, nipple){
+                nipple.on('move', function (evt, data) {
+                    latestPositionX = data.position.x;
+                    latestPositionY = data.position.y;
+                    latestTargetX = evt.target.position.x;
+                    latestTargetY = evt.target.position.y;
                     var deltaX = latestPositionX - latestTargetX;
                     var deltaY = latestPositionY - latestTargetY;
 
-
                     console.log("x is : " + deltaX + "\n" + "and y is :" + deltaY );
-                    app.arm.moveArmByDelta(deltaX/2, deltaY/2 , 'camera1');
+                    app.arm.moveArmByDelta(deltaX/2, deltaY/2 , camera_name);
 
-                }, 100);
+                    if(lastInterval) {
+                        clearInterval(lastInterval);
+                    }
 
+                    lastInterval = setInterval(function () {
+                        var deltaX = latestPositionX - latestTargetX;
+                        var deltaY = latestPositionY - latestTargetY;
 
+                        console.log("x is : " + deltaX + "\n" + "and y is :" + deltaY );
+                        app.arm.moveArmByDelta(deltaX/2, deltaY/2 , camera_name);
+                    }, 100);
 
+                });
+            }).on('removed', function (evt, nipple) {
+                if(lastInterval) {
+                    clearInterval(lastInterval);
+                }
             });
-        }).on('removed', function (evt, nipple) {
-            if(lastInterval) {
-                clearInterval(lastInterval);
-            }
+
         });
 
     });
-
-
-
-
 
 }

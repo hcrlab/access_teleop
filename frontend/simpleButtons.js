@@ -20,8 +20,8 @@ function init() {
 
     var elmnt = document.getElementById("camera1");
 
-    var cameraWidth = "342";
-    var cameraHeight = "342";
+    var cameraWidth = this.app.cameraWidth;
+    var cameraHeight = this.app.cameraHeight;
 
     var camera1Name = "camera1";
     var camera2Name = "camera2";
