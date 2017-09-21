@@ -21,6 +21,14 @@ CoordsListener = function(ros) {
     });
 
     coords.subscribe(function (message) {
+        if(message.camera_name === "camera1") {
+            self.cam1X = message.pixel_x;
+            self.cam1Y = message.pixel_y;
+        }
+        if(message.camera_name === "camera2") {
+            self.cam2X = message.pixel_x;
+            self.cam2Y = app.cameraHeight - message.pixel_y;
+        }
         app.handleGripperCoords(message);
     });
 };

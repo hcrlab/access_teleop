@@ -5,17 +5,6 @@
 var downX;
 var downY;
 
-function addLine(x1,y1, x2, y2, camera_name){
-    var svg = document.querySelector("#" + camera_name + "  svg");
-    var line = document.createElement("line");
-    line.setAttribute('x1', x1);
-    line.setAttribute('y1', y1);
-    line.setAttribute('x2', x2);
-    line.setAttribute('y2', y2);
-    line.setAttribute('stroke', "red");
-    line.setAttribute('stroke-width', "2");
-    svg.appendChild(line);
-}
 
 function init() {
     var arm_div = document.querySelectorAll('.js_arm_div');
@@ -32,27 +21,36 @@ function init() {
             element.onmousedown = function (e) {
                 e = e || window.event;
                 if(e.which == 1) { //This will only be true on a left click
-                    var elementId = (e.target || e.srcElement).parentElement.id;
-                    console.log(elementId);
-                    downX = e.offsetX;
-                    downY = e.offsetY;
+                    var cameraDiv = (e.target || e.srcElement).closest("div");
+                    if(cameraDiv) {
+                        downX = e.offsetX;
+                        downY = e.offsetY;
+                        cameraDiv.onmousemove = function (moveE) {
+                            self.app.moveLine(downX, downY, moveE.offsetX, moveE.offsetY, cameraDiv.id);
+                        };
+                        console.log("added onmousemove to " + cameraDiv.id);
+                    }
                 }
             };
 
             element.onmouseup = function (e) {
                 e = e || window.event;
                 if(e.which == 1) { //This will only be true on a left click
-                    var elementId = (e.target || e.srcElement).parentElement.id;
-                    console.log(elementId);
-                    console.log("Mouse down happend at x:" + downX + " , y:" + downY);
-                    console.log("offsetX :" + e.offsetX + " offsetY : " + e.offsetY);
-                    var angle = Math.atan2(e.offsetY - downY, e.offsetX - downX);
-                    console.log(angle);
-                    self.app.arm.moveAndOrient(e.offsetX, e.offsetY, angle, elementId);
-                    addLine(downX, downY, e.offsetX, e.offsetY, elementId);
-                    console.log("The angle we got is " + angle);
+                    var cameraDiv = (e.target || e.srcElement).closest("div");
+                    if(cameraDiv) {
+                        var elementId = cameraDiv.id;
+                        cameraDiv.onmousemove = undefined;
+                        console.log("removed onmousemove from " + elementId);
+                        console.log("Mouse down happend at x:" + downX + " , y:" + downY);
+                        console.log("offsetX :" + e.offsetX + " offsetY : " + e.offsetY);
+                        var angle = Math.atan2(e.offsetY - downY, e.offsetX - downX);
+                        console.log(angle);
+                        self.app.arm.moveAndOrient(e.offsetX, e.offsetY, angle, elementId);
+                        console.log("The angle we got is " + angle);
+                    }
                 }
             };
+
         });
 
     });

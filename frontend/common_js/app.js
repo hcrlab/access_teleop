@@ -68,6 +68,16 @@ App = function () {
         feedback.appendChild(unfreezeButton);
     };
 
+    this.moveLine = function (x1,y1, x2, y2, camera_name) {
+        if(camera_name) {
+            var line = document.querySelector("#" + camera_name + "  svg line");
+            line.setAttribute('x1', x1);
+            line.setAttribute('y1', y1);
+            line.setAttribute('x2', x2);
+            line.setAttribute('y2', y2);
+        }
+    };
+
 // This is the double slider for the gripper
     $(document).arrive("#slider-range", function () {
         $( function() {
@@ -87,6 +97,12 @@ App = function () {
 
     this.backendCameraWidth = "640";
     this.backendCameraHeight = "480";
+
+    document.getElementById("camera1").style.height = this.cameraHeight + 'px';
+    document.getElementById("camera1").style.width = this.cameraWidth + 'px';
+
+    document.getElementById("camera2").style.height = this.cameraHeight + 'px';
+    document.getElementById("camera2").style.width = this.cameraWidth + 'px';
 
     // Dynamic Canvas Sizes
 

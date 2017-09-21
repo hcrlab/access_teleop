@@ -28,8 +28,7 @@ function init() {
             circle = document.querySelector("#camera1 circle");
             circle.cx.baseVal.value = x_pixel;
             circle.cy.baseVal.value = y_pixel;
-            self.cam1X = x_pixel;
-            self.cam1Y = y_pixel;
+
         }
         else if(message.camera_name ==="camera2"){
             circle = document.querySelector("#camera2 circle");
@@ -89,6 +88,7 @@ function init() {
                     else if (elementId ==="camera2"){
                         var deltaX = e.offsetX - self.app.coordsListener.cam2X;
                         var deltaY = e.offsetY - self.app.coordsListener.cam2Y;
+                        console.log("x down = " + e.offsetX + " and x center = " + self.app.coordsListener.cam2X);
                         console.log("deltaX is " + deltaX + " and deltaY is " + deltaY);
                         console.log("e.offsetY:" + e.offsetY + " and cam2Y:" + self.app.coordsListener.cam2Y);
                         thetaDown = Math.atan2(deltaY, deltaX);

@@ -48,10 +48,16 @@
         <div class="row">
             <h1>Right</h1>
             <div id="camera1" class="col-sm-4, js_arm_div">
-                <svg></svg>
+                <svg style="z-index: 1">
+                    <line x1="0" y1="0" x2="0" y2="0" stroke="red" stroke-width="2" style="z-index: 100"></line>
+                </svg>
             </div>
             <h1>Head</h1>
-            <div id="camera2" class="col-sm-4 js_arm_div"></div>
+            <div id="camera2" class="col-sm-4 js_arm_div">
+                <svg style="z-index: 1">
+                    <line x1="0" y1="0" x2="0" y2="0" stroke="red" stroke-width="2" style="z-index: 100"></line>
+                </svg>
+            </div>
             <h1>Left</h1>
             <div id="camera3" class="col-sm-4"></div>
         </div>
