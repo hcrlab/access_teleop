@@ -45,7 +45,9 @@ function init() {
                         console.log("offsetX :" + e.offsetX + " offsetY : " + e.offsetY);
                         var angle = Math.atan2(e.offsetY - downY, e.offsetX - downX);
                         console.log(angle);
-                        self.app.arm.moveAndOrient(e.offsetX, e.offsetY, angle, elementId);
+                        var x_pixel = parseInt(e.offsetX * (self.app.backendCameraWidth / self.app.cameraWidth));
+                        var y_pixel = parseInt(e.offsetY * (self.app.backendCameraHeight / self.app.cameraHeight));
+                        self.app.arm.moveAndOrient(x_pixel, y_pixel, angle, elementId);
                         console.log("The angle we got is " + angle);
                     }
                 }
