@@ -73,11 +73,11 @@ svg{
 	background-color: blue;
 }
 
-div{
-    /*
-	border-style: solid;
-	border-color: #2423cb;
-	*/
+.cam-container{
+    float:left;
+    padding-left:10px;
+    padding-right:10px;
+    padding-bottom: 10px;
 }
 
 #gripper-container{
@@ -89,6 +89,14 @@ div{
 	height:2.4em;
 }
 
+.joystick-container{
+    position:relative;
+}
+
 circle {
     opacity:0.5;
+}
+
+div{
+    /*border-style: dotted;*/
 }
