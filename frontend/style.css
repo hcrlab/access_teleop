@@ -88,3 +88,7 @@ div{
 .ui-slider .ui-slider-handle {
 	height:2.4em;
 }
+
+circle {
+    opacity:0.5;
+}

@@ -53,18 +53,64 @@ function init() {
             element.onmousedown = function (e) {
                 e = e || window.event;
                 if(e.which == 1) { //This will only be true on a left click
-                    downX = e.offsetX;
-                    downY = e.offsetY;
+                    var cameraDiv = (e.target || e.srcElement).closest("div");
+                    if(cameraDiv) {
+                        downX = e.offsetX;
+                        downY = e.offsetY;
+                        cameraDiv.onmousemove = function (moveE) {
+                            self.app.moveLine(downX, downY, moveE.offsetX, moveE.offsetY, cameraDiv.id);
+                        };
+                    }
                 }
             };
 
             element.onmouseup = function (e) {
                 e = e || window.event;
+                console.log("We had a mouse up, and downOnCircle is " + downOnCircle);
                 if(e.which == 1) { //This will only be true on a left click
-                    var elementId = (e.target || e.srcElement).parentElement.id;
-                    var x_pixel = (self.app.backendCameraWidth / self.app.cameraWidth) * (e.offsetX - downX);
-                    var y_pixel = (self.app.backendCameraHeight / self.app.cameraHeight) * (e.offsetY - downY);
-                    self.app.arm.moveArmByDelta(x_pixel, y_pixel, elementId);
+                    if(downOnCircle) {
+                        downOnCircle = false;
+                        var elementId = (e.target || e.srcElement).closest("div").id;
+                        //console.log("Mouse up on the circle with an id of " + elementId);
+                        if(elementId === "camera1"){
+                            var deltaX = e.offsetX - self.app.coordsListener.cam1X;
+                            var deltaY = e.offsetY - self.app.coordsListener.cam1Y;
+                            //console.log("deltaX is " + deltaX + " and deltaY is " + deltaY);
+                            var thetaUp = Math.atan2(deltaY, deltaX);
+
+                            self.app.arm.orientByTheta(thetaUp - thetaDown, elementId);
+
+                            //console.log("Theta is " + thetaDown);
+                        }
+                        else if (elementId ==="camera2"){
+                            var deltaX = e.offsetX - self.app.coordsListener.cam2X;
+                            var deltaY = e.offsetY - self.app.coordsListener.cam2Y;
+                            //console.log("deltaX is " + deltaX + " and deltaY is " + deltaY);
+                            //console.log("e.offsetY:" + e.offsetY + " and cam2Y:" + self.app.coordsListener.cam2Y);
+                            var thetaUp = Math.atan2(deltaY, deltaX);
+
+                            self.app.arm.orientByTheta(thetaUp - thetaDown, elementId);
+
+                            //console.log("the change in theta is " + parseFloat(thetaUp - thetaDown));
+                        }
+                        else{
+                            //console.error("Camera name not found")
+                        }
+                        //var deltaX = e.offsetX - self.app.coordsListener.
+                    }
+                    else {
+                        var cameraDiv = (e.target || e.srcElement).closest("div");
+                        if (cameraDiv) {
+                            var elementId = cameraDiv.id;
+                            cameraDiv.onmousemove = undefined;
+                            //console.log("mouse move eliminated from " + elementId);
+                            //console.log("offsetX :" + e.offsetX + " offsetY : " + e.offsetY);
+                            var x_pixel = (self.app.backendCameraWidth / self.app.cameraWidth) * (e.offsetX - downX);
+                            var y_pixel = (self.app.backendCameraHeight / self.app.cameraHeight) * (e.offsetY - downY);
+                            self.app.arm.moveArmByDelta(x_pixel, y_pixel, elementId);
+                        }
+                    }
+
                 }
             };
 
@@ -72,28 +118,29 @@ function init() {
 
         circles.forEach(function(element){
             element.onmousedown = function (e) {
-                downOnCircle = true;
                 e = e || window.event;
-                if(e.which == 1) {
+                if(e.which === 1) {
+                    e.stopPropagation();
+                    downOnCircle = true;
                     var elementId = (e.target || e.srcElement).parentElement.parentElement.id;
                     console.log("Mouse down on the circle with an id of " + elementId);
                     if(elementId === "camera1"){
                         var deltaX = e.offsetX - self.app.coordsListener.cam1X;
                         var deltaY = e.offsetY - self.app.coordsListener.cam1Y;
-                        console.log("deltaX is " + deltaX + " and deltaY is " + deltaY);
+                        //console.log("deltaX is " + deltaX + " and deltaY is " + deltaY);
                         thetaDown = Math.atan2(deltaY, deltaX);
                         //self.app.arm.orientByTheta(thetaDown, elementId);
-                        console.log("Theta is " + thetaDown);
+                        //console.log("Theta is " + thetaDown);
                     }
                     else if (elementId ==="camera2"){
                         var deltaX = e.offsetX - self.app.coordsListener.cam2X;
                         var deltaY = e.offsetY - self.app.coordsListener.cam2Y;
-                        console.log("x down = " + e.offsetX + " and x center = " + self.app.coordsListener.cam2X);
-                        console.log("deltaX is " + deltaX + " and deltaY is " + deltaY);
-                        console.log("e.offsetY:" + e.offsetY + " and cam2Y:" + self.app.coordsListener.cam2Y);
+                        //console.log("x down = " + e.offsetX + " and x center = " + self.app.coordsListener.cam2X);
+                        //console.log("deltaX is " + deltaX + " and deltaY is " + deltaY);
+                        //console.log("e.offsetY:" + e.offsetY + " and cam2Y:" + self.app.coordsListener.cam2Y);
                         thetaDown = Math.atan2(deltaY, deltaX);
                         //self.app.arm.orientByTheta(thetaDown, elementId);
-                        console.log("Theta is " + thetaDown);
+                        //console.log("Theta is " + thetaDown);
                     }
                     else{
                         console.error("Camera name not found")
@@ -101,39 +148,45 @@ function init() {
                     //var deltaX = e.offsetX - self.app.coordsListener.
                 }
             };
+            /*
+
             element.onmouseup = function (e) {
                 e = e || window.event;
-                if(e.which == 1 && downOnCircle) {
-                    downOnCircle = false;
-                    var elementId = (e.target || e.srcElement).parentElement.parentElement.id;
-                    console.log("Mouse up on the circle with an id of " + elementId);
-                    if(elementId === "camera1"){
-                        var deltaX = e.offsetX - self.app.coordsListener.cam1X;
-                        var deltaY = e.offsetY - self.app.coordsListener.cam1Y;
-                        console.log("deltaX is " + deltaX + " and deltaY is " + deltaY);
-                        var thetaUp = Math.atan2(deltaY, deltaX);
-                      
-                        self.app.arm.orientByTheta(thetaUp - thetaDown, elementId);
+                if(e.which ===1) {
+                    if (downOnCircle) {
+                        downOnCircle = false;
+                        var elementId = (e.target || e.srcElement).parentElement.parentElement.id;
+                        console.log("Mouse up on the circle with an id of " + elementId);
+                        if (elementId === "camera1") {
+                            var deltaX = e.offsetX - self.app.coordsListener.cam1X;
+                            var deltaY = e.offsetY - self.app.coordsListener.cam1Y;
+                            //console.log("deltaX is " + deltaX + " and deltaY is " + deltaY);
+                            var thetaUp = Math.atan2(deltaY, deltaX);
 
-                        console.log("Theta is " + thetaDown);
-                    }
-                    else if (elementId ==="camera2"){
-                        var deltaX = e.offsetX - self.app.coordsListener.cam2X;
-                        var deltaY = e.offsetY - self.app.coordsListener.cam2Y;
-                        console.log("deltaX is " + deltaX + " and deltaY is " + deltaY);
-                        console.log("e.offsetY:" + e.offsetY + " and cam2Y:" + self.app.coordsListener.cam2Y);
-                        var thetaUp = Math.atan2(deltaY, deltaX);
+                            self.app.arm.orientByTheta(thetaUp - thetaDown, elementId);
 
-                        self.app.arm.orientByTheta(thetaUp - thetaDown, elementId);
+                            //console.log("Theta is " + thetaDown);
+                        }
+                        else if (elementId === "camera2") {
+                            var deltaX = e.offsetX - self.app.coordsListener.cam2X;
+                            var deltaY = e.offsetY - self.app.coordsListener.cam2Y;
+                           // console.log("deltaX is " + deltaX + " and deltaY is " + deltaY);
+                            //console.log("e.offsetY:" + e.offsetY + " and cam2Y:" + self.app.coordsListener.cam2Y);
+                            var thetaUp = Math.atan2(deltaY, deltaX);
 
-                        console.log("the change in theta is " + parseFloat(thetaUp - thetaDown));
+                            self.app.arm.orientByTheta(thetaUp - thetaDown, elementId);
+
+                            //console.log("the change in theta is " + parseFloat(thetaUp - thetaDown));
+                        }
+                        else {
+                            console.error("Camera name not found")
+                        }
+                        //var deltaX = e.offsetX - self.app.coordsListener.
                     }
-                    else{
-                        console.error("Camera name not found")
-                    }
-                    //var deltaX = e.offsetX - self.app.coordsListener.
                 }
             };
+
+            */
         });
     });
 
