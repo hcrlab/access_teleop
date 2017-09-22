@@ -7,6 +7,7 @@ button{
     position: absolute;
     z-index: 4;
 	background-color: transparent;
+    margin-left: 5px;
 }
 
 #rotate{
@@ -99,4 +100,8 @@ circle {
 
 div{
     /*border-style: dotted;*/
+}
+
+#freeze-buttons button{
+
 }
