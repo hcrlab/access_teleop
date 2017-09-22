@@ -78,6 +78,13 @@ App = function () {
         }
     };
 
+    this.moveArrow = function (x1,y1, x2, y2, camera_name) {
+        if(camera_name) {
+            var polyline = document.querySelector("#" + camera_name + "  svg polyline");
+            polyline.setAttribute('points', `${x1},${y1} ${x2},${y2}`);
+        }
+    };
+
 // This is the double slider for the gripper
     $(document).arrive("#slider-range", function () {
         $( function() {

@@ -26,7 +26,7 @@ function init() {
                         downX = e.offsetX;
                         downY = e.offsetY;
                         cameraDiv.onmousemove = function (moveE) {
-                            self.app.moveLine(downX, downY, moveE.offsetX, moveE.offsetY, cameraDiv.id);
+                            self.app.moveArrow(downX, downY, moveE.offsetX, moveE.offsetY, cameraDiv.id);
                         };
                         console.log("added onmousemove to " + cameraDiv.id);
                     }
