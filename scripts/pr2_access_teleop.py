@@ -13,7 +13,7 @@ from visualization_msgs.msg import InteractiveMarker, InteractiveMarkerControl, 
 from visualization_msgs.msg import Marker
 from shared_teleop_functions_and_vars import wait_for_time, quat_array_to_quat, publish_camera_transforms, publish_camera_info,\
     publish_gripper_pixels, getCameraDistances, dpx_to_distance, delta_modified_stamped_pose,\
-    absolute_modified_stamped_pose, add_marker, addSetback, pr2_move_group_name
+    absolute_modified_stamped_pose, add_marker, addSetback, pr2_move_group_name, camera_names
 
 
 class MoveByDelta(object):
@@ -57,6 +57,17 @@ def main():
     print("Don't forget to launch the move group server with roslaunch pr2_moveit_config move_group.launch")
     move_group = MoveGroupCommander(pr2_move_group_name)
 
+    gripper_publisher = rospy.Publisher('/access_teleop/gripper_pixels', PX, queue_size=1)
+
+    camera_model = PinholeCameraModel()
+
+    info_pubs = []
+    for camera_name in camera_names:
+        info_pubs.append([camera_name, rospy.Publisher(camera_name + '/camera_info', camera_info_messages.CameraInfo,
+                                                       queue_size=10)])
+
+    tb = TransformBroadcaster()
+
     move_by_delta = MoveByDelta(move_group)
     move_by_delta.start()
 
@@ -65,8 +76,9 @@ def main():
 
     rate = rospy.Rate(10)
     while not rospy.is_shutdown():
-        publish_camera_transforms()
-        publish_camera_info()
+        publish_camera_transforms(tb)
+        publish_camera_info(info_pubs)
+        publish_gripper_pixels(camera_model, move_group, gripper_publisher)
         rate.sleep()
 
 
