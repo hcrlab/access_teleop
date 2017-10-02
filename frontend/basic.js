@@ -399,7 +399,17 @@ function shownPanel() {
                 viewer2.width=dimCam2Width;
                 viewer3.width=dimCam3Width;
 }
-
+    $(window).resize(function(){
+        dimCam1Width = elFirst.clientWidth;
+        dimCam2Width = elTwo.clientWidth;
+        dimCam3Width = elThree.clientWidth;
+                        viewer1.canvas.width= dimCam1Width;
+                viewer2.canvas.width= dimCam2Width;
+                viewer3.canvas.width= dimCam3Width;
+                viewer1.width=dimCam1Width;
+                viewer2.width=dimCam2Width;
+                viewer3.width=dimCam3Width;
+    });
     $("#cameraTop").on('shown.bs.collapse', shownPanel);
     $("#cameraSide").on('shown.bs.collapse', shownPanel);
     $("#cameraHead").on('shown.bs.collapse', shownPanel);
