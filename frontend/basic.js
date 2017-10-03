@@ -19,7 +19,7 @@ $(document).ready(function(){
       host : 'localhost',
       width : dimCam1Width,
       height : dimCam1Height,
-      topic : '/wide_stereo/left/image_color'
+      topic : '/rviz1/camera1/image'
     });
 
 
@@ -32,7 +32,7 @@ $(document).ready(function(){
       host : 'localhost',
       width : dimCam2Width,
       height : dimCam2Height,
-      topic : '/wide_stereo/left/image_color'
+      topic : '/rviz1/camera2/image'
     });
 
 
@@ -45,7 +45,7 @@ $(document).ready(function(){
       host : 'localhost',
       width : dimCam3Width,
       height : dimCam3Height,
-      topic : '/wide_stereo/left/image_color'
+      topic : '/head_camera/rgb/image_raw'
     });
 
 
