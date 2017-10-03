@@ -85,6 +85,14 @@ App = function () {
         }
     };
 
+    if(!self.handleStatus){
+        this.handleStatus = function (message) {
+            console.log("Generaic handler called");
+        };
+        console.log("Using the app's arm handler");
+    }
+
+
 // This is the double slider for the gripper
     $(document).arrive("#slider-range", function () {
         $( function() {
