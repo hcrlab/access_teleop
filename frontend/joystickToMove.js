@@ -11,25 +11,6 @@ var downY;
 var cmdVelTopic;
 var twist;
 
-/*
- Function.prototype.throttle = function (milliseconds, context) {
- var baseFunction = this,
- lastEventTimestamp = null,
- limit = milliseconds;
-
- return function () {
- var self = context || this,
- args = arguments,
- now = Date.now();
-
- if (!lastEventTimestamp || now - lastEventTimestamp >= limit) {
- lastEventTimestamp = now;
- baseFunction.apply(self, args);
- }
- };
- };
- */
-
 var latestPositionX;
 var latestPositionY;
 var latestTargetX;

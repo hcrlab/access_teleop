@@ -13,33 +13,41 @@ function init() {
     this.app = new App();
     var self = this;
 
-    app.ros.on('connection', function () {
+    this.app.ros.on('connection', function () {
         console.log("We are connected!");
 
-        app.initRightClickGripper(); // This adds the right click gripper listener
-        app.addCloudFreezer();
+        self.app.initRightClickGripper(); // This adds the right click gripper listener
+        self.app.addCloudFreezer();
 
         arm_div.forEach(function(element)
         {
             element.onmousedown = function (e) {
                 e = e || window.event;
                 if(e.which == 1) { //This will only be true on a left click
-                    var elementId = (e.target || e.srcElement).parentElement.id;
-                    console.log(elementId);
-                    downX = e.offsetX;
-                    downY = e.offsetY;
+                    var cameraDiv = (e.target || e.srcElement).closest("div");
+                    if(cameraDiv) {
+                        downX = e.offsetX;
+                        downY = e.offsetY;
+                        cameraDiv.onmousemove = function (moveE) {
+                            self.app.moveLine(downX, downY, moveE.offsetX, moveE.offsetY, cameraDiv.id);
+                        };
+                    }
                 }
             };
 
             element.onmouseup = function (e) {
                 e = e || window.event;
                 if(e.which == 1) { //This will only be true on a left click
-                    var elementId = (e.target || e.srcElement).parentElement.id;
-                    console.log(elementId);
-                    console.log("offsetX :" + e.offsetX + " offsetY : " + e.offsetY);
-                    var x_pixel = (self.app.backendCameraWidth / self.app.cameraWidth) * (e.offsetX - downX);
-                    var y_pixel = (self.app.backendCameraHeight / self.app.cameraHeight) * (e.offsetY - downY);
-                    self.app.arm.moveArmByDelta(x_pixel, y_pixel, elementId);
+                    var cameraDiv = (e.target || e.srcElement).closest("div");
+                    if(cameraDiv) {
+                        var elementId = cameraDiv.id;
+                        cameraDiv.onmousemove = undefined;
+                        console.log("mouse move eliminated from " + elementId);
+                        console.log("offsetX :" + e.offsetX + " offsetY : " + e.offsetY);
+                        var x_pixel = (self.app.backendCameraWidth / self.app.cameraWidth) * (e.offsetX - downX);
+                        var y_pixel = (self.app.backendCameraHeight / self.app.cameraHeight) * (e.offsetY - downY);
+                        self.app.arm.moveArmByDelta(x_pixel, y_pixel, elementId);
+                    }
                 }
             };
 
