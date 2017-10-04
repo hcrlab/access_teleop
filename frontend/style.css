@@ -28,18 +28,23 @@ input{
 
 }
 .card {
-    /* Add shadows to create the "card" effect */
+    /* Add shadows to create the "card" effect
     box-shadow: 0 2px 1px 0 rgba(0,0,0,0.2);
-    transition: 0.3s;
+    transition: 0.3s; */
 }
 
 /* On mouse-over, add a deeper shadow */
-.card:hover {
-	background-color: yellow;
+card-block:hover {
+
+	background-color: pink;
 }
 
 canvas{
 	/*border-style: solid; */
+
+  margin-left: -4px;
+  margin-right: 0px;
+
 }
 .row.no-gutter {
   margin-left: -18px;
@@ -63,6 +68,10 @@ svg{
 
 .title1{
 	background-color: red;
+}
+
+.title1:hover, .title2:hover, .title3:hover{
+	background-color: yellow;
 }
 
 .title2{
@@ -105,3 +114,4 @@ div{
 #freeze-buttons button{
 
 }
+
