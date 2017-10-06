@@ -17,52 +17,39 @@
 
     <script src="http://cdn.robotwebtools.org/mjpegcanvasjs/current/mjpegcanvas.js"></script>
 
-    <!-- Js files unique to this html page go here -->
+    <!-- Common js files go here -->
     <script src="basic.js"></script>
 
  <title>Simple GUI</title>
 </head>
 
-<body>
+    <body>
+        <h2 id="title">Simple GUI</h2>
+           <div class="container-fluid">
+                <div class="row no-gutter">
+                    <div id="cam1-container" class="title1 col-sm-4">
+                      <a id="topBTN" class="btn btn-primary" data-toggle="collapse" href="#cameraTop" aria-expanded="false" aria-controls="collapseExample">Top</a>
+                      <div class="collapse card card-block in" id="cameraTop">
+                          <div id="camera1"></div>
+                      </div>
+                    </div>
 
-    <h2 id="title">Simple GUI</h2>
-       <div class="container-fluid">
-        <div class="row no-gutter">
-          <div id="first" class="title1 col-sm-4">
-           <a id="topBTN" class="btn btn-primary" data-toggle="collapse" href="#cameraTop" aria-expanded="false" aria-controls="collapseExample">
-   Top
-  </a>
-<div class="collapse in" id="cameraTop">
-  <div class="card card-block">
-      <div id="camera1"></div>
-  </div>
-</div>
-          </div>
-            <div id="two" class="title2 col-sm-4">
-           <a  id="sideBTN" class="btn btn-primary" data-toggle="collapse" href="#cameraSide" aria-expanded="false" aria-controls="collapseExample">
-   Side
-  </a>
-<div class="collapse in" id="cameraSide">
-  <div class="card card-block">
-      <div id="camera2"></div>
-  </div>
-</div>
-          </div>
-            <div id="three" class="title3 col-sm-4">
-           <a id="headBTN" class="btn btn-primary" data-toggle="collapse" href="#cameraHead" aria-expanded="false" aria-controls="collapseExample">
-   Head
-  </a>
-<div class="collapse in" id="cameraHead">
-  <div id="c3">
-      <div id="camera3"></div>
-  </div>
-</div>
-          </div>
-        </div>
-       </div>
+                    <div id="cam2-container" class="title2 col-sm-4">
+                      <a  id="sideBTN" class="btn btn-primary" data-toggle="collapse" href="#cameraSide" aria-expanded="false" aria-controls="collapseExample">Side</a>
+                      <div class="collapse card card-block in" id="cameraSide">
+                          <div id="camera2"></div>
+                      </div>
+                    </div>
 
-        <h5>Button Received:<div id="cmdReceived"></div></h5>
+                    <div id="cam3-container" class="title3 col-sm-4">
+                        <a id="headBTN" class="btn btn-primary" data-toggle="collapse" href="#cameraHead" aria-expanded="false" aria-controls="collapseExample">Head</a>
+                        <div class="collapse in" id="cameraHead">
+                            <div id="camera3"></div>
+                        </div>
+                    </div>
 
-
-</body>
+                </div>
+           </div>
+           <h5>Button Received:<div id="cmdReceived"></div></h5>
+    </body>
 </html>

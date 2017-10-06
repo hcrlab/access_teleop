@@ -45,40 +45,46 @@
 <body onload="init()">
     <div class="container-fluid">
         <div class="row">
-            <div id="cam1-container" class="cam-container">
-                <h1>Top</h1>
-                <div id="camera1" class="js_arm_div">
-                    <svg style="z-index: 1">
-                        <defs>
-                            <marker id="Triangle" viewBox="0 0 10 10" refX="10" refY="5"
-                                    markerWidth="6" markerHeight="6" orient="auto" stroke="red" fill="red">
-                                <path d="M 0 0 L 10 5 L 0 10 z" />
-                            </marker>
-                        </defs>
+            <div id="cam1-container" class="cam-container title1 col-sm-4">
+                <a id="topBTN" class="btn btn-primary" data-toggle="collapse" href="#cameraTop" aria-expanded="false" aria-controls="collapseExample">Top</a>
+                <div id="cameraTop" class="collapse card card-block in">
+                    <div id="camera1" class="js_arm_div">
+                        <svg style="z-index: 1">
+                            <defs>
+                                <marker id="Triangle" viewBox="0 0 10 10" refX="10" refY="5"
+                                        markerWidth="6" markerHeight="6" orient="auto" stroke="red" fill="red">
+                                    <path d="M 0 0 L 10 5 L 0 10 z" />
+                                </marker>
+                            </defs>
 
-                        <polyline points="0,0 0,0" fill="none" stroke="red"
-                                  stroke-width="2" marker-end="url(#Triangle)" />
-                    </svg>
+                            <polyline points="0,0 0,0" fill="none" stroke="red"
+                                      stroke-width="2" marker-end="url(#Triangle)" />
+                        </svg>
+                    </div>
                 </div>
             </div>
-            <div id="cam2-container" class="cam-container">
-                <h1>Side</h1>
-                <div id="camera2" class="js_arm_div">
-                    <svg style="z-index: 1">
-                        <defs>
-                            <marker id="Triangle" viewBox="0 0 10 10" refX="10" refY="5"
-                                    markerWidth="6" markerHeight="6" orient="auto" stroke="red" fill="red">
-                                <path d="M 0 0 L 10 5 L 0 10 z" />
-                            </marker>
-                        </defs>
-                        <polyline points="0,0 0,0" fill="none" stroke="red"
-                                  stroke-width="2" marker-end="url(#Triangle)" />
-                    </svg>
+            <div id="cam2-container" class="cam-container title2 col-sm-4">
+                <a  id="sideBTN" class="btn btn-primary" data-toggle="collapse" href="#cameraSide" aria-expanded="false" aria-controls="collapseExample">Side</a>
+                <div id="cameraSide" class="collapse card card-block in">
+                    <div id="camera2" class="js_arm_div">
+                        <svg style="z-index: 1">
+                            <defs>
+                                <marker id="Triangle" viewBox="0 0 10 10" refX="10" refY="5"
+                                        markerWidth="6" markerHeight="6" orient="auto" stroke="red" fill="red">
+                                    <path d="M 0 0 L 10 5 L 0 10 z" />
+                                </marker>
+                            </defs>
+                            <polyline points="0,0 0,0" fill="none" stroke="red"
+                                      stroke-width="2" marker-end="url(#Triangle)" />
+                        </svg>
+                    </div>
                 </div>
             </div>
-            <div id="cam3-container" class="cam-container">
-                <h1>Head Camera</h1>
-                <div id="camera3"></div>
+            <div id="cam3-container" class="cam-container title3 col-sm-4">
+                <a id="headBTN" class="btn btn-primary" data-toggle="collapse" href="#cameraHead" aria-expanded="false" aria-controls="collapseExample">Head</a>
+                <div id="cameraHead" class="collapse in">
+                    <div id="camera3"></div>
+                </div>
             </div>
         </div>
     </div>
