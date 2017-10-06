@@ -5,9 +5,9 @@ $(document).ready(function(){
         var elTwoSt =0;
         var elThreeSt =0;
 
-        var cam1Container = document.getElementById("cam1_container");
-        var cam2Container = document.getElementById("cam2_container");
-        var cam3Container = document.getElementById("cam3_container");
+        var cam1Container = document.getElementById("cam1-container");
+        var cam2Container = document.getElementById("cam2-container");
+        var cam3Container = document.getElementById("cam3-container");
 
 
       var dimCam1Width = cam1Container.clientWidth;
@@ -407,6 +407,7 @@ function shownPanel() {
                 viewer2.width=dimCam2Width;
                 viewer3.width=dimCam3Width;
 }
+
     $(window).resize(function(){
         dimCam1Width = cam1Container.clientWidth;
         dimCam2Width = cam2Container.clientWidth;
