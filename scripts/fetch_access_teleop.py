@@ -19,9 +19,10 @@ from shared_teleop_functions_and_vars import wait_for_time, quat_array_to_quat, 
 
 
 class MoveByDelta(object):
-    def __init__(self, arm, move_group):
+    def __init__(self, arm, move_group, status_pub):
         self._arm = arm
         self._move_group = move_group
+        self._status_pub = status_pub
 
     def start(self):
         rospy.Subscriber('/access_teleop/delta', DeltaPX, self.callback, queue_size=1)
@@ -70,9 +71,10 @@ class MoveByAbsolute(object):
 
 
 class MoveAndOrient(object):
-    def __init__(self, arm, move_group):
+    def __init__(self, arm, move_group, status_pub):
         self._arm = arm
         self._move_group = move_group
+        self._status_pub = status_pub
 
     def start(self):
         rospy.Subscriber('/access_teleop/move_and_orient', PXAndTheta, self.move_and_orient_callback, queue_size=1)
@@ -96,9 +98,10 @@ class MoveAndOrient(object):
 
 
 class MoveAndOrient(object):
-    def __init__(self, arm, move_group):
+    def __init__(self, arm, move_group, status_pub):
         self._arm = arm
         self._move_group = move_group
+        self._status_pub = status_pub
         self.SETBACK = 0.15
 
     def start(self):
@@ -170,7 +173,6 @@ def main():
     arm = fetch_api.Arm()
     move_group = MoveGroupCommander("arm")
 
-
     status_publisher = rospy.Publisher('/access_teleop/arm_status', String, queue_size=1)
     gripper_publisher = rospy.Publisher('/access_teleop/gripper_pixels', PX, queue_size=1)
 
@@ -183,14 +185,14 @@ def main():
 
     camera_model = PinholeCameraModel()
 
-    move_by_delta = MoveByDelta(arm, move_group)
+    move_by_delta = MoveByDelta(arm, move_group, status_publisher)
     move_by_delta.start()
 
     move_by_absolute = MoveByAbsolute(arm, move_group, status_publisher)
 
     move_by_absolute.start()
 
-    move_and_orient = MoveAndOrient(arm, move_group)
+    move_and_orient = MoveAndOrient(arm, move_group, status_publisher)
     move_and_orient.start()
 
     orient = Orient(arm, move_group)

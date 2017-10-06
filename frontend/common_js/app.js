@@ -85,12 +85,11 @@ App = function () {
         }
     };
 
-    if(!self.handleStatus){
-        this.handleStatus = function (message) {
-            console.log("Generaic handler called");
-        };
-        console.log("Using the app's arm handler");
-    }
+
+    this.handleStatus = function (message) {
+        console.log(message);
+    };
+
 
 
 // This is the double slider for the gripper
@@ -100,6 +99,11 @@ App = function () {
             app.gripper.gripperGUI = new GripperGUI(app.gripper); //This has to be here, because otherwise the element wil not be loaded
         });
     });
+
+
+
+
+
 
     // Adds 3 canvas image streams
     // --------------------------------------------------------------------------------
