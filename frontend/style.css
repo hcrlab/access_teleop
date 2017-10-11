@@ -7,6 +7,7 @@ button{
     position: absolute;
     z-index: 4;
 	background-color: transparent;
+    margin-left: 5px;
 }
 
 #rotate{
@@ -59,8 +60,10 @@ svg{
     position: absolute;
     z-index: 6;
 	background: transparent;
-	left:5px;
-	top:5px;
+	/*left:5px;*/
+	/*top:5px;*/
+    height: inherit;
+    width: inherit;
 }
 
 .title1{
@@ -80,11 +83,11 @@ svg{
 	background-color: blue;
 }
 
-div{
-    /*
-	border-style: solid;
-	border-color: #2423cb;
-	*/
+.cam-container{
+    float:left;
+    padding-left:10px;
+    padding-right:10px;
+    padding-bottom: 10px;
 }
 
 #gripper-container{
@@ -96,9 +99,19 @@ div{
 	height:2.4em;
 }
 
-svg.circle-overlay{
-    height: 100%;
-    width: 100%;
-    display: block;
-    float: left;
+.joystick-container{
+    position:relative;
 }
+
+circle {
+    opacity:0.5;
+}
+
+div{
+    /*border-style: dotted;*/
+}
+
+#freeze-buttons button{
+
+}
+

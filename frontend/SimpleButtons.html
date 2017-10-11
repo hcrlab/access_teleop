@@ -35,6 +35,7 @@
 
     <!-- Js files unique to this html page go here -->
     <script src="simpleButtons.js"></script>
+        <script src="speech.js"></script>
 
  <title>Simple Buttons GUI</title>
 </head>
@@ -44,6 +45,7 @@
     <h2 id="title">Simple Buttons GUI</h2>
 
     <div class="container-fluid">
+
         <div class="row no-gutter">
           <div id="first" class="col-sm-4">
             <div class="card title1">
@@ -77,6 +79,26 @@
         </div>
         </div>
 
+        <div id="results" class="container">
+          <div class="row no-gutter">
+          <div class="col-sm-2">
+              <h2>Interim Results</h2>
+                <textarea id="interim-textarea" placeholder="Command using voice recognition." rows="6"></textarea>
+          </div>
+              <div class="col-sm-2">
+              <h2>Activate</h2>
+                <button id="start-record-btn" title="Start Recording">Start Recognition</button>
+
+         </div>
+          <div class="col-sm-2">
+              <h2>Final Results</h2>
+                    <textarea id="final-textarea" placeholder="Command using voice recognition." rows="6"></textarea>
+
+         </div>
+
+           </div>
+
+        </div>
             <h5>Command Received:<div id="cmdReceived"></div></h5>
             <div class="panel">
 
@@ -94,6 +116,7 @@
 
     <div w3-include-html="common_html/gripper.html"></div>
     <script>w3.includeHTML(); // This line is necessary to allow html imports</script>
+
 
 </body>
 </html>
