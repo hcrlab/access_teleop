@@ -21,13 +21,15 @@ CoordsListener = function(ros) {
     });
 
     coords.subscribe(function (message) {
+        var x_pixel = parseInt(message.pixel_x * (app.cameraWidth / app.backendCameraWidth));
+        var y_pixel = parseInt(message.pixel_y * (app.cameraHeight / app.backendCameraHeight));
         if(message.camera_name === "camera1") {
-            self.cam1X = message.pixel_x;
-            self.cam1Y = message.pixel_y;
+            self.cam1X = x_pixel;
+            self.cam1Y = y_pixel;
         }
         if(message.camera_name === "camera2") {
-            self.cam2X = message.pixel_x;
-            self.cam2Y = app.cameraHeight - message.pixel_y;
+            self.cam2X = x_pixel;
+            self.cam2Y = app.cameraHeight - y_pixel;
         }
         app.handleGripperCoords(message);
     });
