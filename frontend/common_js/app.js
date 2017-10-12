@@ -30,7 +30,7 @@ App = function () {
     this.arm = new Arm(this.ros);
     this.gripper = new Gripper(this.ros);
     this.cloudFreezer = new CloudFreezer(this.ros);
-    this.wristRoller = new WristRoller(this.ros);
+    //this.wristRoller = new WristRoller(this.ros);
 
     //self.head = new Head(ros);
 
