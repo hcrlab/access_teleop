@@ -18,14 +18,14 @@ App = function () {
     });
 
 
-    this.ros.on('error', function(error) {
+/*    this.ros.on('error', function(error) {
         console.log('Error connecting to websocket server.');
     });
 
     this.ros.on('close', function (error) {
        console.error('We lost connection with ROS. All is lost');
        document.body.innerHTML = "The connection with ROS is broken. Please reconnect";
-    });
+    });*/
 
     this.arm = new Arm(this.ros);
     this.gripper = new Gripper(this.ros);
