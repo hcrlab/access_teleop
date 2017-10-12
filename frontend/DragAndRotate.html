@@ -30,6 +30,7 @@
     <script src="common_js/arm.js"></script>
     <script src="common_js/gripper_coords_listener.js"></script>
     <script src="common_js/cloud_freezer.js"></script>
+    <script src="common_js/wrist_roll.js"></script>
     <script src="common_js/gripper.js"></script>
     <script src="common_js/gripper_gui.js"></script>
     <script src="common_js/app.js"></script>
@@ -45,20 +46,28 @@
 
 <div class="container-fluid">
     <div class="row">
-        <h1>Right</h1>
-        <div id="camera1" class="col-sm-4, js_arm_div camera-div">
-            <svg class="circle-overlay" style="z-index: 1">
-                <circle cx="50" cy="50" r="40" stroke="red" stroke-width="10" fill="none" style="z-index: 100" />
-            </svg>
+        <div id="cam1-container" class="cam-container">
+            <h1>Top</h1>
+            <div id="camera1" class="js_arm_div">
+                <svg style="z-index: 1">
+                    <circle cx="50" cy="50" r="50" stroke="blue" stroke-width="15" fill="none" style="z-index: 100" />
+                    <line x1="0" y1="0" x2="0" y2="0" stroke="blue" stroke-width="2" style="z-index: 100"></line>
+                </svg>
+            </div>
         </div>
-        <h1>Head</h1>
-        <div id="camera2" class="col-sm-4 js_arm_div camera-div">
-            <svg class="circle-overlay" style="z-index: 1">
-                <circle cx="50" cy="50" r="40" stroke="red" stroke-width="10" fill="none" style="z-index: 100" />
-            </svg>
+        <div id="cam2-container" class="cam-container">
+            <h1>Side</h1>
+            <div id="camera2" class="js_arm_div">
+                <svg style="z-index: 1">
+                    <circle cx="50" cy="50" r="50" stroke="blue" stroke-width="15" fill="none" style="z-index: 100" />
+                    <line x1="0" y1="0" x2="0" y2="0" stroke="blue" stroke-width="2" style="z-index: 100"></line>
+                </svg>
+            </div>
         </div>
-        <h1>Left</h1>
-        <div id="camera3" class="col-sm-4 camera-div"></div>
+        <div id="cam3-container" class="cam-container">
+            <h1>Head Camera</h1>
+            <div id="camera3"></div>
+        </div>
     </div>
 </div>
 
@@ -73,6 +82,8 @@
 </form>
 <p id="demo"></p>
 <div id="feedback"></div>
+<div id="freeze-buttons"></div>
+
 
 
 <div w3-include-html="common_html/gripper.html"></div>

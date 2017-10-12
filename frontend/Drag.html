@@ -29,6 +29,7 @@
     <!-- Common js files go here -->
     <script src="common_js/arm.js"></script>
     <script src="common_js/cloud_freezer.js"></script>
+    <script src="common_js/wrist_roll.js"></script>
     <script src="common_js/gripper.js"></script>
     <script src="common_js/gripper_gui.js"></script>
     <script src="common_js/app.js"></script>
@@ -44,8 +45,18 @@
 
     <div class="container-fluid">
         <div class="row">
-            <div id="camera1" class="col-sm-4, js_arm_div"><h1>Right</h1></div>
-            <div id="camera2" class="col-sm-4 js_arm_div"><h1>Head</h1></div>
+            <h1>Right</h1>
+            <div id="camera1" class="col-sm-4, js_arm_div">
+                <svg style="z-index: 1">
+                    <line x1="0" y1="0" x2="0" y2="0" stroke="red" stroke-width="2" style="z-index: 100"></line>
+                </svg>
+            </div>
+            <h1>Head</h1>
+            <div id="camera2" class="col-sm-4 js_arm_div">
+                <svg style="z-index: 1">
+                    <line x1="0" y1="0" x2="0" y2="0" stroke="red" stroke-width="2" style="z-index: 100"></line>
+                </svg>
+            </div>
             <div id="camera3" class="col-sm-4"><h1>Left</h1></div>
         </div>
     </div>
