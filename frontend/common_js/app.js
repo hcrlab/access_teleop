@@ -30,6 +30,7 @@ App = function () {
     this.arm = new Arm(this.ros);
     this.gripper = new Gripper(this.ros);
     this.cloudFreezer = new CloudFreezer(this.ros);
+    this.ArmStatus = new ArmStatus(this.ros);
     this.wristRoller = new WristRoller(this.ros);
 
     //self.head = new Head(ros);
@@ -87,7 +88,18 @@ App = function () {
 
 
     this.handleStatus = function (message) {
-        console.log(message);
+        console.log(message.data);
+        switch(message.data){
+            case "moving":
+
+                break;
+            case "unreachable":
+
+                break;
+            case "arrived":
+
+
+        }
     };
 
 

@@ -43,7 +43,7 @@ function init() {
                     var deltaX = latestPositionX - latestTargetX;
                     var deltaY = latestPositionY - latestTargetY;
 
-                    console.log("x is : " + deltaX + "\n" + "and y is :" + deltaY );
+                    //console.log("x is : " + deltaX + "\n" + "and y is :" + deltaY );
                     app.arm.moveArmByDelta(deltaX/2, deltaY/2 , camera_name);
 
                     if(lastInterval) {
@@ -54,7 +54,7 @@ function init() {
                         var deltaX = latestPositionX - latestTargetX;
                         var deltaY = latestPositionY - latestTargetY;
 
-                        console.log("x is : " + deltaX + "\n" + "and y is :" + deltaY );
+                        //console.log("x is : " + deltaX + "\n" + "and y is :" + deltaY );
                         app.arm.moveArmByDelta(deltaX/2, deltaY/2 , camera_name);
                     }, 100);
 
