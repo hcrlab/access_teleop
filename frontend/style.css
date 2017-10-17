@@ -59,7 +59,9 @@ canvas{
 svg{
     position: absolute;
     z-index: 6;
-	background: transparent;
+    background: transparent;
+    height:inherit;
+    width:inherit;
 }
 
 .title1{
