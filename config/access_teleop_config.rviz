@@ -5,8 +5,11 @@ Panels:
     Property Tree Widget:
       Expanded:
         - /Global Options1
+        - /TF1
+        - /TF1/Frames1
+        - /TF1/Frames1/camera31
       Splitter Ratio: 0.5
-    Tree Height: 335
+    Tree Height: 236
   - Class: rviz/Selection
     Name: Selection
   - Class: rviz/Tool Properties
@@ -67,12 +70,15 @@ Visualization Manager:
       Visibility:
         Axes: true
         CameraPub2: true
+        CameraPub3: true
         Grid: true
+        Image: true
         Image1: true
         Image2: true
         InteractiveMarkers: true
         PointCloud2: true
         RobotModel: true
+        TF: true
         Value: true
     - Class: rviz/Image
       Enabled: true
@@ -99,12 +105,15 @@ Visualization Manager:
       Visibility:
         Axes: true
         CameraPub1: true
+        CameraPub3: true
         Grid: true
+        Image: true
         Image1: true
         Image2: true
         InteractiveMarkers: true
         PointCloud2: true
         RobotModel: true
+        TF: true
         Value: true
     - Class: rviz/Image
       Enabled: true
@@ -298,6 +307,158 @@ Visualization Manager:
       Use Fixed Frame: true
       Use rainbow: true
       Value: true
+    - Background Color: 0; 0; 0
+      Camera Info Topic: /camera3/camera_info
+      Class: rviz_camera_stream/CameraPub
+      Display namespace: ""
+      Enabled: true
+      Frame Rate: -1
+      Image Topic: /rviz1/camera3/image
+      Name: CameraPub3
+      Queue Size: 2
+      Value: true
+      Visibility:
+        Axes: true
+        CameraPub1: true
+        CameraPub2: true
+        Grid: true
+        Image: true
+        Image1: true
+        Image2: true
+        InteractiveMarkers: true
+        PointCloud2: true
+        RobotModel: true
+        TF: true
+        Value: true
+    - Class: rviz/Image
+      Enabled: true
+      Image Topic: /rviz1/camera3/image
+      Max Value: 1
+      Median window: 5
+      Min Value: 0
+      Name: Image
+      Normalize Range: true
+      Queue Size: 2
+      Transport Hint: raw
+      Unreliable: false
+      Value: true
+    - Class: rviz/TF
+      Enabled: true
+      Frame Timeout: 1.5e+06
+      Frames:
+        All Enabled: false
+        base_link:
+          Value: false
+        bellows_link:
+          Value: false
+        bellows_link2:
+          Value: false
+        camera1:
+          Value: true
+        camera2:
+          Value: true
+        camera3:
+          Value: true
+        elbow_flex_link:
+          Value: false
+        estop_link:
+          Value: false
+        forearm_roll_link:
+          Value: false
+        gripper_link:
+          Value: false
+        head_camera_depth_frame:
+          Value: false
+        head_camera_depth_optical_frame:
+          Value: false
+        head_camera_link:
+          Value: false
+        head_camera_rgb_frame:
+          Value: false
+        head_camera_rgb_optical_frame:
+          Value: false
+        head_pan_link:
+          Value: false
+        head_tilt_link:
+          Value: false
+        l_gripper_finger_link:
+          Value: false
+        l_wheel_link:
+          Value: false
+        laser_link:
+          Value: false
+        odom:
+          Value: false
+        r_gripper_finger_link:
+          Value: false
+        r_wheel_link:
+          Value: false
+        shoulder_lift_link:
+          Value: false
+        shoulder_pan_link:
+          Value: false
+        torso_fixed_link:
+          Value: false
+        torso_lift_link:
+          Value: false
+        upperarm_roll_link:
+          Value: false
+        wrist_flex_link:
+          Value: false
+        wrist_roll_link:
+          Value: false
+      Marker Scale: 1
+      Name: TF
+      Show Arrows: true
+      Show Axes: true
+      Show Names: true
+      Tree:
+        odom:
+          base_link:
+            camera1:
+              {}
+            camera2:
+              {}
+            camera3:
+              {}
+            estop_link:
+              {}
+            l_wheel_link:
+              {}
+            laser_link:
+              {}
+            r_wheel_link:
+              {}
+            torso_fixed_link:
+              {}
+            torso_lift_link:
+              bellows_link:
+                {}
+              bellows_link2:
+                {}
+              head_pan_link:
+                head_tilt_link:
+                  head_camera_link:
+                    head_camera_depth_frame:
+                      head_camera_depth_optical_frame:
+                        {}
+                    head_camera_rgb_frame:
+                      head_camera_rgb_optical_frame:
+                        {}
+              shoulder_pan_link:
+                shoulder_lift_link:
+                  upperarm_roll_link:
+                    elbow_flex_link:
+                      forearm_roll_link:
+                        wrist_flex_link:
+                          wrist_roll_link:
+                            gripper_link:
+                              l_gripper_finger_link:
+                                {}
+                              r_gripper_finger_link:
+                                {}
+      Update Interval: 0
+      Value: true
   Enabled: true
   Global Options:
     Background Color: 48; 48; 90
@@ -322,22 +483,22 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 12.4978
+      Distance: 4.55593
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.06
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: 0.935611
-        Y: 0.0475561
-        Z: 1.15579
+        X: 1.3348
+        Y: 0.904319
+        Z: 1.52547
       Name: Current View
       Near Clip Distance: 0.01
-      Pitch: 0.969796
+      Pitch: -0.0852039
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 3.08863
+      Yaw: 4.08363
     Saved: ~
 Window Geometry:
   Displays:
@@ -345,11 +506,13 @@ Window Geometry:
   Height: 1176
   Hide Left Dock: false
   Hide Right Dock: true
+  Image:
+    collapsed: false
   Image1:
     collapsed: false
   Image2:
     collapsed: false
-  QMainWindow State: 000000ff00000000fd00000004000000000000016a0000040efc020000000ffb0000001200530065006c0065006300740069006f006e00000001e10000009b0000006400fffffffb0000001e0054006f006f006c002000500072006f007000650072007400690065007302000001ed000001df00000185000000a3fb000000120056006900650077007300200054006f006f02000001df000002110000018500000122fb000000200054006f006f006c002000500072006f0070006500720074006900650073003203000002880000011d000002210000017afb000000100044006900730070006c0061007900730100000028000001de000000dd00fffffffb0000002000730065006c0065006300740069006f006e00200062007500660066006500720200000138000000aa0000023a00000294fb00000014005700690064006500530074006500720065006f02000000e6000000d2000003ee0000030bfb0000000c004b0069006e0065006300740200000186000001060000030c00000261fb0000000c00430061006d00650072006100000002d6000000160000000000000000fb0000001200430061006d0065007200610050007500620100000199000000920000000000000000fb0000001200430061006d006500720061005000750062010000022b000000c10000000000000000fb0000001200430061006d006500720061005000750062010000022b000000c10000000000000000fb0000000c0049006d0061006700650031010000020c000000f00000001600fffffffb0000000c0049006d00610067006500320100000302000001340000001600fffffffb0000000a0049006d0061006700650000000367000000cf0000000000000000000000010000010f00000348fc0200000003fb0000001e0054006f006f006c002000500072006f00700065007200740069006500730100000041000000780000000000000000fb0000000a00560069006500770073000000004100000348000000b000fffffffb0000001200530065006c0065006300740069006f006e010000025a000000b200000000000000000000000200000490000000a9fc0100000001fb0000000a00560069006500770073030000004e00000080000002e100000197000000030000073f0000003efc0100000002fb0000000800540069006d006501000000000000073f000002f600fffffffb0000000800540069006d00650100000000000004500000000000000000000005cf0000040e00000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
+  QMainWindow State: 000000ff00000000fd00000004000000000000016a0000040efc0200000010fb0000001200530065006c0065006300740069006f006e00000001e10000009b0000006400fffffffb0000001e0054006f006f006c002000500072006f007000650072007400690065007302000001ed000001df00000185000000a3fb000000120056006900650077007300200054006f006f02000001df000002110000018500000122fb000000200054006f006f006c002000500072006f0070006500720074006900650073003203000002880000011d000002210000017afb000000100044006900730070006c00610079007301000000280000017b000000dd00fffffffb0000002000730065006c0065006300740069006f006e00200062007500660066006500720200000138000000aa0000023a00000294fb00000014005700690064006500530074006500720065006f02000000e6000000d2000003ee0000030bfb0000000c004b0069006e0065006300740200000186000001060000030c00000261fb0000000c00430061006d00650072006100000002d6000000160000000000000000fb0000001200430061006d0065007200610050007500620100000199000000920000000000000000fb0000001200430061006d006500720061005000750062010000022b000000c10000000000000000fb0000001200430061006d006500720061005000750062010000022b000000c10000000000000000fb0000000c0049006d006100670065003101000001a9000000be0000001600fffffffb0000000c0049006d0061006700650032010000026d000000f40000001600fffffffb0000000a0049006d0061006700650100000367000000cf0000001600fffffffb0000000a0049006d0061006700650100000367000000cf0000000000000000000000010000010f00000348fc0200000003fb0000001e0054006f006f006c002000500072006f00700065007200740069006500730100000041000000780000000000000000fb0000000a00560069006500770073000000004100000348000000b000fffffffb0000001200530065006c0065006300740069006f006e010000025a000000b200000000000000000000000200000490000000a9fc0100000001fb0000000a00560069006500770073030000004e00000080000002e100000197000000030000073f0000003efc0100000002fb0000000800540069006d006501000000000000073f000002f600fffffffb0000000800540069006d00650100000000000004500000000000000000000005cf0000040e00000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
   Selection:
     collapsed: false
   Time:

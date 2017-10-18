@@ -149,7 +149,7 @@ App = function () {
         host : 'localhost',
         width : leftForearmWidth,
         height : leftForearmHeight,
-        topic : '/head_camera/rgb/image_raw'
+        topic : '/rviz1/camera3/image'
     });
 
     // ------------------------------------------------------------------------------------------

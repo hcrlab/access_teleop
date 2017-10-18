@@ -15,7 +15,7 @@ from interactive_markers.interactive_marker_server import InteractiveMarkerServe
 from visualization_msgs.msg import InteractiveMarker, InteractiveMarkerControl, InteractiveMarkerFeedback
 from shared_teleop_functions_and_vars import wait_for_time, quat_array_to_quat, publish_camera_transforms, publish_camera_info, \
     publish_gripper_pixels, dpx_to_distance, delta_modified_stamped_pose, \
-    absolute_modified_stamped_pose, add_marker, addSetback, orientation_mapping, orientation_sign_mapping, camera_names
+    absolute_modified_stamped_pose, add_marker, addSetback, orientation_mapping, orientation_sign_mapping, camera_names, camera_info_mapping
 
 
 class MoveByDelta(object):
@@ -175,7 +175,7 @@ def main():
     gripper_publisher = rospy.Publisher('/access_teleop/gripper_pixels', PX, queue_size=1)
 
     info_pubs = []
-    for camera_name in camera_names:
+    for camera_name in camera_info_mapping.keys():
         info_pubs.append([camera_name,
                           rospy.Publisher(camera_name + '/camera_info', camera_info_messages.CameraInfo, queue_size=10)])
 
@@ -201,7 +201,7 @@ def main():
 
     rate = rospy.Rate(10)
     while not rospy.is_shutdown():
-        publish_camera_transforms(tb)
+        publish_camera_transforms(tb, move_group)
         publish_camera_info(info_pubs)
         publish_gripper_pixels(camera_model, move_group, gripper_publisher)
         rate.sleep()

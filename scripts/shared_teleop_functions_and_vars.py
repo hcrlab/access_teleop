@@ -8,13 +8,18 @@ from image_geometry import PinholeCameraModel
 from geometry_msgs.msg import Pose, PoseStamped, Quaternion
 from visualization_msgs.msg import InteractiveMarker, InteractiveMarkerControl, InteractiveMarkerFeedback
 from visualization_msgs.msg import Marker
+from tf import TransformBroadcaster, transformations
 import camera_info_messages
 
 
-camera_info_mapping = {'camera1': camera_info_messages.camera1, 'camera2': camera_info_messages.camera2}
+camera_info_mapping = {'camera1': camera_info_messages.camera1, 'camera2': camera_info_messages.camera2,
+                       'camera3': camera_info_messages.camera3}
 
 transform_broadcaster_mapping = {'camera1': ((0.5, -0.3, 2.6), (1, 0, 0, 0), rospy.Time(10), 'camera1', 'base_link'),
-                                'camera2': ((0.7, -2.0, 0.55), (-0.70711, 0, 0, 0.70711), rospy.Time(10), 'camera2', 'base_link')}
+                                 'camera2': ((0.7, -2.0, 0.55), (-0.70711, 0, 0, 0.70711), rospy.Time(10), 'camera2',
+                                             'base_link'),
+                                 'camera3': ((0.7, -0.9, 0.6), (-0.70711, 0, 0, 0.70711), rospy.Time(10), 'camera3',
+                                             'base_link')}
 orientation_mapping = {'camera1': 2, 'camera2': 1}
 orientation_sign_mapping = {'camera1': -1, 'camera2': 1}
 camera_names = ['camera1', 'camera2']
@@ -37,10 +42,22 @@ def quat_array_to_quat(quat_array):
     return new_quat
 
 
-def publish_camera_transforms(tb):
+def publish_camera_transforms(tb, move_group):
     for key in transform_broadcaster_mapping:
         transform_data = transform_broadcaster_mapping[key]
-        tb.sendTransform(transform_data[0], transform_data[1], transform_data[2], transform_data[3], transform_data[4])
+        if key == "camera3":
+            ps = move_group.get_current_pose().pose
+            rpy = move_group.get_current_rpy()
+            new_quat_array = transformations.quaternion_from_euler(rpy[0], rpy[1] - math.pi/2, rpy[2], "sxyz")
+            quat = quat_array_to_quat(new_quat_array)
+
+            tb.sendTransform((ps.position.x + 0.1, ps.position.y, ps.position.z), (quat.x, quat.y,
+                                                                                   quat.z, quat.w),
+                             transform_data[2], transform_data[3],
+                             transform_data[4])
+            pprint(ps)
+        else:
+            tb.sendTransform(transform_data[0], transform_data[1], transform_data[2], transform_data[3], transform_data[4])
 
 
 def publish_camera_info(publishers):
