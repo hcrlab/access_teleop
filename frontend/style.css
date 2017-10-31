@@ -1,115 +1,206 @@
 body {
     background-color: white;
-	cursor: default;
+    cursor: default;
+}
+#controls1, #controls2{
+    margin:0 auto; /* this will center  it
+    z-index: 8;*/
+    position:relative;
 }
 
+img{
+    margin:0 auto;  /*  this will center  it */
+}
 button{
-    position: absolute;
-    z-index: 4;
-	background-color: transparent;
-    margin-left: 5px;
+    resize:both;
+    background-color: transparent;
+    display:block;
+    position:absolute;
+}
+/*
+    width: 100%;
+    z-index: 4;@media all and (max-width: 479px) {}
+@media all and (min-width: 480px) and (max-width: 719px) {}
+@media all and (min-width: 720px) and (max-width: 959px) {}
+@media all and (min-width: 960px) and (max-width: 1279px) {}
+@media all and (min-width: 1280px) {}   */
+
+[class*="col-"] {
+    float: left;
+    padding: 1px;
+    width: 100%;
 }
 
-#rotate{
-  vertical-align:top;
-  transform:rotate(7deg);
-  -ms-transform:rotate(-90deg); /* IE 9 */
-  -moz-transform:rotate(-90deg); /* Firefox */
-  -webkit-transform:rotate(-90deg); /* Safari and Chrome */
-  -o-transform:rotate(-90deg); /* Opera */
+@media only screen and (min-width: 900px) {
+    h2 {
+        background-color: #103384;
+    }
+    .col-s-1 {width: 8.33%;}
+    .col-s-2 {width: 16.66%;}
+    .col-s-3 {width: 25%;}
+    .col-s-4 {width: 33.33%;}
+    .col-s-5 {width: 41.66%;}
+    .col-s-6 {width: 50%;}
+    .col-s-7 {width: 58.33%;}
+    .col-s-8 {width: 66.66%;}
+    .col-s-9 {width: 75%;}
+    .col-s-10 {width: 83.33%;}
+    .col-s-11 {width: 91.66%;}
+    .col-s-12 {width: 100%;}
+}
+@media only screen and (min-width: 1200px) {
+    h2  {
+        background-color: #580013;
+    }
+    .col-1 {width: 8.33%;}
+    .col-2 {width: 16.66%;}
+    .col-3 {width: 25%;}
+    .col-4 {width: 33.33%;}
+    .col-5 {width: 41.66%;}
+    .col-6 {width: 50%;}
+    .col-7 {width: 58.33%;}
+    .col-8 {width: 66.66%;}
+    .col-9 {width: 75%;}
+    .col-10 {width: 83.33%;}
+    .col-11 {width: 91.66%;}
+    .col-12 {width: 100%;}
+}
+
+/*@media all and (max-width: 719px) {
+    h2 {
+        background-color:magenta;
+    }
+}
+
+@media all and (min-width: 720px) and (max-width: 959px) {
+    h2 {
+      background-color: lightgreen;
   }
 
+}
 
+@media all and (min-width: 960px) {
+    h2{
+        background-color: darkblue;
+    }
+
+    .col-sm-4 {width: 10%;}
+}*/
 
 input{
-  cursor:pointer;
-  min-height:30px;
-  position:relative;
+    cursor:pointer;
+    min-height:30px;
+    position:relative;
 
-}
-.card {
-    /* Add shadows to create the "card" effect
-    box-shadow: 0 2px 1px 0 rgba(0,0,0,0.2);
-    transition: 0.3s; */
 }
 
 /* On mouse-over, add a deeper shadow */
 card-block:hover {
 
-	background-color: pink;
+    background-color: pink;
+}
+.overlayBtn{
+    position: relative;
+    z-index: 6;
+    width: 100px;
+    height: 20px;
+    overflow: hidden;
 }
 
-canvas{
-	/*border-style: solid; */
+#upBtn1{
+    /*      position: relative;
+ top: -60px;
+  left: 10px;
+   -50%; left: 50%;
+     top:10px;
+      left: 270px;*/
+}
 
-  margin-left: -4px;
-  margin-right: 0px;
+#downBtn{
+    /*    top:470px;
+        left: 270px;*/
+}
+
+#rightBtn{
+}
+
+#rotateRightBtn{
+}
+
+#leftBtn{
+}
+
+
+#rotateLeftBtn{
+}
+
+
+canvas{
+    /*border-style: solid; */
+    left:0px;
 
 }
 .row.no-gutter {
-  margin-left: -18px;
-  margin-right: 0px;
+    margin-left: -5px;
+    margin-right: 0px;
 }
 
 .row.no-gutter [class*='col-']:not(:first-child),
 .row.no-gutter [class*='col-']:not(:last-child) {
-  padding-right: 10px;
-  padding-left: 4px;
+    padding-right:0px;
+    padding-left: 0px;
 }
+div#content {
+    position: absolute;    z-index: 6;
+    border: 1px solid gray;
+
+    height: 150px; width: 150px; }
+
 svg{
     position: absolute;
     z-index: 6;
     background: transparent;
-    height:inherit;
-    width:inherit;
+    left:0px;
+    top:0px;
 }
+#svgout {
 
+    position: absolute;
+    z-index: 6;
+    background: transparent;
+    width: 100vw;
+    height: 100vh;
+}
 .title1{
-	background-color: red;
+    background-color: red;
 }
 
 .title1:hover, .title2:hover, .title3:hover{
-	background-color: yellow;
+    background-color: yellow;
 }
 
 .title2{
-	background-color: green;
+    background-color: green;
 
 }
 
 .title3{
-	background-color: blue;
-}
-
-.cam-container{
-    float:left;
-    padding-left:10px;
-    padding-right:10px;
-    padding-bottom: 10px;
-}
-
-#gripper-container{
-	width:20em;
-	margin-left:10em;
-}
-
-.ui-slider .ui-slider-handle {
-	height:2.4em;
-}
-
-.joystick-container{
-    position:relative;
-}
-
-circle {
-    opacity:0.5;
+    background-color: blue;
 }
 
 div{
-    /*border-style: dotted;*/
+    /*
+	border-style: solid;
+	border-color: #2423cb;
+	*/
 }
 
-#freeze-buttons button{
+#gripper-container{
+    width:20em;
+    margin-left:10em;
+}
 
+.ui-slider .ui-slider-handle {
+    height:2.4em;
 }
 
