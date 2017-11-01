@@ -18,12 +18,49 @@ function init() {
         console.log("We are connected!");
     });
 
-    var elmnt = document.getElementById("camera1");
+    var cam1Con = document.getElementById("cam1-container");
+    var cam2Con = document.getElementById("cam2-container");
+    var cam1 = document.getElementById("camera1");
 
-    var cameraWidth = this.app.cameraWidth;
-    var cameraHeight = this.app.cameraHeight;
+    var cam1position = cam1Con.getBoundingClientRect();
+    var cam2position = cam2Con.getBoundingClientRect();
 
-    var upBTN1 = document.createElement("button");
+    var topBTN = document.getElementById("topBTN");
+    var sideBTN = document.getElementById("sideBTN");
+    var headBTN = document.getElementById("headBTN");
+    var cam1W=this.app.dimCam1Width;
+    var cam1H = this.app.dimCam1Height;
+    var cam2W=this.app.dimCam2Width;
+    var cam2H = this.app.dimCam2Height;
+    var cam3W=this.app.dimCam3Width;
+    var cam3H = this.app.dimCam3Height;
+
+    var controls1 = document.getElementById("controls1");
+ //   controls1.style.left=topBTN.left+"px";
+//    controls1.style.top=-this.app.dimCam1Height- 7+"px";
+
+    var controls2= document.getElementById("controls2");
+ //   controls2.style.left=sideBTN.left+"px";
+ //   controls2.style.top=-this.app.dimCam2Height- 7+"px";
+
+    var panel1= document.getElementById("controls1");
+    panel1.style.top=-this.app.dimCam1Height+ 'px';
+    panel1.style.left=0+ 'px';
+
+    var panel2= document.getElementById("controls2");
+    panel2.style.top=-this.app.dimCam2Height+ 'px';
+    panel2.style.left=0+ 'px';
+
+    var panelCam1= document.getElementById("btnCam1");
+    panelCam1.style.width=this.app.dimCam1Width+ 'px';
+    panelCam1.style.height=this.app.dimCam1Height+ 'px';
+
+    var panelCam2= document.getElementById("btnCam2");
+    panelCam2.style.width=this.app.dimCam2Width+ 'px';
+    panelCam2.style.height=this.app.dimCam2Height+ 'px';
+
+
+    var upBTN1 =document.getElementById("upBtn1");
     upBTN1.innerHTML="<img src=\"img/blueUpArrow.png\">";
     upBTN1.id='up';
     upBTN1.title='\u2191Up\u2191';
@@ -152,50 +189,94 @@ function init() {
     rotateleftBTN2.addEventListener ("click", pubMoveMsg);
 
 
+    var cam1 = document.getElementById("camera1");
+    var cam2 = document.getElementById("camera2");
+
+    var topBTN = document.getElementById("topBTN");
+    var resizeOverlay = _.debounce(function() {
+        var ratio1 =this.app.getCam1W()/this.app.getCam1WO();
+        var ratio2 =this.app.getCam2W()/this.app.getCam2WO();
+        panelCam1.style.transform='scale('+ratio1+','+ratio1+')';
+        panelCam2.style.transform='scale('+ratio2+','+ratio2+')';
+        var  leftMargin1= ((this.app.getCam1W() * ratio1) - this.app.getCam1W()) / 2;
+        var  topMargin1= ((this.app.getCam1H() * ratio1) - this.app.getCam1H()) / 2;
+        panel1.style.top=-this.app.getCam2H()+topMargin1 + 'px';
+        panel1.style.left=leftMargin1   + 'px';
+
+        panelCam1.style.width=this.app.getCam1W()+ 'px';
+        panelCam1.style.height=this.app.getCam1H()+ 'px';
+        var leftMargin2  = ((this.app.getCam2W() * ratio2) - this.app.getCam2W()) / 2;
+        var topMargin2 = ((this.app.getCam2H() * ratio2) - this.app.getCam2H()) / 2;
+        panel2.style.top=-this.app.getCam2H()+topMargin2 + 'px';
+        panel2.style.left=leftMargin2+ 'px';
+
+        panelCam2.style.width=this.app.getCam2W()+ 'px';
+        panelCam2.style.height=this.app.getCam2H()+ 'px';
+
+    }, 400);
+
+    window.addEventListener('resize', resizeOverlay);
 
 
-function pubMoveMsg() {
-    var comSel;
-    var expr = this.id;
-    switch (expr) {
-      case 'up':
-        comSel="Go Up 1";
-        break;
-      case 'up2':
-        comSel="Go Up 2";
-        break;
-      case 'down':
-        comSel="Go Down 1";
-        break;
-      case 'down2':
-        comSel="Go Down 2";
-        break;
-      case 'left':
-        comSel="Go Left 1";
-        break;
-      case 'left2':
-        comSel="Go Left 2";
-        break;
-      case 'right':
-        comSel="Go Right 1";
-        break;
-      case 'right2':
-        comSel="Go Right 2";
-        break;
-      case 'rotateRight':
-        comSel="Go Rotate Right 1";
-        break;
-      case 'rotateRight2':
-        comSel="Go Rotate Right 2";
-        break;
-      case 'rotateLeft':
-        comSel="Go Rotate Left";
-        break;
-      case 'rotateLeft2':
-        comSel="Go Rotate Left 2";
-        break;
+
+    /*
+        var resizeOverlay = _.debounce(function() {
+
+controls1.style.top=-cam1.clientHeight+ 'px';
+            controls2.style.left=-sideBTN.left+ 'px';
+            controls2.style.top=-cam2.clientHeight+ 'px';
+            console.log("new ="+this.app.getCam1W());
+            //       console.log("ratio ="+ratio);
+            // location.reload();
+        }, 400);
+
+        window.addEventListener('resize', resizeOverlay);
+    */
+
+    function pubMoveMsg() {
+        var comSel;
+        var expr = this.id;
+        switch (expr) {
+            case 'up':
+                comSel = "Go Up 1";
+                break;
+            case 'up2':
+                comSel = "Go Up 2";
+                break;
+            case 'down':
+                comSel = "Go Down 1";
+                break;
+            case 'down2':
+                comSel = "Go Down 2";
+                break;
+            case 'left':
+                comSel = "Go Left 1";
+                break;
+            case 'left2':
+                comSel = "Go Left 2";
+                break;
+            case 'right':
+                comSel = "Go Right 1";
+                break;
+            case 'right2':
+                comSel = "Go Right 2";
+                break;
+            case 'rotateRight':
+                comSel = "Go Rotate Right 1";
+                break;
+            case 'rotateRight2':
+                comSel = "Go Rotate Right 2";
+                break;
+            case 'rotateLeft':
+                comSel = "Go Rotate Left";
+                break;
+            case 'rotateLeft2':
+                comSel = "Go Rotate Left 2";
+                break;
+        }
+
+        document.getElementById("cmdReceived").innerHTML = comSel;
     }
 
     document.getElementById("cmdReceived").innerHTML = comSel;
-}
 }

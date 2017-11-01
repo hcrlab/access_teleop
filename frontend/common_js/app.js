@@ -486,12 +486,206 @@ App = function () {
         dimCam1Width =cam1Container.clientWidth;
         dimCam2Width = cam2Container.clientWidth;
         dimCam3Width = cam3Container.clientWidth;
-        viewer1.canvas.width= dimCam1Width;
-        viewer2.canvas.width= dimCam2Width;
-        viewer3.canvas.width= dimCam3Width;
-        viewer1.width=dimCam1Width;
-        viewer2.width=dimCam2Width;
-        viewer3.width=dimCam3Width;
+        dimCam1Height = dimCam1Width / aspectRatio;
+        dimCam2Height = dimCam2Width / aspectRatio;
+        dimCam3Height = dimCam3Width / aspectRatio;
+
+        viewer1.canvas.width = dimCam1Width;
+        viewer2.canvas.width = dimCam2Width;
+        viewer3.canvas.width = dimCam3Width;
+        viewer1.width = dimCam1Width;
+        viewer2.width = dimCam2Width;
+        viewer3.width = dimCam3Width;
+        viewer1.canvas.height = viewer1.height = dimCam1Height;
+        viewer2.canvas.height = viewer2.height = dimCam2Height;
+        viewer3.canvas.height = viewer3.height = dimCam3Height;
+
+        resizeWindow();
+    }
+
+
+
+    /*    $(window).resize(function () {
+            winHeight = parseInt($(window).height());
+            winWidth = parseInt($(window).width());
+            document.getElementById("cmdReceived").innerHTML = " w=" + winWidth + " h=" + winHeight;
+            if (winWidth < 600) {
+                dimCam1Height = winHeight / 3 - dimTitleHeight - dimTopBTNHeight;//winHeight/3;//dimCam1Width/aspectRatio;
+                dimCam2Height = winHeight / 3 - dimTitleHeight - dimTopBTNHeight;//dimCam2Width/aspectRatio;
+                dimCam3Height = winHeight / 3 - dimTitleHeight - dimTopBTNHeight;
+                dimCam1Width = dimCam1Height * aspectRatio;//winWidth/3;//cam1Container.clientWidth;
+                dimCam2Width = dimCam2Height * aspectRatio;//winWidth/3;//cam2Container.clientWidth;
+                dimCam3Width = dimCam3Height * aspectRatio;
+            } else {
+                dimCam1Width = winWidth / 3;//cam1Container.clientWidth;
+                dimCam2Width = winWidth / 3;//cam2Container.clientWidth;
+                dimCam3Width = winWidth / 3;//cam3Container.clientWidth;
+                dimCam1Height = dimCam1Width / aspectRatio;
+                dimCam2Height = dimCam2Width / aspectRatio;
+                dimCam3Height = dimCam3Width / aspectRatio;
+            }
+
+          //  alert (dimCam1Width);
+            this.dimCam1Width=dimCam1Width;
+            this.originaldimCam1Width= viewer1.canvas.width;
+            viewer1.width = viewer1.canvas.width = dimCam1Width;
+            this.dimCam2Width=viewer2.width = viewer2.canvas.width = dimCam2Width;
+            this.dimCam3Width  =viewer3.width = viewer3.canvas.width = dimCam3Width;
+
+            this.dimCam1Height=viewer1.canvas.height = viewer1.height = dimCam1Height;
+            this.dimCam2Height=viewer2.canvas.height = viewer2.height = dimCam2Height;
+            this.dimCam3Height=viewer3.canvas.height = viewer3.height = dimCam3Height;
+
+        });*/
+    /*    $(window).on('resize', _.debounce(function() {
+
+
+            //  =       console.clear();
+            console.log("new2 ="+this.dimCam1Width);
+        //    alert ("okay2 ="+ this.dimCam1Width);
+        }, 400));*/
+
+// Helper function to get an element's exact position
+    function getPosition(el) {
+        var xPos = 0;
+        var yPos = 0;
+
+        while (el) {
+            if (el.tagName == "BODY") {
+                // deal with browser quirks with body/window/document and page scroll
+                var xScroll = el.scrollLeft || document.documentElement.scrollLeft;
+                var yScroll = el.scrollTop || document.documentElement.scrollTop;
+
+                xPos += (el.offsetLeft - xScroll + el.clientLeft);
+                yPos += (el.offsetTop - yScroll + el.clientTop);
+            } else {
+                // for all other non-BODY elements
+                xPos += (el.offsetLeft - el.scrollLeft + el.clientLeft);
+                yPos += (el.offsetTop - el.scrollTop + el.clientTop);
+            }
+
+            el = el.offsetParent;
+        }
+        return {
+            x: xPos,
+            y: yPos
+        };
+    }
+
+// deal with the page getting resized or scrolled
+    window.addEventListener("scroll", updatePosition, false);
+    window.addEventListener("resize", updatePosition, false);
+
+    function updatePosition() {
+        // add your code to update the position when your browser
+        // is resized or scrolled
+    }
+    var myEfficientFn = _.debounce(function() {
+        resizeWindow();/*
+        console.log("deb ="+originaldimCam1Width);
+        var controls1 = document.getElementById("controls1");
+        var controls2 = document.getElementById("controls2");
+        var ratio =dimCam1Width/originaldimCam1Width;
+
+        //  ; //Left side of box
+        controls2.offsetTop;  //Top side of box
+        controls2.offsetLeft + controls2.offsetWidth; //Right side of box
+        controls2.offsetTop + controls2.offsetHeight; //Bottom side of box
+        controls1.style.top=-dimCam1Height-7+ 'px';
+        controls2.style.transform='scale('+ratio+','+ratio+')';
+        controls2.style.top=-dimCam2Height-7+ 'px';
+        //    controls2.style.transform='translate('+7+ 'px'+','+7+ 'px'+')';
+        var position = getPosition(controls2);
+        var pos2 = getPosition(cam2Container);
+        controls2.style.left=-(sideBTN.offsetLeft)+"px";
+        controls1.style.transform='scale('+ratio+','+ratio+')';
+        //sideBTN      var myElement = document.querySelector("#foo");
+        alert("The image is located at: " + position.x + ", " +controls2.offsetLeft );
+        //  (50px, 100px)  // scaleconsole.clear();
+        console.log("original ="+originaldimCam1Width);
+        console.log("new ="+dimCam1Width);
+        console.log("ratio ="+ratio);*/
+        //   location.reload();
+    }, 400);
+
+    window.addEventListener('resize', myEfficientFn);
+    function resizeWindow() {
+
+        var elcmdReceived = document.getElementById("speechControl");
+        var dimcmdReceivedHeight = elcmdReceived.clientHeight;
+        var height = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
+        var scrollHeight = document.documentElement.scrollHeight;
+
+        if (scrollHeight <= height) {
+        } else {
+            if (cam1Container.classList.contains("col-sm-10") || cam2Container.classList.contains("col-sm-10") || cam3Container.classList.contains("col-sm-10")) {
+                dimCam1Height = dimCam1Height - (scrollHeight - height) + dimTitleHeight + dimcmdReceivedHeight;
+                dimCam2Height = dimCam2Height - (scrollHeight - height) + dimTitleHeight + dimcmdReceivedHeight;
+                dimCam3Height = dimCam3Height - (scrollHeight - height) + dimTitleHeight + dimcmdReceivedHeight;
+            } else {
+                dimCam1Height = dimCam1Height - (scrollHeight - height) + dimcmdReceivedHeight;
+                dimCam2Height = dimCam2Height - (scrollHeight - height) + dimcmdReceivedHeight;
+                dimCam3Height = dimCam3Height - (scrollHeight - height) + dimcmdReceivedHeight;
+
+            }
+
+            dimCam1Width = dimCam1Height * aspectRatio;
+            dimCam2Width = dimCam2Height * aspectRatio;
+            dimCam3Width = dimCam3Height * aspectRatio;
+
+        }
+        winHeight = parseInt($(window).height());
+        winWidth = parseInt($(window).width());
+        document.getElementById("cmdReceived").innerHTML = " w=" + winWidth + " h=" + winHeight;
+        if (winWidth < 600) {
+            dimCam1Height = winHeight / 3 - dimTitleHeight - dimTopBTNHeight;//winHeight/3;//dimCam1Width/aspectRatio;
+            dimCam2Height = winHeight / 3 - dimTitleHeight - dimTopBTNHeight;//dimCam2Width/aspectRatio;
+            dimCam3Height = winHeight / 3 - dimTitleHeight - dimTopBTNHeight;// dimCam3Width/aspectRatio;
+
+            dimCam1Width = dimCam1Height * aspectRatio;//winWidth/3;//cam1Container.clientWidth;
+            dimCam2Width = dimCam2Height * aspectRatio;//winWidth/3;//cam2Container.clientWidth;
+            dimCam3Width = dimCam3Height * aspectRatio;//winWidth/3;//cam3Container.clientWidth;
+
+        } else {
+            dimCam1Width = winWidth / 3;//cam1Container.clientWidth;
+            dimCam2Width = winWidth / 3;//cam2Container.clientWidth;
+            dimCam3Width = winWidth / 3;//cam3Container.clientWidth;
+            dimCam1Height = dimCam1Width / aspectRatio;
+            dimCam2Height = dimCam2Width / aspectRatio;
+            dimCam3Height = dimCam3Width / aspectRatio;
+        }
+
+        viewer1.width =  viewer1.canvas.width =dimCam1Width;
+        this.dimCam1Width= dimCam1Width;
+        this.dimCam2Width=viewer2.width = viewer2.canvas.width = dimCam2Width;
+        this.dimCam3Width  =viewer3.width = viewer3.canvas.width = dimCam3Width;
+
+        this.dimCam1Height=viewer1.canvas.height = viewer1.height = dimCam1Height;
+        this.dimCam2Height=viewer2.canvas.height = viewer2.height = dimCam2Height;
+        this.dimCam3Height=viewer3.canvas.height = viewer3.height = dimCam3Height;
+
+
+    }
+    this.getCam1W = function(){
+        return dimCam1Width;
+    }
+    this.getCam1H = function(){
+        return dimCam1Height;
+    }
+
+    this.getCam2W = function(){
+        return dimCam2Width;
+    }
+
+    this.getCam2H = function(){
+        return dimCam2Height;
+    }
+
+    this.getCam1WO = function(){
+        return originaldimCam1Width;
+    }
+    this.getCam2WO = function(){
+        return originaldimCam2Width;
     }
     $(window).resize(function(){
         dimCam1Width = cam1Container.clientWidth;
