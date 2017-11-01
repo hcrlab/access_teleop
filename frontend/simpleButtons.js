@@ -33,13 +33,30 @@ function init() {
     var cam3H = this.app.dimCam3Height;
 
     var controls1 = document.getElementById("controls1");
-    controls1.style.left=topBTN.left+"px";
-    controls1.style.top=-this.app.dimCam1Height- 7+"px";
-
+ //   controls1.style.left=topBTN.left+"px";
+//    controls1.style.top=-this.app.dimCam1Height- 7+"px";
 
     var controls2= document.getElementById("controls2");
-    controls2.style.left=sideBTN.left+"px";
-    controls2.style.top=-this.app.dimCam2Height- 7+"px";
+ //   controls2.style.left=sideBTN.left+"px";
+ //   controls2.style.top=-this.app.dimCam2Height- 7+"px";
+
+    var panel1= document.getElementById("controls1");
+    panel1.style.top=-this.app.dimCam1Height+ 'px';
+    panel1.style.left=0+ 'px';
+
+    var panel2= document.getElementById("controls2");
+    panel2.style.top=-this.app.dimCam2Height+ 'px';
+    panel2.style.left=0+ 'px';
+
+    var panelCam1= document.getElementById("btnCam1");
+    panelCam1.style.width=this.app.dimCam1Width+ 'px';
+    panelCam1.style.height=this.app.dimCam1Height+ 'px';
+
+    var panelCam2= document.getElementById("btnCam2");
+    panelCam2.style.width=this.app.dimCam2Width+ 'px';
+    panelCam2.style.height=this.app.dimCam2Height+ 'px';
+
+
     var upBTN1 =document.getElementById("upBtn1");
     upBTN1.innerHTML="<img src=\"img/blueUpArrow.png\">";
     upBTN1.id='up';
@@ -171,23 +188,45 @@ function init() {
     var cam2 = document.getElementById("camera2");
 
     var topBTN = document.getElementById("topBTN");
-
     var resizeOverlay = _.debounce(function() {
-        /*         // the code below should be working instead of location.reload*/
-        var ratio =this.app.getCam1W()/this.app.getCam1WO();
-        //alert(leftBTN1.style.left);
-        console.log("original ="+this.app.getCam1WO());
-        controls1.style.transform='scale('+ratio+','+ratio+') translate('+-this.app.getCam1WO()/2*ratio+'px, 0px)';
-        controls2.style.transform='scale('+ratio+','+ratio+') translate('+-this.app.getCam2WO()/2*ratio+'px, 0px)';
-        controls1.style.top=-cam1.clientHeight+ 'px';
-        controls2.style.left=-sideBTN.left+ 'px';
-        controls2.style.top=-cam2.clientHeight+ 'px';
-        console.log("new ="+this.app.getCam1W());
-        //       console.log("ratio ="+ratio);
-        // location.reload();
+        var ratio1 =this.app.getCam1W()/this.app.getCam1WO();
+        var ratio2 =this.app.getCam2W()/this.app.getCam2WO();
+        panelCam1.style.transform='scale('+ratio1+','+ratio1+')';
+        panelCam2.style.transform='scale('+ratio2+','+ratio2+')';
+        var  leftMargin1= ((this.app.getCam1W() * ratio1) - this.app.getCam1W()) / 2;
+        var  topMargin1= ((this.app.getCam1H() * ratio1) - this.app.getCam1H()) / 2;
+        panel1.style.top=-this.app.getCam2H()+topMargin1 + 'px';
+        panel1.style.left=leftMargin1   + 'px';
+
+        panelCam1.style.width=this.app.getCam1W()+ 'px';
+        panelCam1.style.height=this.app.getCam1H()+ 'px';
+        var leftMargin2  = ((this.app.getCam2W() * ratio2) - this.app.getCam2W()) / 2;
+        var topMargin2 = ((this.app.getCam2H() * ratio2) - this.app.getCam2H()) / 2;
+        panel2.style.top=-this.app.getCam2H()+topMargin2 + 'px';
+        panel2.style.left=leftMargin2+ 'px';
+
+        panelCam2.style.width=this.app.getCam2W()+ 'px';
+        panelCam2.style.height=this.app.getCam2H()+ 'px';
+
     }, 400);
 
     window.addEventListener('resize', resizeOverlay);
+
+
+
+    /*
+        var resizeOverlay = _.debounce(function() {
+
+controls1.style.top=-cam1.clientHeight+ 'px';
+            controls2.style.left=-sideBTN.left+ 'px';
+            controls2.style.top=-cam2.clientHeight+ 'px';
+            console.log("new ="+this.app.getCam1W());
+            //       console.log("ratio ="+ratio);
+            // location.reload();
+        }, 400);
+
+        window.addEventListener('resize', resizeOverlay);
+    */
 
     function pubMoveMsg() {
         var comSel;

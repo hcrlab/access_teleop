@@ -2,12 +2,45 @@ body {
     background-color: white;
     cursor: default;
 }
+
 #controls1, #controls2{
-    margin:0 auto; /* this will center  it
-    z-index: 8;*/
+    margin:0 auto; /* this will center  it*/
+    z-index: 8;
     position:relative;
 }
 
+#canvas1, #canvas2 {
+    z-index: 8;
+    position: relative;
+}
+
+#btnCam1{
+    top: -7px;
+    left: 0px;
+    position: absolute;
+}
+
+
+#btnCam2{
+    top: -7px;
+    left: 0px;
+    position: absolute;
+}
+
+#svgCam1 {
+    border: 2px solid red;
+    top: -7px;
+    left: 0px;
+    position: absolute;
+}
+
+
+#svgCam2{
+    border: 2px solid green;
+    top: -7px;
+    left: 0px;
+    position: absolute;
+}
 img{
     margin:0 auto;  /*  this will center  it */
 }
