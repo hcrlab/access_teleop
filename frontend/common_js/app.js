@@ -685,7 +685,7 @@ App = function () {
         return dimCam1Width;
     }
     this.getCam1H = function(){
-        return dimCam1Height;
+        return dimCam1Width;
     }
 
     this.getCam2W = function(){
