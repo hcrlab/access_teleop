@@ -144,8 +144,8 @@ function init() {
     rightBTN1.addEventListener ("click", pubMoveMsg);
     rotateRightBtn1.addEventListener ("click", pubMoveMsg);
     rotateLeftBtn1.addEventListener ("click", pubMoveMsg);
-
-    upBTN2.addEventListener ("click", pubMoveMsg);
+    /*
+        */  upBTN2.addEventListener ("click", pubMoveMsg);
     downBTN2.addEventListener ("click", pubMoveMsg);
     leftBTN2.addEventListener ("click", pubMoveMsg);
     rightBTN2.addEventListener ("click", pubMoveMsg);
