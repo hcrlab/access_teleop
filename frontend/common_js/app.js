@@ -23,51 +23,50 @@ App = function () {
     });
 
     this.ros.on('close', function (error) {
-
-        console.error('We lost connection with ROS. All is lost');
+       console.error('We lost connection with ROS. All is lost');
 //       document.body.innerHTML = "The connection with ROS is broken. Please reconnect";
     });
-    /*
-        this.arm = new Arm(this.ros);
-        this.gripper = new Gripper(this.ros);
-        this.cloudFreezer = new CloudFreezer(this.ros);
-        this.wristRoller = new WristRoller(this.ros);
+/*
+    this.arm = new Arm(this.ros);
+    this.gripper = new Gripper(this.ros);
+    this.cloudFreezer = new CloudFreezer(this.ros);
+    this.wristRoller = new WristRoller(this.ros);
 
-        //self.head = new Head(ros);
+    //self.head = new Head(ros);
 
-        // Set up the gripper event handlers
-        // Calls itself after definition
-        this.initRightClickGripper = function () {
-            var arm_div = document.querySelectorAll('.js_arm_div');
-            arm_div.forEach(function(element){
-                element.addEventListener('contextmenu', function(ev){
-                    ev.preventDefault();
-                    if(self.gripper.getCurrentPosition() == self.gripper.PositionEnum.CLOSED ||
-                        self.gripper.getCurrentPosition() == self.gripper.PositionEnum.PARTLY_CLOSED) {
-                        self.gripper.open();
-                    }
-                    else {
-                        self.gripper.close();
-                    }
-                   return false;
-                }, false);
-            });
-        };
+    // Set up the gripper event handlers
+    // Calls itself after definition
+    this.initRightClickGripper = function () {
+        var arm_div = document.querySelectorAll('.js_arm_div');
+        arm_div.forEach(function(element){
+            element.addEventListener('contextmenu', function(ev){
+                ev.preventDefault();
+                if(self.gripper.getCurrentPosition() == self.gripper.PositionEnum.CLOSED ||
+                    self.gripper.getCurrentPosition() == self.gripper.PositionEnum.PARTLY_CLOSED) {
+                    self.gripper.open();
+                }
+                else {
+                    self.gripper.close();
+                }
+               return false;
+            }, false);
+        });
+    };
 
-        this.addCloudFreezer = function(){
-            var feedback = document.querySelector("#feedback");
+    this.addCloudFreezer = function(){
+        var feedback = document.querySelector("#feedback");
 
-            var freezeButton = document.createElement("button");
-            freezeButton.innerHTML = "Freeze Point Cloud";
-            freezeButton.onclick = this.cloudFreezer.freezeCloud;
+        var freezeButton = document.createElement("button");
+        freezeButton.innerHTML = "Freeze Point Cloud";
+        freezeButton.onclick = this.cloudFreezer.freezeCloud;
 
-            var unfreezeButton = document.createElement("button");
-            unfreezeButton.innerHTML = "Real Time Point Cloud";
-            unfreezeButton.onclick = this.cloudFreezer.unfreezeCloud;
+        var unfreezeButton = document.createElement("button");
+        unfreezeButton.innerHTML = "Real Time Point Cloud";
+        unfreezeButton.onclick = this.cloudFreezer.unfreezeCloud;
 
-            feedback.appendChild(freezeButton);
-            feedback.appendChild(unfreezeButton);
-        };*/
+        feedback.appendChild(freezeButton);
+        feedback.appendChild(unfreezeButton);
+    };*/
 
 
     if(!self.handleStatus){
@@ -77,15 +76,15 @@ App = function () {
         console.log("Using the app's arm handler");
     }
 
-    /*
+/*
 
-    // This is the double slider for the gripper
-        $(document).arrive("#slider-range", function () {
-            $( function() {
-                $slider = $( "#slider-range" ); //This will create the slider jQuery object as soon as the element is ready
-                app.gripper.gripperGUI = new GripperGUI(app.gripper); //This has to be here, because otherwise the element wil not be loaded
-            });
-        });*/
+// This is the double slider for the gripper
+    $(document).arrive("#slider-range", function () {
+        $( function() {
+            $slider = $( "#slider-range" ); //This will create the slider jQuery object as soon as the element is ready
+            app.gripper.gripperGUI = new GripperGUI(app.gripper); //This has to be here, because otherwise the element wil not be loaded
+        });
+    });*/
 
     // Adds 3 canvas image streams
     // --------------------------------------------------------------------------------
@@ -96,7 +95,6 @@ App = function () {
 
 
     // Dynamic Canvas Sizes
-
 
     var elFirstSt =0;
     var elTwoSt =0;
@@ -111,11 +109,11 @@ App = function () {
     var dimCam2Width = cam2Container.clientWidth;
     var dimCam2Height = cam2Container.clientWidth / aspectRatio;
 
-
     var dimCam3Width = cam3Container.clientWidth;
     var dimCam3Height = cam3Container.clientWidth / aspectRatio;
 
-
+    this.backendCameraWidth = "640";
+    this.backendCameraHeight = "480";
 
     var aspectRatio = this.backendCameraWidth/this.backendCameraHeight;
 
@@ -148,7 +146,6 @@ App = function () {
     var viewer1 = new MJPEGCANVAS.Viewer({
         divID : 'camera1',
         host : 'localhost',
-
         width :this.dimCam1Width,
         height :this.dimCam1Height,
         topic : '/rviz1/camera1/image'
@@ -158,7 +155,6 @@ App = function () {
     var viewer2 = new MJPEGCANVAS.Viewer({
         divID : 'camera2',
         host : 'localhost',
-
         width :this.dimCam2Width,
         height :this.dimCam2Height,
         topic : '/rviz1/camera2/image'
@@ -168,7 +164,6 @@ App = function () {
     var viewer3= new MJPEGCANVAS.Viewer({
         divID : 'camera3',
         host : 'localhost',
-
         width :this.dimCam3Width,
         height :this.dimCam3Height,
         topic : '/head_camera/rgb/image_raw'
@@ -204,53 +199,52 @@ App = function () {
     svgCam1.setAttributeNS("http://www.w3.org/2000/xmlns/", "xmlns:xlink", "http://www.w3.org/1999/xlink");
 
     var svgOverlay1 = document.getElementById("camera1");
-    //  svgOverlay1.appendChild(svgCam1);
+  //  svgOverlay1.appendChild(svgCam1);
 
     var s = Snap("#svgCam1");
     var linex1 = 20;
     var liney1 = 15;
     var linex2 = 50;
     var liney2 = 50;
-    /*
+/*
 
-     var x,y;
-        var line = s.line(linex1,liney1,linex2,liney2);
-        line.attr({
-          stroke: "#008000",
-          strokeWidth: 10
-        });
-        var radius = 10;
+ var x,y;
+    var line = s.line(linex1,liney1,linex2,liney2);
+    line.attr({
+      stroke: "#008000",
+      strokeWidth: 10
+    });
+    var radius = 10;
 
-        var circle1 = s.circle(linex1, liney1, radius).attr({ fill: "red" });
-        var circle2 = s.circle(linex2, liney2, radius).attr({ fill: "green" });
-    */
-    function moveFunc( ev, x, y ) {
+    var circle1 = s.circle(linex1, liney1, radius).attr({ fill: "red" });
+    var circle2 = s.circle(linex2, liney2, radius).attr({ fill: "green" });
+*/
+function moveFunc( ev, x, y ) {
 
-        var coor = "(" + x + "," + y + ")";
-        //  document.getElementById("coordReceived").innerHTML = coor;
-        // circle2.attr({ cx: x, cy: y-25});
+    var coor = "(" + x + "," + y + ")";
+   //  document.getElementById("coordReceived").innerHTML = coor;
+   // circle2.attr({ cx: x, cy: y-25});
 
-    };
-    /*s.click(moveFunc);
-    s.unmouseover(moveFunc);
+};
+/*s.click(moveFunc);
+s.unmouseover(moveFunc);
 
-    s.mouseover(moveFunc);
-        var svgElement = document.getElementById("svgCam1");
-        svgElement.addEventListener("mouseover", mouseOver);
+s.mouseover(moveFunc);
+    var svgElement = document.getElementById("svgCam1");
+    svgElement.addEventListener("mouseover", mouseOver);
 
-        svgElement.style.position = "absolute";
-        function mouseOver() {
-          // alert(this.id);
-             // x = circle2.attr("cx");
-       // y = circle2.attr("cy");
-      //  line.attr({x2:7,y2:9});
-        }*/
+    svgElement.style.position = "absolute";
+    function mouseOver() {
+      // alert(this.id);
+         // x = circle2.attr("cx");
+   // y = circle2.attr("cy");
+  //  line.attr({x2:7,y2:9});
+    }*/
     init_flag = false;
 
 
     function hidePanel() {
         var expr = this.id;
-
 
         switch (expr) {
             case 'cameraTop':
@@ -295,7 +289,6 @@ App = function () {
             case 'cameraSide':
                 elTwoSt = 1;
                 cam2Container.classList.add("col-sm-1");
-
                 cam2Container.classList.remove("col-sm-10", "col-sm-5", "col-sm-4");
 
                 // other panels
@@ -333,7 +326,6 @@ App = function () {
                 }
                 break;
             case 'cameraHead':
-
                 elThreeSt = 1;
                 cam3Container.classList.add("col-sm-1");
                 cam3Container.classList.remove("col-sm-10", "col-sm-5", "col-sm-4");
@@ -374,7 +366,6 @@ App = function () {
                 break;
         }
 
-
         dimCam1Width = cam1Container.clientWidth;
         dimCam2Width = cam2Container.clientWidth;
         dimCam3Width = cam3Container.clientWidth;
@@ -399,7 +390,6 @@ App = function () {
 
     function shownPanel() {
         var expr = this.id;
-
 
         switch (expr) {
             case 'cameraTop':
@@ -442,7 +432,6 @@ App = function () {
                 elTwoSt = 0;
 
                 // other panels
-
                 if (elFirstSt == 0 && elThreeSt == 0) {
                     cam1Container.classList.add("col-sm-4");
                     cam1Container.classList.remove("col-sm-10", "col-sm-5", "col-sm-1");
@@ -509,7 +498,6 @@ App = function () {
                 break;
         }
 
-
         dimCam1Width = cam1Container.clientWidth;
         dimCam2Width = cam2Container.clientWidth;
         dimCam3Width = cam3Container.clientWidth;
@@ -564,13 +552,13 @@ App = function () {
             this.dimCam3Height=viewer3.canvas.height = viewer3.height = dimCam3Height;
 
         });*/
-    /*    $(window).on('resize', _.debounce(function() {
+/*    $(window).on('resize', _.debounce(function() {
 
 
-            //  =       console.clear();
-            console.log("new2 ="+this.dimCam1Width);
-        //    alert ("okay2 ="+ this.dimCam1Width);
-        }, 400));*/
+        //  =       console.clear();
+        console.log("new2 ="+this.dimCam1Width);
+    //    alert ("okay2 ="+ this.dimCam1Width);
+    }, 400));*/
 
 // Helper function to get an element's exact position
     function getPosition(el) {
@@ -715,7 +703,6 @@ App = function () {
         return originaldimCam2Width;
     }
 
-
     $("#cameraTop").on('shown.bs.collapse', shownPanel);
     $("#cameraSide").on('shown.bs.collapse', shownPanel);
     $("#cameraHead").on('shown.bs.collapse', shownPanel);
@@ -723,7 +710,6 @@ App = function () {
     $("#cameraTop").on('hidden.bs.collapse', hidePanel);
     $("#cameraSide").on('hidden.bs.collapse', hidePanel);
     $("#cameraHead").on('hidden.bs.collapse', hidePanel);
-
 
 
 
