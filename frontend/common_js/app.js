@@ -26,9 +26,9 @@ App = function () {
        console.error('We lost connection with ROS. All is lost');
 //       document.body.innerHTML = "The connection with ROS is broken. Please reconnect";
     });
-/*
+
     this.arm = new Arm(this.ros);
-    this.gripper = new Gripper(this.ros);
+/*    this.gripper = new Gripper(this.ros);
     this.cloudFreezer = new CloudFreezer(this.ros);
     this.wristRoller = new WristRoller(this.ros);
 
@@ -241,6 +241,7 @@ s.mouseover(moveFunc);
   //  line.attr({x2:7,y2:9});
     }*/
     init_flag = false;
+    iniarmt_flag = false;
 
 
     function hidePanel() {
