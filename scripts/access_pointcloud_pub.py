@@ -4,7 +4,6 @@ import rospy
 from sensor_msgs.msg import PointCloud2
 from std_msgs.msg import Bool
 from pprint import pprint
-import perception
 
 
 frozen = False
