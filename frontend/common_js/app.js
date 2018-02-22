@@ -46,6 +46,7 @@ App = function () {
                 ev.preventDefault();
                 if(self.gripper.getCurrentPosition() == self.gripper.PositionEnum.CLOSED ||
                     self.gripper.getCurrentPosition() == self.gripper.PositionEnum.PARTLY_CLOSED) {
+                    console.log("opening");
                     self.gripper.open();
                 }
                 else {
@@ -148,8 +149,8 @@ App = function () {
 
 
     var elmntmjpegLeftForearm = document.getElementById("camera3");
-    var leftForearmWidth=elmntmjpegLeftForearm.clientWidth;
-    var leftForearmHeight=leftForearmWidth;
+    var leftForearmHeight = rightForearmHeight;
+    var leftForearmWidth = leftForearmHeight;
 
     // Create the right forearm viewer.
     var forearmRViewer = new MJPEGCANVAS.Viewer({
