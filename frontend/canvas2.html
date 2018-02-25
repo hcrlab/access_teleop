@@ -1,0 +1,130 @@
+    <html>
+    <head>
+        <title>Controls on Canvas</title>
+        <!-- fill iPhone screen with canvas -->
+        <meta name="viewport" content="width=200" />
+        <meta name="viewport" content="initial-scale=2" />
+
+        <script src="common_js/jquery.min.js"></script>
+        <style>
+            body {background-color: powderblue;}
+            h1   {color: blue;}
+            p    {color: red;}
+
+            button{
+                resize:both;
+                background-color: transparent;
+                display:block;
+                position:absolute;
+            }
+
+            #wrapper {
+                padding: 1em;
+                background: gray;
+                position: relative;
+            }
+
+            #test {
+                width: 5em;
+                height: 5em;
+                background: silver;
+            }
+        </style>
+
+        <script type="text/javascript">
+            var can, ctx, hun, n = 0;
+
+            function init() {
+                can = document.getElementById("can");
+                ctx = can.getContext("2d");
+                hun = document.getElementById("hundred");
+                showN();
+            }
+
+            function showN() {
+                // large, centered, bright green text
+                ctx.font = "24pt Helvetica";
+                ctx.textAlign = "center";
+                ctx.textBaseline = "middle";
+                ctx.fillStyle = "rgb(64, 255, 64)";
+                ctx.clearRect(0, 0, can.width, can.height);
+                // draw text at center, max length to fit on canvas
+                ctx.fillText(n, can.width /2, can.height / 2, can.width - 2);
+            }
+
+            function incr() {
+                n++;
+                showN();
+            }
+
+            function decr() {
+                n--;
+                showN();
+            }
+
+            function setHundred() {
+                n = hun.value;
+                showN();
+            }
+
+            function setHundred2() {
+                var test = $('#test');
+                var top = test.offset().top;
+                var left = test.offset().left;
+                $('#output').text('top: ' + top + ', left: ' + left);
+            }
+
+             function setHundred3() {
+                var test = $('#test');
+                var top = test.position().top;
+                var left = test.position().left;
+                alert('top: ' + top + ', left: ' + left);
+            }
+        </script>
+    </head>
+    <body onload="init()">
+    <!-- give canvas rounded corners-->
+    <canvas id="can" height="200" width="500" style="background-color:black; border-radius:25px;">
+    </canvas>
+    <br />
+    <!-- float inputs over canvas -->
+    <div ID = "controls2" style="position:relative; top:-200px; left:250px">
+        <input type="button" value=" + " onclick="incr()">
+        <input type="button" id="bg" value=" - " onclick="decr()" >
+        <select id="hundred" onchange="setHundred()">
+            <option value=0> -- </option>
+            <option value=100> 100 </option>
+            <option value=-100> -100 </option>
+        </select>
+    </div>
+    <p>
+        <button id="offset" onclick="setHundred2()">offset()</button>
+        <button id="position" onclick="setHundred3()">position()</button>
+    </p>
+    <button id="upBtn2">gold </button>
+    <p id="output"></p>
+    <div id="wrapper">
+        <div id="test">Times=<span id="demo">0</span> </div>
+    </div>
+
+    <script>
+        window.addEventListener("resize", myFunction);
+
+        var x = 0;
+        function myFunction() {
+            var txt = x += 1;
+            document.getElementById("demo").innerHTML = txt;
+
+            var item = $("#controls2");
+            var currentPos = item.position();
+
+            var $pos = $('#wrapper').offset().left;
+          $('#bg').css('left',15);
+            item.css('left', (currentPos.left-40) + 'px');
+         //   item.css('top', (item.height() /2 * 100) + 'px');
+
+        }
+    </script>
+
+    </body>
+    </html>

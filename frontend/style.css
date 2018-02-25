@@ -1,25 +1,187 @@
+.stopStyle {
+    background-color: #ff0300;
+    color: white;
+}
+
+
+.startStyle {
+    background-color: #00ff00;
+    color: white;
+}
+
 body {
     background-color: white;
 	cursor: default;
 }
-
-button{
-    position: absolute;
-    z-index: 4;
-	background-color: transparent;
-    margin-left: 5px;
+div.scrollmenu {
+    background-color: #333;
+    overflow: auto;
+    white-space: nowrap;
 }
 
-#rotate{
-  vertical-align:top;
-  transform:rotate(7deg);
-  -ms-transform:rotate(-90deg); /* IE 9 */
-  -moz-transform:rotate(-90deg); /* Firefox */
-  -webkit-transform:rotate(-90deg); /* Safari and Chrome */
-  -o-transform:rotate(-90deg); /* Opera */
+div.scrollmenu a {
+    display: inline-block;
+    color: white;
+    text-align: center;
+    padding: 14px;
+    text-decoration: none;
+}
+
+div.scrollmenu a:hover {
+    background-color: #777;
+}
+#controls1, #controls2{
+    margin:0 auto; /* this will center  it
+
+   0 */
+    position:relative;
+}
+#draggableSpeech {
+
+
+    border: 1px solid black;
+    position: absolute;
+    z-index: 9;
+    background-color: #f1f1f1;
+    border: 1px solid #d3d3d3;
+    text-align: center;
+}
+.labSpeech {
+    grid-area: labSpeech;
+    background-color: #F53573;
+}
+
+.item4 {
+    grid-area: right;
+    background-color: #5357F3;
+}
+
+#draggableSpeechHeader {
+    display: grid;
+    grid-template-areas:'labSpeech right';
+    grid-gap: 1px;
+    padding-top: 10px;
+    padding-right: 10px;
+    padding-bottom: 10px;
+    padding-left: 10px;
+    cursor: move;
+    z-index: 10;
+    background-color: #2196F3;
+    color: #fff;
+}
+
+#min-btn{
+    grid-area: min-btn;
+    position: absolute;
+    left: 60px;
+    top: 10px;
+    z-index: 1;
+}
+
+#final-textarea{
+    resize: none;
+    overflow: hidden;
+    vertical-align:text-top;
+}
+
+#canvas1, #canvas2 {
+    z-index: 8;
+    position: relative;
+}
+
+#svgCam1{
+    border: 2px solid red;
+    top: -8px;
+    left: 0px;
+    position: absolute;
+}
+
+
+#svgCam2{
+    border: 2px solid green;
+    top: -7px;
+    left: 0px;
+    position: absolute;
+}
+
+img{
+    margin:0 auto;  /*  this will center  it */
+}
+button{
+    resize:both;
+	background-color: transparent;
+    display:block;
+    position:absolute;
+}
+/*
+    width: 100%;
+    z-index: 4;@media all and (max-width: 479px) {}
+@media all and (min-width: 480px) and (max-width: 719px) {}
+@media all and (min-width: 720px) and (max-width: 959px) {}
+@media all and (min-width: 960px) and (max-width: 1279px) {}
+@media all and (min-width: 1280px) {}   */
+
+[class*="col-"] {
+    float: left;
+    padding: 1px;
+    width: 100%;
+}
+
+@media only screen and (min-width: 900px) {
+    h2 {
+        background-color: #103384;
+    }
+    .col-s-1 {width: 8.33%;}
+    .col-s-2 {width: 16.66%;}
+    .col-s-3 {width: 25%;}
+    .col-s-4 {width: 33.33%;}
+    .col-s-5 {width: 41.66%;}
+    .col-s-6 {width: 50%;}
+    .col-s-7 {width: 58.33%;}
+    .col-s-8 {width: 66.66%;}
+    .col-s-9 {width: 75%;}
+    .col-s-10 {width: 83.33%;}
+    .col-s-11 {width: 91.66%;}
+    .col-s-12 {width: 100%;}
+}
+@media only screen and (min-width: 1200px) {
+    h2  {
+        background-color: #580013;
+    }
+    .col-1 {width: 8.33%;}
+    .col-2 {width: 16.66%;}
+    .col-3 {width: 25%;}
+    .col-4 {width: 33.33%;}
+    .col-5 {width: 41.66%;}
+    .col-6 {width: 50%;}
+    .col-7 {width: 58.33%;}
+    .col-8 {width: 66.66%;}
+    .col-9 {width: 75%;}
+    .col-10 {width: 83.33%;}
+    .col-11 {width: 91.66%;}
+    .col-12 {width: 100%;}
+}
+
+/*@media all and (max-width: 719px) {
+    h2 {
+        background-color:magenta;
+    }
+}
+
+@media all and (min-width: 720px) and (max-width: 959px) {
+    h2 {
+      background-color: lightgreen;
   }
 
+}
 
+@media all and (min-width: 960px) {
+    h2{
+        background-color: darkblue;
+    }
+
+    .col-sm-4 {width: 10%;}
+}*/
 
 input{
   cursor:pointer;
@@ -27,43 +189,84 @@ input{
   position:relative;
 
 }
-.card {
-    /* Add shadows to create the "card" effect
-    box-shadow: 0 2px 1px 0 rgba(0,0,0,0.2);
-    transition: 0.3s; */
-}
 
 /* On mouse-over, add a deeper shadow */
 card-block:hover {
 
 	background-color: pink;
 }
+.overlayBtn{
+    position: relative;
+    z-index: 6;
+    width: 100px;
+    height: 20px;
+    overflow: hidden;
+}
+
+#upBtn1{
+    /*      position: relative;
+ top: -60px;
+  left: 10px;
+   -50%; left: 50%;
+     top:10px;
+      left: 270px;*/
+}
+
+#downBtn{
+/*    top:470px;
+    left: 270px;*/
+}
+
+#rightBtn{
+}
+
+#rotateRightBtn{
+}
+
+#leftBtn{
+}
+
+
+#rotateLeftBtn{
+}
+
 
 canvas{
 	/*border-style: solid; */
-
-  margin-left: -4px;
-  margin-right: 0px;
+	left:0px;
 
 }
 .row.no-gutter {
-  margin-left: -18px;
+  margin-left: -5px;
   margin-right: 0px;
 }
 
 .row.no-gutter [class*='col-']:not(:first-child),
 .row.no-gutter [class*='col-']:not(:last-child) {
-  padding-right: 10px;
-  padding-left: 4px;
+  padding-right:0px;
+  padding-left: 0px;
 }
+div#content {
+    position: absolute;    z-index: 6;
+    border: 1px solid gray;
+    
+    height: 150px; width: 150px; }
+
 svg{
     position: absolute;
     z-index: 6;
-    background: transparent;
-    height:inherit;
-    width:inherit;
+	background: transparent;
+	left:0px;
+	top:0px;
 }
+#svgout {
 
+    position: absolute;
+    z-index: 6;
+	background: transparent;
+  width: 100vw;
+  height: 100vh;
+}
 .title1{
 	background-color: red;
 }
@@ -81,11 +284,11 @@ svg{
 	background-color: blue;
 }
 
-.cam-container{
-    float:left;
-    padding-left:10px;
-    padding-right:10px;
-    padding-bottom: 10px;
+div{
+    /*
+	border-style: solid;
+	border-color: #2423cb;
+	*/
 }
 
 #gripper-container{
@@ -95,21 +298,5 @@ svg{
 
 .ui-slider .ui-slider-handle {
 	height:2.4em;
-}
-
-.joystick-container{
-    position:relative;
-}
-
-circle {
-    opacity:0.5;
-}
-
-div{
-    /*border-style: dotted;*/
-}
-
-#freeze-buttons button{
-
 }
 

@@ -3,39 +3,38 @@
 <head>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/jquery-ui.css">
 
-    <script src="http://cdn.robotwebtools.org/threejs/current/three.js"></script>
-    <script src="http://cdn.robotwebtools.org/EventEmitter2/current/eventemitter2.min.js"></script>
+    <script src="common_js/jquery.min.js"></script>
+    <script src="common_js/bootstrap.min.js"></script>
 
-    <script src="http://cdn.robotwebtools.org/roslibjs/current/roslib.min.js"></script>
-    <script src="http://cdn.robotwebtools.org/ros3djs/current/ros3d.min.js"></script>
+    <script src="common_js/three.js"></script>
+    <script src="common_js/eventemitter2.min.js"></script>
 
-    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script src="common_js/roslib.min.js"></script>
+    <script src="common_js/ros3d.min.js"></script>
 
-    <script src="http://cdn.robotwebtools.org/mjpegcanvasjs/current/mjpegcanvas.js"></script>
+    <script src="common_js/jquery-1.12.4.js"></script>
+    <script src="common_js/jquery-ui.js"></script>
 
-    <script src="https://www.w3schools.com/lib/w3.js"></script> <!-- Allows html imports -->
+    <script src="common_js/mjpegcanvas.js"></script>
 
-    <script src="/bower_components/arrive/src/arrive.js"></script>
+    <script src="common_js/w3.js"></script> <!-- Allows html imports -->
 
+    <script src="common_js/arrive.js"></script>
 
+    <script src="common_js/snap.svg-min.js"></script>
 
     <!-- Common js files go here -->
     <script src="common_js/arm.js"></script>
     <script src="common_js/cloud_freezer.js"></script>
     <script src="common_js/gripper.js"></script>
     <script src="common_js/gripper_gui.js"></script>
+    <script src="common_js/underscore-min.js"></script>
     <script src="common_js/app.js"></script>
 
-    <!-- Js files unique to this html page go here -->
-    <script src="simpleButtons.js"></script>
-        <script src="speech.js"></script>
 
  <title>Simple Buttons GUI</title>
 </head>
@@ -43,7 +42,7 @@
 <body onload="init()">
 
     <h2 id="title">Simple Buttons GUI</h2>
-
+    <!--
     <div class="container-fluid">
 
         <div class="row no-gutter">
@@ -96,6 +95,68 @@
 
          </div>
 
+-->
+
+    <div class="container-fluid">
+        <div class="row no-gutter">
+            <div id="cam1-container" class="title1 col-4 col-s-6">
+                <a id="topBTN" class="btn btn-primary" data-toggle="collapse" href="#cameraTop" aria-expanded="false" aria-controls="collapseExample">Top</a>
+                <div class="collapse card card-block in" id="cameraTop">
+                    <div id="camera1" class="js_arm_div"></div>
+                    <div ID = "controls1">
+                        <button id="upBtn1"></button>
+                        <button ID="leftBtn1"></button>
+                        <button ID="rotateLeftBtn1"></button>
+                        <button ID="rotateRightBtn1"></button>
+                        <button ID="rightBtn1"></button>
+                        <button ID="downBtn1"></button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="cam2-container"class="title2 col-4 col-s-6">
+                <a  id="sideBTN" class="btn btn-primary" data-toggle="collapse" href="#cameraSide" aria-expanded="false" aria-controls="collapseExample">Side</a>
+                <div class="collapse card card-block in" id="cameraSide">
+                    <div id="camera2" class="js_arm_div"></div>
+                    <div ID = "controls2">
+                        <button id="upBtn2"></button>
+                        <button ID="leftBtn2"></button>
+                        <button ID="rotateLeftBtn2"></button>
+                        <button ID="rotateRightBtn2"></button>
+                        <button ID="rightBtn2"></button>
+                        <button ID="downBtn2"></button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="cam3-container" class="title3 col-4 col-s-12">
+                <a id="headBTN" class="btn btn-primary" data-toggle="collapse" href="#cameraHead" aria-expanded="false" aria-controls="collapseExample">Head</a>
+                <div class="collapse in" id="cameraHead">
+                    <div id="camera3" class="js_arm_div"></div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div ID="speechControl" class="container-fluid">
+
+        <div id="results" class="container">
+          <div class="row no-gutter">
+          <div class="col-sm-2">
+              <h2>Interim Results</h2>
+                <textarea id="interim-textarea" placeholder="Command using voice recognition." rows="6"></textarea>
+          </div>
+              <div class="col-sm-2">
+              <h2>Activate</h2>
+                <button id="start-record-btn" title="Start Recording">Start Recognition</button>
+
+         </div>
+          <div class="col-sm-2">
+              <h2>Final Results</h2>
+                    <textarea id="final-textarea" placeholder="Command using voice recognition." rows="6"></textarea>
+
+         </div>
+
            </div>
 
         </div>
@@ -116,7 +177,9 @@
 
     <div w3-include-html="common_html/gripper.html"></div>
     <script>w3.includeHTML(); // This line is necessary to allow html imports</script>
-
+    <!-- Js files unique to this html page go here -->
+    <script  type="text/javascript" src="simpleButtons.js"></script>
+    <script src="speech.js"></script>
 
 </body>
 </html>

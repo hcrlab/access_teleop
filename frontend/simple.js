@@ -5,50 +5,6 @@ var winHeight = 0; /* Window height */
 var winWidth = 0;  /* Window width */
 
 $(document).ready(function() {
-
-
-
-    //Make the DIV element draggagle:
-    dragElement(document.getElementById(("mydiv")));
-
-    function dragElement(elmnt) {
-        var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
-        if (document.getElementById(elmnt.id + "header")) {
-            /* if present, the header is where you move the DIV from:*/
-            document.getElementById(elmnt.id + "header").onmousedown = dragMouseDown;
-        } else {
-            /* otherwise, move the DIV from anywhere inside the DIV:*/
-            elmnt.onmousedown = dragMouseDown;
-        }
-
-        function dragMouseDown(e) {
-            e = e || window.event;
-            // get the mouse cursor position at startup:
-            pos3 = e.clientX;
-            pos4 = e.clientY;
-            document.onmouseup = closeDragElement;
-            // call a function whenever the cursor moves:
-            document.onmousemove = elementDrag;
-        }
-
-        function elementDrag(e) {
-            e = e || window.event;
-            // calculate the new cursor position:
-            pos1 = pos3 - e.clientX;
-            pos2 = pos4 - e.clientY;
-            pos3 = e.clientX;
-            pos4 = e.clientY;
-            // set the element's new position:
-            elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
-            elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
-        }
-
-        function closeDragElement() {
-            /* stop moving when mouse button is released:*/
-            document.onmouseup = null;
-            document.onmousemove = null;
-        }
-    }
     var cam1Container = document.getElementById("cam1-container");
     var cam2Container = document.getElementById("cam2-container");
     var cam3Container = document.getElementById("cam3-container");
@@ -183,7 +139,7 @@ $(document).ready(function() {
         viewer3.canvas.height = viewer3.height = dimCam3Height;
     }
 
-/*    $(window).resize(function () {
+    $(window).resize(function () {
         winHeight = parseInt($(window).height());
         winWidth = parseInt($(window).width());
         document.getElementById("cmdReceived").innerHTML = " w=" + winWidth + " h=" + winHeight;
@@ -195,9 +151,9 @@ $(document).ready(function() {
             dimCam1Width = dimCam1Height * aspectRatio;//winWidth/3;//cam1Container.clientWidth;
             dimCam2Width = dimCam2Height * aspectRatio;//winWidth/3;//cam2Container.clientWidth;
             dimCam3Width = dimCam3Height * aspectRatio;//winWidth/3;//cam3Container.clientWidth;
-            /!*            cam1Container.style.width = dimCam1Width + 'px';
+            /*            cam1Container.style.width = dimCam1Width + 'px';
                         cam2Container.style.width = dimCam2Width + 'px';
-                        cam3Container.style.width = dimCam3Width + 'px';*!/
+                        cam3Container.style.width = dimCam3Width + 'px';*/
         } else {
             dimCam1Width = winWidth / 3;//cam1Container.clientWidth;
             dimCam2Width = winWidth / 3;//cam2Container.clientWidth;
@@ -215,7 +171,7 @@ $(document).ready(function() {
         viewer1.canvas.height = viewer1.height = dimCam1Height;
         viewer2.canvas.height = viewer2.height = dimCam2Height;
         viewer3.canvas.height = viewer3.height = dimCam3Height;
-    });*/
+    });
 
     topBTN.addEventListener("click", getPanel);
     sideBTN.addEventListener("click", getPanel);
@@ -514,5 +470,59 @@ $(document).ready(function() {
         resizeWindow();
     }
 
+
+
+        function changePanelSizes() {
+
+            var height = window.innerHeight  || document.documentElement.clientHeight || document.body.clientHeight;
+            var scrollHeight=document.documentElement.scrollHeight;
+
+            if(scrollHeight<=height){
+                //    //   alert('we are here');
+            }else {
+                dimCam1Height=dimCam1Height-(scrollHeight-height)+dimcmdReceivedHeight;
+                dimCam2Height=dimCam2Height-(scrollHeight-height)+dimcmdReceivedHeight;
+                dimCam3Height=dimCam3Height-(scrollHeight-height)+dimcmdReceivedHeight;
+                dimCam1Width = dimCam1Height*aspectRatio;
+                dimCam2Width =dimCam2Height*aspectRatio;
+                dimCam3Width = dimCam3Height*aspectRatio;
+
+                if (!cam1Container.classList.contains("col-1")) {
+                    cam1Container.style.width = dimCam1Width + 'px';
+                    cam1Container.width = dimCam1Width;
+                }
+
+                if (!cam2Container.classList.contains("col-1")) {
+                    cam2Container.style.width = dimCam2Width + 'px';
+                    cam2Container.width = dimCam2Width;
+                }
+
+
+                if (!cam3Container.classList.contains("col-1")) {
+                    cam3Container.style.width = dimCam3Width + 'px';
+                    cam3Container.width = dimCam3Width;
+                }
+
+                viewer1.width =viewer1.canvas.width =dimCam1Width;
+                viewer2.width =viewer2.canvas.width =dimCam2Width;
+                viewer3.width =viewer3.canvas.width =dimCam3Width;
+
+                viewer1.canvas.height=viewer1.height = dimCam1Height;
+                viewer2.canvas.height= viewer2.height = dimCam2Height;
+                viewer3.canvas.height= viewer3.height=dimCam3Height;
+
+            viewer1.emit('resize');
+            viewer2.emit('resize');
+            viewer3.emit('resize');
+
+                camera1.style.height = dimCam1Height+ 'px';
+                camera1.style.width =dimCam1Width + 'px';
+                camera2.style.height = dimCam2Height+ 'px';
+                camera2.style.width =dimCam2Width + 'px';
+                camera3.style.height = dimCam3Height+ 'px';
+                camera3.style.width =dimCam3Width + 'px';
+        //   alert("Present scroll bar:"+scrollHeight +" Full document height:"+height);
+        }
+    }
 
     });
