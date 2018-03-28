@@ -27,8 +27,9 @@ App = function () {
        console.error('We lost connection with ROS. All is lost');
 //       document.body.innerHTML = "The connection with ROS is broken. Please reconnect";
     });
-/*
+
     this.arm = new Arm(this.ros);
+/*
     this.gripper = new Gripper(this.ros);
     this.cloudFreezer = new CloudFreezer(this.ros);
     this.wristRoller = new WristRoller(this.ros);

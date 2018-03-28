@@ -169,6 +169,10 @@ function init() {
                         grabLine.attr({x2:middleX,y2:middleY});
                         grabLine.animate({x1:middleX,y1:middleY}, 7000);
 
+                        console.log("The num is " + num + " the parent is: " + parent + " the grandparent is: " + grandparent);
+                        canvasNumber = el3.node.id[el3.node.id.length - 1];
+                        cameraName = $(el3.node).closest("#canvas" + canvasNumber).siblings("#camera" + canvasNumber)[0].id;
+                        self.app.arm.moveArmByAbsolute(middleX, middleY, cameraName)
                         el3.animate({},  7000,
                             function(){
                                 el3.attr({visibility: "hidden"});
@@ -277,6 +281,12 @@ function init() {
                         grabCircle.attr({cx:middleX,cy:middleY});
                         grabLine.attr({x2:middleX,y2:middleY});
                         grabLine.animate({x1:middleX,y1:middleY}, 7000);
+
+                        console.log("The num is " + num + " the parent is: " + parent + " the grandparent is: " + grandparent);
+                        console.log("middleX : " + middleX + " middleY: " + middleY);
+                        canvasNumber = el3.node.id[el3.node.id.length - 1];
+                        cameraName = $(el3.node).closest("#canvas" + canvasNumber).siblings("#camera" + canvasNumber)[0].id;
+                        self.app.arm.moveArmByAbsolute(middleX, middleY, cameraName)
 
                         el3.animate({},  7000,
                             function(){
@@ -678,6 +688,11 @@ function init() {
                     grabCircle.attr({cx:middleX,cy:middleY});
                     grabLine.attr({x2:middleX,y2:middleY});
                     grabLine.animate({x1:middleX,y1:middleY}, 7000);
+
+                    console.log("The num is " + num + " the parent is: " + parent + " the grandparent is: " + grandparent);
+                    canvasNumber = el3.node.id[el3.node.id.length - 1];
+                    cameraName = $(el3.node).closest("#canvas" + canvasNumber).siblings("#camera" + canvasNumber)[0].id;
+                    self.app.arm.moveArmByAbsolute(middleX, middleY, cameraName)
 
                     el3.animate({},  7000,
                         function(){
