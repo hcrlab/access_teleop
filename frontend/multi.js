@@ -29,14 +29,14 @@ function init() {
 
     var btnUpH = camera1.offsetHeight + titleWebH + btnTopH;
     var upBTN = document.createElement("button");
-    upBTN.innerHTML = "<img src=\"img/upArrow.png\">";
+    upBTN.innerHTML = "<img src=\"img/blueUpArrow.png\">";
     upBTN.id = 'up';
     upBTN.title = '\u2191Up\u2191';
     var body = document.getElementsByTagName("body")[0];
     body.appendChild(upBTN);
 
     var downBTN = document.createElement("button");
-    downBTN.innerHTML = "<img src=\"img/downArrow.png\">";
+    downBTN.innerHTML = "<img src=\"img/blueDownArrow.png\">";
     downBTN.id = 'down';
     downBTN.title = '\u2193Down\u2193';
     downBTN.className = "button";
@@ -56,7 +56,7 @@ function init() {
     body.appendChild(leftBTN);
 
     var rotateRightBTN = document.createElement("button");
-    rotateRightBTN.innerHTML = "<img src=\"img/rotateClockwiseRight.png\">";
+    rotateRightBTN.innerHTML = "<img src=\"img/rotateClockwiseRight.png\">"; // Naming convention is wrong
     rotateRightBTN.id = 'rotateRight';
     rotateRightBTN.title = '\u21BBRotate Right\u21BB';
     rotateRightBTN.className = "button";
@@ -72,19 +72,19 @@ function init() {
     rightBTN.className = "button";
     rightBTN.style.width = 55 + "px";
     rightBTN.style.height = 80 + "px";
-    rightBTN.style.left = camera1.offsetWidth - titleWebH - 55 / 4 + "px";
+    rightBTN.style.left = camera1.offsetWidth - titleWebH - 55  + "px";
     rightBTN.style.top = (btnUpH) / 2 + "px";
     body.appendChild(rightBTN);
 
 
     var rotateLeftBTN = document.createElement("button");
-    rotateLeftBTN.innerHTML = "<img src=\"img/rotateAntiClockwiseLeft.png\">";
+    rotateLeftBTN.innerHTML = "<img src=\"img/rotateAntiClockwiseLeft.png\">"; // Naming convention is wrong
     rotateLeftBTN.id = 'rotateLeft';
     rotateLeftBTN.title = '\u21BARotate Left\u21BA';
     rotateLeftBTN.className = "button";
     rotateLeftBTN.style.width = 65 + "px";
     rotateLeftBTN.style.height = 80 + "px";
-    rotateLeftBTN.style.left = camera1.offsetWidth - titleWebH - 75 + "px";
+    rotateLeftBTN.style.left = camera1.offsetWidth - titleWebH - 95 + "px";
     rotateLeftBTN.style.top = (btnUpH) / 2 + "px";
     rotateLeftBTN.style.height = 80 + "px";
     body.appendChild(rotateLeftBTN);
