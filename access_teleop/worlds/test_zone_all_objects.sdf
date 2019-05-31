@@ -1,0 +1,171 @@
+<?xml version="1.0" ?>
+<sdf version="1.4">
+  <world name="default">
+    <include>
+      <uri>model://ground_plane</uri>
+    </include>
+    <include>
+      <uri>model://sun</uri>
+    </include>
+    <include>
+      <uri>model://test_zone</uri>
+    </include>
+    <include>
+      <uri>model://cafe_table</uri>
+      <name>table1</name>
+      <pose>4.05 3 0 0 0 1.57</pose>
+    </include>
+    <include>
+      <uri>model://cafe_table</uri>
+      <name>table2</name>
+      <pose>-3 5 0 0 0 1.57</pose>
+    </include>
+
+    <!-- objects for the test-->
+    <!-- <include>
+      <uri>model://demo_cube</uri>
+      <pose>3.8 3.15 0.83 0 0 0</pose>
+    </include>
+
+    <include>
+      <uri>$(find access_teleop)/models/cube_s</uri>
+      <pose>3.8 3.15 0.83 0 0 0</pose>
+    </include> -->
+      
+    <model name="cube_s">
+      <link name='cube_s'>
+        <self_collide>false</self_collide>
+        <pose>3.8 3.15 0.83 0 0 0</pose>
+
+        <collision name='cube_s'>
+          <geometry>
+            <box><size>0.025 0.025 0.025</size></box>
+          </geometry>                 
+        </collision>
+        <visual name='cube_s'>
+          <geometry>
+            <box><size>0.025 0.025 0.025</size></box>
+          </geometry>
+        </visual>
+      </link>    
+    </model>
+
+    <model name="cube_m">
+      <static>0</static>
+      <link name='link'>
+
+        <pose>3.8 3.045 0.83 0 0 0</pose>
+
+        <inertial>
+          <mass>0.25</mass>
+          <inertia>
+            <ixx>0.001</ixx>
+            <ixy>0.000000</ixy>
+            <ixz>0.000000</ixz>
+            <iyy>0.001</iyy>
+            <iyz>0.000000</iyz>
+            <izz>0.001</izz>
+          </inertia>
+        </inertial>
+        <collision name='collision'>
+          <geometry>
+            <box>
+              <size>0.050 0.050 0.050</size>
+            </box>
+          </geometry>
+          <surface>
+            <friction>
+              <ode>
+                <mu>30.0</mu>
+                <mu2>30.0</mu2>
+              </ode>
+            </friction>
+            <contact>
+              <ode>
+                <kp>1000000.0</kp>
+                <kd>100.0</kd>
+                <max_vel>1.0</max_vel>
+                <min_depth>0.002</min_depth>
+              </ode>
+            </contact>
+          </surface>
+        </collision>
+        <visual name='visual'>
+          <geometry>
+            <box><size>0.050 0.050 0.050</size></box>
+          </geometry>
+          <material>
+            <script>
+              <uri>file://media/materials/scripts/gazebo.material</uri>
+              <name>Gazebo/Blue</name>
+            </script>
+          </material> 
+        </visual>
+        <velocity_decay>
+          <linear>0.000000</linear>
+          <angular>0.000000</angular>
+        </velocity_decay>
+        <self_collide>0</self_collide>
+        <kinematic>0</kinematic>
+        <gravity>1</gravity> 
+      </link>    
+    </model>
+
+    <model name="cube_l">
+      <link name='cube_l'>
+        <self_collide>false</self_collide>
+        <pose>3.8 2.915 0.83 0 0 0</pose>
+
+        <collision name='cube_l'>
+          <geometry>
+            <box><size>0.075 0.075 0.075</size></box>
+          </geometry>                 
+        </collision>
+        <visual name='cube_l'>
+          <geometry>
+            <box><size>0.075 0.075 0.075</size></box>
+          </geometry>
+        </visual>
+      </link>    
+    </model>
+
+    <model name="stone">
+      <link name='stone'>
+        <self_collide>false</self_collide>
+        <pose>3.8 2.80 0.83 0 0 0</pose>
+
+        <collision name='stone'>
+          <geometry>
+            <box><size>0.100 0.025 0.010</size></box>
+          </geometry>                 
+        </collision>
+        <visual name='stone'>
+          <geometry>
+            <box><size>0.100 0.025 0.010</size></box>
+          </geometry>
+        </visual>
+      </link>    
+    </model>
+
+    <model name="ball">
+      <link name="link_ball">
+        <pose>3.8 2.70 0.83 0 0 0</pose>
+        <collision name="collision_ball">
+          <geometry>
+            <sphere>
+              <radius>0.0375</radius>
+            </sphere>
+          </geometry>
+        </collision>
+        <visual name="visual_ball">
+          <geometry>
+            <sphere>
+              <radius>0.0375</radius>
+            </sphere>
+          </geometry>
+        </visual>
+      </link>
+    </model>
+
+  </world>
+</sdf>

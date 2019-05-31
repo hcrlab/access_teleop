@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<launch>
+  <arg name="use_rviz" default="true" />
+
+  <!-- Default: <include file="$(find fetch_gazebo)/launch/playground.launch" /> -->
+  <!-- Xinyi added: For action test -->
+  <include file="$(find access_teleop)/launch/action_test.launch" />
+
+  <include file="$(find fetch_api)/launch/move_group.launch" />
+
+  <!-- <include file="$(find access_teleop)/launch/camera.launch" /> -->
+  
+  <node pkg="web_video_server" type="web_video_server" name="web_video_server_node" />
+
+  <include file="$(find rosbridge_server)/launch/rosbridge_websocket.launch" />
+
+  <!-- launch rviz with config/access_teleop_config.rviz -->
+  <node pkg="rviz" type="rviz" name="rviz"
+      args="-d $(find access_teleop)/config/access_teleop_config.rviz"
+      if="$(arg use_rviz)" />
+
+  <node pkg="access_teleop" output="screen" name="gripper_teleop" type="fetch_access_teleop.py" />
+
+   <!-- launch the point cloud saver to allow point cloud freezing -->
+  <node pkg="access_teleop" name="pointcloud_saver" type="access_pointcloud_pub.py" />
+
+</launch>
