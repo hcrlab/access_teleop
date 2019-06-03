@@ -45,7 +45,7 @@ $(document).ready(function(){
       host : 'localhost',
       width : dimCam3Width,
       height : dimCam3Height,
-      topic : '/rviz1/camera2/image' // '/head_camera/rgb/image_raw'
+      topic : '/rviz1/camera3/image' // '/head_camera/rgb/image_raw'
     });
 
 

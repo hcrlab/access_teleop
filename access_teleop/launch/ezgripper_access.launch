@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<!-- Launch file for launching the SAKE gripper -->
+
+<launch>
+  <node pkg="ezgripper_driver" type="ezgripper.py" name="ezgripper" output="screen">
+    <param name="~port" value="/dev/ttyUSB0"/>
+    <param name="~baud" value="57600"/>
+    <rosparam param="grippers">{main:[1]}</rosparam>
+  </node>
+  
+  <node pkg="access_teleop" type="access_gripper.py" name="access_ezgripper" output="screen">
+    <rosparam param="grippers">['ezgripper/main']</rosparam>
+  </node>
+
+</launch>

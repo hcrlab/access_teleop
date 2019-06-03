@@ -159,8 +159,9 @@ class Arm(object):
         goal = goal_builder.build()
         if goal is not None:
             self._move_group_client.send_goal(goal)
-            success = self._move_group_client.wait_for_result(
-                rospy.Duration(execution_timeout))
+            # success = self._move_group_client.wait_for_result(
+                # rospy.Duration(execution_timeout))
+            success = self._move_group_client.wait_for_result(execution_timeout)
             if not success:
                 return moveit_error_string(MoveItErrorCodes.TIMED_OUT)
             result = self._move_group_client.get_result()

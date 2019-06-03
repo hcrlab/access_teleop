@@ -2,8 +2,8 @@
 <!-- Launch file for action test world model -->
 <launch>
 
-  <!--<env name="GAZEBO_MODEL_PATH" value="$(find fetch_gazebo)/models:$(optenv GAZEBO_MODEL_PATH)" />-->
-  <env name="GAZEBO_MODEL_PATH" value="$(find access_teleop)/models:$(find fetch_gazebo)/models:$(optenv GAZEBO_MODEL_PATH)" />
+  <env name="GAZEBO_MODEL_PATH" value="$(find fetch_gazebo)/models:$(optenv GAZEBO_MODEL_PATH)" />
+  <!--<env name="GAZEBO_MODEL_PATH" value="$(find access_teleop)/models:$(find fetch_gazebo)/models:$(optenv GAZEBO_MODEL_PATH)" />-->
 
   <arg name="robot" default="fetch"/>
   <arg name="debug" default="false"/>

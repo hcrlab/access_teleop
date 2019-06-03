@@ -17,7 +17,9 @@ from shared_teleop_functions_and_vars import wait_for_time, quat_array_to_quat, 
     publish_gripper_pixels, dpx_to_distance, delta_modified_stamped_pose, \
     absolute_modified_stamped_pose, add_marker, addSetback, orientation_mapping, orientation_sign_mapping, camera_names
 
-HEAD_POSE = [1.7, -0.1, 0.3]
+
+HEAD_POSE = [1.7, -0.1, 0.3] # the point in space where robot should look at
+
 
 class MoveByDelta(object):
     def __init__(self, arm, move_group):
@@ -33,7 +35,7 @@ class MoveByDelta(object):
         ps2 = delta_modified_stamped_pose(x_distance, y_distance, data.camera_name, ps)
         pose_possible = self._arm.compute_ik(ps2, timeout=rospy.Duration(1))
         print(pose_possible)
-        if pose_possible: #This check will prevent some edge poses, but will also save time
+        if pose_possible:  # This check will prevent some edge poses, but will also save time
             error = self._arm.move_to_pose(ps2, allowed_planning_time=1.0)
             if error is not None:
                 rospy.logerr(error)
@@ -55,11 +57,11 @@ class MoveByAbsolute(object):
     def absolute_callback(self, data):
         ps = self._move_group.get_current_pose()
         x_distance, y_distance = dpx_to_distance(data.pixel_x, data.pixel_y, data.camera_name, ps, False)
-        #add_marker(x_distance, y_distance, ps, data.camera_name, self)
+        # add_marker(x_distance, y_distance, ps, data.camera_name, self)
         ps2 = absolute_modified_stamped_pose(x_distance, y_distance, data.camera_name, ps)
         pose_possible = self._arm.compute_ik(ps2, timeout=rospy.Duration(1))
         print(pose_possible)
-        if pose_possible: #This check will prevent some edge poses, but will also save time
+        if pose_possible:  # This check will prevent some edge poses, but will also save time
             self._status_pub.publish("moving")
             error = self._arm.move_to_pose(ps2, allowed_planning_time=1.0)
             if error is not None:
@@ -81,7 +83,7 @@ class MoveAndOrient(object):
     def move_and_orient_callback(self, data):
         ps = self._move_group.get_current_pose()
         rpy = self._move_group.get_current_rpy()
-        #rpy = [0,0,0]
+        # rpy = [0,0,0]
         print("The curent orientation for that camera is")
         pprint(rpy)
         rpy[orientation_mapping[data.camera_name]] = data.theta * orientation_sign_mapping[data.camera_name]
@@ -108,7 +110,7 @@ class MoveAndOrient(object):
     def move_and_orient_callback(self, data):
         ps = self._move_group.get_current_pose()
         rpy = self._move_group.get_current_rpy()
-        #rpy = [0,0,0]
+        # rpy = [0,0,0]
         print("The curent orientation for that camera is")
         pprint(rpy)
         rpy[orientation_mapping[data.camera_name]] = data.theta * orientation_sign_mapping[data.camera_name]
@@ -135,7 +137,7 @@ class Orient(object):
     def orient_callback(self, data):
         ps = self._move_group.get_current_pose()
         rpy = self._move_group.get_current_rpy()
-        #rpy = [0,0,0]
+        # rpy = [0,0,0]
         print("The curent orientation for that camera is")
         pprint(rpy)
         rpy[orientation_mapping[data.camera_name]] += data.theta * orientation_sign_mapping[data.camera_name]
@@ -194,6 +196,7 @@ class BaseSwitchTask(object):
             self._base.turn(math.pi / 2)
             self._base.align_with_x_axis_pos()
 
+
 # Added by Xinyi for tilting robot's head
 class HeadTilt(object):
     def __init__(self, head):
@@ -206,21 +209,76 @@ class HeadTilt(object):
         HEAD_POSE[2] += data.tilt
         self._head.look_at("base_link", HEAD_POSE[0], HEAD_POSE[1], HEAD_POSE[2])
 
-        
 
 
 def main():
-    rospy.init_node('access_gripper_teleop')
+    # rospy.init_node('access_gripper_teleop')
+    rospy.init_node('gripper_teleop')
     wait_for_time()
 
-    # set up controls for each part
-    arm = fetch_api.Arm()
-    base = fetch_api.Base()
+    # Added by Xinyi:
+    # Initial Settings for Each Part
+
+    # Raise the torso to allow arm movement
     torso = fetch_api.Torso()
+    torso.set_height(fetch_api.Torso.MAX_HEIGHT)
+
+    # Set arm joints
+    # Order: body ---> gripper
+    # b: blue joint
+    # g: gray joint
+    # order: [b, g, b, g, b, g, b]
+    # OPTION 1: Follow given trajectory
+    arm = fetch_api.Arm()
+    INITIAL_POSES = [1.0, 1.25, 1.0, -2.5, -0.3, 1.0, 0.0]
+    arm.move_to_joints(fetch_api.ArmJoints.from_list(INITIAL_POSES))
+
+    # OPTION 2: Use motion planning
+    # INITIAL_POSES = [
+    #         ("shoulder_pan_joint", 1.0), ("shoulder_lift_joint", 1.2), ("upperarm_roll_joint", 1.0), ("elbow_flex_joint", -2.0), 
+    #         ("forearm_roll_joint", -0.3), ("wrist_flex_joint", 1.2), ("wrist_roll_joint", 0.0)]
+    # arm.move_to_joint_goal(INITIAL_POSES, replan=True)
+
+    # INITIAL_POSES = PoseStamped()
+    # INITIAL_POSES.header.frame_id = 'base_link'
+    # INITIAL_POSES.pose.position.x = 0.6
+    # INITIAL_POSES.pose.position.y = -0.1
+    # INITIAL_POSES.pose.position.z = 0.3
+    # INITIAL_POSES.pose.orientation.w = 1
+    # error = arm.move_to_pose(INITIAL_POSES, replan=True)
+    # if error is not None:
+    #     arm.cancel_all_goals()
+    #     rospy.logerr('FAIL TO MOVE TO INITIAL_POSES {}'.format(error))
+    # else:
+    #     rospy.loginfo('MOVED TO INITIAL_POSES')
+
+
+    # Set the base position
+    base = fetch_api.Base()
+    # OPTION 1: Start from origin
+    # move Fetch from the origin to the table
+    # base.go_forward(1.6, 0.5)  # value (distance in meters)
+    # base.turn(math.pi / 3)     # value (angle in degrees)
+    # base.go_forward(3.3, 0.5)  # value (distance in meters)
+    # base.turn(-math.pi / 3)
+
+    # OPTION 2: Start right in front of the table
+    base.align_with_x_axis_pos()
+    base.go_forward(0.3, 0.5)
+
+
+    # Adjust the head to look at the table
     head = fetch_api.Head()
+    # OPTION 1: Tilt by angle
+    # head.pan_tilt(0, math.pi / 2)
+
+    # OPTION 2: Look at a point in space
+    head.look_at("base_link", HEAD_POSE[0], HEAD_POSE[1], HEAD_POSE[2])
+    
+    # (end)
+
 
     move_group = MoveGroupCommander("arm")
-
 
     status_publisher = rospy.Publisher('/access_teleop/arm_status', String, queue_size=1)
     gripper_publisher = rospy.Publisher('/access_teleop/gripper_pixels', PX, queue_size=1)
@@ -230,10 +288,11 @@ def main():
         info_pubs.append([camera_name,
                           rospy.Publisher(camera_name + '/camera_info', camera_info_messages.CameraInfo, queue_size=10)])
 
-    # debug: visualize camera positions
+    # Added by Xinyi
+    # Debug: visualize camera positions
     camera_vis_pub = rospy.Publisher('visualization_marker', Marker, queue_size=5)
     rospy.sleep(0.5)
-
+    # (end)
 
     tb = TransformBroadcaster()
 
@@ -243,7 +302,6 @@ def main():
     move_by_delta.start()
 
     move_by_absolute = MoveByAbsolute(arm, move_group, status_publisher)
-
     move_by_absolute.start()
 
     move_and_orient = MoveAndOrient(arm, move_group)
@@ -263,47 +321,8 @@ def main():
     head_tilt.start()
 
     rospy.sleep(0.5)
-
-    # Raise the torso to allow arm movement
-    # torso.set_height(fetch_api.Torso.MAX_HEIGHT)
-    torso.set_height(fetch_api.Torso.MAX_HEIGHT) # 0.5
-
-    # Set arm joints
-    # INITIAL_POSES = [0.0, 1.25, 0.0, -2.5, 0.0, 1.5, 0.0]
-    INITIAL_POSES = [1.0, 1.25, 1.0, -2.5, -0.3, 1.2, 0.0]
-    # ---> gripper
-    # b: blue joint
-    # g: gray joint
-    # order: [b, g, b, g, b, g, b]
-    # samples: 
-    # [1.5, -0.6, 3.0, 1.0, 3.0, 1.0, 3.0]
-    # [0.8, 0.75, 0.0, -2.0, 0.0, 2.0, 0.0]
-    # [-0.8, 0.0, 0.0, 2.0, 0.0, -2.0, 0.0]
-    # [-1.5, 1.1, -3.0, -0.5, -3.0, -1.0, -3.0]
-    # [-0.8, 0.0, 0.0, 2.0, 0.0, -2.0, 0.0]
-    # [0.8, 0.75, 0.0, -2.0, 0.0, 2.0, 0.0]
-    # [1.5, -0.6, 3.0, 1.0, 3.0, 1.0, 3.0]
-    arm.move_to_joints(fetch_api.ArmJoints.from_list(INITIAL_POSES))
-
-
-    # Set the base position
-    # OPTION 1: Start from origin
-    # move Fetch from the origin to the table
-    # base.go_forward(1.6, 0.5)  # value (distance in meters)
-    # base.turn(math.pi / 3)     # value (angle in degrees)
-    # base.go_forward(3.3, 0.5)  # value (distance in meters)
-    # base.turn(-math.pi / 3)
-
-    # OPTION 2: Start right in front of the table
-    base.align_with_x_axis_pos()
-    base.go_forward(0.3, 0.5)
-
-
-    # Adjust the head to look at the table
-    # head.pan_tilt(0, math.pi / 2)
-    head.look_at("base_link", HEAD_POSE[0], HEAD_POSE[1], HEAD_POSE[2])
-    
     # (end)
+
 
     rate = rospy.Rate(10)
     while not rospy.is_shutdown():

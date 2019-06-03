@@ -78,7 +78,6 @@ function init() {
     rightBTN.style.height = 80 + "px";
     body.appendChild(rightBTN);
 
-
     var rotateLeftBTN = document.createElement("button");
     rotateLeftBTN.innerHTML = "<img src=\"img/rotateAntiClockwiseLeft.png\">";
     rotateLeftBTN.id = 'rotateLeft';
@@ -88,6 +87,7 @@ function init() {
     rotateLeftBTN.style.height = 80 + "px";
     body.appendChild(rotateLeftBTN);
 
+    // Added by Xinyi
     var prevTaskBTN = document.getElementById("prevTask");
     var nextTaskBTN = document.getElementById("nextTask");
     var headUpBTN = document.getElementById("headUp");

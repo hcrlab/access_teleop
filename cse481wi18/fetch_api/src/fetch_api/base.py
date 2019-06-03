@@ -108,6 +108,7 @@ class Base(object):
     #         x_axis = self._x_axis_from_quaternion(self.odom.orientation)
     #         rate.sleep()
 
+    # ----- A second version of turn() -----
     def turn(self, angular_distance, speed=0.5):
         """Rotates the robot a certain angle.
 
@@ -159,6 +160,7 @@ class Base(object):
                     return True
 
         return False
+    # (end)
 
     def turn_alternate(self, angular_distance, speed=0.5):
         """Rotates the robot a certain angle.
