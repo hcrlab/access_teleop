@@ -137,7 +137,7 @@ function init() {
 	});
 
 	nextTaskBTN.addEventListener("mousedown", function(e) {
-		if (taskNum < 4) {
+		if (taskNum < 5) {
 			app.base.goToNext(taskNum);
 			taskNum++;
 		}

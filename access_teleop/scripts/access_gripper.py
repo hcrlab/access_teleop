@@ -3,6 +3,7 @@
 import rospy
 from ezgripper_libs.ezgripper_interface import EZGripper
 from access_teleop_msgs.msg import EzgripperAccess
+import time
 
 class EZGripperAccess(object):
     """
@@ -65,7 +66,11 @@ if __name__ == "__main__":
     rospy.sleep(0.5)
 
     print("***** Closing *****")
+    start = time.time()
+    end = time.time()
+    # while start - end < 2:
     ezgripper_publisher.publish(EzgripperAccess(type="h_close"))
+    # end = time.time()
     rospy.sleep(5)
 
     print("***** Opening *****")
