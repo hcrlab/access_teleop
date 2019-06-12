@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<!-- 
+	Launch file for deleting a model and adding another model in Gazebo for ARAT test
+	Available model names are:
+		cube_s, cube_m, cube_l, cube_xl, stone, ball
+	 -->
+<launch>
+	<arg name="d" default="cube_s" />
+	<arg name="a" default="cube_m" />
+
+	<node pkg="access_teleop" type="switch_object.sh" 
+			args="$(arg d) $(arg a)" 
+			name="switch" output="screen">
+	</node>
+</launch>

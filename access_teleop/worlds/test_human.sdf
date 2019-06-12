@@ -1,9 +1,23 @@
 <?xml version="1.0" ?>
 <sdf version="1.4">
   <world name="default">
-
     <include>
-      <uri>model://cube_s</uri>
+      <uri>model://ground_plane</uri>
     </include>
+    <include>
+      <uri>model://sun</uri>
+    </include>
+    <include>
+      <uri>model://test_zone</uri>
+    </include>
+
+    <!-- Human -->
+    <include>
+      <uri>model://person_standing</uri>
+      <pose>4 3 0 -0.5 0 0</pose>
+    </include>
+
+    <!-- Bed -->
+    
   </world>
 </sdf>

@@ -1,9 +1,8 @@
 <?xml version="1.0"?>
-<!-- Launch file for model with human figure -->
+<!-- Launch file for action test world model -->
 <launch>
 
-  <!--<env name="GAZEBO_MODEL_PATH" value="$(find fetch_gazebo)/models:$(optenv GAZEBO_MODEL_PATH)" />-->
-  <env name="GAZEBO_MODEL_PATH" value="/home/maru/catkin_ws/src/access_teleop/models:$(find fetch_gazebo)/models:$(optenv GAZEBO_MODEL_PATH)" />
+  <env name="GAZEBO_MODEL_PATH" value="$(find access_teleop)/models:$(find fetch_gazebo)/models:$(optenv GAZEBO_MODEL_PATH)" />
 
   <arg name="robot" default="fetch"/>
   <arg name="debug" default="false"/>
@@ -18,7 +17,7 @@
     <arg name="use_sim_time" value="true"/>
     <arg name="headless" value="$(arg headless)"/>
     <!-- World for the action test -->
-    <arg name="world_name" value="$(find access_teleop)/worlds/test_human.sdf"/>
+    <arg name="world_name" value="$(find access_teleop)/worlds/icub_human_standup_world.sdf"/>
   </include>
 
   <!-- Oh, you wanted a robot? -->

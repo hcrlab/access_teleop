@@ -286,7 +286,7 @@ def main():
     info_pubs = []
     for camera_name in camera_names:
         info_pubs.append([camera_name,
-                          rospy.Publisher(camera_name + '/camera_info', camera_info_messages.CameraInfo, queue_size=10)])
+                          rospy.Publisher(camera_name + '/camera_info', camera_info_messages.CameraInfo, queue_size=1)])
 
     # Added by Xinyi
     # Debug: visualize camera positions
@@ -324,7 +324,7 @@ def main():
     # (end)
 
 
-    rate = rospy.Rate(10)
+    rate = rospy.Rate(200)
     while not rospy.is_shutdown():
         publish_camera_transforms(tb, camera_vis_pub)
         publish_camera_info(info_pubs)

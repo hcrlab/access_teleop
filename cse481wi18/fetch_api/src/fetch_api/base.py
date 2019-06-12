@@ -11,7 +11,7 @@ import tf.transformations as tft
 
 from copy import deepcopy
 
-ANGLELIMIT = 0.1  # maximum error allowed in the robot's current yaw and the desired yaw (in radian)
+ANGLELIMIT = 0.05 # maximum error allowed in the robot's current yaw and the desired yaw (in radian)
 
 class Base(object):
     """Base controls the mobile base portion of the Fetch robot.

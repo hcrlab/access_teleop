@@ -307,16 +307,16 @@ class PublisherManager():
         topic     -- the topic to unregister the publisher for
 
         """
-        if not topic in self._publishers:
-            return
+        # if not topic in self._publishers:
+        #     return
 
-        self._publishers[topic].unregister_client(client_id)
-        if topic in self.unregister_timers:
-            self.unregister_timers[topic].cancel()
-            del self.unregister_timers[topic]
-        self.unregister_timers[topic] = Timer(self.unregister_timeout, self._unregister_impl,
-                                              [topic])
-        self.unregister_timers[topic].start()
+        # self._publishers[topic].unregister_client(client_id)
+        # if topic in self.unregister_timers:
+        #     self.unregister_timers[topic].cancel()
+        #     del self.unregister_timers[topic]
+        # self.unregister_timers[topic] = Timer(self.unregister_timeout, self._unregister_impl,
+        #                                       [topic])
+        # self.unregister_timers[topic].start()
 
     def _unregister_impl(self, topic):
         if not self._publishers[topic].has_clients():
@@ -332,8 +332,8 @@ class PublisherManager():
         client_id -- the ID of the client making this request """
 
         ######## Xinyi commented this out to prevent the "Couldn't process inbound connection error" #########
-        #for topic in self._publishers.keys():
-            #self.unregister(client_id, topic)
+        for topic in self._publishers.keys():
+            self.unregister(client_id, topic)
 
     def publish(self, client_id, topic, msg, latch=False, queue_size=100):
         """ Publish a message on the given topic.
