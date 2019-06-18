@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css"
+          href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css" />
+    <link rel="stylesheet" href="style.css">
+    <script src="http://cdn.robotwebtools.org/threejs/current/three.js"></script>
+    <script src="http://cdn.robotwebtools.org/EventEmitter2/current/eventemitter2.min.js"></script>
+
+    <script src="http://cdn.robotwebtools.org/roslibjs/current/roslib.min.js"></script>
+    <script src="http://cdn.robotwebtools.org/ros3djs/current/ros3d.min.js"></script>
+
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+    <script src="http://cdn.robotwebtools.org/mjpegcanvasjs/current/mjpegcanvas.js"></script>
+    <script src="http://cdn.robotwebtools.org/keyboardteleopjs/current/keyboardteleop.js"></script>
+
+    <script src="https://www.w3schools.com/lib/w3.js"></script> <!-- Allows html imports -->
+
+    <script src="/bower_components/arrive/src/arrive.js"></script>
+
+    <!-- Common js files go here -->
+    <script src="common_js/arm.js"></script>
+    <script src="common_js/gripper_coords_listener.js"></script>
+    <script src="common_js/cloud_freezer.js"></script>
+    <script src="common_js/wrist_roll.js"></script>
+    <script src="common_js/gripper.js"></script>
+    <script src="common_js/gripper_gui.js"></script>
+    <script src="common_js/app.js"></script>
+
+    <!-- Js files unique to this html page go here -->
+    <script src="dragAndRotate.js"></script>
+
+
+    <title>Trajectory Plane Robot GUI</title>
+</head>
+
+<body onload="init()">
+
+<div class="container-fluid">
+    <div class="row">
+        <div id="cam1-container" class="cam-container">
+            <h1>Top</h1>
+            <div id="camera1" class="js_arm_div">
+                <svg style="z-index: 1">
+                    <circle cx="50" cy="50" r="50" stroke="blue" stroke-width="15" fill="none" style="z-index: 100" />
+                    <line x1="0" y1="0" x2="0" y2="0" stroke="blue" stroke-width="2" style="z-index: 100"></line>
+                </svg>
+            </div>
+        </div>
+        <div id="cam2-container" class="cam-container">
+            <h1>Side</h1>
+            <div id="camera2" class="js_arm_div">
+                <svg style="z-index: 1">
+                    <circle cx="50" cy="50" r="50" stroke="blue" stroke-width="15" fill="none" style="z-index: 100" />
+                    <line x1="0" y1="0" x2="0" y2="0" stroke="blue" stroke-width="2" style="z-index: 100"></line>
+                </svg>
+            </div>
+        </div>
+        <div id="cam3-container" class="cam-container">
+            <h1>Head Camera</h1>
+            <div id="camera3"></div>
+        </div>
+    </div>
+</div>
+
+
+<form name="ctrlPanel">
+    <p>Enter positive or negative numeric decimal values in the boxes below</p>
+    <table>
+        <tr><td>Linear X</td><td><input id="linearXText" name="linearXText" type="number" value="1.5"/></td></tr>
+        <tr><td>Angular Z</td><td><input id="angularZText" name="angularZText" type="number" value="1.5"/></td></tr>
+    </table>
+    <button id="sendMsg" type="button" onclick="pubMessage()">Publish Message</button>
+</form>
+<p id="demo"></p>
+<div id="feedback"></div>
+<div id="freeze-buttons"></div>
+
+
+
+<div w3-include-html="common_html/gripper.html"></div>
+<script>w3.includeHTML(); // This line is necessary to allow html imports</script>
+
+</body>
+
+</html>

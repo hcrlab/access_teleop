@@ -16,9 +16,10 @@ from visualization_msgs.msg import Marker, InteractiveMarker, InteractiveMarkerC
 from shared_teleop_functions_and_vars import wait_for_time, quat_array_to_quat, publish_camera_transforms, publish_camera_info, \
     publish_gripper_pixels, dpx_to_distance, delta_modified_stamped_pose, \
     absolute_modified_stamped_pose, add_marker, addSetback, orientation_mapping, orientation_sign_mapping, camera_names
+import os
 
-
-HEAD_POSE = [1.7, -0.1, 0.3] # the point in space where robot should look at
+HEAD_POSE = [1.7, -0.1, 0.3]  # the point in space where robot should look at
+MODELS = {0: "cube_s", 1: "cube_m", 2: "cube_l", 3: "cube_xl", 4: "ball", 5: "stone"}  # models used in ARAT test
 
 
 class MoveByDelta(object):
@@ -175,26 +176,31 @@ class BaseSwitchTask(object):
         rospy.Subscriber('/access_teleop/task_type', TaskType, self.base_switch_task_callback, queue_size=1)
 
     def base_switch_task_callback(self, data):
-        if data.task_type is 0:  # go to previous task
-            self._base.turn(math.pi / 2)
-            self._base.align_with_y_axis_pos()
+        # delete the current test object and spawn the specified test object
+        os.system("pwd")
+        os.system("$(rospack find access_teleop)/scripts/switch_object.sh " + str(MODELS[data.delete_type]) + " " + str(MODELS[data.add_type]))
 
-            self._base.go_forward(0.95, 0.3)
-            self._base.stop()
-            rospy.sleep(0.03)
+        # below is the code for moving Fetch from one table to another
+        # if data.task_type is 0:  # go to previous task
+        #     self._base.turn(math.pi / 2)
+        #     self._base.align_with_y_axis_pos()
 
-            self._base.turn(-math.pi / 2)
-            self._base.align_with_x_axis_pos()
-        else:  # go to next task
-            self._base.turn(-math.pi / 2)
-            self._base.align_with_y_axis_neg()
+        #     self._base.go_forward(0.95, 0.3)
+        #     self._base.stop()
+        #     rospy.sleep(0.03)
 
-            self._base.go_forward(0.95, 0.3)
-            self._base.stop()
-            rospy.sleep(0.03)
+        #     self._base.turn(-math.pi / 2)
+        #     self._base.align_with_x_axis_pos()
+        # else:  # go to next task
+        #     self._base.turn(-math.pi / 2)
+        #     self._base.align_with_y_axis_neg()
 
-            self._base.turn(math.pi / 2)
-            self._base.align_with_x_axis_pos()
+        #     self._base.go_forward(0.95, 0.3)
+        #     self._base.stop()
+        #     rospy.sleep(0.03)
+
+        #     self._base.turn(math.pi / 2)
+        #     self._base.align_with_x_axis_pos()
 
 
 # Added by Xinyi for tilting robot's head

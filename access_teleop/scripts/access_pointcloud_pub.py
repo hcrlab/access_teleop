@@ -52,7 +52,7 @@ def main():
     pub = rospy.Publisher('access_teleop/point_cloud', PointCloud2, queue_size=1)
     cloud_subscriber = rospy.Subscriber('/head_camera/depth_registered/points', PointCloud2, callback=republish,
                                         callback_args=pub, queue_size=1)
-    freeze_subscriber = rospy.Subscriber('/access_teleop/freeze_cloud', Bool, callback=save_and_pub, callback_args= pub,
+    freeze_subscriber = rospy.Subscriber('/access_teleop/freeze_cloud', Bool, callback=save_and_pub, callback_args=pub,
                                          queue_size=1)
     rate = rospy.Rate(10)
 

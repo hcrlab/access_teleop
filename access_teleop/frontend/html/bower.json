@@ -1,0 +1,23 @@
+{
+  "name": "frontend",
+  "homepage": "https://github.com/hcrlab/access_teleop",
+  "authors": [
+    "Tim Adamson <tda5@uw.edu>"
+  ],
+  "description": "frontend components for access_teleop",
+  "main": "",
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "nipplejs": "^0.6.7",
+    "arrive": "^2.4.1",
+    "ros-topic": "jstnhuang/ros-topic#^1.0.0"
+  }
+}
