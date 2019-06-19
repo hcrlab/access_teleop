@@ -46,20 +46,25 @@ def save_and_pub(data, pub):
 
 def main():
     global cloud_subscriber
+    global frozen
 
     rospy.init_node('access_pointcloud_pub')
     wait_for_time()
     pub = rospy.Publisher('access_teleop/point_cloud', PointCloud2, queue_size=1)
+    # freeze_pub = rospy.Publisher('access_teleop/point_cloud_freeze', PointCloud2, queue_size=1)
+
     cloud_subscriber = rospy.Subscriber('/head_camera/depth_registered/points', PointCloud2, callback=republish,
                                         callback_args=pub, queue_size=1)
     freeze_subscriber = rospy.Subscriber('/access_teleop/freeze_cloud', Bool, callback=save_and_pub, callback_args=pub,
                                          queue_size=1)
-    rate = rospy.Rate(10)
 
+    rate = rospy.Rate(10)
     while not rospy.is_shutdown():
         if frozen:
             rospy.loginfo("Publishing frozen cloud")
             pub.publish(frozen_cloud)
+        # if frozen:
+        #     freeze_pub.publish(frozen_cloud)
         rate.sleep()
 
 if __name__ == '__main__':

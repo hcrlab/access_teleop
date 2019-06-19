@@ -6,21 +6,22 @@ from pprint import pprint
 from access_teleop_msgs.msg import DeltaPX, PX, PXAndTheta, Theta, TaskType, HeadZ
 import fetch_api
 import camera_info_messages
-from std_msgs.msg import String
+from std_msgs.msg import String, Header, ColorRGBA, Bool
 from moveit_commander import MoveGroupCommander
 from image_geometry import PinholeCameraModel
 from tf import TransformBroadcaster, transformations
-from geometry_msgs.msg import Pose, PoseStamped, Quaternion
+from geometry_msgs.msg import Pose, PoseStamped, Quaternion, Point, Vector3
 from interactive_markers.interactive_marker_server import InteractiveMarkerServer
 from visualization_msgs.msg import Marker, InteractiveMarker, InteractiveMarkerControl, InteractiveMarkerFeedback
 from shared_teleop_functions_and_vars import wait_for_time, quat_array_to_quat, publish_camera_transforms, publish_camera_info, \
     publish_gripper_pixels, dpx_to_distance, delta_modified_stamped_pose, \
     absolute_modified_stamped_pose, add_marker, addSetback, orientation_mapping, orientation_sign_mapping, camera_names
+from gazebo_msgs.srv import GetModelState
 import os
 
 HEAD_POSE = [1.7, -0.1, 0.3]  # the point in space where robot should look at
 MODELS = {0: "cube_s", 1: "cube_m", 2: "cube_l", 3: "cube_xl", 4: "ball", 5: "stone"}  # models used in ARAT test
-
+current_model_idx = 0  # index of the current model in MODELS
 
 class MoveByDelta(object):
     def __init__(self, arm, move_group):
@@ -177,10 +178,13 @@ class BaseSwitchTask(object):
 
     def base_switch_task_callback(self, data):
         # delete the current test object and spawn the specified test object
-        os.system("pwd")
         os.system("$(rospack find access_teleop)/scripts/switch_object.sh " + str(MODELS[data.delete_type]) + " " + str(MODELS[data.add_type]))
+        
+        # record the current model index
+        global current_model_idx
+        current_model_idx = data.add_type
 
-        # below is the code for moving Fetch from one table to another
+        #### below is the code for moving Fetch from one table to another
         # if data.task_type is 0:  # go to previous task
         #     self._base.turn(math.pi / 2)
         #     self._base.align_with_y_axis_pos()
@@ -236,8 +240,8 @@ def main():
     # order: [b, g, b, g, b, g, b]
     # OPTION 1: Follow given trajectory
     arm = fetch_api.Arm()
-    INITIAL_POSES = [1.0, 1.25, 1.0, -2.5, -0.3, 1.0, 0.0]
-    arm.move_to_joints(fetch_api.ArmJoints.from_list(INITIAL_POSES))
+    arm_initial_poses = [1.0, 1.25, 1.0, -2.25, 2.25, 2.25, 0.0]  # [1.0, 1.25, 1.0, -2.25, -0.3, 1.0, 0.0]
+    arm.move_to_joints(fetch_api.ArmJoints.from_list(arm_initial_poses))
 
     # OPTION 2: Use motion planning
     # INITIAL_POSES = [
@@ -280,9 +284,15 @@ def main():
 
     # OPTION 2: Look at a point in space
     head.look_at("base_link", HEAD_POSE[0], HEAD_POSE[1], HEAD_POSE[2])
+
+
+    # Freeze point cloud
+    freeze_pub = rospy.Publisher('/access_teleop/freeze_cloud', Bool, queue_size=5)
+    rospy.sleep(0.5)
+    # publish freeze point cloud
+    freeze_pub.publish(Bool(data=True))
     
     # (end)
-
 
     move_group = MoveGroupCommander("arm")
 
@@ -296,7 +306,7 @@ def main():
 
     # Added by Xinyi
     # Debug: visualize camera positions
-    camera_vis_pub = rospy.Publisher('visualization_marker', Marker, queue_size=5)
+    vis_pub = rospy.Publisher('visualization_marker', Marker, queue_size=5)
     rospy.sleep(0.5)
     # (end)
 
@@ -326,15 +336,39 @@ def main():
     head_tilt = HeadTilt(head)
     head_tilt.start()
 
+    # add the first test object to Gazebo
+    os.system("$(rospack find access_teleop)/scripts/switch_object.sh " + "NONE" + " " + str(MODELS[0]))
+    # move arm joints to positions for test
+    arm_test_poses = [1.0, 1.25, 1.0, -2.25, -0.3, 1.0, 0.0]
+    arm.move_to_joints(fetch_api.ArmJoints.from_list(arm_test_poses))
+
+
     rospy.sleep(0.5)
     # (end)
 
-
     rate = rospy.Rate(200)
     while not rospy.is_shutdown():
-        publish_camera_transforms(tb, camera_vis_pub)
+        publish_camera_transforms(tb, vis_pub)
         publish_camera_info(info_pubs)
         publish_gripper_pixels(camera_model, move_group, gripper_publisher)
+
+        # publish freeze point cloud
+        freeze_pub.publish(Bool(data=True))
+
+        # get the current model position and publish a marker of current model position
+        model_state = rospy.ServiceProxy('gazebo/get_model_state', GetModelState)
+        model_pos = model_state(MODELS[current_model_idx], 'base_link')
+        if model_pos.success:
+            marker = Marker(
+                    type=Marker.SPHERE,
+                    id=current_model_idx,
+                    pose=Pose(Point(model_pos.pose.position.x, model_pos.pose.position.y, model_pos.pose.position.z), 
+                              Quaternion(model_pos.pose.orientation.x, model_pos.pose.orientation.y, model_pos.pose.orientation.z, model_pos.pose.orientation.w)),
+                    scale=Vector3(0.05, 0.05, 0.05),
+                    header=Header(frame_id='base_link'),
+                    color=ColorRGBA(1.0, 0.5, 1.0, 0.5))
+            vis_pub.publish(marker)
+
         rate.sleep()
 
 

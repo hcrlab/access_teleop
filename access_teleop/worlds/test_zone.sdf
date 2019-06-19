@@ -23,11 +23,5 @@
       <name>shelf1</name>
       <pose>4.3 3 0.83 0 0 -1.57</pose>
     </include>
-    <!-- Test object -->
-    <include>
-      <uri>model://cube_s</uri>
-      <name>cube_s</name>
-      <pose>3.8 3 0.83 0 0 0</pose>
-    </include>
   </world>
 </sdf>

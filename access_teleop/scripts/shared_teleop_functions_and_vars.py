@@ -56,18 +56,18 @@ def publish_camera_transforms(tb, pub):
     for key in transform_broadcaster_mapping:
         transform_data = transform_broadcaster_mapping[key]
         tb.sendTransform(transform_data[0], transform_data[1], transform_data[2], transform_data[3], transform_data[4])
-        # Debug: visualize camera poses
-        marker = Marker(
-                type=Marker.TEXT_VIEW_FACING,
-                id=id,
-                pose=Pose(Point(transform_data[0][0], transform_data[0][1], transform_data[0][2]), 
-                          Quaternion(transform_data[1][0], transform_data[1][1], transform_data[1][2], transform_data[1][3])),
-                scale=Vector3(0.06, 0.06, 0.06),
-                header=Header(frame_id='base_link'),
-                color=ColorRGBA(0.0, 1.0, 0.0, 0.8),
-                text=transform_data[3])
-        pub.publish(marker)
-        id += 1
+        # # Debug: visualize camera poses
+        # marker = Marker(
+        #         type=Marker.TEXT_VIEW_FACING,
+        #         id=id,
+        #         pose=Pose(Point(transform_data[0][0], transform_data[0][1], transform_data[0][2]), 
+        #                   Quaternion(transform_data[1][0], transform_data[1][1], transform_data[1][2], transform_data[1][3])),
+        #         scale=Vector3(0.06, 0.06, 0.06),
+        #         header=Header(frame_id='base_link'),
+        #         color=ColorRGBA(0.0, 1.0, 0.0, 0.8),
+        #         text=transform_data[3])
+        # pub.publish(marker)
+        # id += 1
 
 def publish_camera_info(publishers):
     for pub in publishers:
