@@ -3,9 +3,7 @@ Panels:
     Help Height: 0
     Name: Displays
     Property Tree Widget:
-      Expanded:
-        - /PointCloud21
-        - /PointCloud22
+      Expanded: ~
       Splitter Ratio: 0.5
     Tree Height: 418
   - Class: rviz/Selection
@@ -75,9 +73,12 @@ Visualization Manager:
         Image3: true
         InteractiveMarkers: true
         Marker: true
-        PointCloud2: true
         RobotModel: true
         Value: true
+        bagPointCloud2: true
+        currentPointCloud2: true
+        frozenPointCloud2: true
+        testPointCloud2: true
     - Class: rviz/Image
       Enabled: true
       Image Topic: /rviz1/camera1/image
@@ -110,9 +111,12 @@ Visualization Manager:
         Image3: true
         InteractiveMarkers: true
         Marker: true
-        PointCloud2: true
         RobotModel: true
         Value: true
+        bagPointCloud2: true
+        currentPointCloud2: true
+        frozenPointCloud2: true
+        testPointCloud2: true
     - Class: rviz/Image
       Enabled: true
       Image Topic: /rviz1/camera2/image
@@ -275,36 +279,6 @@ Visualization Manager:
       Show Visual Aids: false
       Update Topic: /im_server/update
       Value: true
-    - Alpha: 1
-      Autocompute Intensity Bounds: true
-      Autocompute Value Bounds:
-        Max Value: 10
-        Min Value: -10
-        Value: true
-      Axis: Z
-      Channel Name: intensity
-      Class: rviz/PointCloud2
-      Color: 255; 255; 255
-      Color Transformer: RGB8
-      Decay Time: 0
-      Enabled: true
-      Invert Rainbow: false
-      Max Color: 255; 255; 255
-      Max Intensity: 4096
-      Min Color: 0; 0; 0
-      Min Intensity: 0
-      Name: PointCloud2
-      Position Transformer: XYZ
-      Queue Size: 10
-      Selectable: true
-      Size (Pixels): 3
-      Size (m): 0.01
-      Style: Points
-      Topic: /head_camera/depth_registered/points
-      Unreliable: false
-      Use Fixed Frame: true
-      Use rainbow: true
-      Value: true
     - Class: rviz/Image
       Enabled: true
       Image Topic: /rviz1/camera3/image
@@ -337,9 +311,12 @@ Visualization Manager:
         Image3: true
         InteractiveMarkers: true
         Marker: true
-        PointCloud2: true
         RobotModel: true
         Value: true
+        bagPointCloud2: true
+        currentPointCloud2: true
+        frozenPointCloud2: true
+        testPointCloud2: true
     - Class: rviz/Marker
       Enabled: true
       Marker Topic: visualization_marker
@@ -366,7 +343,37 @@ Visualization Manager:
       Max Intensity: 4096
       Min Color: 0; 0; 0
       Min Intensity: 0
-      Name: PointCloud2
+      Name: currentPointCloud2
+      Position Transformer: XYZ
+      Queue Size: 10
+      Selectable: true
+      Size (Pixels): 3
+      Size (m): 0.01
+      Style: Points
+      Topic: /head_camera/depth_registered/points
+      Unreliable: false
+      Use Fixed Frame: true
+      Use rainbow: true
+      Value: true
+    - Alpha: 0.015
+      Autocompute Intensity Bounds: true
+      Autocompute Value Bounds:
+        Max Value: 1.11403
+        Min Value: -0.00785816
+        Value: true
+      Axis: Z
+      Channel Name: intensity
+      Class: rviz/PointCloud2
+      Color: 255; 255; 255
+      Color Transformer: RGB8
+      Decay Time: 0
+      Enabled: false
+      Invert Rainbow: false
+      Max Color: 255; 255; 255
+      Max Intensity: 4096
+      Min Color: 0; 0; 0
+      Min Intensity: 0
+      Name: frozenPointCloud2
       Position Transformer: XYZ
       Queue Size: 10
       Selectable: true
@@ -374,6 +381,66 @@ Visualization Manager:
       Size (m): 0.01
       Style: Flat Squares
       Topic: /access_teleop/point_cloud
+      Unreliable: false
+      Use Fixed Frame: true
+      Use rainbow: true
+      Value: false
+    - Alpha: 1
+      Autocompute Intensity Bounds: true
+      Autocompute Value Bounds:
+        Max Value: 10
+        Min Value: -10
+        Value: true
+      Axis: Z
+      Channel Name: intensity
+      Class: rviz/PointCloud2
+      Color: 255; 255; 255
+      Color Transformer: RGB8
+      Decay Time: 1e+38
+      Enabled: false
+      Invert Rainbow: false
+      Max Color: 255; 255; 255
+      Max Intensity: 4096
+      Min Color: 0; 0; 0
+      Min Intensity: 0
+      Name: testPointCloud2
+      Position Transformer: XYZ
+      Queue Size: 10
+      Selectable: true
+      Size (Pixels): 3
+      Size (m): 0.01
+      Style: Flat Squares
+      Topic: /test1
+      Unreliable: false
+      Use Fixed Frame: true
+      Use rainbow: true
+      Value: false
+    - Alpha: 1
+      Autocompute Intensity Bounds: true
+      Autocompute Value Bounds:
+        Max Value: 10
+        Min Value: -10
+        Value: true
+      Axis: Z
+      Channel Name: intensity
+      Class: rviz/PointCloud2
+      Color: 255; 255; 255
+      Color Transformer: RGB8
+      Decay Time: 0
+      Enabled: true
+      Invert Rainbow: false
+      Max Color: 255; 255; 255
+      Max Intensity: 4096
+      Min Color: 0; 0; 0
+      Min Intensity: 0
+      Name: bagPointCloud2
+      Position Transformer: XYZ
+      Queue Size: 10
+      Selectable: true
+      Size (Pixels): 3
+      Size (m): 0.01
+      Style: Flat Squares
+      Topic: /access_teleop/world_cloud
       Unreliable: false
       Use Fixed Frame: true
       Use rainbow: true
@@ -402,22 +469,22 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 6.42544
+      Distance: 2.98646
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.06
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: 0.935611
-        Y: 0.0475561
-        Z: 1.15579
+        X: 0.88551
+        Y: -0.0332063
+        Z: 1.1123
       Name: Current View
       Near Clip Distance: 0.01
-      Pitch: 0.299796
+      Pitch: 0.4048
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 4.60363
+      Yaw: 4.61363
     Saved: ~
 Window Geometry:
   Displays:

@@ -18,8 +18,10 @@ from shared_teleop_functions_and_vars import wait_for_time, quat_array_to_quat, 
     absolute_modified_stamped_pose, add_marker, addSetback, orientation_mapping, orientation_sign_mapping, camera_names
 from gazebo_msgs.srv import GetModelState
 import os
+import rosbag
+from sensor_msgs.msg import PointCloud2
 
-HEAD_POSE = [1.7, -0.1, 0.3]  # the point in space where robot should look at
+HEAD_POSE = [1.7, -0.1, 0.25]  # the point in space where robot should look at
 MODELS = {0: "cube_s", 1: "cube_m", 2: "cube_l", 3: "cube_xl", 4: "ball", 5: "stone"}  # models used in ARAT test
 current_model_idx = 0  # index of the current model in MODELS
 
@@ -222,12 +224,11 @@ class HeadTilt(object):
 
 
 def main():
-    # rospy.init_node('access_gripper_teleop')
     rospy.init_node('gripper_teleop')
     wait_for_time()
 
     # Added by Xinyi:
-    # Initial Settings for Each Part
+    # Initialize Settings for the Test (Part 1)
 
     # Raise the torso to allow arm movement
     torso = fetch_api.Torso()
@@ -240,8 +241,10 @@ def main():
     # order: [b, g, b, g, b, g, b]
     # OPTION 1: Follow given trajectory
     arm = fetch_api.Arm()
-    arm_initial_poses = [1.0, 1.25, 1.0, -2.25, 2.25, 2.25, 0.0]  # [1.0, 1.25, 1.0, -2.25, -0.3, 1.0, 0.0]
+    arm_initial_poses = [1.0, 1.25, 1.0, -2.25, -0.3, 1.0, 0.0]
     arm.move_to_joints(fetch_api.ArmJoints.from_list(arm_initial_poses))
+    arm_viz_poses = [1.0, 1.25, 1.0, -2.25, 2.25, 2.25, 0.0]
+    arm.move_to_joints(fetch_api.ArmJoints.from_list(arm_viz_poses))
 
     # OPTION 2: Use motion planning
     # INITIAL_POSES = [
@@ -277,21 +280,21 @@ def main():
     base.go_forward(0.3, 0.5)
 
 
-    # Adjust the head to look at the table
-    head = fetch_api.Head()
-    # OPTION 1: Tilt by angle
-    # head.pan_tilt(0, math.pi / 2)
-
-    # OPTION 2: Look at a point in space
-    head.look_at("base_link", HEAD_POSE[0], HEAD_POSE[1], HEAD_POSE[2])
-
-
-    # Freeze point cloud
-    freeze_pub = rospy.Publisher('/access_teleop/freeze_cloud', Bool, queue_size=5)
-    rospy.sleep(0.5)
+    # Avoid occlusion
+    # OPTION 1: Freeze point cloud
+    # freeze_pub = rospy.Publisher('/access_teleop/freeze_cloud', Bool, queue_size=5)
+    # rospy.sleep(0.5)
     # publish freeze point cloud
-    freeze_pub.publish(Bool(data=True))
-    
+    # freeze_pub.publish(Bool(data=True))
+
+    # OPTION 2: Record a bag file of the surrounding
+    head = fetch_api.Head()
+
+    # tilt the head from -0.35 to 0.85
+    for i in range(6):
+        head.look_at("base_link", HEAD_POSE[0], HEAD_POSE[1], -0.35 + i * 0.2)
+        os.system("rosrun perception save_cloud world $(rospack find access_teleop)/bags/")
+    rospy.set_param("bag_file_refreshed", "true")
     # (end)
 
     move_group = MoveGroupCommander("arm")
@@ -336,12 +339,20 @@ def main():
     head_tilt = HeadTilt(head)
     head_tilt.start()
 
-    # add the first test object to Gazebo
+    # Initialize Settings for the Test (Part 2)
+    # Add the first test object to Gazebo
     os.system("$(rospack find access_teleop)/scripts/switch_object.sh " + "NONE" + " " + str(MODELS[0]))
-    # move arm joints to positions for test
+    
+    # Move arm joints to positions for test
     arm_test_poses = [1.0, 1.25, 1.0, -2.25, -0.3, 1.0, 0.0]
     arm.move_to_joints(fetch_api.ArmJoints.from_list(arm_test_poses))
 
+    # Adjust the head to look at the table
+    # OPTION 1: Tilt by angle
+    # head.pan_tilt(0, math.pi / 2)
+
+    # OPTION 2: Look at a point in space
+    head.look_at("base_link", HEAD_POSE[0], HEAD_POSE[1], HEAD_POSE[2])
 
     rospy.sleep(0.5)
     # (end)
@@ -353,7 +364,7 @@ def main():
         publish_gripper_pixels(camera_model, move_group, gripper_publisher)
 
         # publish freeze point cloud
-        freeze_pub.publish(Bool(data=True))
+        # freeze_pub.publish(Bool(data=True))
 
         # get the current model position and publish a marker of current model position
         model_state = rospy.ServiceProxy('gazebo/get_model_state', GetModelState)
