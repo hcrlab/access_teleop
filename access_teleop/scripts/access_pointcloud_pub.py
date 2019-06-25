@@ -42,8 +42,8 @@ def save_and_pub(data, pub):
     else:
         frozen = False
         save_next = False
-        cloud_subscriber = rospy.Subscriber('/head_camera/depth_registered/points', PointCloud2, callback=republish,
-                                            callback_args=pub, queue_size=1)
+        cloud_subscriber = rospy.Subscriber('access_teleop/point_cloud_filtered', PointCloud2, callback=republish,
+                                            callback_args=pub, queue_size=1)  # /head_camera/depth_registered/points
 
 
 def bag_file_reader():
@@ -66,11 +66,11 @@ def main():
     wait_for_time()
     pub = rospy.Publisher('access_teleop/point_cloud', PointCloud2, queue_size=1)
 
-    world_pub = rospy.Publisher('/access_teleop/world_cloud', PointCloud2, queue_size=5)
-    rospy.sleep(0.5)
+    # world_pub = rospy.Publisher('/access_teleop/world_cloud', PointCloud2, queue_size=5)
+    # rospy.sleep(0.5)
 
-    cloud_subscriber = rospy.Subscriber('/head_camera/depth_registered/points', PointCloud2, callback=republish,
-                                        callback_args=pub, queue_size=1)
+    cloud_subscriber = rospy.Subscriber('access_teleop/point_cloud_filtered', PointCloud2, callback=republish,
+                                        callback_args=pub, queue_size=1)  # /head_camera/depth_registered/points
     freeze_subscriber = rospy.Subscriber('/access_teleop/freeze_cloud', Bool, callback=save_and_pub, callback_args=pub,
                                          queue_size=1)
     
@@ -80,12 +80,12 @@ def main():
             # rospy.loginfo("Publishing frozen cloud")
             pub.publish(frozen_cloud)
         
-        # check if bag file is refreshed
-        if rospy.get_param("bag_file_refreshed"):
-            bag_file_reader()
-            # publish point cloud
-            for cloud in world_pointcloud:
-                world_pub.publish(cloud)
+        # # check if bag file is refreshed
+        # if rospy.get_param("bag_file_refreshed"):
+        #     bag_file_reader()
+        #     # publish point cloud
+        #     for cloud in world_pointcloud:
+        #         world_pub.publish(cloud)
 
         rate.sleep()
 

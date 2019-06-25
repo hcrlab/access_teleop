@@ -243,8 +243,9 @@ def main():
     arm = fetch_api.Arm()
     arm_initial_poses = [1.0, 1.25, 1.0, -2.25, -0.3, 1.0, 0.0]
     arm.move_to_joints(fetch_api.ArmJoints.from_list(arm_initial_poses))
-    arm_viz_poses = [1.0, 1.25, 1.0, -2.25, 2.25, 2.25, 0.0]
-    arm.move_to_joints(fetch_api.ArmJoints.from_list(arm_viz_poses))
+    # for recording bag file
+    # arm_viz_poses = [1.0, 1.25, 1.0, -2.25, 2.25, 2.25, 0.0]
+    # arm.move_to_joints(fetch_api.ArmJoints.from_list(arm_viz_poses))
 
     # OPTION 2: Use motion planning
     # INITIAL_POSES = [
@@ -291,10 +292,10 @@ def main():
     head = fetch_api.Head()
 
     # tilt the head from -0.35 to 0.85
-    for i in range(6):
-        head.look_at("base_link", HEAD_POSE[0], HEAD_POSE[1], -0.35 + i * 0.2)
-        os.system("rosrun perception save_cloud world $(rospack find access_teleop)/bags/")
-    rospy.set_param("bag_file_refreshed", "true")
+    # for i in range(6):
+    #     head.look_at("base_link", HEAD_POSE[0], HEAD_POSE[1], -0.35 + i * 0.2)
+    #     os.system("rosrun perception save_cloud world $(rospack find access_teleop)/bags/")
+    # rospy.set_param("bag_file_refreshed", "true")
     # (end)
 
     move_group = MoveGroupCommander("arm")
@@ -366,19 +367,19 @@ def main():
         # publish freeze point cloud
         # freeze_pub.publish(Bool(data=True))
 
-        # get the current model position and publish a marker of current model position
-        model_state = rospy.ServiceProxy('gazebo/get_model_state', GetModelState)
-        model_pos = model_state(MODELS[current_model_idx], 'base_link')
-        if model_pos.success:
-            marker = Marker(
-                    type=Marker.SPHERE,
-                    id=current_model_idx,
-                    pose=Pose(Point(model_pos.pose.position.x, model_pos.pose.position.y, model_pos.pose.position.z), 
-                              Quaternion(model_pos.pose.orientation.x, model_pos.pose.orientation.y, model_pos.pose.orientation.z, model_pos.pose.orientation.w)),
-                    scale=Vector3(0.05, 0.05, 0.05),
-                    header=Header(frame_id='base_link'),
-                    color=ColorRGBA(1.0, 0.5, 1.0, 0.5))
-            vis_pub.publish(marker)
+        # # get the current model position and publish a marker of current model position
+        # model_state = rospy.ServiceProxy('gazebo/get_model_state', GetModelState)
+        # model_pos = model_state(MODELS[current_model_idx], 'base_link')
+        # if model_pos.success:
+        #     marker = Marker(
+        #             type=Marker.SPHERE,
+        #             id=current_model_idx,
+        #             pose=Pose(Point(model_pos.pose.position.x, model_pos.pose.position.y, model_pos.pose.position.z), 
+        #                       Quaternion(model_pos.pose.orientation.x, model_pos.pose.orientation.y, model_pos.pose.orientation.z, model_pos.pose.orientation.w)),
+        #             scale=Vector3(0.05, 0.05, 0.05),
+        #             header=Header(frame_id='base_link'),
+        #             color=ColorRGBA(1.0, 0.5, 1.0, 0.5))
+        #     vis_pub.publish(marker)
 
         rate.sleep()
 

@@ -55,24 +55,32 @@ int main(int argc, char** argv) {
   sensor_msgs::PointCloud2 final_cloud;
 
   // read the previous cloud
-  rosbag::Bag prev_bag;
-  sensor_msgs::PointCloud2::ConstPtr prev_cloud;
-  prev_bag.open(filename);
+  bool overwrite;
+  ros::param::get("overwrite_prev_bag", overwrite);
+  if (!overwrite) {
+    rosbag::Bag prev_bag;
+    sensor_msgs::PointCloud2::ConstPtr prev_cloud;
+    try {
+      prev_bag.open(filename);
 
-  std::vector<std::string> topics;
-  topics.push_back(std::string("head_camera/depth_registered/points"));
-  rosbag::View view(prev_bag, rosbag::TopicQuery(topics));
-  foreach (rosbag::MessageInstance const m, view) {
-    prev_cloud = m.instantiate<sensor_msgs::PointCloud2>();
-    // concatenate the previous cloud and the new cloud
-    if (prev_cloud != NULL) {
-      pcl::concatenatePointCloud(*prev_cloud, cloud_out, final_cloud);
+      std::vector<std::string> topics;
+      topics.push_back(std::string("head_camera/depth_registered/points"));
+      rosbag::View view(prev_bag, rosbag::TopicQuery(topics));
+      foreach (rosbag::MessageInstance const m, view) {
+        prev_cloud = m.instantiate<sensor_msgs::PointCloud2>();
+        // concatenate the previous cloud and the new cloud
+        if (prev_cloud != NULL) {
+          pcl::concatenatePointCloud(*prev_cloud, cloud_out, final_cloud);
+        }
+      }
+
+      prev_bag.close();
+    } catch (rosbag::BagException& e) {
+      std::cerr << e.what() << std::endl;
     }
+  } else {
+    ros::param::set("overwrite_prev_bag", false);
   }
-
-  prev_bag.close();
-
-
 
   // write the new cloud into bag file
   rosbag::Bag bag;

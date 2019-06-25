@@ -13,6 +13,7 @@ App = function () {
     var self = this;
 
     // Set up ros
+    // 'ws://localhost:9090'
     this.ros = new ROSLIB.Ros({
         url : 'ws://localhost:9090'
     });
@@ -29,20 +30,20 @@ App = function () {
     });
 
     this.advertiseAll = function() {
-        // self.arm.adv();
-        // self.cloudFreezer.adv();
+        self.arm.adv();
+        self.cloudFreezer.adv();
         self.base.adv();
-        // self.wristRoller.adv();
+        self.wristRoller.adv();
         self.head.adv();
 
         console.log("Advertised all publishers");
     };
 
     this.unadvertiseAll = function() {
-        // self.arm.unadv();
-        // self.cloudFreezer.unadv();
+        self.arm.unadv();
+        self.cloudFreezer.unadv();
         self.base.unadv();
-        // self.wristRoller.unadv();
+        self.wristRoller.unadv();
         self.head.unadv();
 
         console.log("Unadvertised all publishers");

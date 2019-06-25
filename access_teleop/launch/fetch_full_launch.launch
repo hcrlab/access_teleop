@@ -1,6 +1,8 @@
 <?xml version="1.0"?>
 <launch>
   <arg name="use_rviz" default="true" />
+  
+  <param name="overwrite_prev_bag" value="true" />
   <param name="bag_file_refreshed" value="false" />
 
   <!-- Default: <include file="$(find fetch_gazebo)/launch/playground.launch" /> -->
@@ -11,7 +13,10 @@
   
   <node pkg="web_video_server" type="web_video_server" name="web_video_server_node" />
 
-  <include file="$(find rosbridge_server)/launch/rosbridge_websocket.launch" />
+  <include file="$(find rosbridge_server)/launch/rosbridge_websocket.launch">
+    <!-- <arg name="port" value="9090" /> -->
+    <!-- <arg name="address" value="127.0.0.1" /> -->
+  </include>
 
   <!-- launch rviz with config/access_teleop_config.rviz -->
   <node pkg="rviz" type="rviz" name="rviz"
@@ -21,8 +26,18 @@
   <!-- launch the point cloud saver to allow point cloud freezing -->
   <node pkg="access_teleop" output="screen" name="pointcloud_saver" type="access_pointcloud_pub.py" />
   
+  <!-- launch the backend -->
   <node pkg="access_teleop" output="screen" name="gripper_teleop" type="fetch_access_teleop.py" />
 
+  <!-- Xinyi added: For robot self-filtering -->
+  <!-- launch the robot self filter to filter out the robot itself from point cloud -->
+  <node pkg="robot_self_filter" output="screen" name="self_filter" type="self_filter">
+    <remap from="cloud_in" to="access_teleop/point_cloud"/>
+    <remap from="cloud_out" to="access_teleop/point_cloud_filtered"/>
+    <param name="use_rgb" value="true" />
+  </node>
+  <!-- load self see links -->
+  <rosparam command="load" file="$(find robot_self_filter)/launch/self_see_links.yaml"/>
 
 
 </launch>

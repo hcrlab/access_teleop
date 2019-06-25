@@ -92,6 +92,7 @@ function init() {
     var nextTaskBTN = document.getElementById("nextTask");
     var headUpBTN = document.getElementById("headUp");
     var headDownBTN = document.getElementById("headDown");
+    var cloudBTN = document.getElementById("freeze");
 
     // mouse down
     upBTN.addEventListener("mousedown", function () {
@@ -112,20 +113,20 @@ function init() {
 
     rotateRightBTN.addEventListener("mousedown", function () {
     	if (active_cam == "camera1" || active_cam == "camera2") {
-    		app.arm.orientByTheta(0.3, active_cam);
+    		app.arm.orientByTheta(0.2, active_cam);
     	} else {
     		// rotates the gripper
-    		app.wristRoller.rotate(-0.3);
+    		app.wristRoller.rotate(-0.2);
     	}
         
     });
 
     rotateLeftBTN.addEventListener("mousedown", function () {
     	if (active_cam == "camera1" || active_cam == "camera2") {
-        	app.arm.orientByTheta(-0.3, active_cam);
+        	app.arm.orientByTheta(-0.2, active_cam);
         } else  {
         	// rotates the gripper
-        	app.wristRoller.rotate(0.3);
+        	app.wristRoller.rotate(0.2);
         }
     });
 
@@ -150,6 +151,16 @@ function init() {
 	headDownBTN.addEventListener("mousedown", function() {
 		app.head.tilt(-0.2);
 	});
+
+    cloudBTN.addEventListener("mousedown", function() {
+        if (cloudBTN.innerHTML == "Freeze") {
+            cloudBTN.innerHTML = "Unfreeze";
+            app.cloudFreezer.freezeCloud();
+        } else {
+            cloudBTN.innerHTML = "Freeze";
+            app.cloudFreezer.unfreezeCloud();
+        }
+    })
 
     // for continuous motion: mouse up
     // var btns = [upBTN, downBTN, leftBTN, rightBTN, rotateRightBTN, rotateLeftBTN];
