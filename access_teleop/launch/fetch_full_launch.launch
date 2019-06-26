@@ -13,10 +13,7 @@
   
   <node pkg="web_video_server" type="web_video_server" name="web_video_server_node" />
 
-  <include file="$(find rosbridge_server)/launch/rosbridge_websocket.launch">
-    <!-- <arg name="port" value="9090" /> -->
-    <!-- <arg name="address" value="127.0.0.1" /> -->
-  </include>
+  <include file="$(find rosbridge_server)/launch/rosbridge_websocket.launch" />
 
   <!-- launch rviz with config/access_teleop_config.rviz -->
   <node pkg="rviz" type="rviz" name="rviz"

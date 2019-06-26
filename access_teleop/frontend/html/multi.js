@@ -6,8 +6,16 @@
  * An App self adds 3 camera streams, and the controlers to move the robot
  */
 
+// Number of cameras
+var camNum = 3;
 // Number of the current task
 var taskNum;
+// button dimensions
+var VERTICAL_BTN_H = 80;
+var VERTICAL_BTN_W = 55;
+var VERTICAL_BTN_W_WIDE = 65;
+var HORIZONTAL_BTN_H = 55;
+var HORIZONTAL_BTN_W = 80;
 
 function init() {
     var arm_div = document.querySelectorAll('.js_arm_div');
@@ -24,9 +32,10 @@ function init() {
        console.error('We lost connection with ROS. All is lost');
     });
 
-    var camera1 = document.getElementById("camera1");
-    var camera2 = document.getElementById("camera2");    
-    var camera3 = document.getElementById("camera3");
+    var cameras = [];
+    for (var i = 0; i < camNum; i++) {
+        cameras.push(document.getElementById("camera" + (i + 1)));
+    }
 
     var active_cam = "camera1";
 
@@ -41,51 +50,44 @@ function init() {
     upBTN.innerHTML = "<img src=\"img/blueUpArrow.png\">";
     upBTN.id = 'up';
     upBTN.title = '\u2191Up\u2191';
-    var body = document.getElementsByTagName("body")[0];
-    body.appendChild(upBTN);
 
     var downBTN = document.createElement("button");
     downBTN.innerHTML = "<img src=\"img/blueDownArrow.png\">";
     downBTN.id = 'down';
     downBTN.title = '\u2193Down\u2193';
     downBTN.className = "button";
-    body.appendChild(downBTN);
 
     var leftBTN = document.createElement("button");
     leftBTN.innerHTML = "<img src=\"img/greenLeftArrow.png\">";
     leftBTN.id = 'left';
     leftBTN.title = '\u2190Left\u2190';
     leftBTN.className = "button";
-    leftBTN.style.width = 55 + "px";
-    leftBTN.style.height = 80 + "px";
-    body.appendChild(leftBTN);
+    leftBTN.style.width = VERTICAL_BTN_W + "px";
+    leftBTN.style.height = VERTICAL_BTN_H + "px";
 
     var rotateRightBTN = document.createElement("button");
     rotateRightBTN.innerHTML = "<img src=\"img/rotateClockwiseRight.png\">";
     rotateRightBTN.id = 'rotateRight';
     rotateRightBTN.title = '\u21BBRotate Right\u21BB';
     rotateRightBTN.className = "button";
-    rotateRightBTN.style.width = 65 + "px"
-    rotateRightBTN.style.height = 80 + "px";
-    body.appendChild(rotateRightBTN);
+    rotateRightBTN.style.width = VERTICAL_BTN_W_WIDE + "px"
+    rotateRightBTN.style.height = VERTICAL_BTN_H + "px";
 
     var rightBTN = document.createElement("button");
     rightBTN.innerHTML = "<img src=\"img/greenRightArrow.png\">";
     rightBTN.id = 'right';
     rightBTN.title = '\u2192Right\u2192';
     rightBTN.className = "button";
-    rightBTN.style.width = 55 + "px";
-    rightBTN.style.height = 80 + "px";
-    body.appendChild(rightBTN);
+    rightBTN.style.width = VERTICAL_BTN_W + "px";
+    rightBTN.style.height = VERTICAL_BTN_H + "px";
 
     var rotateLeftBTN = document.createElement("button");
     rotateLeftBTN.innerHTML = "<img src=\"img/rotateAntiClockwiseLeft.png\">";
     rotateLeftBTN.id = 'rotateLeft';
     rotateLeftBTN.title = '\u21BARotate Left\u21BA';
     rotateLeftBTN.className = "button";
-    rotateLeftBTN.style.width = 65 + "px";
-    rotateLeftBTN.style.height = 80 + "px";
-    body.appendChild(rotateLeftBTN);
+    rotateLeftBTN.style.width = VERTICAL_BTN_W_WIDE + "px";
+    rotateLeftBTN.style.height = VERTICAL_BTN_H + "px";
 
     // Added by Xinyi
     var prevTaskBTN = document.getElementById("prevTask");
@@ -170,19 +172,10 @@ function init() {
     // 	});
     // }
 
-    $("#up").hide();
-    $("#down").hide();
-    $("#left").hide()
-    $("#right").hide();
-    $("#rotateRight").hide()
-    $("#rotateLeft").hide();
-
-    camera1.addEventListener("mouseover", showButtons);
-    camera1.addEventListener("mouseout", hideButtons);
-    camera2.addEventListener("mouseover", showButtons);
-    camera2.addEventListener("mouseout", hideButtons);
-    camera3.addEventListener("mouseover", showButtons);
-    camera3.addEventListener("mouseout", hideButtons);
+    for (var i = 0; i < camNum; i++) {
+        cameras[i].addEventListener("mouseenter", showButtons);
+        cameras[i].addEventListener("mouseleave", hideButtons);
+    }
 
     function showButtons() {
     	showButtonsHelper(parseInt(this.id[6]));
@@ -192,12 +185,6 @@ function init() {
     	active_cam = "camera" + cam_id;
         $("#cam" + cam_id).css("color", "yellow");
         layoutButtons(cam_id, btnTop, upBTN, downBTN, leftBTN, rotateRightBTN, rightBTN, rotateLeftBTN); 
-        $("#up").show();
-        $("#down").show();
-        $("#left").show();
-        $("#right").show();
-        $("#rotateRight").show();
-        $("#rotateLeft").show();
     }
 
     function hideButtons() {
@@ -206,39 +193,50 @@ function init() {
 
     function hideButtonsHelper(cam_id) {
     	$("#title" + cam_id).css("color", "blue");
-        $("#up").hide();
-        $("#down").hide();
-        $("#left").hide();
-        $("#right").hide()
-        $("#rotateRight").hide()
-        $("#rotateLeft").hide();
+        var camera = document.getElementById("camera" + cam_id);
+        camera.removeChild(upBTN);
+        camera.removeChild(downBTN);
+        camera.removeChild(leftBTN);
+        camera.removeChild(rotateRightBTN);
+        camera.removeChild(rightBTN);
+        camera.removeChild(rotateLeftBTN);
     }
 
     function layoutButtons(cameraId, btnTop, upBTN, downBTN, leftBTN, rotateRightBTN, rightBTN, rotateLeftBTN) {
     	var camera = document.getElementById("camera" + cameraId);
+        camera.appendChild(upBTN);
+        camera.appendChild(downBTN);
+        camera.appendChild(leftBTN);
+        camera.appendChild(rotateRightBTN);
+        camera.appendChild(rightBTN);
+        camera.appendChild(rotateLeftBTN);
 
 	    var btnTopH = btnTop.offsetHeight;
-	    var btnUpH = camera.offsetHeight + titleWebH + btnTopH;
+	    var btnUpH = camera.offsetHeight;// + titleWebH;// + btnTopH;
 	    var offset = camera.offsetWidth * cameraId;
 	    var divisor = 2 * cameraId;
 
-	    upBTN.style.left = (offset - 95) / divisor * (divisor - 1) + "px";
-        upBTN.style.top = (btnUpH) / 5 + "px";
+        var cameraWidth = parseInt(camera.style.width);
+        var cameraHeight = parseInt(camera.style.height) - btnTopH;
+        var horizontalOffset = HORIZONTAL_BTN_W / 2;
+        var verticalOffset = VERTICAL_BTN_W / 2;
+	    upBTN.style.left = cameraWidth / 2 - horizontalOffset + "px";
+        upBTN.style.top = btnTopH;
 
-    	downBTN.style.left = (offset - 95) / divisor * (divisor - 1) + "px";
-    	downBTN.style.top = (btnUpH - titleWebH / 1.5) / 1 + "px";
+    	downBTN.style.left = cameraWidth / 2 - horizontalOffset + "px";
+    	downBTN.style.top = cameraHeight + "px";
 
-    	leftBTN.style.left = camera.offsetWidth * (cameraId - 1) + "px";
-    	leftBTN.style.top = (btnUpH) / 2 + "px";
+    	leftBTN.style.left = 0;
+    	leftBTN.style.top = cameraHeight / 2 + "px";
 
-    	rotateRightBTN.style.left = camera.offsetWidth * (cameraId - 1) + 55 + "px";
-	    rotateRightBTN.style.top = (btnUpH) / 2 + "px";
+    	rotateRightBTN.style.left = VERTICAL_BTN_W + "px";
+	    rotateRightBTN.style.top = cameraHeight / 2 + "px";
 
-	    rightBTN.style.left = offset - titleWebH - 30 + "px";
-	    rightBTN.style.top = (btnUpH) / 2 + "px";
+	    rightBTN.style.left = cameraWidth - VERTICAL_BTN_W + "px";
+	    rightBTN.style.top = cameraHeight / 2 + "px";
 
-	    rotateLeftBTN.style.left = offset - titleWebH - 95 + "px";
-	    rotateLeftBTN.style.top = (btnUpH) / 2 + "px";
+	    rotateLeftBTN.style.left = cameraWidth - VERTICAL_BTN_W - VERTICAL_BTN_W_WIDE + "px";
+	    rotateLeftBTN.style.top = cameraHeight / 2 + "px";
     }
 
     init_flag = false;

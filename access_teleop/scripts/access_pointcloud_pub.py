@@ -42,8 +42,8 @@ def save_and_pub(data, pub):
     else:
         frozen = False
         save_next = False
-        cloud_subscriber = rospy.Subscriber('access_teleop/point_cloud_filtered', PointCloud2, callback=republish,
-                                            callback_args=pub, queue_size=1)  # /head_camera/depth_registered/points
+        cloud_subscriber = rospy.Subscriber('/head_camera/depth_registered/points', PointCloud2, callback=republish,
+                                            callback_args=pub, queue_size=1)
 
 
 def bag_file_reader():
@@ -69,8 +69,8 @@ def main():
     # world_pub = rospy.Publisher('/access_teleop/world_cloud', PointCloud2, queue_size=5)
     # rospy.sleep(0.5)
 
-    cloud_subscriber = rospy.Subscriber('access_teleop/point_cloud_filtered', PointCloud2, callback=republish,
-                                        callback_args=pub, queue_size=1)  # /head_camera/depth_registered/points
+    cloud_subscriber = rospy.Subscriber('/head_camera/depth_registered/points', PointCloud2, callback=republish,
+                                        callback_args=pub, queue_size=1)
     freeze_subscriber = rospy.Subscriber('/access_teleop/freeze_cloud', Bool, callback=save_and_pub, callback_args=pub,
                                          queue_size=1)
     

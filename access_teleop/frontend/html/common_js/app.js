@@ -15,7 +15,7 @@ App = function () {
     // Set up ros
     // 'ws://localhost:9090'
     this.ros = new ROSLIB.Ros({
-        url : 'ws://localhost:9090'
+        url : 'ws://rosbridge.ngrok.io'
     });
 
     this.arm = new Arm(this.ros);
@@ -148,7 +148,7 @@ App = function () {
     // Create the right forearm viewer.
     var forearmRViewer = new MJPEGCANVAS.Viewer({
         divID : 'camera1',
-        host : 'localhost',
+        host : 'rosvideo.ngrok.io',
         width : rightForearmWidth,
         height : rightForearmHeight,
         topic : '/rviz1/camera1/image'
@@ -157,7 +157,7 @@ App = function () {
     // Create the head viewer.
     var headViewer = new MJPEGCANVAS.Viewer({
         divID : 'camera2',
-        host : 'localhost',
+        host : 'rosvideo.ngrok.io',
         width : headWidth,
         height : headHeight,
         topic : '/rviz1/camera2/image'
@@ -175,7 +175,7 @@ App = function () {
     // Create the fromt viewer.
     var frontViewer = new MJPEGCANVAS.Viewer({
         divID : 'camera3',
-        host : 'localhost',
+        host : 'rosvideo.ngrok.io',
         width : frontWidth,
         height : frontHeight,
         topic : '/rviz1/camera3/image'
