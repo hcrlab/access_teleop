@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8">
+    <meta charset="utf-8">
   	<meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
 
     <link rel="stylesheet" href="style.css">
@@ -20,13 +20,13 @@
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
-    <script src="https://static.robotwebtools.org/mjpegcanvasjs/current/mjpegcanvas.js"></script> <!-- changed by Maru on 04/11/19 -->
+    <!-- <script src="https://static.robotwebtools.org/mjpegcanvasjs/current/mjpegcanvas.js"></script> --> <!-- changed by Maru on 04/11/19 -->
+    <script src="common_js/mjpegcanvas.js"></script> <!-- added by Xinyi for using ngrok -->
 
     <script src="https://www.w3schools.com/lib/w3.js"></script> <!-- Allows html imports -->
 
     <script src="/bower_components/arrive/src/arrive.js"></script> <!-- had to install arrive from: https://www.npmjs.com/package/arrive
     follow instructions with Bower on frontend folder  --- Changed by Maru on 04/11/19 -->
-
 
 
     <!-- Common js files go here -->
@@ -101,6 +101,7 @@
 	        	<p>Gripper Control</p>
 	        	<div w3-include-html="common_html/gripper.html"></div>
 	        </div>
+	        <!-- Uncomment these lines for switching task buttons -->
 	        <div id="task_buttons">
 	        	<button id="prevTask" type="button">Prev Task</button>
 	        	<button id="nextTask" type="button">Next Task</button>
@@ -109,7 +110,9 @@
 	        	<button id="headUp" type="button">Head Up</button>
 	        	<button id="headDown" type="button">Head Down</button>
 	        </div>
-
+	        <div id="freeze_buttons">
+	        	<button id="freeze" type="button">Freeze</button>
+	        </div>
     	</div>
     </div>
 

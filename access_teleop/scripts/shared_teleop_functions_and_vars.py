@@ -18,12 +18,13 @@ camera_info_mapping = {'camera1': camera_info_messages.camera1, 'camera2': camer
 # original:
 # transform_broadcaster_mapping = {'camera1': ((0.5, -0.3, 2.6), (1, 0, 0, 0), rospy.Time(10), 'camera1', 'base_link'),
 #                                 'camera2': ((0.7, -2.0, 0.55), (-0.70711, 0, 0, 0.70711), rospy.Time(10), 'camera2', 'base_link')}
-# without shelf:
 # transform_broadcaster_mapping = {
 #         'camera1': ((0.7, 0, 2.3), (1, 0, 0, 0), rospy.Time(10), 'camera1', 'base_link'),
 #         'camera2': ((0.9, -1.2, 1.1), (-0.70711, 0, 0, 0.70711), rospy.Time(10), 'camera2', 'base_link'),
 #         'camera3': ((1.7, -0.1, 1.1), (0.5, 0.5, -0.5, -0.5), rospy.Time(10), 'camera3', 'base_link')
 #         }
+
+# with shelf:
 transform_broadcaster_mapping = {
         'camera1': ((0.7, 0, 2.3), (1, 0, 0, 0), rospy.Time(10), 'camera1', 'base_link'),
         'camera2': ((0.9, -1.2, 1.1), (-0.70711, 0, 0, 0.70711), rospy.Time(10), 'camera2', 'base_link'),

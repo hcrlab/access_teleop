@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<launch>
+<!--   <arg name="use_rviz" default="true" />
+  
+  <include file="$(find fetch_gazebo)/launch/playground.launch" />
+
+  <include file="$(find fetch_api)/launch/move_group.launch" />
+  
+  launch rviz with config/access_teleop_config.rviz
+  <node pkg="rviz" type="rviz" name="rviz"
+      args="-d $(find limb_manipulation)/config/limb_manipulation_config.rviz"
+      if="$(arg use_rviz)" /> -->
+
+  <node pkg="limb_manipulation" type="limb_seg_demo" name="limb_seg_demo" output="screen">
+  </node>
+</launch>
