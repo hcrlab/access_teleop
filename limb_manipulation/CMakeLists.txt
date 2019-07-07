@@ -18,6 +18,7 @@ find_package(catkin REQUIRED COMPONENTS
   shape_msgs
   simple_grasping
   tf
+  perception
 )
 
 ## System dependencies are found with CMake's conventions

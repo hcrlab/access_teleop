@@ -21,7 +21,7 @@
     <include>
       <uri>model://bed</uri>
       <name>bed</name>
-      <pose>4 3 0 0 0 -1.5707</pose>
+      <pose>4 4 0 0 0 -1.5707</pose>
     </include>
     
   </world>

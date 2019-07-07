@@ -4,9 +4,10 @@ Panels:
     Name: Displays
     Property Tree Widget:
       Expanded:
-        - /currentPointCloud21
-        - /PointCloud21
-      Splitter Ratio: 0.530233
+        - /Marker1/Namespaces1
+        - /coloredPointCloud21
+        - /TF1/Frames1
+      Splitter Ratio: 0.488789
     Tree Height: 602
   - Class: rviz/Selection
     Name: Selection
@@ -191,10 +192,10 @@ Visualization Manager:
       Visual Enabled: true
     - Class: rviz/Marker
       Enabled: true
-      Marker Topic: visualization_marker
+      Marker Topic: /visualization_marker
       Name: Marker
       Namespaces:
-        {}
+        objects: true
       Queue Size: 100
       Value: true
     - Alpha: 1
@@ -249,7 +250,7 @@ Visualization Manager:
       Channel Name: intensity
       Class: rviz/PointCloud2
       Color: 255; 255; 255
-      Color Transformer: ""
+      Color Transformer: RGB8
       Decay Time: 0
       Enabled: true
       Invert Rainbow: false
@@ -257,8 +258,8 @@ Visualization Manager:
       Max Intensity: 4096
       Min Color: 0; 0; 0
       Min Intensity: 0
-      Name: PointCloud2
-      Position Transformer: ""
+      Name: coloredPointCloud2
+      Position Transformer: XYZ
       Queue Size: 10
       Selectable: true
       Size (Pixels): 3
@@ -269,6 +270,27 @@ Visualization Manager:
       Use Fixed Frame: true
       Use rainbow: true
       Value: true
+    - Class: rviz/TF
+      Enabled: false
+      Frame Timeout: 15
+      Frames:
+        All Enabled: false
+      Marker Scale: 0.5
+      Name: TF
+      Show Arrows: true
+      Show Axes: true
+      Show Names: true
+      Tree:
+        {}
+      Update Interval: 0
+      Value: false
+    - Class: rviz/Axes
+      Enabled: false
+      Length: 1
+      Name: Axes
+      Radius: 0.1
+      Reference Frame: <Fixed Frame>
+      Value: false
   Enabled: true
   Global Options:
     Background Color: 48; 48; 90
@@ -293,22 +315,22 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 5.67701
+      Distance: 2.57873
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.06
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: 0.88551
-        Y: -0.0332063
-        Z: 1.1123
+        X: 0.978904
+        Y: -0.138313
+        Z: 0.600843
       Name: Current View
       Near Clip Distance: 0.01
-      Pitch: 0.4598
+      Pitch: 0.024797
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 4.78863
+      Yaw: 4.50367
     Saved: ~
 Window Geometry:
   Displays:

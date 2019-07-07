@@ -23,7 +23,7 @@
   <!-- Oh, you wanted a robot? -->
   <include file="$(find fetch_gazebo)/launch/include/$(arg robot).launch.xml">
     <!-- set robot's default position -->
-    <arg name="x" value="2.5" />
+    <arg name="x" value="2.8" />
     <arg name="y" value="2.8" />
   </include>
 
