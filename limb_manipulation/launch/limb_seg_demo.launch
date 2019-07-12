@@ -1,15 +1,20 @@
 <?xml version="1.0"?>
 <launch>
-<!--   <arg name="use_rviz" default="true" />
-  
-  <include file="$(find limb_manipulation)/launch/human_sim.launch" />
+  <param name="reg_distance" value="10" />
+  <param name="reg_point_color" value="30" />
+  <param name="reg_region_color" value="100" />
+  <param name="min_cluster_size" value="5" />
+  <param name="max_cluster_size" value="10000" />
+
+  <param name="size_min" value="10" />
+  <param name="size_max" value="30" />
 
   <include file="$(find fetch_api)/launch/move_group.launch" />
   
-  launch rviz with config/access_teleop_config.rviz
+  <arg name="use_rviz" default="true" />
   <node pkg="rviz" type="rviz" name="rviz"
-      args="-d $(find limb_manipulation)/config/limb_manipulation_config.rviz"
-      if="$(arg use_rviz)" /> -->
+      args="-d $(find limb_manipulation)/config/limb_manipulation_seg_config.rviz"
+      if="$(arg use_rviz)" />
 
   <node pkg="limb_manipulation" type="limb_seg_demo" name="limb_seg_demo" output="screen" />
 

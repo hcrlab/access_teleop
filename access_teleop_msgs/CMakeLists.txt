@@ -53,7 +53,6 @@ find_package(catkin REQUIRED COMPONENTS
    Theta.msg
    TaskType.msg
    HeadZ.msg
-   EzgripperAccess.msg
  )
 
 ## Generate services in the 'srv' folder

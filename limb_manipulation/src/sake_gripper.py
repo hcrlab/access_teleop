@@ -2,7 +2,7 @@
 
 import rospy
 from ezgripper_libs.ezgripper_interface import EZGripper
-from access_teleop_msgs.msg import EzgripperAccess
+from limb_manipulation_msgs.msg import EzgripperAccess
 import time
 
 class EZGripperAccess(object):
@@ -18,12 +18,13 @@ class EZGripperAccess(object):
         #     self.ezgripper_right = EZGripper(gripper_names[1])
         # else:
         #     self.ezgripper_right = None
+
         self.last_command_end_time = rospy.get_rostime()
 
     def start(self):
-        rospy.Subscriber("/ezgripper_access", EzgripperAccess, ezgripper_access.access_callback)
+        rospy.Subscriber("/ezgripper_access", EzgripperAccess, self.callback)
 
-    def access_callback(self, data):
+    def callback(self, data):
         if (rospy.get_rostime() - self.last_command_end_time).to_sec() > 0.2:
             # This check should flush all messages accumulated during command execution
             # and avoid executing it again.
@@ -53,6 +54,7 @@ class EZGripperAccess(object):
 
 if __name__ == "__main__":
     rospy.init_node("sake_gripper")
+
     rospy.sleep(0.5)
 
     gripper_names = rospy.get_param('~grippers')
@@ -65,17 +67,20 @@ if __name__ == "__main__":
     ezgripper_publisher = rospy.Publisher('/ezgripper_access', EzgripperAccess, queue_size=1)
     rospy.sleep(0.5)
 
-    print("***** Closing *****")
-    start = time.time()
-    end = time.time()
-    # while start - end < 2:
-    ezgripper_publisher.publish(EzgripperAccess(type="h_close"))
-    # end = time.time()
-    rospy.sleep(5)
+    # # VERSION 1
+    # print("***** Closing *****")
+    # ezgripper_publisher.publish(EzgripperAccess(type="h_close"))
+    # rospy.sleep(5)
 
-    print("***** Opening *****")
-    ezgripper_publisher.publish(EzgripperAccess(type="open"))
-    rospy.sleep(5)
+    # print("***** Opening *****")
+    # ezgripper_publisher.publish(EzgripperAccess(type="open"))
+    # rospy.sleep(5)
+
+    # VERSION 2
+    rate = rospy.Rate(10)
+    while not rospy.is_shutdown():
+        ezgripper_publisher.publish(EzgripperAccess(type="h_close"))
+        rate.sleep()
 
 
     rospy.loginfo("Exiting")

@@ -28,8 +28,8 @@ def main():
     head = fetch_api.Head()
 
 
-    torso.set_height(0.2)
-    head.pan_tilt(0, math.pi / 4)
+    torso.set_height(0.4)
+    head.pan_tilt(0, math.pi / 3)
 
     rospy.spin()
 

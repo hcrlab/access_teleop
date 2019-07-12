@@ -35,13 +35,14 @@
 namespace manipulation {
 class Segmenter {
  public:
-  Segmenter(const ros::Publisher& colored_cloud_pub, const ros::Publisher& marker_pub);
+  Segmenter(const ros::Publisher& filtered_cloud_pub, const ros::Publisher& colored_cloud_pub, const ros::Publisher& marker_pub);
   void Callback(const sensor_msgs::PointCloud2& msg);
   void JointStateCallback(const sensor_msgs::JointState& msg);
   void SegmentPointCloud(const sensor_msgs::PointCloud2& msg);
   void SegmentMarker(std::vector <pcl::PointIndices>* object_indices, pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud);
 
  private:
+  ros::Publisher filtered_cloud_pub_;
   ros::Publisher colored_cloud_pub_;
   ros::Publisher marker_pub_;
   float head_tilt_joint_value_;
