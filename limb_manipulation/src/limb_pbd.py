@@ -32,7 +32,7 @@ def main():
 
   server = PbdServer()
   server.setup()
-  print("LIMB PBD")
+  print("******** LIMB PBD ********")
   grasp_position_ready = False
 
   print_usage()
