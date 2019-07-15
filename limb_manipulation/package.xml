@@ -64,7 +64,7 @@
   <depend>shape_msgs</depend>
   <depend>simple_grasping</depend>
   <depend>tf</depend>
-
+  <depend>limb_manipulation_msgs</depend>
 
   <!-- The export tag contains other, unspecified, tags -->
   <export>

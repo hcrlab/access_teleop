@@ -19,6 +19,7 @@ find_package(catkin REQUIRED COMPONENTS
   simple_grasping
   tf
   perception
+  limb_manipulation_msgs
 )
 
 ## System dependencies are found with CMake's conventions

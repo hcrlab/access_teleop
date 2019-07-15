@@ -54,7 +54,6 @@ class EZGripperAccess(object):
 
 if __name__ == "__main__":
     rospy.init_node("sake_gripper")
-
     rospy.sleep(0.5)
 
     gripper_names = rospy.get_param('~grippers')
