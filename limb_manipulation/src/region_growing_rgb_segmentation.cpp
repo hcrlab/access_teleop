@@ -38,7 +38,7 @@ void Segmenter::SegmentPointCloud(const sensor_msgs::PointCloud2& msg) {
   ros::param::param("min_cluster_size", min_cluster_size, 60);
   ros::param::param("max_cluster_size", max_cluster_size, 10000);
 
-  // filtering
+  // pass through filter
   pcl::search::Search <pcl::PointXYZRGB>::Ptr tree (new pcl::search::KdTree<pcl::PointXYZRGB>);
 
   pcl::PointCloud <pcl::PointXYZRGB>::Ptr cloud_unfiltered (new pcl::PointCloud <pcl::PointXYZRGB>);
@@ -121,9 +121,10 @@ void Segmenter::SegmentPointCloud(const sensor_msgs::PointCloud2& msg) {
   pcl_ros::transformPointCloud("base_link", rotation_transform, cloud_out, colored_cloud_transformed);
   // **********************************
 
-  // publish
+  // publish the color-segmented cloud
   colored_cloud_pub_.publish(colored_cloud_transformed);
 
+  // convert ROS message to pcl PointCloud type for labelling
   pcl::PointCloud <pcl::PointXYZRGB>::Ptr colored_cloud_with_transformation (new pcl::PointCloud <pcl::PointXYZRGB>);
   pcl::fromROSMsg (colored_cloud_transformed, *colored_cloud_with_transformation);
   // label the markers
@@ -133,6 +134,7 @@ void Segmenter::SegmentPointCloud(const sensor_msgs::PointCloud2& msg) {
 }
 
 void Segmenter::SegmentMarker(std::vector <pcl::PointIndices>* object_indices, pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud) {
+  // parameters
   int size_min, size_max;
   ros::param::param("size_min", size_min, 3);
   ros::param::param("size_max", size_max, 10);
@@ -140,7 +142,7 @@ void Segmenter::SegmentMarker(std::vector <pcl::PointIndices>* object_indices, p
   pcl::ExtractIndices<pcl::PointXYZRGB> extract;
   extract.setInputCloud(cloud);
 
-  int num = 0;
+  int num = 0;  // for the id# of visualization markers
 
   for (size_t i = 0; i < object_indices->size(); ++i) {
     // reify indices into a point cloud of the object
@@ -180,6 +182,7 @@ void Segmenter::SegmentMarker(std::vector <pcl::PointIndices>* object_indices, p
     }
 
     /*
+    // Fit every region into a bounding box, and only label markers with specific sizes
     pcl::PointCloud<pcl::PointXYZRGB>::Ptr object_cloud(new pcl::PointCloud<pcl::PointXYZRGB>());
 
     // fill in object_cloud using indices

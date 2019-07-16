@@ -5,7 +5,7 @@ from ezgripper_libs.ezgripper_interface import EZGripper
 from limb_manipulation_msgs.msg import EzgripperAccess
 import time
 
-class EZGripperAccess(object):
+class SakeEzGripper(object):
     """
         Controls for SAKE gripper
     """
@@ -57,7 +57,7 @@ if __name__ == "__main__":
     rospy.sleep(0.5)
 
     gripper_names = rospy.get_param('~grippers')
-    ezgripper_access = EZGripperAccess(gripper_names)
+    ezgripper_access = SakeEzGripper(gripper_names)
     ezgripper_access.start()
 
     rospy.sleep(2)

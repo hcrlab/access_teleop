@@ -5,6 +5,12 @@ import math
 from pprint import pprint
 from limb_pbd_server import PbdServer
 
+# body parts and their corresponding ID#
+BODY_PARTS = {0: "upper right arm", 1: "lower right arm",
+              2: "upper left arm", 3: "lower left arm",
+              4: "upper right leg", 5: "lower right leg"
+              6: "upper left leg", 7: "lower left leg"}
+
 def wait_for_time():
   """Wait for simulated time to begin.
   """
@@ -27,15 +33,19 @@ def print_usage():
   print("\thelp: print program usage")
 
 def main():
+  print("******** LIMB PBD ********")
+  print("Setting up everything, please wait...")
   rospy.init_node('limb_pbd')
   wait_for_time()
 
   server = PbdServer()
   server.setup()
-  print("******** LIMB PBD ********")
+  
   grasp_position_ready = False
 
+  print("The program is ready to use :-)")
   print_usage()
+
   while (True):
     command = raw_input("> ")
 
@@ -43,13 +53,17 @@ def main():
       print_usage()
     elif command[:5] == "parts":
       print("Below are the body parts recognized by the robot:")
-      # 
+      parts = server.get_list()
+      for part in parts:
+        print(BODY_PARTS[part.id] + " ID: " + part.id)
+      print()
     elif command[:7] == "actions":
       print("Below is the list of available actions:")
       # 
     elif command[:5] == "reset":
       print("Resetting...")
       # reset
+      # move Fetch's arm to its initial position, calibrate gripper
       # grasp_position_ready = False
 
     elif command[:2] == "go" and len(command) > 3:
@@ -61,7 +75,7 @@ def main():
       # grasp_position_ready = False
     elif command[:7] == "release":
       print("Releasing the gripper...")
-      # 
+      server.open_sake_gripper()
     elif command[:2] == "do" and len(command) > 3:
       print("Performing " + command[3:])
       # reset
