@@ -70,9 +70,7 @@ class PbdServer():
     # AR tag reader
     self._reader = ArTagReader()
     self._ar_sub = rospy.Subscriber("ar_pose_marker", AlvarMarkers, callback=self._reader.callback)
-    # controls of SAKE gripper
-    self._sake_gripper = SakeEzGripper(rospy.get_param('~grippers'))
-    self._sake_gripper.start()
+    # publisher for controls of SAKE gripper
     self._sake_gripper_pub = rospy.Publisher('/ezgripper_access', EzgripperAccess, queue_size=1)
     
     rospy.sleep(0.5)
@@ -80,7 +78,7 @@ class PbdServer():
 
   def setup(self):
     # robot set up
-    self._torso.set_height(0.4)
+    self._torso.set_height(0.1)
     self._head.pan_tilt(0, math.pi / 3)
 
     # collision detection

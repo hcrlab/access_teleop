@@ -60,26 +60,5 @@ if __name__ == "__main__":
     ezgripper_access = SakeEzGripper(gripper_names)
     ezgripper_access.start()
 
-    rospy.sleep(2)
-
-    print("***** EZgripper *****")
-    ezgripper_publisher = rospy.Publisher('/ezgripper_access', EzgripperAccess, queue_size=1)
     rospy.sleep(0.5)
-
-    # # VERSION 1
-    # print("***** Closing *****")
-    # ezgripper_publisher.publish(EzgripperAccess(type="h_close"))
-    # rospy.sleep(5)
-
-    # print("***** Opening *****")
-    # ezgripper_publisher.publish(EzgripperAccess(type="open"))
-    # rospy.sleep(5)
-
-    # VERSION 2
-    rate = rospy.Rate(10)
-    while not rospy.is_shutdown():
-        ezgripper_publisher.publish(EzgripperAccess(type="h_close"))
-        rate.sleep()
-
-
-    rospy.loginfo("Exiting")
+    rospy.spin()

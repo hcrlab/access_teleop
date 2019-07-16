@@ -8,7 +8,7 @@ from limb_pbd_server import PbdServer
 # body parts and their corresponding ID#
 BODY_PARTS = {0: "upper right arm", 1: "lower right arm",
               2: "upper left arm", 3: "lower left arm",
-              4: "upper right leg", 5: "lower right leg"
+              4: "upper right leg", 5: "lower right leg",
               6: "upper left leg", 7: "lower left leg"}
 
 def wait_for_time():
@@ -30,20 +30,22 @@ def print_usage():
   print("\tdo ABBR: perform the action at once")
   print("\tstop: emergency stop")
   print("\n")
-  print("\thelp: print program usage")
+  print("\thelp: print program usage\n")
 
 def main():
-  print("******** LIMB PBD ********")
-  print("Setting up everything, please wait...")
+  print("\n************ LIMB PBD *************")
+  print("Setting up everything, please wait...\n")
+
   rospy.init_node('limb_pbd')
   wait_for_time()
 
   server = PbdServer()
   server.setup()
+  rospy.sleep(0.5)
   
   grasp_position_ready = False
 
-  print("The program is ready to use :-)")
+  print("\nThe program is ready to use :-)\n")
   print_usage()
 
   while (True):
@@ -54,9 +56,15 @@ def main():
     elif command[:5] == "parts":
       print("Below are the body parts recognized by the robot:")
       parts = server.get_list()
-      for part in parts:
-        print(BODY_PARTS[part.id] + " ID: " + part.id)
-      print()
+      if len(parts):
+        for part in parts:
+          if part.id in BODY_PARTS:
+            print(BODY_PARTS[part.id] + " ID: " + str(part.id))
+          else:
+            print("Unknown part")
+      else:
+        print("No parts found")
+
     elif command[:7] == "actions":
       print("Below is the list of available actions:")
       # 
