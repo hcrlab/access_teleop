@@ -19,6 +19,7 @@ def wait_for_time():
 
 def print_usage():
   print("Commands:")
+  print("\trecord: record the current scene and update body parts known to the robot")
   print("\tparts: show a list of body parts (eg: right lower leg (ID#))")
   print("\tactions: show a list of available actions (eg: leg abduction (ABBREVIATION))")
   print("\n")
@@ -53,6 +54,11 @@ def main():
 
     if command[:4] == "help":
       print_usage()
+
+    elif command[:6] == "record":
+      print("Recording the current scene...")
+      server.update_list()
+
     elif command[:5] == "parts":
       print("Below are the body parts recognized by the robot:")
       parts = server.get_list()
@@ -68,6 +74,7 @@ def main():
     elif command[:7] == "actions":
       print("Below is the list of available actions:")
       # 
+
     elif command[:5] == "reset":
       print("Resetting...")
       # reset
@@ -75,24 +82,42 @@ def main():
       # grasp_position_ready = False
 
     elif command[:2] == "go" and len(command) > 3:
-      print("Moving towards body part #" + command[3:])
-      # check if the given id is valid, if valid: grasp_position_ready = True
+      print("Moving towards body part #" + command[3:] + "...")
+      if command[3:] not in BODY_PARTS:
+        print("Given number is invalid!")
+      elif server.goto_part_with_id(command[3:]):  # given id$ is valid
+        print("Done, ready to grasp")
+        grasp_position_ready = True
+      else:
+        print("Fail to move!")
+
     elif command[:5] == "grasp" and grasp_position_ready:
-      print("Grasping, please don't move!")
+      print("Grasping...")
       # open gripper, then grasp
+      # continue publishing "h_close" during grasp
       # grasp_position_ready = False
+
     elif command[:7] == "release":
       print("Releasing the gripper...")
       server.open_sake_gripper()
+
     elif command[:2] == "do" and len(command) > 3:
-      print("Performing " + command[3:])
+      print("Performing " + command[3:] + "...")
       # reset
       # check if the action fails
+
     elif command[:4] == "stop":
       print("Stopping the robot...")
       # grasp_position_ready = False
+
     else: 
       print("Invalid command :)")
+
+  # shutdown handler
+  def handle_shutdown():
+    server.shutdown()
+  
+  rospy.on_shutdown(handle_shutdown)
 
   rospy.spin()
 

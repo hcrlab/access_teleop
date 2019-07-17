@@ -11,7 +11,7 @@
       args="-d $(find limb_manipulation)/config/limb_manipulation_ar_config.rviz"
       if="$(arg use_rviz)" /> -->
 
-  <!--<include file="$(find fetch_api)/launch/move_group.launch" />-->
+  <include file="$(find fetch_api)/launch/move_group.launch" />
  
   <node pkg="limb_manipulation" type="limb_pbd.py" name="limb_pbd" output="screen" />
 
