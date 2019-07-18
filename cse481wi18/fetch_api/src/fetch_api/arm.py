@@ -215,7 +215,7 @@ class Arm(object):
         goal_builder = MoveItGoalBuilder()
         goal_builder.set_pose_goal(pose_stamped)
         if orientation_constraint is not None:
-            goal_builder.add_path_orientation_contraint(orientation_constraint)
+            goal_builder.orientation_constraint = orientation_constraint
         goal_builder.allowed_planning_time = allowed_planning_time
         goal_builder.num_planning_attempts = num_planning_attempts
         goal_builder.plan_only = plan_only
