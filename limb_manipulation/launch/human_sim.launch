@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<!-- Launch file for action test world model -->
+<!-- Launch file for Gazebo simulation of limb repositioning -->
 <launch>
 
   <env name="GAZEBO_MODEL_PATH" value="$(find limb_manipulation)/models:$(find fetch_gazebo)/models:$(optenv GAZEBO_MODEL_PATH)" />

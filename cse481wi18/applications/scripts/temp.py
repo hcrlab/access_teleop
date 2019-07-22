@@ -14,7 +14,7 @@ def wait_for_time():
 def main():
     rospy.init_node('arm_demo')
     wait_for_time()
-    pose = [1.0, 1.25, 1.0, -2.25, -0.3, 1.0, 0.0]
+    pose = [1.0, 1.25, 1.0, -2.25, 0, 1.0, 0.0]
 
     arm = fetch_api.Arm()
     arm.move_to_joints(fetch_api.ArmJoints.from_list(pose))

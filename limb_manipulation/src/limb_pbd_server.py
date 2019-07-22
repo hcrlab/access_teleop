@@ -17,7 +17,7 @@ from sensor_msgs.msg import PointCloud2
 from ar_track_alvar_msgs.msg import AlvarMarkers
 from limb_manipulation_msgs.msg import EzgripperAccess
 from sake_gripper import SakeEzGripper
-from moveit_commander import MoveGroupCommander
+import moveit_commander
 from moveit_python import PlanningSceneInterface
 from moveit_msgs.msg import OrientationConstraint
 import subprocess
@@ -25,8 +25,10 @@ from robot_controllers_msgs.msg import QueryControllerStatesAction, QueryControl
 from database import Database
 import actionlib
 
+# maximum times to retry if a transform lookup fails
+TRANSFROM_LOOKUP_RETRY = 10
 
-# body parts and their corresponding ID#
+# body parts and their corresponding ID# and actions
 BODY_PARTS = {0: "upper right leg", 1: "lower right leg",
               2: "upper left leg", 3: "lower left leg",
               4: "upper right arm", 5: "lower right arm",
@@ -46,7 +48,8 @@ ABBR = {"right leg adduction": "RLAD", "right leg abduction": "RLAB",
 
 
 def wait_for_time():
-  """Wait for simulated time to begin.
+  """
+    Wait for simulated time to begin.
   """
   while rospy.Time().now().to_sec() == 0:
     pass
@@ -88,29 +91,35 @@ class PbdServer():
     self._head = fetch_api.Head()
     self._base = fetch_api.Base()
     self._fetch_gripper = fetch_api.Gripper()
-    self._controller_client = actionlib.SimpleActionClient('/query_controller_states', QueryControllerStatesAction)
     # status of the arm: relax or freeze
     self._arm_relaxed = False
+    # transformation
+    self._tf_listener = tf.TransformListener()
+    rospy.sleep(0.1)
     # AR tag reader
     self._reader = ArTagReader()
     self._ar_sub = rospy.Subscriber("ar_pose_marker", AlvarMarkers, callback=self._reader.callback)
     # database of actions
     self._db = Database()
     self._db.load()
-    # transformation
-    self._tf_listener = tf.TransformListener()
     # publisher for controls of SAKE gripper
     self._sake_gripper_pub = rospy.Publisher('/ezgripper_access', EzgripperAccess, queue_size=1)
-    # motion planning
+    # motion planning scene
     self._planning_scene = PlanningSceneInterface('base_link')
     self._planning_scene.clear()
+    # moveit: query controller
+    self._controller_client = actionlib.SimpleActionClient('/query_controller_states', QueryControllerStatesAction)
+    # # moveit: move group commander
+    # moveit_commander.roscpp_initialize(sys.argv)
+    # moveit_robot = moveit_commander.RobotCommander()
+    # self._moveit_group = moveit_commander.MoveGroupCommander('arm')
 
     # initial position of robot arm
     self._arm_initial_poses = [
         ("shoulder_pan_joint", 1.296), ("shoulder_lift_joint", 1.480), ("upperarm_roll_joint", -0.904), ("elbow_flex_joint", 2.251), 
         ("forearm_roll_joint", -2.021), ("wrist_flex_joint", 1.113), ("wrist_roll_joint", -0.864)]
     
-    # orientation constraint and moveit args
+    # orientation constraint
     self._gripper_oc = OrientationConstraint()
     self._gripper_oc.header.frame_id = 'base_link'
     self._gripper_oc.link_name = 'wrist_roll_link'
@@ -120,7 +129,7 @@ class PbdServer():
     self._gripper_oc.absolute_y_axis_tolerance = 0.1
     self._gripper_oc.absolute_z_axis_tolerance = 3.14
     self._gripper_oc.weight = 1.0
-
+    # moveit args
     self._kwargs = {
       'allowed_planning_time': 10,
       'execution_timeout': 30,
@@ -162,6 +171,9 @@ class PbdServer():
     self._planning_scene.removeAttachedObject('sake')
     self._planning_scene.clear()
     self._arm.cancel_all_goals()
+    # # moveit: move group commander
+    # self._moveit_group.stop()
+    # moveit_commander.roscpp_shutdown()
 
   def attach_sake_gripper(self):
     """
@@ -281,21 +293,40 @@ class PbdServer():
       goal_pose = PoseStamped()
       goal_pose.pose = pose
       goal_pose.header = tag_pose.header
-      # move to the goal position, hard close SAKE gripper again to ensure the limb is grasped
+      # hard close SAKE gripper again to ensure the limb is grasped
       self.hard_close_sake_gripper()
+      # move to the goal position while avoiding unreasonable trajectories!
       return self._move_arm(goal_pose, final_state=True)
     else:
       rospy.logerr("Invalid action")
       return False
 
   def record_action_with_abbr(self, abbr, id):
-    """ Record the pose relative to tag """
+    """
+      Records the pose named abbr relative to tag, always overwrites the previous entry (if exists).
+      Returns true if succeeds, false otherwise.
+    """
     # get tag pose
     tag_pose = self._get_tag_with_id(id)
     if tag_pose == None:
+      rospy.logerr("Fail to find the tag with ID#: " + str(id))
       return False
-    # get the pose to be recorded
-    (position, quaternion) = self._tf_listener.lookupTransform('base_link', 'wrist_roll_link', rospy.Time(0))
+    # get the pose to be recorded: transformation lookup
+    (position, quaternion) = (None, None)
+    count = 0
+    while True:
+      if (position, quaternion) != (None, None):  # lookup succeeds
+        break
+      elif count >= TRANSFROM_LOOKUP_RETRY:  # exceeds maximum retry times
+        rospy.logerr("Fail to lookup transfrom information between 'base_link' and 'wrist_roll_link'")
+        return False
+      else: # try to lookup transform information
+        try:
+          (position, quaternion) = self._tf_listener.lookupTransform('base_link', 'wrist_roll_link', rospy.Time(0))
+        except (tf.LookupException, tf.ConnectivityException, tf.ExtrapolationException):
+          count += 1
+          continue
+    # get the transformation, record it
     record_pose = Pose()
     record_pose.position.x = position[0]
     record_pose.position.y = position[1]
@@ -315,7 +346,7 @@ class PbdServer():
     return True
 
   def relax_arm(self):
-    """ Relax the robot arm """
+    """ Relax the robot arm, if the program is running on the real robot """
     if not rospy.get_param("use_sim") and not self._arm_relaxed:
       goal = QueryControllerStatesGoal()
       state = ControllerState()
@@ -327,7 +358,7 @@ class PbdServer():
       self._arm_relaxed = True
 
   def freeze_arm(self):
-    """ Freeze the robot arm """
+    """ Freeze the robot arm, if the program is running on the real robot """
     if not rospy.get_param("use_sim") and self._arm_relaxed:
       goal = QueryControllerStatesGoal()
       state = ControllerState()
@@ -342,19 +373,33 @@ class PbdServer():
     """ 
       Moves arm to the specified goal_pose. Returns true if succeed, false otherwise.
     """
-    error = self._arm.move_to_pose(goal_pose, **self._kwargs)
+    error = None
+    if not final_state:
+      # simply go to the gaol_pose
+      error = self._arm.move_to_pose(goal_pose, **self._kwargs)
+      # record the current pose because we still have the "do action" step to do
+      self._current_pose = goal_pose
+    else:
+      # go to goal_pose while avoiding unreasonable trajectories!
+      # # OPTION 1: 
+      # # moveit: move group commander
+      # error = self._arm.straight_move_to_pose(self._moveit_group, goal_pose)
+
+      # OPTION 2: ################################################ TODO: change code below ##########################
+      error = self._arm.move_to_pose(goal_pose, **self._kwargs)
+      
+      # reset current pose to none
+      self._current_pose = None
+    
     if error is not None:
       self._arm.cancel_all_goals()
       rospy.logerr("Fail to move: {}".format(error))
       return False
-    # success, record the current pose if we still have the "do action" step to do
-    if final_state:
-      self._current_pose = None
-    else:
-      self._current_pose = goal_pose
+    # succeed
     return True
 
   def _transform_to_pose(self, matrix):
+    """ Matrix to pose """
     pose = Pose()
     trans_vector = tft.translation_from_matrix(matrix)
     pose.position = Point(trans_vector[0], trans_vector[1], trans_vector[2])
@@ -363,6 +408,7 @@ class PbdServer():
     return pose
 
   def _pose_to_transform(self, pose):
+    """ Pose to matrix """
     q = pose.orientation
     matrix = tft.quaternion_matrix([q.x, q.y, q.z, q.w])
     matrix[0, 3] = pose.position.x
@@ -371,6 +417,7 @@ class PbdServer():
     return matrix
 
   def _get_tag_with_id(self, id):
+    """ Returns the AR tag with the given id, returns None if id not found """
     tag_pose = self._reader.get_tag(id)
     if tag_pose == None:
       rospy.logerr("AR tag lookup error: Invalid ID# " + str(id))
