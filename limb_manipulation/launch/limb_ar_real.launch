@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <launch>
-  <include file="$(find limb_manipulation)/launch/ar.launch">
+<!--   <include file="$(find limb_manipulation)/launch/ar.launch">
     <arg name="cam_image_topic" default="/head_camera/depth_registered/points" />
-  </include>
+  </include> -->
 
   <include file="$(find fetch_api)/launch/move_group.launch" />
 

@@ -17,7 +17,10 @@ def print_usage():
   print("  grasp: if followed by \"go ID#\", move the gripper down to grasp the body part with these options (default: -s)")
   print("    -h: hard close gripper")
   print("    -s: soft close gripper")
+  print("  relax: relax the robot arm")
+  print("  freeze: freeze the robot arm")
   print("  do ABBR: perform the action specified by ABBR")
+  print("    -r: if the robot arm is relaxed, record the pose named ABBR")
   print("  release: if the gripper is closed, open it")
   print("  reset: move Fetch's arm to its initial position, open the gripper if it's closed\n")
   print("  stop: emergency stop\n")
@@ -121,15 +124,18 @@ def main():
         elif command[:2] == "go" and len(command) > 3:
           do_position_ready = False
           print("Moving towards body part #" + command[3:] + "...")
-          id = int(command[3:])  # convert from string to int
-          if id not in BODY_PARTS:
-            print("Given number is invalid!")
-          elif server.goto_part_with_id(id):  # given id# is valid
-            print("Done, ready to grasp")
-            grasp_position_ready = True
-            do_position_id = id
-          else:
-            print("Fail to move!")
+          try:
+            id = int(command[3:])  # convert from string to int
+            if id not in BODY_PARTS:
+              print("Given number is invalid!")
+            elif server.goto_part_with_id(id):  # given id# is valid
+              print("Done, ready to grasp")
+              grasp_position_ready = True
+              do_position_id = id
+            else:
+              print("Fail to move!")
+          except ValueError:
+            print("Please enter an integer!")
 
         elif command[:5] == "grasp" and grasp_position_ready:
           print("Grasping...")
@@ -140,16 +146,36 @@ def main():
           grasp_position_ready = False
           do_position_ready = True
 
-        elif command[:2] == "do" and len(command) > 3 and do_position_ready:
-          if command[3:] in ABBR.values():
+        elif command[:5] == "relax":
+          print("Relaxing arm...")
+          server.relax_arm()
+          print("Arm relaxed, please move the arm to the goal position, and use \"do -r ABBR\" to record the pose")
+
+        elif command[:6] == "freeze":
+          print("Freezing arm...")
+          server.freeze_arm()
+
+        elif command[:2] == "do" and len(command) > 3:
+          if len(command) > 3 and command[3:] in ABBR.values() and do_position_ready:
+            # performing mode
             print("Performing " + command[3:] + "...")
-            if server.do_action_with_abbr(command[3:]):
+            if server.do_action_with_abbr(command[3:], do_position_id):
               print("Action succeed")
             else:
               print("Action failed!")
             do_position_ready = False
+          elif command[:5] == "do -r" and len(command) > 6 and command[6:] in ABBR.values():
+            # recording mode
+            print("Recording " + command[6:] + ", please don't move the robot arm...")
+            if server.record_action_with_abbr(command[6:], do_position_id):
+              do_position_ready = False
+              # freeze the arm
+              print("Action recorded, freezing the robot arm...")
+            else:
+              print("Fail to record this action! Freezing robot arm...")
+            server.freeze_arm()
           else:
-            print("Unknown action: " + command[3:] + " for body part with ID: " + str(do_position_id))
+            print("Unknown action for body part with ID: " + str(do_position_id))
           # always release gripper
           print("Releasing the gripper...")
           server.open_sake_gripper()

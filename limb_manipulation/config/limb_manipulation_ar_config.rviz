@@ -4,7 +4,7 @@ Panels:
     Name: Displays
     Property Tree Widget:
       Expanded:
-        - /PlanningScene1
+        - /PointCloud21
         - /PlanningScene1/Scene Geometry1
         - /PlanningScene1/Scene Robot1
         - /InteractiveMarkers1
@@ -236,7 +236,7 @@ Visualization Manager:
       Size (Pixels): 3
       Size (m): 0.01
       Style: Flat Squares
-      Topic: /mock_point_cloud
+      Topic: /head_camera/depth_registered/points
       Unreliable: false
       Use Fixed Frame: true
       Use rainbow: true

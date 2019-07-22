@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <launch>
- 
+  <param name="use_sim" value="false" />
   <node pkg="limb_manipulation" type="limb_pbd.py" name="limb_pbd" output="screen"/>
 
 </launch>
