@@ -126,7 +126,7 @@ def main():
 
         elif not robot_stopped: 
           # moveit controller is running
-          elif command[:2] == "go" and len(command) > 3:
+          if command[:2] == "go" and len(command) > 3:
             do_position_ready = False
             print("Moving towards body part #" + command[3:] + "...")
             try:

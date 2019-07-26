@@ -23,6 +23,20 @@
       <name>bed</name>
       <pose>4 3 0 0 0 -1.5707</pose>
     </include>
+
+    <!-- Block -->
+    <include>
+      <uri>model://cafe_table</uri>
+      <name>cafe_table</name>
+      <pose>3 1 0 0 0 0</pose>
+    </include>
+
+    <!-- Block -->
+    <include>
+      <uri>model://demo_cube</uri>
+      <name>demo_cube</name>
+      <pose>3 1 3 0 0 0</pose>
+    </include>
     
   </world>
 </sdf>

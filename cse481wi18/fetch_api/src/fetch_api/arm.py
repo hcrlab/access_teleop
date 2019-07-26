@@ -12,7 +12,7 @@ import tf
 from .arm_joints import ArmJoints
 from .moveit_goal_builder import MoveItGoalBuilder
 from moveit_msgs.msg import MoveItErrorCodes, MoveGroupAction
-from moveit_msgs.srv import GetPositionIK, GetPositionIKRequest
+from moveit_msgs.srv import GetPositionIK, GetPositionIKRequest, GetPositionFK, GetPositionFKRequest
 from tf.listener import TransformListener
 
 ARM_GROUP_NAME = 'arm'
@@ -100,6 +100,7 @@ class Arm(object):
             MOVE_GROUP_ACTION_SERVER, MoveGroupAction)
         self._move_group_client.wait_for_server(rospy.Duration(10))
         self._compute_ik = rospy.ServiceProxy('compute_ik', GetPositionIK)
+        self._compute_fk = rospy.ServiceProxy('compute_fk', GetPositionFK)
         self._tf_listener = TransformListener()
 
     def move_to_joints(self, joint_state):
@@ -331,6 +332,27 @@ class Arm(object):
             if name in ArmJoints.names():
                 joints.append((name, position))
         return joints
+
+    def compute_fk(self, joint_state, timeout=rospy.Duration(5)):
+        """Computes forward kinematics for the given joint state.
+
+        Args:
+            joint_state: sensor_msgs/JointState.
+            timeout: rospy.Duration. How long to wait before giving up on the
+                FK solution.
+
+        Returns: A geometry_msgs/PoseStamped of the wrist position, False otherwise.
+        """
+        request = GetPositionFKRequest()
+        request.header.frame_id = 'base_link'
+        request.fk_link_names = ['wrist_roll_link']
+        request.robot_state.joint_state = joint_state
+        response = self._compute_fk(request)
+        error_str = moveit_error_string(response.error_code.val)
+        success = error_str == 'SUCCESS'
+        if not success:
+            return False
+        return response.pose_stamped
 
     def cancel_all_goals(self):
         self._move_group_client.cancel_all_goals()
