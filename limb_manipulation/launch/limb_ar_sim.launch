@@ -7,6 +7,7 @@
     	args="-d $(find limb_manipulation)/config/limb_manipulation_ar_config.rviz"
     	if="$(arg use_rviz)" />
 
+	<!-- The octomap outside Moveit package -->
 	<!-- <include file="$(find octomap_server)/launch/octomap_mapping.launch" /> -->
 
 	<include file="$(find fetch_api)/launch/move_group.launch" />

@@ -313,6 +313,11 @@ class PbdServer():
         return self._move_arm_relative(tag_pose.pose.pose, tag_pose.header, offset[0])
 
     elif rospy.get_param("use_traj"):
+      # move arm to the starting position relative to AR tag
+      if not self.goto_part_with_id(id):
+        rospy.logerr("Fail to move to the starting position for action: " + abbr)
+        return False
+
       # check bag files for the trajectory
       bag_file_path = os.path.join(self._bag_file_dir, abbr.lower() + '.bag')
       bag = rosbag.Bag(bag_file_path)
@@ -351,7 +356,7 @@ class PbdServer():
       return action_result is not None
 
     else:
-      rospy.logerr("Invalid action")
+      rospy.logerr("Invalid action: " + abbr)
       return False
 
   def record_action_with_abbr(self, abbr, id):
