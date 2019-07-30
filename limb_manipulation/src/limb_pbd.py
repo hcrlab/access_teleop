@@ -88,7 +88,10 @@ def main():
         # SAKE gripper has already attached
         if command[:6] == "record":
           print("Recording the current scene...")
-          server.update_list()
+          if server.update_env():
+            print("Scene recorded")
+          else:
+            print("Failed to record the current scene!")
 
         elif command[:5] == "parts":
           parts = server.get_list()

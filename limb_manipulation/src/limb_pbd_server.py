@@ -6,6 +6,7 @@ from pprint import pprint
 import numpy as np
 import fetch_api
 from std_msgs.msg import String, Header, ColorRGBA, Bool
+from std_srvs.srv import Empty
 from image_geometry import PinholeCameraModel
 import tf
 import tf.transformations as tft
@@ -34,19 +35,13 @@ TRANSFROM_LOOKUP_RETRY = 10
 ARM_TRAJ_TRESHOLD = 0.1
 
 # body parts and their corresponding ID# and actions
-BODY_PARTS = {0: "upper right leg", 1: "lower right leg",
-              2: "upper left leg", 3: "lower left leg",
-              4: "upper right arm", 5: "lower right arm",
-              6: "upper left arm", 7: "lower left arm"}
+BODY_PARTS = {0: "right wrist", 1: "lower right leg",
+              2: "left wrist", 3: "lower left leg"}
 
-ACTIONS = {0: [],
+ACTIONS = {0: ["right arm elbow extension", "right arm elbow flexion"],
            1: ["right leg adduction", "right leg abduction", "right leg medial rotation", "right leg lateral rotation"],
-           2: [],
-           3: ["left leg adduction", "left leg abduction", "left leg medial rotation", "left leg lateral rotation"],
-           4: [],
-           5: ["right arm elbow extension", "right arm elbow flexion"],
-           6: [],
-           7: ["left arm elbow extension", "left arm elbow flexion"]
+           2: ["left arm elbow extension", "left arm elbow flexion"],
+           3: ["left leg adduction", "left leg abduction", "left leg medial rotation", "left leg lateral rotation"]
           }
 
 ABBR = {"right leg adduction": "RLAD", "right leg abduction": "RLAB",
@@ -58,7 +53,6 @@ ABBR = {"right leg adduction": "RLAD", "right leg abduction": "RLAB",
        }
 
 # leg medial rotation, leg lateral rotation
-# "right arm elbow extension": "RAEE", "right arm elbow flexion": "RAEF", 
 
 
 # shoulder flexion, shoulder abduction, shoulder adduction, shoulder medial rotation, shoulder lateral rotation, 
@@ -178,16 +172,10 @@ class PbdServer():
     print("\nSetting up everything, please wait...\n")
     # set robot's initial state
     self._torso.set_height(0.1)
-    self._head.pan_tilt(0, math.pi / 3)
-
-    # collision detection
-
+    self._head.pan_tilt(0, 0.7)
 
     # move arm to the initial position (with collision detection)
     self._arm.move_to_joint_goal(self._arm_initial_poses, replan=True)    
-    # arm_initial_poses = [1.296, 1.480, -0.904, 2.251, -2.021, 1.113, -0.864]
-    # self._arm.move_to_joint_goal(fetch_api.ArmJoints.from_list(arm_initial_poses))
-
 
   def shutdown(self):
     """ Handler for robot shutdown """
@@ -243,9 +231,34 @@ class PbdServer():
     # remove SAKE gripper from the planning scene
     self._planning_scene.removeAttachedObject('sake')
 
-  def update_list(self):
-    """ Updates the list of markers. """
+  def update_env(self):
+    """
+      Updates the list of markers, and scan the surroundings to build an octomap.
+      Returns false if the update fails, true otherwise.
+    """
+    # update markers
     self._reader.update()
+
+    # update octomap
+    # clear previous octomap
+    rospy.wait_for_service('clear_octomap')
+    try:
+      clear_octo = rospy.ServiceProxy('clear_octomap', Empty)
+      clear_octo()
+    except rospy.ServiceException, e:
+      rospy.logerr('Fail to move to the starting position for action: {}'.format(e))
+      return False
+    # scan the range: pan -0.75~0.75, tilt 0~0.7
+    for i in range(6):
+      pan = -0.75 + 0.25 * i
+      self._head.pan_tilt(pan, 0)
+      rospy.sleep(2)
+      self._head.pan_tilt(pan, 0.7)
+      rospy.sleep(2)
+      self._head.pan_tilt(pan, 0)
+    # move the head back to initial position
+    self._head.pan_tilt(0, 0.7)
+    return True
   
   def get_list(self):
     """ Returns a list of AR tags recognized by the robot. """
@@ -417,8 +430,8 @@ class PbdServer():
 
   def _move_arm_relative(self, ref_pose, ref_header, offset):
     """ 
-      Calculates the coordinate of the goal by adding the offset to the given reference pose, and moves the arm to the goal.
-      Returns the result of the movement
+      Calculates the coordinate of the goal by adding the offset to the given reference pose, 
+      and moves the arm to the goal. Returns the result of the movement
     """
     # current pose is valid, perform action
     t_mat = self._pose_to_transform(ref_pose)
@@ -450,7 +463,7 @@ class PbdServer():
     """
     error = None
     if not final_state:
-      # simply go to the gaol_pose
+      # simply go to the goal_pose
       error = self._arm.move_to_pose(goal_pose, **self._kwargs)
       # record the current pose because we still have the "do action" step to do
       self._current_pose = goal_pose
@@ -460,7 +473,7 @@ class PbdServer():
       # # moveit: move group commander
       # error = self._arm.straight_move_to_pose(self._moveit_group, goal_pose)
 
-      # OPTION 2: ################################################ TODO: change code below ##########################
+      # OPTION 2: ############################################ TODO: change code below ##########################
       error = self._arm.move_to_pose(goal_pose, **self._kwargs)
       
       # reset current pose to none
