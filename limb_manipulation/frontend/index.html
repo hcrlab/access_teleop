@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+  	<meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+    <script src="https://static.robotwebtools.org/roslibjs/current/roslib.min.js"></script>
+    <script src="https://static.robotwebtools.org/ros3djs/current/ros3d.min.js"></script>
+    <script src="https://static.robotwebtools.org/EventEmitter2/0.4.14/eventemitter2.min.js"></script>
+    <script src="../../access_teleop/frontend/html/common_js/mjpegcanvas.js"></script>
+    <script src="../../access_teleop/frontend/html/bower_components/arrive/src/arrive.js"></script>
+
+    <link rel="stylesheet" href="index.css">
+    <script src="index.js"></script>
+
+	<title>Limb Repositioning Interface</title>
+</head>
+
+<body>
+    <h1 id="title">Limb Repositioning Interface</h1>
+
+    <div id="main_interface">
+        <div id="cameras">
+            <div id="camera_large"></div>
+            <div id="camera_small"></div>
+        </div>
+
+        <div id="general_ctrl">
+            <button id="gripper_btn">Attach Gripper</button>
+            <button id="record_btn">Update Scene</button>
+            <button id="base_btn">Base Control</button>
+            <button id="help_btn">Help</button>
+        </div>
+ 
+        <div id="main_panel">
+            <div id="mode_ctrl">
+                <button id="action_panel_btn">Action<br>Panel</button>
+                <button id="record_panel_btn">Record<br>Panel</button>
+            </div>
+
+            <div id="main_ctrl">
+                <div id="action_step_container">
+                    <div id="go_container_0">
+                        <button id="go_btn_0">Body Part</button>
+                        <div class="dropdown">
+                            <button class="dropbtn">Select a body part</button>
+                            <div class="dropdown_content">
+                                <a href="#">Link 1</a>
+                                <a href="#">Link 2</a>
+                                <a href="#">Link 3</a>
+                            </div>
+                        </div>
+                        <p class="status"></p>
+                    </div>
+                    <div id="grasp_container_0">
+                        <button id="grasp_btn_0">Grasp</button>
+                        <p class="status"></p>
+                    </div>
+                    <div id="action_container">
+                        <button id="action_btn">Action</button>
+                        <p class="status"></p>
+                    </div>
+                    <div>
+                        <button id="run_btn">RUN</button><br>
+                        <button id="estop_btn">STOP</button> 
+                    </div>
+                </div>
+    
+                <div id="record_step_container" style="display:none">
+                    <div id="go_container_1">
+                        <button id="go_btn_1">Body Part</button>
+                        <div class="dropdown">
+                            <button class="dropbtn">Select a body part</button>
+                            <div class="dropdown_content"></div>
+                        </div>
+                        <p class="status"></p>
+                    </div>
+                    <div id="grasp_container_1">
+                        <button id="grasp_btn_1">Grasp</button>
+                        <p class="status"></p>
+                    </div>
+                    <div id="relax_container">
+                        <button id="relax_btn">Relax</button>
+                        <p class="status"></p>
+                    </div>
+                    <div id="record_container">
+                        <button id="recrod_btn">Record</button>
+                        <p class="status"></p>
+                    </div>
+                    <div id="freeze_container">
+                        <button id="Freeze_btn">Freeze</button>
+                        <p class="status"></p>
+                    </div>
+                    <button id="reset_btn">RESET</button>
+                </div>
+            </div>
+            
+        </div>
+
+        <div id="base_ctrl" style="display:none">
+            <div>
+                <button id="forward_btn" on-down="_startForward" on-up="_endBaseCommand">Forward</button>
+            </div>
+            <div>
+                <button on-down="_startLeft" on-up="_endBaseCommand">Left</button>
+                <button on-down="_startBack" on-up="_endBaseCommand">Back</button>
+                <button on-down="_startRight" on-up="_endBaseCommand">Right</button>
+            </div>
+        </div>
+    </div>
+</body>
+
+
+</html>

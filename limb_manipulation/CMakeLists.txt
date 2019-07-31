@@ -20,6 +20,9 @@ find_package(catkin REQUIRED COMPONENTS
   tf
   perception
   limb_manipulation_msgs
+  rviz_camera_stream
+  theora_image_transport
+  image_transport
 )
 
 ## System dependencies are found with CMake's conventions

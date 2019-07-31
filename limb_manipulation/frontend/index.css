@@ -1,0 +1,127 @@
+/* General Layout */
+body * {
+    text-align: center;
+    margin: auto;
+    font-family: system-ui;
+}
+
+h1 {
+    font-size: 2.5em;
+}
+
+h2 {
+    font-size: 1.2em;
+}
+
+button {
+    font-size: 1em;
+    border: none;
+    background-color: #e5e5e5;
+    padding: 0.6em;
+    margin: 0.3em;
+}
+
+/* Container Layout */
+#cameras, #main_panel, #general_ctrl {
+    margin: 2em;
+}
+
+#main_ctrl {
+    margin: 0;
+}
+
+/* Camera Layout */
+#cameras, #camera_small, #main_panel, #action_step_container, #record_step_container {
+    display: grid;
+}
+
+#cameras {
+    grid-template-columns: repeat(2, 1fr);
+}
+
+#camera_small {
+    grid-template-rows: repeat(2, 1fr);
+}
+
+/* Control Layout */
+#general_ctrl button {
+    width: 15%;
+}
+
+#main_panel {
+    grid-template-columns: 0.1fr 1fr;
+}
+
+#main_panel button {
+    width: 90%;
+}
+
+#action_step_container {
+    grid-template-columns: repeat(4, 1fr);
+}
+
+#action_step_container button, #record_step_container button {
+    background-color: #e5f2fd;
+}
+
+#action_step_container > div, #record_step_container > div {
+    padding: 0.1em;
+    margin: 0;
+    width: 100%;
+}
+
+#action_step_container > div *, #record_step_container > div * {
+    width: 90%;
+}
+
+#record_step_container {
+    grid-template-columns: repeat(6, 1fr);
+}
+
+#run_btn, #reset_btn {
+    background-color: #F6B37E !important;
+}
+
+#estop_btn {
+    background-color: #f67e85 !important;
+}
+
+/* Dropdown Button Layout */
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+/* Dropdown Content (Hidden by Default) */
+.dropdown_content {
+    display: none;
+    position: absolute;
+    background-color: #f1f1f1;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+    margin-left: 5% !important;
+}
+
+/* links inside the dropdown */
+.dropdown_content a {
+    color: black;
+    padding: 0.5em 0.6em;
+    text-decoration: none;
+    display: block;
+}
+
+/* change color of dropdown links on hover */
+.dropdown_content a:hover {
+    background-color: #ddd;
+}
+
+/* show the dropdown menu on hover */
+.dropdown:hover .dropdown_content {
+    display: block;
+}
+
+/* change the background color of the dropdown button when the dropdown content is shown */
+.dropdown:hover .dropbtn {
+    background-color: #fce8d8 !important;
+}

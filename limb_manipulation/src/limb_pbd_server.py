@@ -16,7 +16,7 @@ from interactive_markers.interactive_marker_server import InteractiveMarkerServe
 from visualization_msgs.msg import Marker, InteractiveMarker, InteractiveMarkerControl, InteractiveMarkerFeedback
 from sensor_msgs.msg import PointCloud2
 from ar_track_alvar_msgs.msg import AlvarMarkers
-from limb_manipulation_msgs.msg import EzgripperAccess
+from limb_manipulation_msgs.msg import EzgripperAccess, WebAppRequest
 from sake_gripper import SakeEzGripper
 import moveit_commander
 from moveit_python import PlanningSceneInterface
@@ -163,6 +163,16 @@ class PbdServer():
     # bag file directory
     script_path = os.path.abspath(__file__)
     self._bag_file_dir = os.path.split(script_path)[0][:-4] + '/bags'
+
+    # subscriber and publisher for frontend
+    self._web_app_request_sub = rospy.Subscriber("web_app_request", WebAppRequest, callback=self.web_app_request_callback)
+    self._web_app_status_pub = rospy.Publisher('web_app_status', String, queue_size=5)
+    # variables representing the program state
+    self._sake_gripper_attached = False
+    self._robot_stopped = False
+    self._grasp_position_ready = False
+    self._do_position_ready = False
+    self._do_position_id = -1
 
     rospy.sleep(0.5)
 
@@ -427,6 +437,158 @@ class PbdServer():
       self._controller_client.send_goal(goal)
       self._controller_client.wait_for_result()
       self._arm_relaxed = False
+
+  def web_app_request_callback(self, msg):
+    """
+      Parse the request given by the wee application, and call the corresponding functions.
+    """
+    request_type = msg.type
+    request_args = msg.args
+
+    if request_type == "attach":
+      if not self._sake_gripper_attached:
+        print("Attaching SAKE gripper...")
+        self._web_app_status_pub.publish("Attaching SAKE gripper...")
+        self.attach_sake_gripper()
+        self._sake_gripper_attached = True
+      else:
+        print("SAKE gripper has already attached!")
+        self._web_app_status_pub.publish("SAKE gripper has already attached!")
+
+    elif request_type == "remove":
+      if self._sake_gripper_attached:
+        print("Removing SAKE gripper...")
+        self.remove_sake_gripper()
+        self._sake_gripper_attached = False
+      else:
+        print("SAKE gripper has already removed!")
+
+    elif not self._sake_gripper_attached:
+      # need to attach SAKE gripper first
+      print("Please attach SAKE gripper first!")
+      
+    else:
+      # SAKE gripper has already attached
+      if request_type == "record":
+        print("Recording the current scene...")
+        if self.update_env():
+          print("Scene recorded")
+        else:
+          print("Failed to record the current scene!")
+
+      elif request_type == "parts":
+        parts = self.get_list()
+        if len(parts):
+          print("Below are the body parts recognized by the robot:")
+          for part in parts:
+            if part.id in BODY_PARTS:
+              print(BODY_PARTS[part.id] + " ID: " + str(part.id))
+            else:
+              print("Unknown part ID: " + str(part.id))
+        else:
+          print("No part found")
+
+      elif request_type == "actions":
+        parts = self.get_list()
+        if len(parts):
+          print("Below is the list of available actions:")
+          for part in parts:
+            if part.id in ACTIONS:
+              print("Part ID " + str(part.id) + ": " + BODY_PARTS[part.id])
+              for action in ACTIONS[part.id]:
+                print("\t" + action + ", abbreviation: " + ABBR[action])
+            else:
+              print("Part ID " + str(part.id) + " has no action available")
+        else:
+          print("No action found")
+
+      elif request_type == "reset":
+        print("Resetting...")
+        self.reset()
+        self._robot_stopped = False
+        self._grasp_position_ready = False
+        self._do_position_ready = False
+        self._do_position_id = -1
+
+      # elif not self._robot_stopped: 
+      #   # moveit controller is running
+      #   if command[:2] == "go" and len(command) > 3:
+      #     self._do_position_ready = False
+      #     print("Moving towards body part #" + command[3:] + "...")
+      #     try:
+      #       id = int(command[3:])  # convert from string to int
+      #       if id not in BODY_PARTS:
+      #         print("Given number is invalid!")
+      #       elif self.goto_part_with_id(id):  # given id# is valid
+      #         print("Done, ready to grasp")
+      #         self._grasp_position_ready = True
+      #         self._do_position_id = id
+      #       else:
+      #         print("Fail to move!")
+      #     except ValueError:
+      #       print("Please enter an integer!")
+
+      #   elif command[:5] == "grasp" and self._grasp_position_ready:
+      #     print("Grasping...")
+      #     if len(command) > 7 and command[7] == "h":
+      #       self.hard_close_sake_gripper()
+      #     else:
+      #       self.soft_close_sake_gripper()
+      #     self._grasp_position_ready = False
+      #     self._do_position_ready = True
+
+      #   elif command[:5] == "relax":
+      #     print("Relaxing arm...")
+      #     self.relax_arm()
+      #     print("Arm relaxed, please move the arm to the goal position, and use \"do -r ABBR\" to record the pose")
+
+      #   elif command[:6] == "freeze":
+      #     print("Freezing arm...")
+      #     self.freeze_arm()
+
+      #   elif command[:2] == "do" and len(command) > 3:
+      #     if len(command) > 3 and command[3:] in ABBR.values() and self._do_position_ready:
+      #       # performing mode
+      #       print("Performing " + command[3:] + "...")
+      #       if self.do_action_with_abbr(command[3:], self._do_position_id):
+      #         print("Action succeed")
+      #       else:
+      #         print("Action failed!")
+      #       self._do_position_ready = False
+      #     elif command[:5] == "do -r" and len(command) > 6 and command[6:] in ABBR.values():
+      #       # recording mode
+      #       print("Recording " + command[6:] + ", please don't move the robot arm...")
+      #       if self.record_action_with_abbr(command[6:], self._do_position_id):
+      #         self._do_position_ready = False
+      #         # freeze the arm
+      #         print("Action recorded, freezing the robot arm...")
+      #       else:
+      #         print("Fail to record this action! Freezing robot arm...")
+      #       self.freeze_arm()
+      #     else:
+      #       print("Unknown action for body part with ID: " + str(self._do_position_id))
+      #     # always release gripper
+      #     print("Releasing the gripper...")
+      #     self.open_sake_gripper()
+      #     self._do_position_ready = False
+
+      #   elif command[:7] == "release":
+      #     print("Releasing the gripper...")
+      #     self.open_sake_gripper()
+      #     self._do_position_ready = False
+
+      #   elif command[:4] == "stop":
+      #     print("Stopping the robot...")
+      #     self.relax_arm()
+      #     self._robot_stopped = True
+      #     self._grasp_position_ready = False
+      #     self._do_position_ready = False
+      #     self._do_position_id = -1
+      #     print("Robot stopped, please \"reset\" if you want to continue using it")
+
+      else: 
+        print("Invalid command :)")
+
 
   def _move_arm_relative(self, ref_pose, ref_header, offset):
     """ 

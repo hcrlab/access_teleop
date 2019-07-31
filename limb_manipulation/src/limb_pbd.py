@@ -53,6 +53,7 @@ def main():
   print("\nThe program is ready to use :-)\n")
   print_usage()
 
+  # main loop
   while not rospy.is_shutdown():
     command = raw_input("> ")
 
