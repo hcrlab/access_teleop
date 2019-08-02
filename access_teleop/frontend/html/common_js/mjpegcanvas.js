@@ -322,13 +322,14 @@ MJPEGCANVAS.Viewer.prototype.__proto__ = EventEmitter2.prototype;
  */
 MJPEGCANVAS.Viewer.prototype.changeStream = function(topic) {
   this.image = new Image();
+  // *****************************************************************************************************************************
   // ORIGINAL VERSION
   // create the image to hold the stream
-  // var src = 'http://' + this.host + ':' + this.port + '/stream?topic=' + topic;
+  var src = 'http://' + this.host + ':' + this.port + '/stream?topic=' + topic;
   // ********************
   // MODIFIED BY XINYI WANG FOR USING NGROK
   // ********************
-  var src = 'http://' + this.host + '/stream?topic=' + topic;
+  // var src = 'http://' + this.host + '/stream?topic=' + topic;
   // add various options
   src += '&width=' + this.width;
   src += '&height=' + this.height;

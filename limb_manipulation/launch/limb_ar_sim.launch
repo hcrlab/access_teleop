@@ -11,6 +11,9 @@
 	<!-- <include file="$(find octomap_server)/launch/octomap_mapping.launch" /> -->
 
 	<include file="$(find fetch_api)/launch/move_group.launch" />
+
+	<node pkg="web_video_server" type="web_video_server" name="web_video_server_node" />
+	<include file="$(find rosbridge_server)/launch/rosbridge_websocket.launch" />
  
 
 </launch>

@@ -7,12 +7,7 @@ import pickle
 class Database(object):
     def __init__(self):
         # actions and their offsets
-        self._actions = {
-          "RLAD": [],  # right leg adduction
-          "RLAB": [],  # right leg abduction
-          "LLAD": [],  # left leg adduction
-          "LLAB": []   # left leg abduction
-        }
+        self._actions = {}
         # file path of the database
         script_path = os.path.abspath(__file__)
         script_dir = os.path.split(script_path)[0]
@@ -28,7 +23,8 @@ class Database(object):
         ## if name not in self._actions:
         # always overwrite the previous entry
         self._actions[name] = []
-        self._actions[name].append(offset)
+        for o in offset:
+            self._actions[name].append(o)
 
     def delete(self, name):
         if name in self._actions:

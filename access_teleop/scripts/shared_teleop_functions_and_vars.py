@@ -69,6 +69,7 @@ def publish_camera_transforms(tb, pub):
         #         text=transform_data[3])
         # pub.publish(marker)
         # id += 1
+        
 
 def publish_camera_info(publishers):
     for pub in publishers:

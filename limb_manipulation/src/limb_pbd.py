@@ -11,8 +11,10 @@ def print_usage():
   print("  attach: close Fetch's gripper to hold SAKE gripper")
   print("  remove: open Fetch's gripper to remove SAKE gripper\n")
   print("  record: record the current scene and update body parts known to the robot")
+  print("    -o: update octomap as well")
   print("  parts: show a list of body parts (eg: right lower leg (ID#))")
-  print("  actions: show a list of available actions (eg: leg abduction (ABBREVIATION))\n")
+  print("  actions: show a list of available actions (eg: leg abduction (ABBREVIATION))")
+  print("  prev ABBR ID: preview the trajectory of action ABBR with respect to body part ID#\n")
   print("  go ID#: move the gripper to a place 10cm from the body part specified by ID#")
   print("  grasp: if followed by \"go ID#\", move the gripper down to grasp the body part with these options (default: -s)")
   print("    -h: hard close gripper")
@@ -24,7 +26,9 @@ def print_usage():
   print("  release: if the gripper is closed, open it")
   print("  reset: move Fetch's arm to its initial position, open the gripper if it's closed\n")
   print("  stop: emergency stop\n")
-  print("  help: print program usage")
+  print("  help: print program usage\n")
+  print("  db_list: list entries in database")
+  print("  db_delete ABBR: delete the entry in database")
   print("  quit: shutdown the program\n")
 
 def main():
@@ -50,7 +54,6 @@ def main():
   do_position_ready = False
   do_position_id = -1
 
-  print("\nThe program is ready to use :-)\n")
   print_usage()
 
   # main loop
@@ -63,6 +66,15 @@ def main():
     elif command[:4] == "quit":
       print("Exitting...")
       break
+
+    elif command[:7] == "db_list":
+      print("Entries in the database:")
+      list = server.get_db_entry()
+      print(list)
+
+    elif command[:9] == "db_delete" and len(command) > 10:
+      print("Deleting: " + command[10:] + "...")
+      server.delete_db_entry(command[10:])
 
     else:
       if command[:6] == "attach":
@@ -89,7 +101,12 @@ def main():
         # SAKE gripper has already attached
         if command[:6] == "record":
           print("Recording the current scene...")
-          if server.update_env():
+          result = False
+          if len(command) > 7 and command[7] == "o":
+            result = server.update_env()
+          else:
+            result = server.update_env(update_octo=False)
+          if result:
             print("Scene recorded")
           else:
             print("Failed to record the current scene!")
@@ -120,6 +137,16 @@ def main():
           else:
             print("No action found")
 
+        elif command[:4] == "prev" and len(command) > 5:
+          prev_args = command.split()
+          if len(prev_args) == 3:
+            abbr = prev_args[1]
+            id_num = prev_args[2]
+            print("Previewing action " + abbr + " with respect to body part " + id_num + "...")
+            server.preview_action_with_abbr(abbr, int(id_num))
+          else:
+            print("Not enough arguments")
+
         elif command[:5] == "reset":
           print("Resetting...")
           server.reset()
@@ -134,13 +161,13 @@ def main():
             do_position_ready = False
             print("Moving towards body part #" + command[3:] + "...")
             try:
-              id = int(command[3:])  # convert from string to int
-              if id not in BODY_PARTS:
+              id_num = int(command[3:])  # convert from string to int
+              if id_num not in BODY_PARTS:
                 print("Given number is invalid!")
-              elif server.goto_part_with_id(id):  # given id# is valid
+              elif server.goto_part_with_id(id_num):  # given id# is valid
                 print("Done, ready to grasp")
                 grasp_position_ready = True
-                do_position_id = id
+                do_position_id = id_num
               else:
                 print("Fail to move!")
             except ValueError:

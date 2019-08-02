@@ -23,6 +23,8 @@ find_package(catkin REQUIRED COMPONENTS
   rviz_camera_stream
   theora_image_transport
   image_transport
+  access_teleop_msgs
+  fetch_api
 )
 
 ## System dependencies are found with CMake's conventions

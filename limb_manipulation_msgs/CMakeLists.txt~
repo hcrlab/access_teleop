@@ -48,6 +48,7 @@ find_package(catkin REQUIRED COMPONENTS
  add_message_files(
    FILES
    EzgripperAccess.msg
+   WebAppRequest.msg
  )
 
 ## Generate services in the 'srv' folder
@@ -186,7 +187,7 @@ include_directories(
 #############
 
 ## Add gtest based cpp test target and link libraries
-# catkin_add_gtest(${PROJECT_NAME}-test test/test_access_teleop_msgs.cpp)
+# catkin_add_gtest(${PROJECT_NAME}-test test/test_limb_manipulation_msgs.cpp)
 # if(TARGET ${PROJECT_NAME}-test)
 #   target_link_libraries(${PROJECT_NAME}-test ${PROJECT_NAME})
 # endif()

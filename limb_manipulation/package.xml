@@ -67,6 +67,7 @@
   <depend>limb_manipulation_msgs</depend>
 
   <depend>rviz_camera_stream</depend>
+  <depend>access_teleop_msgs</depend>
 
   <!-- The export tag contains other, unspecified, tags -->
   <export>

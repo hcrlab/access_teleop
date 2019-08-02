@@ -19,6 +19,11 @@ find_package(catkin REQUIRED COMPONENTS
   simple_grasping
   tf
   perception
+  limb_manipulation_msgs
+  rviz_camera_stream
+  theora_image_transport
+  image_transport
+  access_teleop
 )
 
 ## System dependencies are found with CMake's conventions

@@ -49,6 +49,7 @@ find_package(catkin REQUIRED COMPONENTS
    FILES
    EzgripperAccess.msg
    WebAppRequest.msg
+   WebAppResponse.msg
  )
 
 ## Generate services in the 'srv' folder

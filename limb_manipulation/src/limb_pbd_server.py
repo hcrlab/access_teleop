@@ -13,10 +13,10 @@ import tf.transformations as tft
 from tf import TransformBroadcaster
 from geometry_msgs.msg import Pose, PoseStamped, Quaternion, Point, Vector3
 from interactive_markers.interactive_marker_server import InteractiveMarkerServer
-from visualization_msgs.msg import Marker, InteractiveMarker, InteractiveMarkerControl, InteractiveMarkerFeedback
+from visualization_msgs.msg import Marker, MarkerArray, InteractiveMarker, InteractiveMarkerControl, InteractiveMarkerFeedback
 from sensor_msgs.msg import PointCloud2
 from ar_track_alvar_msgs.msg import AlvarMarkers
-from limb_manipulation_msgs.msg import EzgripperAccess, WebAppRequest
+from limb_manipulation_msgs.msg import EzgripperAccess, WebAppRequest, WebAppResponse
 from sake_gripper import SakeEzGripper
 import moveit_commander
 from moveit_python import PlanningSceneInterface
@@ -130,6 +130,7 @@ class PbdServer():
 
     # visualization
     self._viz_pub = rospy.Publisher('visualization_marker', Marker, queue_size=5)
+    self._viz_markers_pub = rospy.Publisher('visualization_marker_array', MarkerArray, queue_size=5)
 
     # initial position of robot arm
     self._arm_initial_poses = [
@@ -166,7 +167,7 @@ class PbdServer():
 
     # subscriber and publisher for frontend
     self._web_app_request_sub = rospy.Subscriber("web_app_request", WebAppRequest, callback=self.web_app_request_callback)
-    self._web_app_status_pub = rospy.Publisher('web_app_status', String, queue_size=5)
+    self._web_app_response_pub = rospy.Publisher('web_app_response', WebAppResponse, queue_size=5)
     # variables representing the program state
     self._sake_gripper_attached = False
     self._robot_stopped = False
@@ -176,7 +177,6 @@ class PbdServer():
 
     rospy.sleep(0.5)
 
-
   def setup(self):
     """ Handler for robot set up """
     print("\nSetting up everything, please wait...\n")
@@ -185,7 +185,8 @@ class PbdServer():
     self._head.pan_tilt(0, 0.7)
 
     # move arm to the initial position (with collision detection)
-    self._arm.move_to_joint_goal(self._arm_initial_poses, replan=True)    
+    self._arm.move_to_joint_goal(self._arm_initial_poses, replan=True)
+    print("\nThe program is ready to use :-)\n")
 
   def shutdown(self):
     """ Handler for robot shutdown """
@@ -194,6 +195,7 @@ class PbdServer():
     self._planning_scene.removeAttachedObject('sake')
     self._planning_scene.clear()
     self._arm.cancel_all_goals()
+    self._db.save()
     # # moveit: move group commander
     # self._moveit_group.stop()
     # moveit_commander.roscpp_shutdown()
@@ -241,7 +243,7 @@ class PbdServer():
     # remove SAKE gripper from the planning scene
     self._planning_scene.removeAttachedObject('sake')
 
-  def update_env(self):
+  def update_env(self, update_octo=True):
     """
       Updates the list of markers, and scan the surroundings to build an octomap.
       Returns false if the update fails, true otherwise.
@@ -249,45 +251,59 @@ class PbdServer():
     # update markers
     self._reader.update()
 
-    # update octomap
-    # clear previous octomap
-    rospy.wait_for_service('clear_octomap')
-    try:
-      clear_octo = rospy.ServiceProxy('clear_octomap', Empty)
-      clear_octo()
-    except rospy.ServiceException, e:
-      rospy.logerr('Fail to move to the starting position for action: {}'.format(e))
-      return False
-    # scan the range: pan -0.75~0.75, tilt 0~0.7
-    for i in range(6):
-      pan = -0.75 + 0.25 * i
-      self._head.pan_tilt(pan, 0)
-      rospy.sleep(2)
-      self._head.pan_tilt(pan, 0.7)
-      rospy.sleep(2)
-      self._head.pan_tilt(pan, 0)
-    # move the head back to initial position
-    self._head.pan_tilt(0, 0.7)
+    if update_octo:
+      # update octomap
+      # clear previous octomap
+      rospy.wait_for_service('clear_octomap')
+      try:
+        clear_octo = rospy.ServiceProxy('clear_octomap', Empty)
+        clear_octo()
+      except rospy.ServiceException, e:
+        rospy.logerr('Fail to move to the starting position for action: {}'.format(e))
+        return False
+      # scan the range: pan -0.75~0.75, tilt 0~0.7
+      for i in range(6):
+        pan = -0.75 + 0.25 * i
+        self._head.pan_tilt(pan, 0)
+        rospy.sleep(2)
+        self._head.pan_tilt(pan, 0.7)
+        rospy.sleep(2)
+        self._head.pan_tilt(pan, 0)
+      # move the head back to initial position
+      self._head.pan_tilt(0, 0.7)
     return True
   
   def get_list(self):
     """ Returns a list of AR tags recognized by the robot. """
     return self._reader.get_list()
 
+  def get_db_entry(self):
+    """ Returns entries in the database. """
+    return self._db.list()
+
+  def delete_db_entry(self, name):
+    """ Delete the database entry with the given name """
+    self._db.delete(name)
+    self._db.save()
+
   def calibrate_sake_gripper(self):
     print("Calibrating SAKE gripper, please wait...")
+    self._web_app_response_pub.publish(WebAppResponse(type="", args=[], msg="Calibrating SAKE gripper, please wait..."))
     self._sake_gripper_pub.publish(EzgripperAccess(type="calibrate"))
 
   def hard_close_sake_gripper(self):
     print("Hard closing SAKE gripper, please wait...")
+    self._web_app_response_pub.publish(WebAppResponse(type="", args=[], msg="Hard closing SAKE gripper, please wait..."))
     self._sake_gripper_pub.publish(EzgripperAccess(type="h_close"))
 
   def soft_close_sake_gripper(self):
     print("Soft closing SAKE gripper, please wait...")
+    self._web_app_response_pub.publish(WebAppResponse(type="", args=[], msg="Soft closing SAKE gripper, please wait..."))
     self._sake_gripper_pub.publish(EzgripperAccess(type="s_close"))
   
   def open_sake_gripper(self):
     print("Opening SAKE gripper, please wait...")
+    self._web_app_response_pub.publish(WebAppResponse(type="", args=[], msg="Opening SAKE gripper, please wait..."))
     self._sake_gripper_pub.publish(EzgripperAccess(type="open"))
 
   def reset(self):
@@ -296,36 +312,122 @@ class PbdServer():
     self._arm.move_to_joint_goal(self._arm_initial_poses, replan=True)    
     self.calibrate_sake_gripper()
 
-  def goto_part_with_id(self, id):
+  def goto_part_with_id(self, id_num):
     """ 
-      Moves arm above a body part specified by id.
+      Moves arm above a body part specified by id_num.
       Returns true if succeed, false otherwise.
     """
     self.freeze_arm()
-    raw_pose = self._get_tag_with_id(id)
+    raw_pose = self._get_tag_with_id(id_num)
     if raw_pose is not None:
       # found marker, move towards it
-      goal_pose = PoseStamped()
-      goal_pose.pose.position.x = raw_pose.pose.pose.position.x - 0.18  # let SAKE gripper align with the marker
-      goal_pose.pose.position.y = raw_pose.pose.pose.position.y
-      goal_pose.pose.position.z = raw_pose.pose.pose.position.z + 0.05  # 10cm above
-      goal_pose.pose.orientation = raw_pose.pose.pose.orientation  # use the orientation of AR tag
-      goal_pose.header.frame_id = "base_link"
-
-      return self._move_arm(goal_pose, final_state=False)
+      return self._move_arm(self._get_goto_pose(raw_pose), final_state=False)
     else:
-      # marker with id is not found
+      # marker with id_num is not found
       return False
-    
-  def do_action_with_abbr(self, abbr, id):
+
+  def preview_action_with_abbr(self, abbr, id_num):
+    """
+      Publish visualization markers to preview waypoints on the trajectory with given abbr.
+    """
+    # check the database for the action
+    waypoints = self._db.get(abbr)
+    if waypoints == None or len(waypoints) == 0:
+      waypoints = self._save_traj_to_db(abbr, id_num)
+
+    if waypoints:
+      raw_pose = self._get_tag_with_id(id_num)
+      if raw_pose is not None:
+        prev_pose = self._get_goto_pose(raw_pose)
+        # markers
+        marker_arr = []
+        ########################################################TODO: color gradient###################
+        # pip install colour
+
+        # from colour import Color
+        # red = Color("red")
+        # colors = list(red.range_to(Color("green"),10))
+
+
+        
+        # visualize the starting point
+        marker = Marker(
+                    type=Marker.SPHERE,
+                    id=0,
+                    pose=prev_pose.pose,
+                    scale=Vector3(0.05, 0.05, 0.05),
+                    header=prev_pose.header,
+                    color=ColorRGBA(0.0, 0.0, 1.0, 0.8))
+        marker_arr.append(marker)
+        # visualize the trajectory
+        for i in range(len(waypoints) - 1):
+          # calculate offset between the previous point on the trajectory and the current point
+          r_pos = waypoints[i].pose  # previous point
+          r_mat = self._pose_to_transform(r_pos)
+          w_mat = self._pose_to_transform(waypoints[i + 1].pose)
+          offset = np.dot(np.linalg.inv(r_mat), w_mat)
+          prev_pose = self._move_arm_relative(prev_pose.pose, prev_pose.header, offset, preview_only=True)
+          # visualize the current waypoint
+          marker = Marker(
+                      type=Marker.SPHERE,
+                      id=i+1,
+                      pose=prev_pose.pose,
+                      scale=Vector3(0.03, 0.03, 0.03),
+                      header=prev_pose.header,
+                      color=ColorRGBA(0.0, 0.0, 1.0, 0.8))
+          marker_arr.append(marker)
+          
+        self._viz_markers_pub.publish(MarkerArray(markers=marker_arr))
+
+  def do_action_with_abbr(self, abbr, id_num):
     """ 
+      Moves arm to perform the action specified by abbr, save the trajectory to database if neccessary.
+      Returns true if succeed, false otherwise.
+    """
+    self.freeze_arm()
+
+    # get AR tag information
+    tag_pose = self._get_tag_with_id(id_num)
+    if tag_pose == None or self._current_pose == None:
+      return False
+
+    # check the database for the action
+    waypoints = self._db.get(abbr)
+    if waypoints == None or len(waypoints) == 0:
+      waypoints = self._save_traj_to_db(abbr, id_num)
+
+    # move arm to the starting position relative to AR tag
+    if not waypoints or not self.goto_part_with_id(id_num):
+      rospy.logerr("Fail to move to the starting position for action: " + abbr)
+      return False
+
+    # follow the trajectory
+    prev_pose = self._current_pose
+    prev_waypoint = waypoints[0].pose
+    action_result = None
+    for i in range(len(waypoints) - 1):
+      # calculate offset between the previous point on the trajectory and the current point
+      r_pos = prev_waypoint
+      r_mat = self._pose_to_transform(r_pos)
+      w_mat = self._pose_to_transform(waypoints[i + 1].pose)
+      offset = np.dot(np.linalg.inv(r_mat), w_mat)
+      # move arm relative to the previous pose, skip the current waypoint if the current action fails
+      action_result = self._move_arm_relative(prev_pose.pose, prev_pose.header, offset)
+      if action_result is not None:
+        prev_pose = action_result
+        prev_waypoint = waypoints[i + 1].pose
+    return action_result is not None
+
+  def do_action_with_abbr_pose_or_traj(self, abbr, id_num):
+    """ 
+      (OLD VERSION)
       Moves arm to perform the action specified by abbr.
       Returns true if succeed, false otherwise.
     """
     self.freeze_arm()
 
     # move arm with respect to the AR tag
-    tag_pose = self._get_tag_with_id(id)
+    tag_pose = self._get_tag_with_id(id_num)
     if tag_pose == None:
       return False
 
@@ -337,7 +439,7 @@ class PbdServer():
 
     elif rospy.get_param("use_traj"):
       # move arm to the starting position relative to AR tag
-      if not self.goto_part_with_id(id):
+      if not self.goto_part_with_id(id_num):
         rospy.logerr("Fail to move to the starting position for action: " + abbr)
         return False
 
@@ -364,16 +466,15 @@ class PbdServer():
 
       # follow the trajectory
       prev_pose = self._current_pose
+      action_result = None
       for i in range(len(waypoints) - 1):
         # calculate offset between the previous point on the trajectory and the current point
         r_pos = waypoints[i].pose  # previous point
         r_mat = self._pose_to_transform(r_pos)
         w_mat = self._pose_to_transform(waypoints[i + 1].pose)
         offset = np.dot(np.linalg.inv(r_mat), w_mat)
-
-        total_offset = offset
         # move arm relative to the previous pose, skip the current waypoint if the current action fails
-        action_result = self._move_arm_relative(prev_pose.pose, prev_pose.header, total_offset)
+        action_result = self._move_arm_relative(prev_pose.pose, prev_pose.header, offset)
         if action_result is not None:
           prev_pose = action_result
       return action_result is not None
@@ -382,13 +483,13 @@ class PbdServer():
       rospy.logerr("Invalid action: " + abbr)
       return False
 
-  def record_action_with_abbr(self, abbr, id):
+  def record_action_with_abbr(self, abbr, id_num):
     """
       Records the pose named abbr relative to tag, always overwrites the previous entry (if exists).
       Returns true if succeeds, false otherwise.
     """
     # get tag pose
-    tag_pose = self._get_tag_with_id(id)
+    tag_pose = self._get_tag_with_id(id_num)
     if tag_pose == None:
       return False
     # get the pose to be recorded: transformation lookup
@@ -447,60 +548,44 @@ class PbdServer():
 
     if request_type == "attach":
       if not self._sake_gripper_attached:
-        print("Attaching SAKE gripper...")
-        self._web_app_status_pub.publish("Attaching SAKE gripper...")
+        self._web_app_response_pub.publish(WebAppResponse(type=request_type, args=[], msg="Attaching SAKE gripper..."))
         self.attach_sake_gripper()
         self._sake_gripper_attached = True
+        self._web_app_response_pub.publish(WebAppResponse(type=request_type, args=[], msg="SAKE gripper attached"))
       else:
-        print("SAKE gripper has already attached!")
-        self._web_app_status_pub.publish("SAKE gripper has already attached!")
+        self._web_app_response_pub.publish(WebAppResponse(type=request_type, args=[], msg="SAKE gripper has already attached!"))
 
     elif request_type == "remove":
       if self._sake_gripper_attached:
-        print("Removing SAKE gripper...")
+        self._web_app_response_pub.publish(WebAppResponse(type=request_type, args=[], msg="Removing SAKE gripper..."))
         self.remove_sake_gripper()
         self._sake_gripper_attached = False
       else:
-        print("SAKE gripper has already removed!")
+        self._web_app_response_pub.publish(WebAppResponse(type=request_type, args=[], msg="SAKE gripper has already removed!"))
 
     elif not self._sake_gripper_attached:
       # need to attach SAKE gripper first
-      print("Please attach SAKE gripper first!")
-      
+      self._web_app_response_pub.publish(WebAppResponse(type="", args=[], msg="Please attach SAKE gripper first!"))
+
     else:
       # SAKE gripper has already attached
       if request_type == "record":
-        print("Recording the current scene...")
-        if self.update_env():
-          print("Scene recorded")
+        self._web_app_response_pub.publish(WebAppResponse(type=request_type, args=[], msg="Recording the current scene..."))
+        if self.update_env(update_octo=bool(request_args[0])): ###########################################################change to true
+          # get the list of body parts and actions
+          parts = self.get_list()
+          parts_info = []
+          actions_info = []
+          if len(parts):
+            for part in parts:
+              if part.id in BODY_PARTS and part.id in ACTIONS:
+                parts_info.append(str(part.id) + ":" + BODY_PARTS[part.id])
+                for action in ACTIONS[part.id]:
+                  actions_info.append(str(part.id) + ":" + action + ":" + ABBR[action])
+          self._web_app_response_pub.publish(WebAppResponse(type="parts", args=parts_info, msg=""))
+          self._web_app_response_pub.publish(WebAppResponse(type="actions", args=actions_info, msg="Scene recorded"))
         else:
-          print("Failed to record the current scene!")
-
-      elif request_type == "parts":
-        parts = self.get_list()
-        if len(parts):
-          print("Below are the body parts recognized by the robot:")
-          for part in parts:
-            if part.id in BODY_PARTS:
-              print(BODY_PARTS[part.id] + " ID: " + str(part.id))
-            else:
-              print("Unknown part ID: " + str(part.id))
-        else:
-          print("No part found")
-
-      elif request_type == "actions":
-        parts = self.get_list()
-        if len(parts):
-          print("Below is the list of available actions:")
-          for part in parts:
-            if part.id in ACTIONS:
-              print("Part ID " + str(part.id) + ": " + BODY_PARTS[part.id])
-              for action in ACTIONS[part.id]:
-                print("\t" + action + ", abbreviation: " + ABBR[action])
-            else:
-              print("Part ID " + str(part.id) + " has no action available")
-        else:
-          print("No action found")
+          self._web_app_response_pub.publish(WebAppResponse(type=request_type, args=[], msg="Failed to record the current scene!"))
 
       elif request_type == "reset":
         print("Resetting...")
@@ -516,13 +601,13 @@ class PbdServer():
       #     self._do_position_ready = False
       #     print("Moving towards body part #" + command[3:] + "...")
       #     try:
-      #       id = int(command[3:])  # convert from string to int
-      #       if id not in BODY_PARTS:
+      #       id_num = int(command[3:])  # convert from string to int
+      #       if id_num not in BODY_PARTS:
       #         print("Given number is invalid!")
-      #       elif self.goto_part_with_id(id):  # given id# is valid
+      #       elif self.goto_part_with_id(id_num):  # given id# is valid
       #         print("Done, ready to grasp")
       #         self._grasp_position_ready = True
-      #         self._do_position_id = id
+      #         self._do_position_id = id_num
       #       else:
       #         print("Fail to move!")
       #     except ValueError:
@@ -590,7 +675,7 @@ class PbdServer():
         print("Invalid command :)")
 
 
-  def _move_arm_relative(self, ref_pose, ref_header, offset):
+  def _move_arm_relative(self, ref_pose, ref_header, offset, preview_only=False):
     """ 
       Calculates the coordinate of the goal by adding the offset to the given reference pose, 
       and moves the arm to the goal. Returns the result of the movement
@@ -603,8 +688,6 @@ class PbdServer():
     goal_pose = PoseStamped()
     goal_pose.pose = pose
     goal_pose.header = ref_header
-    # hard close SAKE gripper again to ensure the limb is grasped
-    self.hard_close_sake_gripper()
     # visualize goal pose
     marker = Marker(
                 type=Marker.SPHERE,
@@ -615,9 +698,12 @@ class PbdServer():
                 color=ColorRGBA(0.0, 1.0, 0.0, 0.8))
     self._viz_pub.publish(marker)
     # move to the goal position while avoiding unreasonable trajectories!
-    if self._move_arm(goal_pose, final_state=True):
+    if preview_only:
       return goal_pose
-    return None
+    else:
+      # hard close SAKE gripper again to ensure the limb is grasped
+      self.hard_close_sake_gripper()
+      return goal_pose if self._move_arm(goal_pose, final_state=True) else None
 
   def _move_arm(self, goal_pose, final_state=False):
     """ 
@@ -666,11 +752,11 @@ class PbdServer():
     matrix[2, 3] = pose.position.z
     return matrix
 
-  def _get_tag_with_id(self, id):
+  def _get_tag_with_id(self, id_num):
     """ Returns the AR tag with the given id, returns None if id not found """
-    tag_pose = self._reader.get_tag(id)
+    tag_pose = self._reader.get_tag(id_num)
     if tag_pose == None:
-      rospy.logerr("AR tag lookup error: Invalid ID# " + str(id))
+      rospy.logerr("AR tag lookup error: Invalid ID# " + str(id_num))
       return None
     return tag_pose
 
@@ -693,3 +779,46 @@ class PbdServer():
         except (tf.LookupException, tf.ConnectivityException, tf.ExtrapolationException):
           count += 1
           continue
+
+  def _get_goto_pose(self, ar_pose):
+    """
+      Calculates the grasp pose of gripper given the AR tag pose, returns the gripper pose.
+    """
+    goal_pose = PoseStamped()
+    goal_pose.pose.position.x = ar_pose.pose.pose.position.x - 0.18  # let SAKE gripper align with the marker
+    goal_pose.pose.position.y = ar_pose.pose.pose.position.y
+    goal_pose.pose.position.z = ar_pose.pose.pose.position.z + 0.05  # 10cm above
+    goal_pose.pose.orientation = ar_pose.pose.pose.orientation  # use the orientation of AR tag
+    goal_pose.header.frame_id = "base_link"
+    return goal_pose
+
+  def _save_traj_to_db(self, abbr, id_num):
+    """
+      Checks bag file for the trajectory with given abbr, calculate waypoints and save those points to the database.
+      Returns the calculated waypoints if succeed, none otherwise.
+    """
+    # check bag files for the trajectory
+    bag_file_path = os.path.join(self._bag_file_dir, abbr.lower() + '.bag')
+    bag = rosbag.Bag(bag_file_path)
+    waypoints = []
+    prev_msg = []
+    # get the trajectory from bag file
+    for topic, msg, t in bag.read_messages(topics=['/joint_states']):
+      joint_state = list(msg.position[6:13])
+      if len(joint_state) != 0 and (len(prev_msg) == 0 or np.abs(np.sum(np.subtract(joint_state, prev_msg))) > ARM_TRAJ_TRESHOLD):
+        prev_msg = joint_state
+        # use forward kinematics to find the wrist position
+        point = self._arm.compute_fk(msg)
+        if point:
+          # add the result position
+          waypoints.append(point[0])
+    bag.close()
+
+    if len(waypoints) < 2:  # empty trajectory
+      rospy.logerr("Empty trajectory for action: " + abbr)
+      return None
+    
+    # add the result position to database
+    self._db.add(abbr, waypoints)
+    self._db.save()
+    return waypoints

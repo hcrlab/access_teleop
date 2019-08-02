@@ -16,9 +16,20 @@ h2 {
 button {
     font-size: 1em;
     border: none;
-    background-color: #e5e5e5;
+    background-color: #cecece;
     padding: 0.6em;
     margin: 0.3em;
+    cursor: pointer;
+}
+
+button:active {
+    filter: invert(100%);;
+}
+
+/* Status bar */
+#status_bar {
+    margin-top: 1em;
+    color: #309cf0;
 }
 
 /* Container Layout */
@@ -56,22 +67,46 @@ button {
     width: 90%;
 }
 
+#record_btn_confirm {
+    background-color: #FDF8E0;
+    border-style: solid;
+    border-width: 0.2em;
+    border-color: #ffa98c;
+    padding: 2em;
+    position: fixed;
+    top: 10%;
+    margin: auto;
+    width: 20%;
+    left: 40%;
+}
+
+#record_btn_confirm p {
+    margin-bottom: 1em;
+}
+
+#record_btn_confirm button {
+    background-color: #757575;
+    margin: 1em;
+    padding-left: 1em;
+    padding-right: 1em;
+    color: white;
+}
+
 #action_step_container {
     grid-template-columns: repeat(4, 1fr);
 }
 
 #action_step_container button, #record_step_container button {
-    background-color: #e5f2fd;
+    background-color: #b6daf9;
 }
 
-#action_step_container > div, #record_step_container > div {
-    padding: 0.1em;
+#action_step_container div, #record_step_container div {
     margin: 0;
     width: 100%;
 }
 
-#action_step_container > div *, #record_step_container > div * {
-    width: 90%;
+.dropdown button {
+    width: 100%;
 }
 
 #record_step_container {
@@ -96,8 +131,8 @@ button {
 .dropdown_content {
     display: none;
     position: absolute;
-    background-color: #f1f1f1;
-    min-width: 160px;
+    background-color: #e5e5e5;
+    max-width: 300px;
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
     z-index: 1;
     margin-left: 5% !important;
@@ -123,5 +158,5 @@ button {
 
 /* change the background color of the dropdown button when the dropdown content is shown */
 .dropdown:hover .dropbtn {
-    background-color: #fce8d8 !important;
+    background-color: #f8cca9 !important;
 }
