@@ -1,0 +1,2783 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<COLLADA xmlns="http://www.collada.org/2008/03/COLLADASchema" version="1.5.0">
+	<asset>
+		<contributor>
+			<authoring_tool>URDF Collada Writer</authoring_tool>
+		</contributor>
+		<created>2019-08-05T15:51:10.000000</created>
+		<modified>2019-08-05T15:51:10.000000</modified>
+		<unit/>
+		<up_axis>Z_UP</up_axis>
+	</asset>
+	<library_visual_scenes id="vscenes">
+		<visual_scene id="vscene" name="URDF Visual Scene">
+			<node id="visual0" name="new_ragdoll" sid="visual0">
+				<node id="vkmodel0_node7" name="new_ragdoll__lower_body" sid="node7">
+					<translate>0 0 10</translate>
+					<rotate>0 -1 0 89.95437383553926</rotate>
+					<instance_geometry url="#gkmodel0_new_ragdoll__lower_body_geom0">
+						<bind_material>
+							<technique_common>
+								<instance_material symbol="mat0" target="#gkmodel0_new_ragdoll__lower_body_geom0_mat"/>
+							</technique_common>
+						</bind_material>
+					</instance_geometry>
+					<node id="vkmodel0_node18" name="new_ragdoll__v_l_thigh" sid="node18">
+						<translate>-9.999996829318347 -0 -0.007963267107332639</translate>
+						<rotate>-0 1 -0 89.95437383553926</rotate>
+						<translate>-0.0864 0 10.00006</translate>
+						<rotate>0 -1 0 89.95437383553926</rotate>
+						<rotate sid="node_new_ragdoll__l_thigh_joint_axis0">0 0 1 0</rotate>
+						<translate>0 0 0</translate>
+						<rotate>1 0 0 0</rotate>
+						<instance_geometry url="#gkmodel0_new_ragdoll__v_l_thigh_geom0">
+							<bind_material>
+								<technique_common>
+									<instance_material symbol="mat0" target="#gkmodel0_new_ragdoll__v_l_thigh_geom0_mat"/>
+								</technique_common>
+							</bind_material>
+						</instance_geometry>
+						<node id="vkmodel0_node5" name="new_ragdoll__l_thigh" sid="node5">
+							<translate>-0 -0 -0</translate>
+							<rotate>1 0 0 0</rotate>
+							<translate>0 0 0</translate>
+							<rotate>1 0 0 0</rotate>
+							<rotate sid="node_new_ragdoll__L_thigh_joint2_axis0">0 0 0 0</rotate>
+							<translate>-0.21336 0 0</translate>
+							<rotate>1 0 0 0</rotate>
+							<instance_geometry url="#gkmodel0_new_ragdoll__l_thigh_geom0">
+								<bind_material>
+									<technique_common>
+										<instance_material symbol="mat0" target="#gkmodel0_new_ragdoll__l_thigh_geom0_mat"/>
+									</technique_common>
+								</bind_material>
+							</instance_geometry>
+							<node id="vkmodel0_node4" name="new_ragdoll__l_shin" sid="node4">
+								<translate>0.21336 -0 -0</translate>
+								<rotate>1 0 0 0</rotate>
+								<translate>-0.42672 0 0</translate>
+								<rotate>1 0 0 0</rotate>
+								<rotate sid="node_new_ragdoll__l_shin_joint_axis0">0 0 1 0</rotate>
+								<translate>-0.20701 0 0</translate>
+								<rotate>1 0 0 0</rotate>
+								<instance_geometry url="#gkmodel0_new_ragdoll__l_shin_geom0">
+									<bind_material>
+										<technique_common>
+											<instance_material symbol="mat0" target="#gkmodel0_new_ragdoll__l_shin_geom0_mat"/>
+										</technique_common>
+									</bind_material>
+								</instance_geometry>
+								<node id="vkmodel0_node2" name="new_ragdoll__l_foot" sid="node2">
+									<translate>0.20701 -0 -0</translate>
+									<rotate>1 0 0 0</rotate>
+									<translate>-0.41402 0 0</translate>
+									<rotate>1 0 0 0</rotate>
+									<rotate sid="node_new_ragdoll__l_foot_joint_axis0">0 0 1 0</rotate>
+									<translate>0 0 0</translate>
+									<rotate>1 0 0 0</rotate>
+									<instance_geometry url="#gkmodel0_new_ragdoll__l_foot_geom0">
+										<bind_material>
+											<technique_common>
+												<instance_material symbol="mat0" target="#gkmodel0_new_ragdoll__l_foot_geom0_mat"/>
+											</technique_common>
+										</bind_material>
+									</instance_geometry>
+								</node>
+							</node>
+						</node>
+					</node>
+					<node id="vkmodel0_node8" name="new_ragdoll__middle_body" sid="node8">
+						<translate>-9.999996829318347 -0 -0.007963267107332639</translate>
+						<rotate>-0 1 -0 89.95437383553926</rotate>
+						<translate>4e-05 0 10.05207</translate>
+						<rotate>0 -1 0 89.95437383553926</rotate>
+						<rotate sid="node_new_ragdoll__middle_body_joint_axis0">0 0 1 0</rotate>
+						<translate>0 0 0</translate>
+						<rotate>1 0 0 0</rotate>
+						<instance_geometry url="#gkmodel0_new_ragdoll__middle_body_geom0">
+							<bind_material>
+								<technique_common>
+									<instance_material symbol="mat0" target="#gkmodel0_new_ragdoll__middle_body_geom0_mat"/>
+								</technique_common>
+							</bind_material>
+						</instance_geometry>
+						<node id="vkmodel0_node16" name="new_ragdoll__upper_body" sid="node16">
+							<translate>-0 -0 -0</translate>
+							<rotate>1 0 0 0</rotate>
+							<translate>0.15112 0 0</translate>
+							<rotate>1 0 0 0</rotate>
+							<rotate sid="node_new_ragdoll__upper_body_joint_axis0">0 0 1 0</rotate>
+							<translate>0 0 0</translate>
+							<rotate>1 0 0 0</rotate>
+							<instance_geometry url="#gkmodel0_new_ragdoll__upper_body_geom0">
+								<bind_material>
+									<technique_common>
+										<instance_material symbol="mat0" target="#gkmodel0_new_ragdoll__upper_body_geom0_mat"/>
+									</technique_common>
+								</bind_material>
+							</instance_geometry>
+							<node id="vkmodel0_node17" name="new_ragdoll__v_l_arm" sid="node17">
+								<translate>-0 -0 -0</translate>
+								<rotate>1 0 0 0</rotate>
+								<translate>0.254 0 0.17526</translate>
+								<rotate>1 0 0 179.9087476710785</rotate>
+								<rotate sid="node_new_ragdoll__l_arm_joint_axis0">0 0.00159 -0.99999 0</rotate>
+								<translate>0 0 0</translate>
+								<rotate>1 0 0 0</rotate>
+								<instance_geometry url="#gkmodel0_new_ragdoll__v_l_arm_geom0">
+									<bind_material>
+										<technique_common>
+											<instance_material symbol="mat0" target="#gkmodel0_new_ragdoll__v_l_arm_geom0_mat"/>
+										</technique_common>
+									</bind_material>
+								</instance_geometry>
+								<node id="vkmodel0_node1" name="new_ragdoll__l_arm" sid="node1">
+									<translate>-0 -0 -0</translate>
+									<rotate>1 0 0 0</rotate>
+									<translate>0 0 0</translate>
+									<rotate>-1 0 0 179.9087476710785</rotate>
+									<rotate sid="node_new_ragdoll__L_arm_joint2_axis0">0 0 0 0</rotate>
+									<translate>-0.14097 0 0.04953</translate>
+									<rotate>1 0 0 179.9087476710785</rotate>
+									<instance_geometry url="#gkmodel0_new_ragdoll__l_arm_geom0">
+										<bind_material>
+											<technique_common>
+												<instance_material symbol="mat0" target="#gkmodel0_new_ragdoll__l_arm_geom0_mat"/>
+											</technique_common>
+										</bind_material>
+									</instance_geometry>
+									<node id="vkmodel0_node6" name="new_ragdoll__l_wrist" sid="node6">
+										<translate>0.14097 -7.888409895359259e-05 0.04952993718246503</translate>
+										<rotate>-1 -0 -0 179.9087476710785</rotate>
+										<translate>-0.28199 0 0.04953</translate>
+										<rotate>1 0 0 0</rotate>
+										<rotate sid="node_new_ragdoll__l_wrist_joint_axis0">0 0 1 0</rotate>
+										<translate>-0.1257 0 0</translate>
+										<rotate>1 0 0 179.9087476710785</rotate>
+										<instance_geometry url="#gkmodel0_new_ragdoll__l_wrist_geom0">
+											<bind_material>
+												<technique_common>
+													<instance_material symbol="mat0" target="#gkmodel0_new_ragdoll__l_wrist_geom0_mat"/>
+												</technique_common>
+											</bind_material>
+										</instance_geometry>
+										<node id="vkmodel0_node3" name="new_ragdoll__l_hand" sid="node3">
+											<translate>0.1257 -0 -0</translate>
+											<rotate>-1 -0 -0 179.9087476710785</rotate>
+											<translate>-0.2515 0 0</translate>
+											<rotate>1 0 0 0</rotate>
+											<rotate sid="node_new_ragdoll__l_hand_joint_axis0">0 0 0 0</rotate>
+											<translate>0 0 0</translate>
+											<rotate>1 0 0 179.9087476710785</rotate>
+											<instance_geometry url="#gkmodel0_new_ragdoll__l_hand_geom0">
+												<bind_material>
+													<technique_common>
+														<instance_material symbol="mat0" target="#gkmodel0_new_ragdoll__l_hand_geom0_mat"/>
+													</technique_common>
+												</bind_material>
+											</instance_geometry>
+										</node>
+									</node>
+								</node>
+							</node>
+							<node id="vkmodel0_node9" name="new_ragdoll__neck" sid="node9">
+								<translate>-0 -0 -0</translate>
+								<rotate>1 0 0 0</rotate>
+								<translate>0.35052 0 0</translate>
+								<rotate>1 0 0 0</rotate>
+								<rotate sid="node_new_ragdoll__neck_joint_axis0">0 0 0 0</rotate>
+								<translate>0 0 0</translate>
+								<rotate>1 0 0 0</rotate>
+								<instance_geometry url="#gkmodel0_new_ragdoll__neck_geom0">
+									<bind_material>
+										<technique_common>
+											<instance_material symbol="mat0" target="#gkmodel0_new_ragdoll__neck_geom0_mat"/>
+										</technique_common>
+									</bind_material>
+								</instance_geometry>
+								<node id="vkmodel0_node0" name="new_ragdoll__head" sid="node0">
+									<translate>-0 -0 -0</translate>
+									<rotate>1 0 0 0</rotate>
+									<translate>0.07238 0 0</translate>
+									<rotate>1 0 0 0</rotate>
+									<rotate sid="node_new_ragdoll__head_joint_axis0">0 0 0 0</rotate>
+									<translate>0 0 0</translate>
+									<rotate>1.325740094511289e-06 0.9999999999982424 1.325740094511289e-06 179.9088997103726</rotate>
+									<instance_geometry url="#gkmodel0_new_ragdoll__head_geom0">
+										<bind_material>
+											<technique_common>
+												<instance_material symbol="mat0" target="#gkmodel0_new_ragdoll__head_geom0_mat"/>
+											</technique_common>
+										</bind_material>
+									</instance_geometry>
+								</node>
+							</node>
+							<node id="vkmodel0_node19" name="new_ragdoll__v_r_arm" sid="node19">
+								<translate>-0 -0 -0</translate>
+								<rotate>1 0 0 0</rotate>
+								<translate>0.254 0 -0.17526</translate>
+								<rotate>1 0 0 0</rotate>
+								<rotate sid="node_new_ragdoll__r_arm_joint_axis0">0 0 1 0</rotate>
+								<translate>0 0 0</translate>
+								<rotate>1 0 0 0</rotate>
+								<instance_geometry url="#gkmodel0_new_ragdoll__v_r_arm_geom0">
+									<bind_material>
+										<technique_common>
+											<instance_material symbol="mat0" target="#gkmodel0_new_ragdoll__v_r_arm_geom0_mat"/>
+										</technique_common>
+									</bind_material>
+								</instance_geometry>
+								<node id="vkmodel0_node10" name="new_ragdoll__r_arm" sid="node10">
+									<translate>-0 -0 -0</translate>
+									<rotate>1 0 0 0</rotate>
+									<translate>0 0 0</translate>
+									<rotate>1 0 0 0</rotate>
+									<rotate sid="node_new_ragdoll__R_arm_joint2_axis0">0 0 0 0</rotate>
+									<translate>-0.141 0 -0.04953</translate>
+									<rotate>1 0 0 0</rotate>
+									<instance_geometry url="#gkmodel0_new_ragdoll__r_arm_geom0">
+										<bind_material>
+											<technique_common>
+												<instance_material symbol="mat0" target="#gkmodel0_new_ragdoll__r_arm_geom0_mat"/>
+											</technique_common>
+										</bind_material>
+									</instance_geometry>
+									<node id="vkmodel0_node15" name="new_ragdoll__r_wrist" sid="node15">
+										<translate>0.141 -0 0.04953</translate>
+										<rotate>1 0 0 0</rotate>
+										<translate>-0.28199 0 -0.04953</translate>
+										<rotate>1 0 0 0</rotate>
+										<rotate sid="node_new_ragdoll__r_wrist_joint_axis0">0 0 0 0</rotate>
+										<translate>-0.1257 0 0</translate>
+										<rotate>1 0 0 0</rotate>
+										<instance_geometry url="#gkmodel0_new_ragdoll__r_wrist_geom0">
+											<bind_material>
+												<technique_common>
+													<instance_material symbol="mat0" target="#gkmodel0_new_ragdoll__r_wrist_geom0_mat"/>
+												</technique_common>
+											</bind_material>
+										</instance_geometry>
+										<node id="vkmodel0_node12" name="new_ragdoll__r_hand" sid="node12">
+											<translate>0.1257 -0 -0</translate>
+											<rotate>1 0 0 0</rotate>
+											<translate>-0.2515 0 0</translate>
+											<rotate>1 0 0 0</rotate>
+											<rotate sid="node_new_ragdoll__r_hand_joint_axis0">0 0 0 0</rotate>
+											<translate>0 0 0</translate>
+											<rotate>1 0 0 0</rotate>
+											<instance_geometry url="#gkmodel0_new_ragdoll__r_hand_geom0">
+												<bind_material>
+													<technique_common>
+														<instance_material symbol="mat0" target="#gkmodel0_new_ragdoll__r_hand_geom0_mat"/>
+													</technique_common>
+												</bind_material>
+											</instance_geometry>
+										</node>
+									</node>
+								</node>
+							</node>
+						</node>
+					</node>
+					<node id="vkmodel0_node20" name="new_ragdoll__v_r_thigh" sid="node20">
+						<translate>-9.999996829318347 -0 -0.007963267107332639</translate>
+						<rotate>-0 1 -0 89.95437383553926</rotate>
+						<translate>0.0864 0 9.999930000000001</translate>
+						<rotate>0 -1 0 89.95437383553926</rotate>
+						<rotate sid="node_new_ragdoll__r_thigh_joint_axis0">0 0 1 0</rotate>
+						<translate>0 0 0</translate>
+						<rotate>1 0 0 0</rotate>
+						<instance_geometry url="#gkmodel0_new_ragdoll__v_r_thigh_geom0">
+							<bind_material>
+								<technique_common>
+									<instance_material symbol="mat0" target="#gkmodel0_new_ragdoll__v_r_thigh_geom0_mat"/>
+								</technique_common>
+							</bind_material>
+						</instance_geometry>
+						<node id="vkmodel0_node14" name="new_ragdoll__r_thigh" sid="node14">
+							<translate>-0 -0 -0</translate>
+							<rotate>1 0 0 0</rotate>
+							<translate>0 0 0</translate>
+							<rotate>1 0 0 0</rotate>
+							<rotate sid="node_new_ragdoll__R_thigh_joint2_axis0">0 0 0 0</rotate>
+							<translate>-0.21336 0 0</translate>
+							<rotate>1 0 0 0</rotate>
+							<instance_geometry url="#gkmodel0_new_ragdoll__r_thigh_geom0">
+								<bind_material>
+									<technique_common>
+										<instance_material symbol="mat0" target="#gkmodel0_new_ragdoll__r_thigh_geom0_mat"/>
+									</technique_common>
+								</bind_material>
+							</instance_geometry>
+							<node id="vkmodel0_node13" name="new_ragdoll__r_shin" sid="node13">
+								<translate>0.21336 -0 -0</translate>
+								<rotate>1 0 0 0</rotate>
+								<translate>-0.42672 0 0</translate>
+								<rotate>1 0 0 0</rotate>
+								<rotate sid="node_new_ragdoll__r_shin_joint_axis0">0 0 1 0</rotate>
+								<translate>-0.20701 0 0</translate>
+								<rotate>1 0 0 0</rotate>
+								<instance_geometry url="#gkmodel0_new_ragdoll__r_shin_geom0">
+									<bind_material>
+										<technique_common>
+											<instance_material symbol="mat0" target="#gkmodel0_new_ragdoll__r_shin_geom0_mat"/>
+										</technique_common>
+									</bind_material>
+								</instance_geometry>
+								<node id="vkmodel0_node11" name="new_ragdoll__r_foot" sid="node11">
+									<translate>0.20701 -0 -0</translate>
+									<rotate>1 0 0 0</rotate>
+									<translate>-0.41402 0 0</translate>
+									<rotate>1 0 0 0</rotate>
+									<rotate sid="node_new_ragdoll__r_foot_joint_axis0">0 0 1 0</rotate>
+									<translate>0 0 0</translate>
+									<rotate>1 0 0 0</rotate>
+									<instance_geometry url="#gkmodel0_new_ragdoll__r_foot_geom0">
+										<bind_material>
+											<technique_common>
+												<instance_material symbol="mat0" target="#gkmodel0_new_ragdoll__r_foot_geom0_mat"/>
+											</technique_common>
+										</bind_material>
+									</instance_geometry>
+								</node>
+							</node>
+						</node>
+					</node>
+				</node>
+			</node>
+		</visual_scene>
+	</library_visual_scenes>
+	<library_geometries id="geometries">
+		<geometry id="gkmodel0_new_ragdoll__lower_body_geom0" name="package://ezgripper_driver/meshes/visual/SAKE_Finger.stl OR ezgripper_driver/meshes/visual/SAKE_Palm_Quad.stl OR ezgripper_driver/meshes/visual/SAKE_Palm_Dual.stl OR ezgripper_driver/meshes/collision/SAKE_Finger.stl OR ezgripper_driver/meshes/collision/SAKE_Palm_Quad.stl OR ezgripper_driver/meshes/collision/SAKE_Palm_Dual.stl OR ezgripper_driver/meshes/ezgripper_gen2/SAKE_Palm_Dual_Gen2.stl OR ezgripper_driver/meshes/ezgripper_gen2/SAKE_Finger_L1_Gen2.stl OR ezgripper_driver/meshes/ezgripper_gen2/SAKE_Finger_L2_Gen2.stl OR access_teleop/models/ragdoll/model.dae OR access_teleop/files/model_files/collada/cube_l.dae OR access_teleop/files/model_files/collada/ball.dae OR access_teleop/files/model_files/collada/cube_s.dae OR access_teleop/files/model_files/collada/cube_m.dae OR access_teleop/files/model_files/collada/stone.dae OR access_teleop/files/model_files/collada/cube_xl.dae OR access_teleop/files/model_files/collada/shelf.dae OR collada_web_server/fetch_description/meshes/gripper_link.dae OR collada_web_server/fetch_description/meshes/elbow_flex_link.dae OR collada_web_server/fetch_description/meshes/torso_fixed_link.dae OR collada_web_server/fetch_description/meshes/base_link.dae OR collada_web_server/fetch_description/meshes/shoulder_lift_link.dae OR collada_web_server/fetch_description/meshes/wrist_roll_link.dae OR collada_web_server/fetch_description/meshes/head_tilt_link.dae OR collada_web_server/fetch_description/meshes/upperarm_roll_link.dae OR collada_web_server/fetch_description/meshes/forearm_roll_link.dae OR collada_web_server/fetch_description/meshes/shoulder_pan_link.dae OR collada_web_server/fetch_description/meshes/torso_lift_link.dae OR collada_web_server/fetch_description/meshes/wrist_flex_link.dae OR collada_web_server/fetch_description/meshes/head_pan_link.dae"/>
+		<geometry id="gkmodel0_new_ragdoll__v_l_thigh_geom0">
+			<mesh>
+				<source id="gkmodel0_new_ragdoll__v_l_thigh_geom0_positions">
+					<float_array id="gkmodel0_new_ragdoll__v_l_thigh_geom0_positions-array" count="1" digits="2490374">0 0 0</float_array>
+					<technique_common>
+						<accessor count="1" source="#gkmodel0_new_ragdoll__v_l_thigh_geom0_positions-array" stride="3">
+							<param name="X" type="float"/>
+							<param name="Y" type="float"/>
+							<param name="Z" type="float"/>
+						</accessor>
+					</technique_common>
+				</source>
+				<vertices id="vertices">
+					<input semantic="POSITION" source="#gkmodel0_new_ragdoll__v_l_thigh_geom0_positions"/>
+				</vertices>
+				<triangles count="12" material="mat0">
+					<input offset="0" semantic="VERTEX" source="#gkmodel0_new_ragdoll__v_l_thigh_geom0/vertices" set="0"/>
+					<p>0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0</p>
+				</triangles>
+			</mesh>
+		</geometry>
+		<geometry id="gkmodel0_new_ragdoll__l_thigh_geom0" name="package://ezgripper_driver/meshes/visual/SAKE_Finger.stl OR ezgripper_driver/meshes/visual/SAKE_Palm_Quad.stl OR ezgripper_driver/meshes/visual/SAKE_Palm_Dual.stl OR ezgripper_driver/meshes/collision/SAKE_Finger.stl OR ezgripper_driver/meshes/collision/SAKE_Palm_Quad.stl OR ezgripper_driver/meshes/collision/SAKE_Palm_Dual.stl OR ezgripper_driver/meshes/ezgripper_gen2/SAKE_Palm_Dual_Gen2.stl OR ezgripper_driver/meshes/ezgripper_gen2/SAKE_Finger_L1_Gen2.stl OR ezgripper_driver/meshes/ezgripper_gen2/SAKE_Finger_L2_Gen2.stl OR access_teleop/models/ragdoll/model.dae OR access_teleop/files/model_files/collada/cube_l.dae OR access_teleop/files/model_files/collada/ball.dae OR access_teleop/files/model_files/collada/cube_s.dae OR access_teleop/files/model_files/collada/cube_m.dae OR access_teleop/files/model_files/collada/stone.dae OR access_teleop/files/model_files/collada/cube_xl.dae OR access_teleop/files/model_files/collada/shelf.dae OR collada_web_server/fetch_description/meshes/gripper_link.dae OR collada_web_server/fetch_description/meshes/elbow_flex_link.dae OR collada_web_server/fetch_description/meshes/torso_fixed_link.dae OR collada_web_server/fetch_description/meshes/base_link.dae OR collada_web_server/fetch_description/meshes/shoulder_lift_link.dae OR collada_web_server/fetch_description/meshes/wrist_roll_link.dae OR collada_web_server/fetch_description/meshes/head_tilt_link.dae OR collada_web_server/fetch_description/meshes/upperarm_roll_link.dae OR collada_web_server/fetch_description/meshes/forearm_roll_link.dae OR collada_web_server/fetch_description/meshes/shoulder_pan_link.dae OR collada_web_server/fetch_description/meshes/torso_lift_link.dae OR collada_web_server/fetch_description/meshes/wrist_flex_link.dae OR collada_web_server/fetch_description/meshes/head_pan_link.dae"/>
+		<geometry id="gkmodel0_new_ragdoll__l_shin_geom0" name="package://ezgripper_driver/meshes/visual/SAKE_Finger.stl OR ezgripper_driver/meshes/visual/SAKE_Palm_Quad.stl OR ezgripper_driver/meshes/visual/SAKE_Palm_Dual.stl OR ezgripper_driver/meshes/collision/SAKE_Finger.stl OR ezgripper_driver/meshes/collision/SAKE_Palm_Quad.stl OR ezgripper_driver/meshes/collision/SAKE_Palm_Dual.stl OR ezgripper_driver/meshes/ezgripper_gen2/SAKE_Palm_Dual_Gen2.stl OR ezgripper_driver/meshes/ezgripper_gen2/SAKE_Finger_L1_Gen2.stl OR ezgripper_driver/meshes/ezgripper_gen2/SAKE_Finger_L2_Gen2.stl OR access_teleop/models/ragdoll/model.dae OR access_teleop/files/model_files/collada/cube_l.dae OR access_teleop/files/model_files/collada/ball.dae OR access_teleop/files/model_files/collada/cube_s.dae OR access_teleop/files/model_files/collada/cube_m.dae OR access_teleop/files/model_files/collada/stone.dae OR access_teleop/files/model_files/collada/cube_xl.dae OR access_teleop/files/model_files/collada/shelf.dae OR collada_web_server/fetch_description/meshes/gripper_link.dae OR collada_web_server/fetch_description/meshes/elbow_flex_link.dae OR collada_web_server/fetch_description/meshes/torso_fixed_link.dae OR collada_web_server/fetch_description/meshes/base_link.dae OR collada_web_server/fetch_description/meshes/shoulder_lift_link.dae OR collada_web_server/fetch_description/meshes/wrist_roll_link.dae OR collada_web_server/fetch_description/meshes/head_tilt_link.dae OR collada_web_server/fetch_description/meshes/upperarm_roll_link.dae OR collada_web_server/fetch_description/meshes/forearm_roll_link.dae OR collada_web_server/fetch_description/meshes/shoulder_pan_link.dae OR collada_web_server/fetch_description/meshes/torso_lift_link.dae OR collada_web_server/fetch_description/meshes/wrist_flex_link.dae OR collada_web_server/fetch_description/meshes/head_pan_link.dae"/>
+		<geometry id="gkmodel0_new_ragdoll__l_foot_geom0" name="package://ezgripper_driver/meshes/visual/SAKE_Finger.stl OR ezgripper_driver/meshes/visual/SAKE_Palm_Quad.stl OR ezgripper_driver/meshes/visual/SAKE_Palm_Dual.stl OR ezgripper_driver/meshes/collision/SAKE_Finger.stl OR ezgripper_driver/meshes/collision/SAKE_Palm_Quad.stl OR ezgripper_driver/meshes/collision/SAKE_Palm_Dual.stl OR ezgripper_driver/meshes/ezgripper_gen2/SAKE_Palm_Dual_Gen2.stl OR ezgripper_driver/meshes/ezgripper_gen2/SAKE_Finger_L1_Gen2.stl OR ezgripper_driver/meshes/ezgripper_gen2/SAKE_Finger_L2_Gen2.stl OR access_teleop/models/ragdoll/model.dae OR access_teleop/files/model_files/collada/cube_l.dae OR access_teleop/files/model_files/collada/ball.dae OR access_teleop/files/model_files/collada/cube_s.dae OR access_teleop/files/model_files/collada/cube_m.dae OR access_teleop/files/model_files/collada/stone.dae OR access_teleop/files/model_files/collada/cube_xl.dae OR access_teleop/files/model_files/collada/shelf.dae OR collada_web_server/fetch_description/meshes/gripper_link.dae OR collada_web_server/fetch_description/meshes/elbow_flex_link.dae OR collada_web_server/fetch_description/meshes/torso_fixed_link.dae OR collada_web_server/fetch_description/meshes/base_link.dae OR collada_web_server/fetch_description/meshes/shoulder_lift_link.dae OR collada_web_server/fetch_description/meshes/wrist_roll_link.dae OR collada_web_server/fetch_description/meshes/head_tilt_link.dae OR collada_web_server/fetch_description/meshes/upperarm_roll_link.dae OR collada_web_server/fetch_description/meshes/forearm_roll_link.dae OR collada_web_server/fetch_description/meshes/shoulder_pan_link.dae OR collada_web_server/fetch_description/meshes/torso_lift_link.dae OR collada_web_server/fetch_description/meshes/wrist_flex_link.dae OR collada_web_server/fetch_description/meshes/head_pan_link.dae"/>
+		<geometry id="gkmodel0_new_ragdoll__middle_body_geom0" name="package://ezgripper_driver/meshes/visual/SAKE_Finger.stl OR ezgripper_driver/meshes/visual/SAKE_Palm_Quad.stl OR ezgripper_driver/meshes/visual/SAKE_Palm_Dual.stl OR ezgripper_driver/meshes/collision/SAKE_Finger.stl OR ezgripper_driver/meshes/collision/SAKE_Palm_Quad.stl OR ezgripper_driver/meshes/collision/SAKE_Palm_Dual.stl OR ezgripper_driver/meshes/ezgripper_gen2/SAKE_Palm_Dual_Gen2.stl OR ezgripper_driver/meshes/ezgripper_gen2/SAKE_Finger_L1_Gen2.stl OR ezgripper_driver/meshes/ezgripper_gen2/SAKE_Finger_L2_Gen2.stl OR access_teleop/models/ragdoll/model.dae OR access_teleop/files/model_files/collada/cube_l.dae OR access_teleop/files/model_files/collada/ball.dae OR access_teleop/files/model_files/collada/cube_s.dae OR access_teleop/files/model_files/collada/cube_m.dae OR access_teleop/files/model_files/collada/stone.dae OR access_teleop/files/model_files/collada/cube_xl.dae OR access_teleop/files/model_files/collada/shelf.dae OR collada_web_server/fetch_description/meshes/gripper_link.dae OR collada_web_server/fetch_description/meshes/elbow_flex_link.dae OR collada_web_server/fetch_description/meshes/torso_fixed_link.dae OR collada_web_server/fetch_description/meshes/base_link.dae OR collada_web_server/fetch_description/meshes/shoulder_lift_link.dae OR collada_web_server/fetch_description/meshes/wrist_roll_link.dae OR collada_web_server/fetch_description/meshes/head_tilt_link.dae OR collada_web_server/fetch_description/meshes/upperarm_roll_link.dae OR collada_web_server/fetch_description/meshes/forearm_roll_link.dae OR collada_web_server/fetch_description/meshes/shoulder_pan_link.dae OR collada_web_server/fetch_description/meshes/torso_lift_link.dae OR collada_web_server/fetch_description/meshes/wrist_flex_link.dae OR collada_web_server/fetch_description/meshes/head_pan_link.dae"/>
+		<geometry id="gkmodel0_new_ragdoll__upper_body_geom0" name="package://ezgripper_driver/meshes/visual/SAKE_Finger.stl OR ezgripper_driver/meshes/visual/SAKE_Palm_Quad.stl OR ezgripper_driver/meshes/visual/SAKE_Palm_Dual.stl OR ezgripper_driver/meshes/collision/SAKE_Finger.stl OR ezgripper_driver/meshes/collision/SAKE_Palm_Quad.stl OR ezgripper_driver/meshes/collision/SAKE_Palm_Dual.stl OR ezgripper_driver/meshes/ezgripper_gen2/SAKE_Palm_Dual_Gen2.stl OR ezgripper_driver/meshes/ezgripper_gen2/SAKE_Finger_L1_Gen2.stl OR ezgripper_driver/meshes/ezgripper_gen2/SAKE_Finger_L2_Gen2.stl OR access_teleop/models/ragdoll/model.dae OR access_teleop/files/model_files/collada/cube_l.dae OR access_teleop/files/model_files/collada/ball.dae OR access_teleop/files/model_files/collada/cube_s.dae OR access_teleop/files/model_files/collada/cube_m.dae OR access_teleop/files/model_files/collada/stone.dae OR access_teleop/files/model_files/collada/cube_xl.dae OR access_teleop/files/model_files/collada/shelf.dae OR collada_web_server/fetch_description/meshes/gripper_link.dae OR collada_web_server/fetch_description/meshes/elbow_flex_link.dae OR collada_web_server/fetch_description/meshes/torso_fixed_link.dae OR collada_web_server/fetch_description/meshes/base_link.dae OR collada_web_server/fetch_description/meshes/shoulder_lift_link.dae OR collada_web_server/fetch_description/meshes/wrist_roll_link.dae OR collada_web_server/fetch_description/meshes/head_tilt_link.dae OR collada_web_server/fetch_description/meshes/upperarm_roll_link.dae OR collada_web_server/fetch_description/meshes/forearm_roll_link.dae OR collada_web_server/fetch_description/meshes/shoulder_pan_link.dae OR collada_web_server/fetch_description/meshes/torso_lift_link.dae OR collada_web_server/fetch_description/meshes/wrist_flex_link.dae OR collada_web_server/fetch_description/meshes/head_pan_link.dae"/>
+		<geometry id="gkmodel0_new_ragdoll__v_l_arm_geom0">
+			<mesh>
+				<source id="gkmodel0_new_ragdoll__v_l_arm_geom0_positions">
+					<float_array id="gkmodel0_new_ragdoll__v_l_arm_geom0_positions-array" count="1" digits="2490374">0 0 0</float_array>
+					<technique_common>
+						<accessor count="1" source="#gkmodel0_new_ragdoll__v_l_arm_geom0_positions-array" stride="3">
+							<param name="X" type="float"/>
+							<param name="Y" type="float"/>
+							<param name="Z" type="float"/>
+						</accessor>
+					</technique_common>
+				</source>
+				<vertices id="vertices">
+					<input semantic="POSITION" source="#gkmodel0_new_ragdoll__v_l_arm_geom0_positions"/>
+				</vertices>
+				<triangles count="12" material="mat0">
+					<input offset="0" semantic="VERTEX" source="#gkmodel0_new_ragdoll__v_l_arm_geom0/vertices" set="0"/>
+					<p>0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0</p>
+				</triangles>
+			</mesh>
+		</geometry>
+		<geometry id="gkmodel0_new_ragdoll__l_arm_geom0" name="package://ezgripper_driver/meshes/visual/SAKE_Finger.stl OR ezgripper_driver/meshes/visual/SAKE_Palm_Quad.stl OR ezgripper_driver/meshes/visual/SAKE_Palm_Dual.stl OR ezgripper_driver/meshes/collision/SAKE_Finger.stl OR ezgripper_driver/meshes/collision/SAKE_Palm_Quad.stl OR ezgripper_driver/meshes/collision/SAKE_Palm_Dual.stl OR ezgripper_driver/meshes/ezgripper_gen2/SAKE_Palm_Dual_Gen2.stl OR ezgripper_driver/meshes/ezgripper_gen2/SAKE_Finger_L1_Gen2.stl OR ezgripper_driver/meshes/ezgripper_gen2/SAKE_Finger_L2_Gen2.stl OR access_teleop/models/ragdoll/model.dae OR access_teleop/files/model_files/collada/cube_l.dae OR access_teleop/files/model_files/collada/ball.dae OR access_teleop/files/model_files/collada/cube_s.dae OR access_teleop/files/model_files/collada/cube_m.dae OR access_teleop/files/model_files/collada/stone.dae OR access_teleop/files/model_files/collada/cube_xl.dae OR access_teleop/files/model_files/collada/shelf.dae OR collada_web_server/fetch_description/meshes/gripper_link.dae OR collada_web_server/fetch_description/meshes/elbow_flex_link.dae OR collada_web_server/fetch_description/meshes/torso_fixed_link.dae OR collada_web_server/fetch_description/meshes/base_link.dae OR collada_web_server/fetch_description/meshes/shoulder_lift_link.dae OR collada_web_server/fetch_description/meshes/wrist_roll_link.dae OR collada_web_server/fetch_description/meshes/head_tilt_link.dae OR collada_web_server/fetch_description/meshes/upperarm_roll_link.dae OR collada_web_server/fetch_description/meshes/forearm_roll_link.dae OR collada_web_server/fetch_description/meshes/shoulder_pan_link.dae OR collada_web_server/fetch_description/meshes/torso_lift_link.dae OR collada_web_server/fetch_description/meshes/wrist_flex_link.dae OR collada_web_server/fetch_description/meshes/head_pan_link.dae"/>
+		<geometry id="gkmodel0_new_ragdoll__l_wrist_geom0" name="package://ezgripper_driver/meshes/visual/SAKE_Finger.stl OR ezgripper_driver/meshes/visual/SAKE_Palm_Quad.stl OR ezgripper_driver/meshes/visual/SAKE_Palm_Dual.stl OR ezgripper_driver/meshes/collision/SAKE_Finger.stl OR ezgripper_driver/meshes/collision/SAKE_Palm_Quad.stl OR ezgripper_driver/meshes/collision/SAKE_Palm_Dual.stl OR ezgripper_driver/meshes/ezgripper_gen2/SAKE_Palm_Dual_Gen2.stl OR ezgripper_driver/meshes/ezgripper_gen2/SAKE_Finger_L1_Gen2.stl OR ezgripper_driver/meshes/ezgripper_gen2/SAKE_Finger_L2_Gen2.stl OR access_teleop/models/ragdoll/model.dae OR access_teleop/files/model_files/collada/cube_l.dae OR access_teleop/files/model_files/collada/ball.dae OR access_teleop/files/model_files/collada/cube_s.dae OR access_teleop/files/model_files/collada/cube_m.dae OR access_teleop/files/model_files/collada/stone.dae OR access_teleop/files/model_files/collada/cube_xl.dae OR access_teleop/files/model_files/collada/shelf.dae OR collada_web_server/fetch_description/meshes/gripper_link.dae OR collada_web_server/fetch_description/meshes/elbow_flex_link.dae OR collada_web_server/fetch_description/meshes/torso_fixed_link.dae OR collada_web_server/fetch_description/meshes/base_link.dae OR collada_web_server/fetch_description/meshes/shoulder_lift_link.dae OR collada_web_server/fetch_description/meshes/wrist_roll_link.dae OR collada_web_server/fetch_description/meshes/head_tilt_link.dae OR collada_web_server/fetch_description/meshes/upperarm_roll_link.dae OR collada_web_server/fetch_description/meshes/forearm_roll_link.dae OR collada_web_server/fetch_description/meshes/shoulder_pan_link.dae OR collada_web_server/fetch_description/meshes/torso_lift_link.dae OR collada_web_server/fetch_description/meshes/wrist_flex_link.dae OR collada_web_server/fetch_description/meshes/head_pan_link.dae"/>
+		<geometry id="gkmodel0_new_ragdoll__l_hand_geom0" name="package://ezgripper_driver/meshes/visual/SAKE_Finger.stl OR ezgripper_driver/meshes/visual/SAKE_Palm_Quad.stl OR ezgripper_driver/meshes/visual/SAKE_Palm_Dual.stl OR ezgripper_driver/meshes/collision/SAKE_Finger.stl OR ezgripper_driver/meshes/collision/SAKE_Palm_Quad.stl OR ezgripper_driver/meshes/collision/SAKE_Palm_Dual.stl OR ezgripper_driver/meshes/ezgripper_gen2/SAKE_Palm_Dual_Gen2.stl OR ezgripper_driver/meshes/ezgripper_gen2/SAKE_Finger_L1_Gen2.stl OR ezgripper_driver/meshes/ezgripper_gen2/SAKE_Finger_L2_Gen2.stl OR access_teleop/models/ragdoll/model.dae OR access_teleop/files/model_files/collada/cube_l.dae OR access_teleop/files/model_files/collada/ball.dae OR access_teleop/files/model_files/collada/cube_s.dae OR access_teleop/files/model_files/collada/cube_m.dae OR access_teleop/files/model_files/collada/stone.dae OR access_teleop/files/model_files/collada/cube_xl.dae OR access_teleop/files/model_files/collada/shelf.dae OR collada_web_server/fetch_description/meshes/gripper_link.dae OR collada_web_server/fetch_description/meshes/elbow_flex_link.dae OR collada_web_server/fetch_description/meshes/torso_fixed_link.dae OR collada_web_server/fetch_description/meshes/base_link.dae OR collada_web_server/fetch_description/meshes/shoulder_lift_link.dae OR collada_web_server/fetch_description/meshes/wrist_roll_link.dae OR collada_web_server/fetch_description/meshes/head_tilt_link.dae OR collada_web_server/fetch_description/meshes/upperarm_roll_link.dae OR collada_web_server/fetch_description/meshes/forearm_roll_link.dae OR collada_web_server/fetch_description/meshes/shoulder_pan_link.dae OR collada_web_server/fetch_description/meshes/torso_lift_link.dae OR collada_web_server/fetch_description/meshes/wrist_flex_link.dae OR collada_web_server/fetch_description/meshes/head_pan_link.dae"/>
+		<geometry id="gkmodel0_new_ragdoll__neck_geom0" name="package://ezgripper_driver/meshes/visual/SAKE_Finger.stl OR ezgripper_driver/meshes/visual/SAKE_Palm_Quad.stl OR ezgripper_driver/meshes/visual/SAKE_Palm_Dual.stl OR ezgripper_driver/meshes/collision/SAKE_Finger.stl OR ezgripper_driver/meshes/collision/SAKE_Palm_Quad.stl OR ezgripper_driver/meshes/collision/SAKE_Palm_Dual.stl OR ezgripper_driver/meshes/ezgripper_gen2/SAKE_Palm_Dual_Gen2.stl OR ezgripper_driver/meshes/ezgripper_gen2/SAKE_Finger_L1_Gen2.stl OR ezgripper_driver/meshes/ezgripper_gen2/SAKE_Finger_L2_Gen2.stl OR access_teleop/models/ragdoll/model.dae OR access_teleop/files/model_files/collada/cube_l.dae OR access_teleop/files/model_files/collada/ball.dae OR access_teleop/files/model_files/collada/cube_s.dae OR access_teleop/files/model_files/collada/cube_m.dae OR access_teleop/files/model_files/collada/stone.dae OR access_teleop/files/model_files/collada/cube_xl.dae OR access_teleop/files/model_files/collada/shelf.dae OR collada_web_server/fetch_description/meshes/gripper_link.dae OR collada_web_server/fetch_description/meshes/elbow_flex_link.dae OR collada_web_server/fetch_description/meshes/torso_fixed_link.dae OR collada_web_server/fetch_description/meshes/base_link.dae OR collada_web_server/fetch_description/meshes/shoulder_lift_link.dae OR collada_web_server/fetch_description/meshes/wrist_roll_link.dae OR collada_web_server/fetch_description/meshes/head_tilt_link.dae OR collada_web_server/fetch_description/meshes/upperarm_roll_link.dae OR collada_web_server/fetch_description/meshes/forearm_roll_link.dae OR collada_web_server/fetch_description/meshes/shoulder_pan_link.dae OR collada_web_server/fetch_description/meshes/torso_lift_link.dae OR collada_web_server/fetch_description/meshes/wrist_flex_link.dae OR collada_web_server/fetch_description/meshes/head_pan_link.dae"/>
+		<geometry id="gkmodel0_new_ragdoll__head_geom0" name="package://ezgripper_driver/meshes/visual/SAKE_Finger.stl OR ezgripper_driver/meshes/visual/SAKE_Palm_Quad.stl OR ezgripper_driver/meshes/visual/SAKE_Palm_Dual.stl OR ezgripper_driver/meshes/collision/SAKE_Finger.stl OR ezgripper_driver/meshes/collision/SAKE_Palm_Quad.stl OR ezgripper_driver/meshes/collision/SAKE_Palm_Dual.stl OR ezgripper_driver/meshes/ezgripper_gen2/SAKE_Palm_Dual_Gen2.stl OR ezgripper_driver/meshes/ezgripper_gen2/SAKE_Finger_L1_Gen2.stl OR ezgripper_driver/meshes/ezgripper_gen2/SAKE_Finger_L2_Gen2.stl OR access_teleop/models/ragdoll/model.dae OR access_teleop/files/model_files/collada/cube_l.dae OR access_teleop/files/model_files/collada/ball.dae OR access_teleop/files/model_files/collada/cube_s.dae OR access_teleop/files/model_files/collada/cube_m.dae OR access_teleop/files/model_files/collada/stone.dae OR access_teleop/files/model_files/collada/cube_xl.dae OR access_teleop/files/model_files/collada/shelf.dae OR collada_web_server/fetch_description/meshes/gripper_link.dae OR collada_web_server/fetch_description/meshes/elbow_flex_link.dae OR collada_web_server/fetch_description/meshes/torso_fixed_link.dae OR collada_web_server/fetch_description/meshes/base_link.dae OR collada_web_server/fetch_description/meshes/shoulder_lift_link.dae OR collada_web_server/fetch_description/meshes/wrist_roll_link.dae OR collada_web_server/fetch_description/meshes/head_tilt_link.dae OR collada_web_server/fetch_description/meshes/upperarm_roll_link.dae OR collada_web_server/fetch_description/meshes/forearm_roll_link.dae OR collada_web_server/fetch_description/meshes/shoulder_pan_link.dae OR collada_web_server/fetch_description/meshes/torso_lift_link.dae OR collada_web_server/fetch_description/meshes/wrist_flex_link.dae OR collada_web_server/fetch_description/meshes/head_pan_link.dae"/>
+		<geometry id="gkmodel0_new_ragdoll__v_r_arm_geom0">
+			<mesh>
+				<source id="gkmodel0_new_ragdoll__v_r_arm_geom0_positions">
+					<float_array id="gkmodel0_new_ragdoll__v_r_arm_geom0_positions-array" count="1" digits="2490374">0 0 0</float_array>
+					<technique_common>
+						<accessor count="1" source="#gkmodel0_new_ragdoll__v_r_arm_geom0_positions-array" stride="3">
+							<param name="X" type="float"/>
+							<param name="Y" type="float"/>
+							<param name="Z" type="float"/>
+						</accessor>
+					</technique_common>
+				</source>
+				<vertices id="vertices">
+					<input semantic="POSITION" source="#gkmodel0_new_ragdoll__v_r_arm_geom0_positions"/>
+				</vertices>
+				<triangles count="12" material="mat0">
+					<input offset="0" semantic="VERTEX" source="#gkmodel0_new_ragdoll__v_r_arm_geom0/vertices" set="0"/>
+					<p>0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0</p>
+				</triangles>
+			</mesh>
+		</geometry>
+		<geometry id="gkmodel0_new_ragdoll__r_arm_geom0" name="package://ezgripper_driver/meshes/visual/SAKE_Finger.stl OR ezgripper_driver/meshes/visual/SAKE_Palm_Quad.stl OR ezgripper_driver/meshes/visual/SAKE_Palm_Dual.stl OR ezgripper_driver/meshes/collision/SAKE_Finger.stl OR ezgripper_driver/meshes/collision/SAKE_Palm_Quad.stl OR ezgripper_driver/meshes/collision/SAKE_Palm_Dual.stl OR ezgripper_driver/meshes/ezgripper_gen2/SAKE_Palm_Dual_Gen2.stl OR ezgripper_driver/meshes/ezgripper_gen2/SAKE_Finger_L1_Gen2.stl OR ezgripper_driver/meshes/ezgripper_gen2/SAKE_Finger_L2_Gen2.stl OR access_teleop/models/ragdoll/model.dae OR access_teleop/files/model_files/collada/cube_l.dae OR access_teleop/files/model_files/collada/ball.dae OR access_teleop/files/model_files/collada/cube_s.dae OR access_teleop/files/model_files/collada/cube_m.dae OR access_teleop/files/model_files/collada/stone.dae OR access_teleop/files/model_files/collada/cube_xl.dae OR access_teleop/files/model_files/collada/shelf.dae OR collada_web_server/fetch_description/meshes/gripper_link.dae OR collada_web_server/fetch_description/meshes/elbow_flex_link.dae OR collada_web_server/fetch_description/meshes/torso_fixed_link.dae OR collada_web_server/fetch_description/meshes/base_link.dae OR collada_web_server/fetch_description/meshes/shoulder_lift_link.dae OR collada_web_server/fetch_description/meshes/wrist_roll_link.dae OR collada_web_server/fetch_description/meshes/head_tilt_link.dae OR collada_web_server/fetch_description/meshes/upperarm_roll_link.dae OR collada_web_server/fetch_description/meshes/forearm_roll_link.dae OR collada_web_server/fetch_description/meshes/shoulder_pan_link.dae OR collada_web_server/fetch_description/meshes/torso_lift_link.dae OR collada_web_server/fetch_description/meshes/wrist_flex_link.dae OR collada_web_server/fetch_description/meshes/head_pan_link.dae"/>
+		<geometry id="gkmodel0_new_ragdoll__r_wrist_geom0" name="package://ezgripper_driver/meshes/visual/SAKE_Finger.stl OR ezgripper_driver/meshes/visual/SAKE_Palm_Quad.stl OR ezgripper_driver/meshes/visual/SAKE_Palm_Dual.stl OR ezgripper_driver/meshes/collision/SAKE_Finger.stl OR ezgripper_driver/meshes/collision/SAKE_Palm_Quad.stl OR ezgripper_driver/meshes/collision/SAKE_Palm_Dual.stl OR ezgripper_driver/meshes/ezgripper_gen2/SAKE_Palm_Dual_Gen2.stl OR ezgripper_driver/meshes/ezgripper_gen2/SAKE_Finger_L1_Gen2.stl OR ezgripper_driver/meshes/ezgripper_gen2/SAKE_Finger_L2_Gen2.stl OR access_teleop/models/ragdoll/model.dae OR access_teleop/files/model_files/collada/cube_l.dae OR access_teleop/files/model_files/collada/ball.dae OR access_teleop/files/model_files/collada/cube_s.dae OR access_teleop/files/model_files/collada/cube_m.dae OR access_teleop/files/model_files/collada/stone.dae OR access_teleop/files/model_files/collada/cube_xl.dae OR access_teleop/files/model_files/collada/shelf.dae OR collada_web_server/fetch_description/meshes/gripper_link.dae OR collada_web_server/fetch_description/meshes/elbow_flex_link.dae OR collada_web_server/fetch_description/meshes/torso_fixed_link.dae OR collada_web_server/fetch_description/meshes/base_link.dae OR collada_web_server/fetch_description/meshes/shoulder_lift_link.dae OR collada_web_server/fetch_description/meshes/wrist_roll_link.dae OR collada_web_server/fetch_description/meshes/head_tilt_link.dae OR collada_web_server/fetch_description/meshes/upperarm_roll_link.dae OR collada_web_server/fetch_description/meshes/forearm_roll_link.dae OR collada_web_server/fetch_description/meshes/shoulder_pan_link.dae OR collada_web_server/fetch_description/meshes/torso_lift_link.dae OR collada_web_server/fetch_description/meshes/wrist_flex_link.dae OR collada_web_server/fetch_description/meshes/head_pan_link.dae"/>
+		<geometry id="gkmodel0_new_ragdoll__r_hand_geom0" name="package://ezgripper_driver/meshes/visual/SAKE_Finger.stl OR ezgripper_driver/meshes/visual/SAKE_Palm_Quad.stl OR ezgripper_driver/meshes/visual/SAKE_Palm_Dual.stl OR ezgripper_driver/meshes/collision/SAKE_Finger.stl OR ezgripper_driver/meshes/collision/SAKE_Palm_Quad.stl OR ezgripper_driver/meshes/collision/SAKE_Palm_Dual.stl OR ezgripper_driver/meshes/ezgripper_gen2/SAKE_Palm_Dual_Gen2.stl OR ezgripper_driver/meshes/ezgripper_gen2/SAKE_Finger_L1_Gen2.stl OR ezgripper_driver/meshes/ezgripper_gen2/SAKE_Finger_L2_Gen2.stl OR access_teleop/models/ragdoll/model.dae OR access_teleop/files/model_files/collada/cube_l.dae OR access_teleop/files/model_files/collada/ball.dae OR access_teleop/files/model_files/collada/cube_s.dae OR access_teleop/files/model_files/collada/cube_m.dae OR access_teleop/files/model_files/collada/stone.dae OR access_teleop/files/model_files/collada/cube_xl.dae OR access_teleop/files/model_files/collada/shelf.dae OR collada_web_server/fetch_description/meshes/gripper_link.dae OR collada_web_server/fetch_description/meshes/elbow_flex_link.dae OR collada_web_server/fetch_description/meshes/torso_fixed_link.dae OR collada_web_server/fetch_description/meshes/base_link.dae OR collada_web_server/fetch_description/meshes/shoulder_lift_link.dae OR collada_web_server/fetch_description/meshes/wrist_roll_link.dae OR collada_web_server/fetch_description/meshes/head_tilt_link.dae OR collada_web_server/fetch_description/meshes/upperarm_roll_link.dae OR collada_web_server/fetch_description/meshes/forearm_roll_link.dae OR collada_web_server/fetch_description/meshes/shoulder_pan_link.dae OR collada_web_server/fetch_description/meshes/torso_lift_link.dae OR collada_web_server/fetch_description/meshes/wrist_flex_link.dae OR collada_web_server/fetch_description/meshes/head_pan_link.dae"/>
+		<geometry id="gkmodel0_new_ragdoll__v_r_thigh_geom0">
+			<mesh>
+				<source id="gkmodel0_new_ragdoll__v_r_thigh_geom0_positions">
+					<float_array id="gkmodel0_new_ragdoll__v_r_thigh_geom0_positions-array" count="1" digits="2490374">0 0 0</float_array>
+					<technique_common>
+						<accessor count="1" source="#gkmodel0_new_ragdoll__v_r_thigh_geom0_positions-array" stride="3">
+							<param name="X" type="float"/>
+							<param name="Y" type="float"/>
+							<param name="Z" type="float"/>
+						</accessor>
+					</technique_common>
+				</source>
+				<vertices id="vertices">
+					<input semantic="POSITION" source="#gkmodel0_new_ragdoll__v_r_thigh_geom0_positions"/>
+				</vertices>
+				<triangles count="12" material="mat0">
+					<input offset="0" semantic="VERTEX" source="#gkmodel0_new_ragdoll__v_r_thigh_geom0/vertices" set="0"/>
+					<p>0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0</p>
+				</triangles>
+			</mesh>
+		</geometry>
+		<geometry id="gkmodel0_new_ragdoll__r_thigh_geom0" name="package://ezgripper_driver/meshes/visual/SAKE_Finger.stl OR ezgripper_driver/meshes/visual/SAKE_Palm_Quad.stl OR ezgripper_driver/meshes/visual/SAKE_Palm_Dual.stl OR ezgripper_driver/meshes/collision/SAKE_Finger.stl OR ezgripper_driver/meshes/collision/SAKE_Palm_Quad.stl OR ezgripper_driver/meshes/collision/SAKE_Palm_Dual.stl OR ezgripper_driver/meshes/ezgripper_gen2/SAKE_Palm_Dual_Gen2.stl OR ezgripper_driver/meshes/ezgripper_gen2/SAKE_Finger_L1_Gen2.stl OR ezgripper_driver/meshes/ezgripper_gen2/SAKE_Finger_L2_Gen2.stl OR access_teleop/models/ragdoll/model.dae OR access_teleop/files/model_files/collada/cube_l.dae OR access_teleop/files/model_files/collada/ball.dae OR access_teleop/files/model_files/collada/cube_s.dae OR access_teleop/files/model_files/collada/cube_m.dae OR access_teleop/files/model_files/collada/stone.dae OR access_teleop/files/model_files/collada/cube_xl.dae OR access_teleop/files/model_files/collada/shelf.dae OR collada_web_server/fetch_description/meshes/gripper_link.dae OR collada_web_server/fetch_description/meshes/elbow_flex_link.dae OR collada_web_server/fetch_description/meshes/torso_fixed_link.dae OR collada_web_server/fetch_description/meshes/base_link.dae OR collada_web_server/fetch_description/meshes/shoulder_lift_link.dae OR collada_web_server/fetch_description/meshes/wrist_roll_link.dae OR collada_web_server/fetch_description/meshes/head_tilt_link.dae OR collada_web_server/fetch_description/meshes/upperarm_roll_link.dae OR collada_web_server/fetch_description/meshes/forearm_roll_link.dae OR collada_web_server/fetch_description/meshes/shoulder_pan_link.dae OR collada_web_server/fetch_description/meshes/torso_lift_link.dae OR collada_web_server/fetch_description/meshes/wrist_flex_link.dae OR collada_web_server/fetch_description/meshes/head_pan_link.dae"/>
+		<geometry id="gkmodel0_new_ragdoll__r_shin_geom0" name="package://ezgripper_driver/meshes/visual/SAKE_Finger.stl OR ezgripper_driver/meshes/visual/SAKE_Palm_Quad.stl OR ezgripper_driver/meshes/visual/SAKE_Palm_Dual.stl OR ezgripper_driver/meshes/collision/SAKE_Finger.stl OR ezgripper_driver/meshes/collision/SAKE_Palm_Quad.stl OR ezgripper_driver/meshes/collision/SAKE_Palm_Dual.stl OR ezgripper_driver/meshes/ezgripper_gen2/SAKE_Palm_Dual_Gen2.stl OR ezgripper_driver/meshes/ezgripper_gen2/SAKE_Finger_L1_Gen2.stl OR ezgripper_driver/meshes/ezgripper_gen2/SAKE_Finger_L2_Gen2.stl OR access_teleop/models/ragdoll/model.dae OR access_teleop/files/model_files/collada/cube_l.dae OR access_teleop/files/model_files/collada/ball.dae OR access_teleop/files/model_files/collada/cube_s.dae OR access_teleop/files/model_files/collada/cube_m.dae OR access_teleop/files/model_files/collada/stone.dae OR access_teleop/files/model_files/collada/cube_xl.dae OR access_teleop/files/model_files/collada/shelf.dae OR collada_web_server/fetch_description/meshes/gripper_link.dae OR collada_web_server/fetch_description/meshes/elbow_flex_link.dae OR collada_web_server/fetch_description/meshes/torso_fixed_link.dae OR collada_web_server/fetch_description/meshes/base_link.dae OR collada_web_server/fetch_description/meshes/shoulder_lift_link.dae OR collada_web_server/fetch_description/meshes/wrist_roll_link.dae OR collada_web_server/fetch_description/meshes/head_tilt_link.dae OR collada_web_server/fetch_description/meshes/upperarm_roll_link.dae OR collada_web_server/fetch_description/meshes/forearm_roll_link.dae OR collada_web_server/fetch_description/meshes/shoulder_pan_link.dae OR collada_web_server/fetch_description/meshes/torso_lift_link.dae OR collada_web_server/fetch_description/meshes/wrist_flex_link.dae OR collada_web_server/fetch_description/meshes/head_pan_link.dae"/>
+		<geometry id="gkmodel0_new_ragdoll__r_foot_geom0" name="package://ezgripper_driver/meshes/visual/SAKE_Finger.stl OR ezgripper_driver/meshes/visual/SAKE_Palm_Quad.stl OR ezgripper_driver/meshes/visual/SAKE_Palm_Dual.stl OR ezgripper_driver/meshes/collision/SAKE_Finger.stl OR ezgripper_driver/meshes/collision/SAKE_Palm_Quad.stl OR ezgripper_driver/meshes/collision/SAKE_Palm_Dual.stl OR ezgripper_driver/meshes/ezgripper_gen2/SAKE_Palm_Dual_Gen2.stl OR ezgripper_driver/meshes/ezgripper_gen2/SAKE_Finger_L1_Gen2.stl OR ezgripper_driver/meshes/ezgripper_gen2/SAKE_Finger_L2_Gen2.stl OR access_teleop/models/ragdoll/model.dae OR access_teleop/files/model_files/collada/cube_l.dae OR access_teleop/files/model_files/collada/ball.dae OR access_teleop/files/model_files/collada/cube_s.dae OR access_teleop/files/model_files/collada/cube_m.dae OR access_teleop/files/model_files/collada/stone.dae OR access_teleop/files/model_files/collada/cube_xl.dae OR access_teleop/files/model_files/collada/shelf.dae OR collada_web_server/fetch_description/meshes/gripper_link.dae OR collada_web_server/fetch_description/meshes/elbow_flex_link.dae OR collada_web_server/fetch_description/meshes/torso_fixed_link.dae OR collada_web_server/fetch_description/meshes/base_link.dae OR collada_web_server/fetch_description/meshes/shoulder_lift_link.dae OR collada_web_server/fetch_description/meshes/wrist_roll_link.dae OR collada_web_server/fetch_description/meshes/head_tilt_link.dae OR collada_web_server/fetch_description/meshes/upperarm_roll_link.dae OR collada_web_server/fetch_description/meshes/forearm_roll_link.dae OR collada_web_server/fetch_description/meshes/shoulder_pan_link.dae OR collada_web_server/fetch_description/meshes/torso_lift_link.dae OR collada_web_server/fetch_description/meshes/wrist_flex_link.dae OR collada_web_server/fetch_description/meshes/head_pan_link.dae"/>
+	</library_geometries>
+	<library_effects id="effects">
+		<effect id="gkmodel0_new_ragdoll__lower_body_geom0">
+			<profile_COMMON>
+				<technique sid="">
+					<phong>
+						<ambient>
+							<color>0.1000000014901161 0.1000000014901161 0.1000000014901161 0</color>
+						</ambient>
+						<diffuse>
+							<color>1 1 1 0</color>
+						</diffuse>
+					</phong>
+				</technique>
+			</profile_COMMON>
+		</effect>
+		<effect id="gkmodel0_new_ragdoll__lower_body_geom0_eff">
+			<profile_COMMON>
+				<technique sid="">
+					<phong>
+						<ambient>
+							<color>0.1000000014901161 0.1000000014901161 0.1000000014901161 0</color>
+						</ambient>
+						<diffuse>
+							<color>1 1 1 0</color>
+						</diffuse>
+					</phong>
+				</technique>
+			</profile_COMMON>
+		</effect>
+		<effect id="gkmodel0_new_ragdoll__v_l_thigh_geom0">
+			<profile_COMMON>
+				<technique sid="">
+					<phong>
+						<ambient>
+							<color>0.1000000014901161 0.1000000014901161 0.1000000014901161 0</color>
+						</ambient>
+						<diffuse>
+							<color>1 1 1 0</color>
+						</diffuse>
+					</phong>
+				</technique>
+			</profile_COMMON>
+		</effect>
+		<effect id="gkmodel0_new_ragdoll__v_l_thigh_geom0_eff">
+			<profile_COMMON>
+				<technique sid="">
+					<phong>
+						<ambient>
+							<color>0.1000000014901161 0.1000000014901161 0.1000000014901161 0</color>
+						</ambient>
+						<diffuse>
+							<color>1 1 1 0</color>
+						</diffuse>
+					</phong>
+				</technique>
+			</profile_COMMON>
+		</effect>
+		<effect id="gkmodel0_new_ragdoll__l_thigh_geom0">
+			<profile_COMMON>
+				<technique sid="">
+					<phong>
+						<ambient>
+							<color>0.1000000014901161 0.1000000014901161 0.1000000014901161 0</color>
+						</ambient>
+						<diffuse>
+							<color>1 1 1 0</color>
+						</diffuse>
+					</phong>
+				</technique>
+			</profile_COMMON>
+		</effect>
+		<effect id="gkmodel0_new_ragdoll__l_thigh_geom0_eff">
+			<profile_COMMON>
+				<technique sid="">
+					<phong>
+						<ambient>
+							<color>0.1000000014901161 0.1000000014901161 0.1000000014901161 0</color>
+						</ambient>
+						<diffuse>
+							<color>1 1 1 0</color>
+						</diffuse>
+					</phong>
+				</technique>
+			</profile_COMMON>
+		</effect>
+		<effect id="gkmodel0_new_ragdoll__l_shin_geom0">
+			<profile_COMMON>
+				<technique sid="">
+					<phong>
+						<ambient>
+							<color>0.1000000014901161 0.1000000014901161 0.1000000014901161 0</color>
+						</ambient>
+						<diffuse>
+							<color>1 1 1 0</color>
+						</diffuse>
+					</phong>
+				</technique>
+			</profile_COMMON>
+		</effect>
+		<effect id="gkmodel0_new_ragdoll__l_shin_geom0_eff">
+			<profile_COMMON>
+				<technique sid="">
+					<phong>
+						<ambient>
+							<color>0.1000000014901161 0.1000000014901161 0.1000000014901161 0</color>
+						</ambient>
+						<diffuse>
+							<color>1 1 1 0</color>
+						</diffuse>
+					</phong>
+				</technique>
+			</profile_COMMON>
+		</effect>
+		<effect id="gkmodel0_new_ragdoll__l_foot_geom0">
+			<profile_COMMON>
+				<technique sid="">
+					<phong>
+						<ambient>
+							<color>0.1000000014901161 0.1000000014901161 0.1000000014901161 0</color>
+						</ambient>
+						<diffuse>
+							<color>1 1 1 0</color>
+						</diffuse>
+					</phong>
+				</technique>
+			</profile_COMMON>
+		</effect>
+		<effect id="gkmodel0_new_ragdoll__l_foot_geom0_eff">
+			<profile_COMMON>
+				<technique sid="">
+					<phong>
+						<ambient>
+							<color>0.1000000014901161 0.1000000014901161 0.1000000014901161 0</color>
+						</ambient>
+						<diffuse>
+							<color>1 1 1 0</color>
+						</diffuse>
+					</phong>
+				</technique>
+			</profile_COMMON>
+		</effect>
+		<effect id="gkmodel0_new_ragdoll__middle_body_geom0">
+			<profile_COMMON>
+				<technique sid="">
+					<phong>
+						<ambient>
+							<color>0.1000000014901161 0.1000000014901161 0.1000000014901161 0</color>
+						</ambient>
+						<diffuse>
+							<color>1 1 1 0</color>
+						</diffuse>
+					</phong>
+				</technique>
+			</profile_COMMON>
+		</effect>
+		<effect id="gkmodel0_new_ragdoll__middle_body_geom0_eff">
+			<profile_COMMON>
+				<technique sid="">
+					<phong>
+						<ambient>
+							<color>0.1000000014901161 0.1000000014901161 0.1000000014901161 0</color>
+						</ambient>
+						<diffuse>
+							<color>1 1 1 0</color>
+						</diffuse>
+					</phong>
+				</technique>
+			</profile_COMMON>
+		</effect>
+		<effect id="gkmodel0_new_ragdoll__upper_body_geom0">
+			<profile_COMMON>
+				<technique sid="">
+					<phong>
+						<ambient>
+							<color>0.1000000014901161 0.1000000014901161 0.1000000014901161 0</color>
+						</ambient>
+						<diffuse>
+							<color>1 1 1 0</color>
+						</diffuse>
+					</phong>
+				</technique>
+			</profile_COMMON>
+		</effect>
+		<effect id="gkmodel0_new_ragdoll__upper_body_geom0_eff">
+			<profile_COMMON>
+				<technique sid="">
+					<phong>
+						<ambient>
+							<color>0.1000000014901161 0.1000000014901161 0.1000000014901161 0</color>
+						</ambient>
+						<diffuse>
+							<color>1 1 1 0</color>
+						</diffuse>
+					</phong>
+				</technique>
+			</profile_COMMON>
+		</effect>
+		<effect id="gkmodel0_new_ragdoll__v_l_arm_geom0">
+			<profile_COMMON>
+				<technique sid="">
+					<phong>
+						<ambient>
+							<color>0.1000000014901161 0.1000000014901161 0.1000000014901161 0</color>
+						</ambient>
+						<diffuse>
+							<color>1 1 1 0</color>
+						</diffuse>
+					</phong>
+				</technique>
+			</profile_COMMON>
+		</effect>
+		<effect id="gkmodel0_new_ragdoll__v_l_arm_geom0_eff">
+			<profile_COMMON>
+				<technique sid="">
+					<phong>
+						<ambient>
+							<color>0.1000000014901161 0.1000000014901161 0.1000000014901161 0</color>
+						</ambient>
+						<diffuse>
+							<color>1 1 1 0</color>
+						</diffuse>
+					</phong>
+				</technique>
+			</profile_COMMON>
+		</effect>
+		<effect id="gkmodel0_new_ragdoll__l_arm_geom0">
+			<profile_COMMON>
+				<technique sid="">
+					<phong>
+						<ambient>
+							<color>0.1000000014901161 0.1000000014901161 0.1000000014901161 0</color>
+						</ambient>
+						<diffuse>
+							<color>1 1 1 0</color>
+						</diffuse>
+					</phong>
+				</technique>
+			</profile_COMMON>
+		</effect>
+		<effect id="gkmodel0_new_ragdoll__l_arm_geom0_eff">
+			<profile_COMMON>
+				<technique sid="">
+					<phong>
+						<ambient>
+							<color>0.1000000014901161 0.1000000014901161 0.1000000014901161 0</color>
+						</ambient>
+						<diffuse>
+							<color>1 1 1 0</color>
+						</diffuse>
+					</phong>
+				</technique>
+			</profile_COMMON>
+		</effect>
+		<effect id="gkmodel0_new_ragdoll__l_wrist_geom0">
+			<profile_COMMON>
+				<technique sid="">
+					<phong>
+						<ambient>
+							<color>0.1000000014901161 0.1000000014901161 0.1000000014901161 0</color>
+						</ambient>
+						<diffuse>
+							<color>1 1 1 0</color>
+						</diffuse>
+					</phong>
+				</technique>
+			</profile_COMMON>
+		</effect>
+		<effect id="gkmodel0_new_ragdoll__l_wrist_geom0_eff">
+			<profile_COMMON>
+				<technique sid="">
+					<phong>
+						<ambient>
+							<color>0.1000000014901161 0.1000000014901161 0.1000000014901161 0</color>
+						</ambient>
+						<diffuse>
+							<color>1 1 1 0</color>
+						</diffuse>
+					</phong>
+				</technique>
+			</profile_COMMON>
+		</effect>
+		<effect id="gkmodel0_new_ragdoll__l_hand_geom0">
+			<profile_COMMON>
+				<technique sid="">
+					<phong>
+						<ambient>
+							<color>0.1000000014901161 0.1000000014901161 0.1000000014901161 0</color>
+						</ambient>
+						<diffuse>
+							<color>1 1 1 0</color>
+						</diffuse>
+					</phong>
+				</technique>
+			</profile_COMMON>
+		</effect>
+		<effect id="gkmodel0_new_ragdoll__l_hand_geom0_eff">
+			<profile_COMMON>
+				<technique sid="">
+					<phong>
+						<ambient>
+							<color>0.1000000014901161 0.1000000014901161 0.1000000014901161 0</color>
+						</ambient>
+						<diffuse>
+							<color>1 1 1 0</color>
+						</diffuse>
+					</phong>
+				</technique>
+			</profile_COMMON>
+		</effect>
+		<effect id="gkmodel0_new_ragdoll__neck_geom0">
+			<profile_COMMON>
+				<technique sid="">
+					<phong>
+						<ambient>
+							<color>0.1000000014901161 0.1000000014901161 0.1000000014901161 0</color>
+						</ambient>
+						<diffuse>
+							<color>1 1 1 0</color>
+						</diffuse>
+					</phong>
+				</technique>
+			</profile_COMMON>
+		</effect>
+		<effect id="gkmodel0_new_ragdoll__neck_geom0_eff">
+			<profile_COMMON>
+				<technique sid="">
+					<phong>
+						<ambient>
+							<color>0.1000000014901161 0.1000000014901161 0.1000000014901161 0</color>
+						</ambient>
+						<diffuse>
+							<color>1 1 1 0</color>
+						</diffuse>
+					</phong>
+				</technique>
+			</profile_COMMON>
+		</effect>
+		<effect id="gkmodel0_new_ragdoll__head_geom0">
+			<profile_COMMON>
+				<technique sid="">
+					<phong>
+						<ambient>
+							<color>0.1000000014901161 0.1000000014901161 0.1000000014901161 0</color>
+						</ambient>
+						<diffuse>
+							<color>1 1 1 0</color>
+						</diffuse>
+					</phong>
+				</technique>
+			</profile_COMMON>
+		</effect>
+		<effect id="gkmodel0_new_ragdoll__head_geom0_eff">
+			<profile_COMMON>
+				<technique sid="">
+					<phong>
+						<ambient>
+							<color>0.1000000014901161 0.1000000014901161 0.1000000014901161 0</color>
+						</ambient>
+						<diffuse>
+							<color>1 1 1 0</color>
+						</diffuse>
+					</phong>
+				</technique>
+			</profile_COMMON>
+		</effect>
+		<effect id="gkmodel0_new_ragdoll__v_r_arm_geom0">
+			<profile_COMMON>
+				<technique sid="">
+					<phong>
+						<ambient>
+							<color>0.1000000014901161 0.1000000014901161 0.1000000014901161 0</color>
+						</ambient>
+						<diffuse>
+							<color>1 1 1 0</color>
+						</diffuse>
+					</phong>
+				</technique>
+			</profile_COMMON>
+		</effect>
+		<effect id="gkmodel0_new_ragdoll__v_r_arm_geom0_eff">
+			<profile_COMMON>
+				<technique sid="">
+					<phong>
+						<ambient>
+							<color>0.1000000014901161 0.1000000014901161 0.1000000014901161 0</color>
+						</ambient>
+						<diffuse>
+							<color>1 1 1 0</color>
+						</diffuse>
+					</phong>
+				</technique>
+			</profile_COMMON>
+		</effect>
+		<effect id="gkmodel0_new_ragdoll__r_arm_geom0">
+			<profile_COMMON>
+				<technique sid="">
+					<phong>
+						<ambient>
+							<color>0.1000000014901161 0.1000000014901161 0.1000000014901161 0</color>
+						</ambient>
+						<diffuse>
+							<color>1 1 1 0</color>
+						</diffuse>
+					</phong>
+				</technique>
+			</profile_COMMON>
+		</effect>
+		<effect id="gkmodel0_new_ragdoll__r_arm_geom0_eff">
+			<profile_COMMON>
+				<technique sid="">
+					<phong>
+						<ambient>
+							<color>0.1000000014901161 0.1000000014901161 0.1000000014901161 0</color>
+						</ambient>
+						<diffuse>
+							<color>1 1 1 0</color>
+						</diffuse>
+					</phong>
+				</technique>
+			</profile_COMMON>
+		</effect>
+		<effect id="gkmodel0_new_ragdoll__r_wrist_geom0">
+			<profile_COMMON>
+				<technique sid="">
+					<phong>
+						<ambient>
+							<color>0.1000000014901161 0.1000000014901161 0.1000000014901161 0</color>
+						</ambient>
+						<diffuse>
+							<color>1 1 1 0</color>
+						</diffuse>
+					</phong>
+				</technique>
+			</profile_COMMON>
+		</effect>
+		<effect id="gkmodel0_new_ragdoll__r_wrist_geom0_eff">
+			<profile_COMMON>
+				<technique sid="">
+					<phong>
+						<ambient>
+							<color>0.1000000014901161 0.1000000014901161 0.1000000014901161 0</color>
+						</ambient>
+						<diffuse>
+							<color>1 1 1 0</color>
+						</diffuse>
+					</phong>
+				</technique>
+			</profile_COMMON>
+		</effect>
+		<effect id="gkmodel0_new_ragdoll__r_hand_geom0">
+			<profile_COMMON>
+				<technique sid="">
+					<phong>
+						<ambient>
+							<color>0.1000000014901161 0.1000000014901161 0.1000000014901161 0</color>
+						</ambient>
+						<diffuse>
+							<color>1 1 1 0</color>
+						</diffuse>
+					</phong>
+				</technique>
+			</profile_COMMON>
+		</effect>
+		<effect id="gkmodel0_new_ragdoll__r_hand_geom0_eff">
+			<profile_COMMON>
+				<technique sid="">
+					<phong>
+						<ambient>
+							<color>0.1000000014901161 0.1000000014901161 0.1000000014901161 0</color>
+						</ambient>
+						<diffuse>
+							<color>1 1 1 0</color>
+						</diffuse>
+					</phong>
+				</technique>
+			</profile_COMMON>
+		</effect>
+		<effect id="gkmodel0_new_ragdoll__v_r_thigh_geom0">
+			<profile_COMMON>
+				<technique sid="">
+					<phong>
+						<ambient>
+							<color>0.1000000014901161 0.1000000014901161 0.1000000014901161 0</color>
+						</ambient>
+						<diffuse>
+							<color>1 1 1 0</color>
+						</diffuse>
+					</phong>
+				</technique>
+			</profile_COMMON>
+		</effect>
+		<effect id="gkmodel0_new_ragdoll__v_r_thigh_geom0_eff">
+			<profile_COMMON>
+				<technique sid="">
+					<phong>
+						<ambient>
+							<color>0.1000000014901161 0.1000000014901161 0.1000000014901161 0</color>
+						</ambient>
+						<diffuse>
+							<color>1 1 1 0</color>
+						</diffuse>
+					</phong>
+				</technique>
+			</profile_COMMON>
+		</effect>
+		<effect id="gkmodel0_new_ragdoll__r_thigh_geom0">
+			<profile_COMMON>
+				<technique sid="">
+					<phong>
+						<ambient>
+							<color>0.1000000014901161 0.1000000014901161 0.1000000014901161 0</color>
+						</ambient>
+						<diffuse>
+							<color>1 1 1 0</color>
+						</diffuse>
+					</phong>
+				</technique>
+			</profile_COMMON>
+		</effect>
+		<effect id="gkmodel0_new_ragdoll__r_thigh_geom0_eff">
+			<profile_COMMON>
+				<technique sid="">
+					<phong>
+						<ambient>
+							<color>0.1000000014901161 0.1000000014901161 0.1000000014901161 0</color>
+						</ambient>
+						<diffuse>
+							<color>1 1 1 0</color>
+						</diffuse>
+					</phong>
+				</technique>
+			</profile_COMMON>
+		</effect>
+		<effect id="gkmodel0_new_ragdoll__r_shin_geom0">
+			<profile_COMMON>
+				<technique sid="">
+					<phong>
+						<ambient>
+							<color>0.1000000014901161 0.1000000014901161 0.1000000014901161 0</color>
+						</ambient>
+						<diffuse>
+							<color>1 1 1 0</color>
+						</diffuse>
+					</phong>
+				</technique>
+			</profile_COMMON>
+		</effect>
+		<effect id="gkmodel0_new_ragdoll__r_shin_geom0_eff">
+			<profile_COMMON>
+				<technique sid="">
+					<phong>
+						<ambient>
+							<color>0.1000000014901161 0.1000000014901161 0.1000000014901161 0</color>
+						</ambient>
+						<diffuse>
+							<color>1 1 1 0</color>
+						</diffuse>
+					</phong>
+				</technique>
+			</profile_COMMON>
+		</effect>
+		<effect id="gkmodel0_new_ragdoll__r_foot_geom0">
+			<profile_COMMON>
+				<technique sid="">
+					<phong>
+						<ambient>
+							<color>0.1000000014901161 0.1000000014901161 0.1000000014901161 0</color>
+						</ambient>
+						<diffuse>
+							<color>1 1 1 0</color>
+						</diffuse>
+					</phong>
+				</technique>
+			</profile_COMMON>
+		</effect>
+		<effect id="gkmodel0_new_ragdoll__r_foot_geom0_eff">
+			<profile_COMMON>
+				<technique sid="">
+					<phong>
+						<ambient>
+							<color>0.1000000014901161 0.1000000014901161 0.1000000014901161 0</color>
+						</ambient>
+						<diffuse>
+							<color>1 1 1 0</color>
+						</diffuse>
+					</phong>
+				</technique>
+			</profile_COMMON>
+		</effect>
+	</library_effects>
+	<library_materials id="materials">
+		<material id="gkmodel0_new_ragdoll__lower_body_geom0_mat">
+			<instance_effect url="#gkmodel0_new_ragdoll__lower_body_geom0_eff"/>
+		</material>
+		<material id="gkmodel0_new_ragdoll__lower_body_geom0_mat">
+			<instance_effect url="#gkmodel0_new_ragdoll__lower_body_geom0"/>
+		</material>
+		<material id="gkmodel0_new_ragdoll__v_l_thigh_geom0_mat">
+			<instance_effect url="#gkmodel0_new_ragdoll__v_l_thigh_geom0_eff"/>
+		</material>
+		<material id="gkmodel0_new_ragdoll__v_l_thigh_geom0_mat">
+			<instance_effect url="#gkmodel0_new_ragdoll__v_l_thigh_geom0"/>
+		</material>
+		<material id="gkmodel0_new_ragdoll__l_thigh_geom0_mat">
+			<instance_effect url="#gkmodel0_new_ragdoll__l_thigh_geom0_eff"/>
+		</material>
+		<material id="gkmodel0_new_ragdoll__l_thigh_geom0_mat">
+			<instance_effect url="#gkmodel0_new_ragdoll__l_thigh_geom0"/>
+		</material>
+		<material id="gkmodel0_new_ragdoll__l_shin_geom0_mat">
+			<instance_effect url="#gkmodel0_new_ragdoll__l_shin_geom0_eff"/>
+		</material>
+		<material id="gkmodel0_new_ragdoll__l_shin_geom0_mat">
+			<instance_effect url="#gkmodel0_new_ragdoll__l_shin_geom0"/>
+		</material>
+		<material id="gkmodel0_new_ragdoll__l_foot_geom0_mat">
+			<instance_effect url="#gkmodel0_new_ragdoll__l_foot_geom0_eff"/>
+		</material>
+		<material id="gkmodel0_new_ragdoll__l_foot_geom0_mat">
+			<instance_effect url="#gkmodel0_new_ragdoll__l_foot_geom0"/>
+		</material>
+		<material id="gkmodel0_new_ragdoll__middle_body_geom0_mat">
+			<instance_effect url="#gkmodel0_new_ragdoll__middle_body_geom0_eff"/>
+		</material>
+		<material id="gkmodel0_new_ragdoll__middle_body_geom0_mat">
+			<instance_effect url="#gkmodel0_new_ragdoll__middle_body_geom0"/>
+		</material>
+		<material id="gkmodel0_new_ragdoll__upper_body_geom0_mat">
+			<instance_effect url="#gkmodel0_new_ragdoll__upper_body_geom0_eff"/>
+		</material>
+		<material id="gkmodel0_new_ragdoll__upper_body_geom0_mat">
+			<instance_effect url="#gkmodel0_new_ragdoll__upper_body_geom0"/>
+		</material>
+		<material id="gkmodel0_new_ragdoll__v_l_arm_geom0_mat">
+			<instance_effect url="#gkmodel0_new_ragdoll__v_l_arm_geom0_eff"/>
+		</material>
+		<material id="gkmodel0_new_ragdoll__v_l_arm_geom0_mat">
+			<instance_effect url="#gkmodel0_new_ragdoll__v_l_arm_geom0"/>
+		</material>
+		<material id="gkmodel0_new_ragdoll__l_arm_geom0_mat">
+			<instance_effect url="#gkmodel0_new_ragdoll__l_arm_geom0_eff"/>
+		</material>
+		<material id="gkmodel0_new_ragdoll__l_arm_geom0_mat">
+			<instance_effect url="#gkmodel0_new_ragdoll__l_arm_geom0"/>
+		</material>
+		<material id="gkmodel0_new_ragdoll__l_wrist_geom0_mat">
+			<instance_effect url="#gkmodel0_new_ragdoll__l_wrist_geom0_eff"/>
+		</material>
+		<material id="gkmodel0_new_ragdoll__l_wrist_geom0_mat">
+			<instance_effect url="#gkmodel0_new_ragdoll__l_wrist_geom0"/>
+		</material>
+		<material id="gkmodel0_new_ragdoll__l_hand_geom0_mat">
+			<instance_effect url="#gkmodel0_new_ragdoll__l_hand_geom0_eff"/>
+		</material>
+		<material id="gkmodel0_new_ragdoll__l_hand_geom0_mat">
+			<instance_effect url="#gkmodel0_new_ragdoll__l_hand_geom0"/>
+		</material>
+		<material id="gkmodel0_new_ragdoll__neck_geom0_mat">
+			<instance_effect url="#gkmodel0_new_ragdoll__neck_geom0_eff"/>
+		</material>
+		<material id="gkmodel0_new_ragdoll__neck_geom0_mat">
+			<instance_effect url="#gkmodel0_new_ragdoll__neck_geom0"/>
+		</material>
+		<material id="gkmodel0_new_ragdoll__head_geom0_mat">
+			<instance_effect url="#gkmodel0_new_ragdoll__head_geom0_eff"/>
+		</material>
+		<material id="gkmodel0_new_ragdoll__head_geom0_mat">
+			<instance_effect url="#gkmodel0_new_ragdoll__head_geom0"/>
+		</material>
+		<material id="gkmodel0_new_ragdoll__v_r_arm_geom0_mat">
+			<instance_effect url="#gkmodel0_new_ragdoll__v_r_arm_geom0_eff"/>
+		</material>
+		<material id="gkmodel0_new_ragdoll__v_r_arm_geom0_mat">
+			<instance_effect url="#gkmodel0_new_ragdoll__v_r_arm_geom0"/>
+		</material>
+		<material id="gkmodel0_new_ragdoll__r_arm_geom0_mat">
+			<instance_effect url="#gkmodel0_new_ragdoll__r_arm_geom0_eff"/>
+		</material>
+		<material id="gkmodel0_new_ragdoll__r_arm_geom0_mat">
+			<instance_effect url="#gkmodel0_new_ragdoll__r_arm_geom0"/>
+		</material>
+		<material id="gkmodel0_new_ragdoll__r_wrist_geom0_mat">
+			<instance_effect url="#gkmodel0_new_ragdoll__r_wrist_geom0_eff"/>
+		</material>
+		<material id="gkmodel0_new_ragdoll__r_wrist_geom0_mat">
+			<instance_effect url="#gkmodel0_new_ragdoll__r_wrist_geom0"/>
+		</material>
+		<material id="gkmodel0_new_ragdoll__r_hand_geom0_mat">
+			<instance_effect url="#gkmodel0_new_ragdoll__r_hand_geom0_eff"/>
+		</material>
+		<material id="gkmodel0_new_ragdoll__r_hand_geom0_mat">
+			<instance_effect url="#gkmodel0_new_ragdoll__r_hand_geom0"/>
+		</material>
+		<material id="gkmodel0_new_ragdoll__v_r_thigh_geom0_mat">
+			<instance_effect url="#gkmodel0_new_ragdoll__v_r_thigh_geom0_eff"/>
+		</material>
+		<material id="gkmodel0_new_ragdoll__v_r_thigh_geom0_mat">
+			<instance_effect url="#gkmodel0_new_ragdoll__v_r_thigh_geom0"/>
+		</material>
+		<material id="gkmodel0_new_ragdoll__r_thigh_geom0_mat">
+			<instance_effect url="#gkmodel0_new_ragdoll__r_thigh_geom0_eff"/>
+		</material>
+		<material id="gkmodel0_new_ragdoll__r_thigh_geom0_mat">
+			<instance_effect url="#gkmodel0_new_ragdoll__r_thigh_geom0"/>
+		</material>
+		<material id="gkmodel0_new_ragdoll__r_shin_geom0_mat">
+			<instance_effect url="#gkmodel0_new_ragdoll__r_shin_geom0_eff"/>
+		</material>
+		<material id="gkmodel0_new_ragdoll__r_shin_geom0_mat">
+			<instance_effect url="#gkmodel0_new_ragdoll__r_shin_geom0"/>
+		</material>
+		<material id="gkmodel0_new_ragdoll__r_foot_geom0_mat">
+			<instance_effect url="#gkmodel0_new_ragdoll__r_foot_geom0_eff"/>
+		</material>
+		<material id="gkmodel0_new_ragdoll__r_foot_geom0_mat">
+			<instance_effect url="#gkmodel0_new_ragdoll__r_foot_geom0"/>
+		</material>
+	</library_materials>
+	<library_kinematics_models id="kmodels">
+		<kinematics_model id="kmodel0" name="new_ragdoll">
+			<technique_common>
+				<joint name="new_ragdoll__L_arm_joint2" sid="new_ragdoll__L_arm_joint2">
+					<revolute sid="axis0">
+						<axis>0 0 0</axis>
+						<limits>
+							<min>0</min>
+							<max>0</max>
+						</limits>
+					</revolute>
+				</joint>
+				<joint name="new_ragdoll__L_thigh_joint2" sid="new_ragdoll__L_thigh_joint2">
+					<revolute sid="axis0">
+						<axis>0 0 0</axis>
+						<limits>
+							<min>0</min>
+							<max>0</max>
+						</limits>
+					</revolute>
+				</joint>
+				<joint name="new_ragdoll__R_arm_joint2" sid="new_ragdoll__R_arm_joint2">
+					<revolute sid="axis0">
+						<axis>0 0 0</axis>
+						<limits>
+							<min>0</min>
+							<max>0</max>
+						</limits>
+					</revolute>
+				</joint>
+				<joint name="new_ragdoll__R_thigh_joint2" sid="new_ragdoll__R_thigh_joint2">
+					<revolute sid="axis0">
+						<axis>0 0 0</axis>
+						<limits>
+							<min>0</min>
+							<max>0</max>
+						</limits>
+					</revolute>
+				</joint>
+				<joint name="new_ragdoll__head_joint" sid="new_ragdoll__head_joint">
+					<revolute sid="axis0">
+						<axis>0 0 0</axis>
+						<limits>
+							<min>0</min>
+							<max>0</max>
+						</limits>
+					</revolute>
+				</joint>
+				<joint name="new_ragdoll__l_arm_joint" sid="new_ragdoll__l_arm_joint">
+					<revolute sid="axis0">
+						<axis>0 0.00159 -0.99999</axis>
+						<limits>
+							<min>-177.2731418134767</min>
+							<max>58.72817400090938</max>
+						</limits>
+					</revolute>
+				</joint>
+				<joint name="new_ragdoll__l_foot_joint" sid="new_ragdoll__l_foot_joint">
+					<revolute sid="axis0">
+						<axis>0 0 1</axis>
+						<limits>
+							<min>-23.49126960036375</min>
+							<max>36.26822843178111</max>
+						</limits>
+					</revolute>
+				</joint>
+				<joint name="new_ragdoll__l_hand_joint" sid="new_ragdoll__l_hand_joint">
+					<revolute sid="axis0">
+						<axis>0 0 0</axis>
+						<limits>
+							<min>0</min>
+							<max>0</max>
+						</limits>
+					</revolute>
+				</joint>
+				<joint name="new_ragdoll__l_shin_joint" sid="new_ragdoll__l_shin_joint">
+					<revolute sid="axis0">
+						<axis>0 0 1</axis>
+						<limits>
+							<min>0</min>
+							<max>104.5075018318622</max>
+						</limits>
+					</revolute>
+				</joint>
+				<joint name="new_ragdoll__l_thigh_joint" sid="new_ragdoll__l_thigh_joint">
+					<revolute sid="axis0">
+						<axis>0 0 1</axis>
+						<limits>
+							<min>-117.5136437813319</min>
+							<max>44.97718691776962</max>
+						</limits>
+					</revolute>
+				</joint>
+				<joint name="new_ragdoll__l_wrist_joint" sid="new_ragdoll__l_wrist_joint">
+					<revolute sid="axis0">
+						<axis>0 0 1</axis>
+						<limits>
+							<min>-136.2493636821098</min>
+							<max>0</max>
+						</limits>
+					</revolute>
+				</joint>
+				<joint name="new_ragdoll__middle_body_joint" sid="new_ragdoll__middle_body_joint">
+					<revolute sid="axis0">
+						<axis>0 0 1</axis>
+						<limits>
+							<min>-15.01149423242757</min>
+							<max>35.0077212824933</max>
+						</limits>
+					</revolute>
+				</joint>
+				<joint name="new_ragdoll__neck_joint" sid="new_ragdoll__neck_joint">
+					<revolute sid="axis0">
+						<axis>0 0 0</axis>
+						<limits>
+							<min>0</min>
+							<max>0</max>
+						</limits>
+					</revolute>
+				</joint>
+				<joint name="new_ragdoll__r_arm_joint" sid="new_ragdoll__r_arm_joint">
+					<revolute sid="axis0">
+						<axis>0 0 1</axis>
+						<limits>
+							<min>-177.2731418134767</min>
+							<max>58.72817400090938</max>
+						</limits>
+					</revolute>
+				</joint>
+				<joint name="new_ragdoll__r_foot_joint" sid="new_ragdoll__r_foot_joint">
+					<revolute sid="axis0">
+						<axis>0 0 1</axis>
+						<limits>
+							<min>-23.49126960036375</min>
+							<max>36.26822843178111</max>
+						</limits>
+					</revolute>
+				</joint>
+				<joint name="new_ragdoll__r_hand_joint" sid="new_ragdoll__r_hand_joint">
+					<revolute sid="axis0">
+						<axis>0 0 0</axis>
+						<limits>
+							<min>0</min>
+							<max>0</max>
+						</limits>
+					</revolute>
+				</joint>
+				<joint name="new_ragdoll__r_shin_joint" sid="new_ragdoll__r_shin_joint">
+					<revolute sid="axis0">
+						<axis>0 0 1</axis>
+						<limits>
+							<min>0</min>
+							<max>104.5075018318622</max>
+						</limits>
+					</revolute>
+				</joint>
+				<joint name="new_ragdoll__r_thigh_joint" sid="new_ragdoll__r_thigh_joint">
+					<revolute sid="axis0">
+						<axis>0 0 1</axis>
+						<limits>
+							<min>-117.5136437813319</min>
+							<max>44.97718691776962</max>
+						</limits>
+					</revolute>
+				</joint>
+				<joint name="new_ragdoll__r_wrist_joint" sid="new_ragdoll__r_wrist_joint">
+					<revolute sid="axis0">
+						<axis>0 0 0</axis>
+						<limits>
+							<min>0</min>
+							<max>0</max>
+						</limits>
+					</revolute>
+				</joint>
+				<joint name="new_ragdoll__upper_body_joint" sid="new_ragdoll__upper_body_joint">
+					<revolute sid="axis0">
+						<axis>0 0 1</axis>
+						<limits>
+							<min>-15.01149423242757</min>
+							<max>35.0077212824933</max>
+						</limits>
+					</revolute>
+				</joint>
+				<link sid="new_ragdoll__lower_body" name="new_ragdoll__lower_body">
+					<attachment_full joint="kmodel0/new_ragdoll__l_thigh_joint">
+						<translate>-0.0864 0 10.00006</translate>
+						<rotate>0 -1 0 89.95437383553926</rotate>
+						<link sid="new_ragdoll__v_l_thigh" name="new_ragdoll__v_l_thigh">
+							<attachment_full joint="kmodel0/new_ragdoll__L_thigh_joint2">
+								<translate>0 0 0</translate>
+								<rotate>1 0 0 0</rotate>
+								<link sid="new_ragdoll__l_thigh" name="new_ragdoll__l_thigh">
+									<attachment_full joint="kmodel0/new_ragdoll__l_shin_joint">
+										<translate>-0.42672 0 0</translate>
+										<rotate>1 0 0 0</rotate>
+										<link sid="new_ragdoll__l_shin" name="new_ragdoll__l_shin">
+											<attachment_full joint="kmodel0/new_ragdoll__l_foot_joint">
+												<translate>-0.41402 0 0</translate>
+												<rotate>1 0 0 0</rotate>
+												<link sid="new_ragdoll__l_foot" name="new_ragdoll__l_foot"/>
+											</attachment_full>
+										</link>
+									</attachment_full>
+								</link>
+							</attachment_full>
+						</link>
+					</attachment_full>
+					<attachment_full joint="kmodel0/new_ragdoll__middle_body_joint">
+						<translate>4e-05 0 10.05207</translate>
+						<rotate>0 -1 0 89.95437383553926</rotate>
+						<link sid="new_ragdoll__middle_body" name="new_ragdoll__middle_body">
+							<attachment_full joint="kmodel0/new_ragdoll__upper_body_joint">
+								<translate>0.15112 0 0</translate>
+								<rotate>1 0 0 0</rotate>
+								<link sid="new_ragdoll__upper_body" name="new_ragdoll__upper_body">
+									<attachment_full joint="kmodel0/new_ragdoll__l_arm_joint">
+										<translate>0.254 0 0.17526</translate>
+										<rotate>1 0 0 179.9087476710785</rotate>
+										<link sid="new_ragdoll__v_l_arm" name="new_ragdoll__v_l_arm">
+											<attachment_full joint="kmodel0/new_ragdoll__L_arm_joint2">
+												<translate>0 0 0</translate>
+												<rotate>-1 0 0 179.9087476710785</rotate>
+												<link sid="new_ragdoll__l_arm" name="new_ragdoll__l_arm">
+													<attachment_full joint="kmodel0/new_ragdoll__l_wrist_joint">
+														<translate>-0.28199 0 0.04953</translate>
+														<rotate>1 0 0 0</rotate>
+														<link sid="new_ragdoll__l_wrist" name="new_ragdoll__l_wrist">
+															<attachment_full joint="kmodel0/new_ragdoll__l_hand_joint">
+																<translate>-0.2515 0 0</translate>
+																<rotate>1 0 0 0</rotate>
+																<link sid="new_ragdoll__l_hand" name="new_ragdoll__l_hand"/>
+															</attachment_full>
+														</link>
+													</attachment_full>
+												</link>
+											</attachment_full>
+										</link>
+									</attachment_full>
+									<attachment_full joint="kmodel0/new_ragdoll__neck_joint">
+										<translate>0.35052 0 0</translate>
+										<rotate>1 0 0 0</rotate>
+										<link sid="new_ragdoll__neck" name="new_ragdoll__neck">
+											<attachment_full joint="kmodel0/new_ragdoll__head_joint">
+												<translate>0.07238 0 0</translate>
+												<rotate>1 0 0 0</rotate>
+												<link sid="new_ragdoll__head" name="new_ragdoll__head"/>
+											</attachment_full>
+										</link>
+									</attachment_full>
+									<attachment_full joint="kmodel0/new_ragdoll__r_arm_joint">
+										<translate>0.254 0 -0.17526</translate>
+										<rotate>1 0 0 0</rotate>
+										<link sid="new_ragdoll__v_r_arm" name="new_ragdoll__v_r_arm">
+											<attachment_full joint="kmodel0/new_ragdoll__R_arm_joint2">
+												<translate>0 0 0</translate>
+												<rotate>1 0 0 0</rotate>
+												<link sid="new_ragdoll__r_arm" name="new_ragdoll__r_arm">
+													<attachment_full joint="kmodel0/new_ragdoll__r_wrist_joint">
+														<translate>-0.28199 0 -0.04953</translate>
+														<rotate>1 0 0 0</rotate>
+														<link sid="new_ragdoll__r_wrist" name="new_ragdoll__r_wrist">
+															<attachment_full joint="kmodel0/new_ragdoll__r_hand_joint">
+																<translate>-0.2515 0 0</translate>
+																<rotate>1 0 0 0</rotate>
+																<link sid="new_ragdoll__r_hand" name="new_ragdoll__r_hand"/>
+															</attachment_full>
+														</link>
+													</attachment_full>
+												</link>
+											</attachment_full>
+										</link>
+									</attachment_full>
+								</link>
+							</attachment_full>
+						</link>
+					</attachment_full>
+					<attachment_full joint="kmodel0/new_ragdoll__r_thigh_joint">
+						<translate>0.0864 0 9.999930000000001</translate>
+						<rotate>0 -1 0 89.95437383553926</rotate>
+						<link sid="new_ragdoll__v_r_thigh" name="new_ragdoll__v_r_thigh">
+							<attachment_full joint="kmodel0/new_ragdoll__R_thigh_joint2">
+								<translate>0 0 0</translate>
+								<rotate>1 0 0 0</rotate>
+								<link sid="new_ragdoll__r_thigh" name="new_ragdoll__r_thigh">
+									<attachment_full joint="kmodel0/new_ragdoll__r_shin_joint">
+										<translate>-0.42672 0 0</translate>
+										<rotate>1 0 0 0</rotate>
+										<link sid="new_ragdoll__r_shin" name="new_ragdoll__r_shin">
+											<attachment_full joint="kmodel0/new_ragdoll__r_foot_joint">
+												<translate>-0.41402 0 0</translate>
+												<rotate>1 0 0 0</rotate>
+												<link sid="new_ragdoll__r_foot" name="new_ragdoll__r_foot"/>
+											</attachment_full>
+										</link>
+									</attachment_full>
+								</link>
+							</attachment_full>
+						</link>
+					</attachment_full>
+				</link>
+			</technique_common>
+		</kinematics_model>
+	</library_kinematics_models>
+	<library_articulated_systems id="asystems">
+		<articulated_system id="robot0_motion">
+			<motion>
+				<instance_articulated_system url="#robot0_kinematics">
+					<newparam sid="robot0_motion_kmodel0_inst">
+						<SIDREF>robot0_kinematics/robot0_kinematics_kmodel0_inst</SIDREF>
+					</newparam>
+					<newparam sid="robot0_motion_robot0_kinematics_kmodel0_inst_new_ragdoll__L_arm_joint2_axis0">
+						<SIDREF>robot0_kinematics/robot0_kinematics_kmodel0_inst_new_ragdoll__L_arm_joint2_axis0</SIDREF>
+					</newparam>
+					<newparam sid="robot0_motion_robot0_kinematics_kmodel0_inst_new_ragdoll__L_arm_joint2_axis0_value">
+						<SIDREF>robot0_kinematics/robot0_kinematics_kmodel0_inst_new_ragdoll__L_arm_joint2_axis0_value</SIDREF>
+					</newparam>
+					<newparam sid="robot0_motion_robot0_kinematics_kmodel0_inst_new_ragdoll__L_thigh_joint2_axis0">
+						<SIDREF>robot0_kinematics/robot0_kinematics_kmodel0_inst_new_ragdoll__L_thigh_joint2_axis0</SIDREF>
+					</newparam>
+					<newparam sid="robot0_motion_robot0_kinematics_kmodel0_inst_new_ragdoll__L_thigh_joint2_axis0_value">
+						<SIDREF>robot0_kinematics/robot0_kinematics_kmodel0_inst_new_ragdoll__L_thigh_joint2_axis0_value</SIDREF>
+					</newparam>
+					<newparam sid="robot0_motion_robot0_kinematics_kmodel0_inst_new_ragdoll__R_arm_joint2_axis0">
+						<SIDREF>robot0_kinematics/robot0_kinematics_kmodel0_inst_new_ragdoll__R_arm_joint2_axis0</SIDREF>
+					</newparam>
+					<newparam sid="robot0_motion_robot0_kinematics_kmodel0_inst_new_ragdoll__R_arm_joint2_axis0_value">
+						<SIDREF>robot0_kinematics/robot0_kinematics_kmodel0_inst_new_ragdoll__R_arm_joint2_axis0_value</SIDREF>
+					</newparam>
+					<newparam sid="robot0_motion_robot0_kinematics_kmodel0_inst_new_ragdoll__R_thigh_joint2_axis0">
+						<SIDREF>robot0_kinematics/robot0_kinematics_kmodel0_inst_new_ragdoll__R_thigh_joint2_axis0</SIDREF>
+					</newparam>
+					<newparam sid="robot0_motion_robot0_kinematics_kmodel0_inst_new_ragdoll__R_thigh_joint2_axis0_value">
+						<SIDREF>robot0_kinematics/robot0_kinematics_kmodel0_inst_new_ragdoll__R_thigh_joint2_axis0_value</SIDREF>
+					</newparam>
+					<newparam sid="robot0_motion_robot0_kinematics_kmodel0_inst_new_ragdoll__head_joint_axis0">
+						<SIDREF>robot0_kinematics/robot0_kinematics_kmodel0_inst_new_ragdoll__head_joint_axis0</SIDREF>
+					</newparam>
+					<newparam sid="robot0_motion_robot0_kinematics_kmodel0_inst_new_ragdoll__head_joint_axis0_value">
+						<SIDREF>robot0_kinematics/robot0_kinematics_kmodel0_inst_new_ragdoll__head_joint_axis0_value</SIDREF>
+					</newparam>
+					<newparam sid="robot0_motion_robot0_kinematics_kmodel0_inst_new_ragdoll__l_arm_joint_axis0">
+						<SIDREF>robot0_kinematics/robot0_kinematics_kmodel0_inst_new_ragdoll__l_arm_joint_axis0</SIDREF>
+					</newparam>
+					<newparam sid="robot0_motion_robot0_kinematics_kmodel0_inst_new_ragdoll__l_arm_joint_axis0_value">
+						<SIDREF>robot0_kinematics/robot0_kinematics_kmodel0_inst_new_ragdoll__l_arm_joint_axis0_value</SIDREF>
+					</newparam>
+					<newparam sid="robot0_motion_robot0_kinematics_kmodel0_inst_new_ragdoll__l_foot_joint_axis0">
+						<SIDREF>robot0_kinematics/robot0_kinematics_kmodel0_inst_new_ragdoll__l_foot_joint_axis0</SIDREF>
+					</newparam>
+					<newparam sid="robot0_motion_robot0_kinematics_kmodel0_inst_new_ragdoll__l_foot_joint_axis0_value">
+						<SIDREF>robot0_kinematics/robot0_kinematics_kmodel0_inst_new_ragdoll__l_foot_joint_axis0_value</SIDREF>
+					</newparam>
+					<newparam sid="robot0_motion_robot0_kinematics_kmodel0_inst_new_ragdoll__l_hand_joint_axis0">
+						<SIDREF>robot0_kinematics/robot0_kinematics_kmodel0_inst_new_ragdoll__l_hand_joint_axis0</SIDREF>
+					</newparam>
+					<newparam sid="robot0_motion_robot0_kinematics_kmodel0_inst_new_ragdoll__l_hand_joint_axis0_value">
+						<SIDREF>robot0_kinematics/robot0_kinematics_kmodel0_inst_new_ragdoll__l_hand_joint_axis0_value</SIDREF>
+					</newparam>
+					<newparam sid="robot0_motion_robot0_kinematics_kmodel0_inst_new_ragdoll__l_shin_joint_axis0">
+						<SIDREF>robot0_kinematics/robot0_kinematics_kmodel0_inst_new_ragdoll__l_shin_joint_axis0</SIDREF>
+					</newparam>
+					<newparam sid="robot0_motion_robot0_kinematics_kmodel0_inst_new_ragdoll__l_shin_joint_axis0_value">
+						<SIDREF>robot0_kinematics/robot0_kinematics_kmodel0_inst_new_ragdoll__l_shin_joint_axis0_value</SIDREF>
+					</newparam>
+					<newparam sid="robot0_motion_robot0_kinematics_kmodel0_inst_new_ragdoll__l_thigh_joint_axis0">
+						<SIDREF>robot0_kinematics/robot0_kinematics_kmodel0_inst_new_ragdoll__l_thigh_joint_axis0</SIDREF>
+					</newparam>
+					<newparam sid="robot0_motion_robot0_kinematics_kmodel0_inst_new_ragdoll__l_thigh_joint_axis0_value">
+						<SIDREF>robot0_kinematics/robot0_kinematics_kmodel0_inst_new_ragdoll__l_thigh_joint_axis0_value</SIDREF>
+					</newparam>
+					<newparam sid="robot0_motion_robot0_kinematics_kmodel0_inst_new_ragdoll__l_wrist_joint_axis0">
+						<SIDREF>robot0_kinematics/robot0_kinematics_kmodel0_inst_new_ragdoll__l_wrist_joint_axis0</SIDREF>
+					</newparam>
+					<newparam sid="robot0_motion_robot0_kinematics_kmodel0_inst_new_ragdoll__l_wrist_joint_axis0_value">
+						<SIDREF>robot0_kinematics/robot0_kinematics_kmodel0_inst_new_ragdoll__l_wrist_joint_axis0_value</SIDREF>
+					</newparam>
+					<newparam sid="robot0_motion_robot0_kinematics_kmodel0_inst_new_ragdoll__middle_body_joint_axis0">
+						<SIDREF>robot0_kinematics/robot0_kinematics_kmodel0_inst_new_ragdoll__middle_body_joint_axis0</SIDREF>
+					</newparam>
+					<newparam sid="robot0_motion_robot0_kinematics_kmodel0_inst_new_ragdoll__middle_body_joint_axis0_value">
+						<SIDREF>robot0_kinematics/robot0_kinematics_kmodel0_inst_new_ragdoll__middle_body_joint_axis0_value</SIDREF>
+					</newparam>
+					<newparam sid="robot0_motion_robot0_kinematics_kmodel0_inst_new_ragdoll__neck_joint_axis0">
+						<SIDREF>robot0_kinematics/robot0_kinematics_kmodel0_inst_new_ragdoll__neck_joint_axis0</SIDREF>
+					</newparam>
+					<newparam sid="robot0_motion_robot0_kinematics_kmodel0_inst_new_ragdoll__neck_joint_axis0_value">
+						<SIDREF>robot0_kinematics/robot0_kinematics_kmodel0_inst_new_ragdoll__neck_joint_axis0_value</SIDREF>
+					</newparam>
+					<newparam sid="robot0_motion_robot0_kinematics_kmodel0_inst_new_ragdoll__r_arm_joint_axis0">
+						<SIDREF>robot0_kinematics/robot0_kinematics_kmodel0_inst_new_ragdoll__r_arm_joint_axis0</SIDREF>
+					</newparam>
+					<newparam sid="robot0_motion_robot0_kinematics_kmodel0_inst_new_ragdoll__r_arm_joint_axis0_value">
+						<SIDREF>robot0_kinematics/robot0_kinematics_kmodel0_inst_new_ragdoll__r_arm_joint_axis0_value</SIDREF>
+					</newparam>
+					<newparam sid="robot0_motion_robot0_kinematics_kmodel0_inst_new_ragdoll__r_foot_joint_axis0">
+						<SIDREF>robot0_kinematics/robot0_kinematics_kmodel0_inst_new_ragdoll__r_foot_joint_axis0</SIDREF>
+					</newparam>
+					<newparam sid="robot0_motion_robot0_kinematics_kmodel0_inst_new_ragdoll__r_foot_joint_axis0_value">
+						<SIDREF>robot0_kinematics/robot0_kinematics_kmodel0_inst_new_ragdoll__r_foot_joint_axis0_value</SIDREF>
+					</newparam>
+					<newparam sid="robot0_motion_robot0_kinematics_kmodel0_inst_new_ragdoll__r_hand_joint_axis0">
+						<SIDREF>robot0_kinematics/robot0_kinematics_kmodel0_inst_new_ragdoll__r_hand_joint_axis0</SIDREF>
+					</newparam>
+					<newparam sid="robot0_motion_robot0_kinematics_kmodel0_inst_new_ragdoll__r_hand_joint_axis0_value">
+						<SIDREF>robot0_kinematics/robot0_kinematics_kmodel0_inst_new_ragdoll__r_hand_joint_axis0_value</SIDREF>
+					</newparam>
+					<newparam sid="robot0_motion_robot0_kinematics_kmodel0_inst_new_ragdoll__r_shin_joint_axis0">
+						<SIDREF>robot0_kinematics/robot0_kinematics_kmodel0_inst_new_ragdoll__r_shin_joint_axis0</SIDREF>
+					</newparam>
+					<newparam sid="robot0_motion_robot0_kinematics_kmodel0_inst_new_ragdoll__r_shin_joint_axis0_value">
+						<SIDREF>robot0_kinematics/robot0_kinematics_kmodel0_inst_new_ragdoll__r_shin_joint_axis0_value</SIDREF>
+					</newparam>
+					<newparam sid="robot0_motion_robot0_kinematics_kmodel0_inst_new_ragdoll__r_thigh_joint_axis0">
+						<SIDREF>robot0_kinematics/robot0_kinematics_kmodel0_inst_new_ragdoll__r_thigh_joint_axis0</SIDREF>
+					</newparam>
+					<newparam sid="robot0_motion_robot0_kinematics_kmodel0_inst_new_ragdoll__r_thigh_joint_axis0_value">
+						<SIDREF>robot0_kinematics/robot0_kinematics_kmodel0_inst_new_ragdoll__r_thigh_joint_axis0_value</SIDREF>
+					</newparam>
+					<newparam sid="robot0_motion_robot0_kinematics_kmodel0_inst_new_ragdoll__r_wrist_joint_axis0">
+						<SIDREF>robot0_kinematics/robot0_kinematics_kmodel0_inst_new_ragdoll__r_wrist_joint_axis0</SIDREF>
+					</newparam>
+					<newparam sid="robot0_motion_robot0_kinematics_kmodel0_inst_new_ragdoll__r_wrist_joint_axis0_value">
+						<SIDREF>robot0_kinematics/robot0_kinematics_kmodel0_inst_new_ragdoll__r_wrist_joint_axis0_value</SIDREF>
+					</newparam>
+					<newparam sid="robot0_motion_robot0_kinematics_kmodel0_inst_new_ragdoll__upper_body_joint_axis0">
+						<SIDREF>robot0_kinematics/robot0_kinematics_kmodel0_inst_new_ragdoll__upper_body_joint_axis0</SIDREF>
+					</newparam>
+					<newparam sid="robot0_motion_robot0_kinematics_kmodel0_inst_new_ragdoll__upper_body_joint_axis0_value">
+						<SIDREF>robot0_kinematics/robot0_kinematics_kmodel0_inst_new_ragdoll__upper_body_joint_axis0_value</SIDREF>
+					</newparam>
+				</instance_articulated_system>
+				<technique_common>
+					<axis_info axis="robot0_kinematics/axis_info_inst0">
+						<speed>
+							<float>0</float>
+						</speed>
+						<acceleration>
+							<float>0</float>
+						</acceleration>
+					</axis_info>
+					<axis_info axis="robot0_kinematics/axis_info_inst1">
+						<speed>
+							<float>0</float>
+						</speed>
+						<acceleration>
+							<float>0</float>
+						</acceleration>
+					</axis_info>
+					<axis_info axis="robot0_kinematics/axis_info_inst2">
+						<speed>
+							<float>0</float>
+						</speed>
+						<acceleration>
+							<float>0</float>
+						</acceleration>
+					</axis_info>
+					<axis_info axis="robot0_kinematics/axis_info_inst3">
+						<speed>
+							<float>0</float>
+						</speed>
+						<acceleration>
+							<float>0</float>
+						</acceleration>
+					</axis_info>
+					<axis_info axis="robot0_kinematics/axis_info_inst4">
+						<speed>
+							<float>0</float>
+						</speed>
+						<acceleration>
+							<float>0</float>
+						</acceleration>
+					</axis_info>
+					<axis_info axis="robot0_kinematics/axis_info_inst5">
+						<speed>
+							<float>0</float>
+						</speed>
+						<acceleration>
+							<float>0</float>
+						</acceleration>
+					</axis_info>
+					<axis_info axis="robot0_kinematics/axis_info_inst6">
+						<speed>
+							<float>0</float>
+						</speed>
+						<acceleration>
+							<float>0</float>
+						</acceleration>
+					</axis_info>
+					<axis_info axis="robot0_kinematics/axis_info_inst7">
+						<speed>
+							<float>0</float>
+						</speed>
+						<acceleration>
+							<float>0</float>
+						</acceleration>
+					</axis_info>
+					<axis_info axis="robot0_kinematics/axis_info_inst8">
+						<speed>
+							<float>0</float>
+						</speed>
+						<acceleration>
+							<float>0</float>
+						</acceleration>
+					</axis_info>
+					<axis_info axis="robot0_kinematics/axis_info_inst9">
+						<speed>
+							<float>0</float>
+						</speed>
+						<acceleration>
+							<float>0</float>
+						</acceleration>
+					</axis_info>
+					<axis_info axis="robot0_kinematics/axis_info_inst10">
+						<speed>
+							<float>0</float>
+						</speed>
+						<acceleration>
+							<float>0</float>
+						</acceleration>
+					</axis_info>
+					<axis_info axis="robot0_kinematics/axis_info_inst11">
+						<speed>
+							<float>0</float>
+						</speed>
+						<acceleration>
+							<float>0</float>
+						</acceleration>
+					</axis_info>
+					<axis_info axis="robot0_kinematics/axis_info_inst12">
+						<speed>
+							<float>0</float>
+						</speed>
+						<acceleration>
+							<float>0</float>
+						</acceleration>
+					</axis_info>
+					<axis_info axis="robot0_kinematics/axis_info_inst13">
+						<speed>
+							<float>0</float>
+						</speed>
+						<acceleration>
+							<float>0</float>
+						</acceleration>
+					</axis_info>
+					<axis_info axis="robot0_kinematics/axis_info_inst14">
+						<speed>
+							<float>0</float>
+						</speed>
+						<acceleration>
+							<float>0</float>
+						</acceleration>
+					</axis_info>
+					<axis_info axis="robot0_kinematics/axis_info_inst15">
+						<speed>
+							<float>0</float>
+						</speed>
+						<acceleration>
+							<float>0</float>
+						</acceleration>
+					</axis_info>
+					<axis_info axis="robot0_kinematics/axis_info_inst16">
+						<speed>
+							<float>0</float>
+						</speed>
+						<acceleration>
+							<float>0</float>
+						</acceleration>
+					</axis_info>
+					<axis_info axis="robot0_kinematics/axis_info_inst17">
+						<speed>
+							<float>0</float>
+						</speed>
+						<acceleration>
+							<float>0</float>
+						</acceleration>
+					</axis_info>
+					<axis_info axis="robot0_kinematics/axis_info_inst18">
+						<speed>
+							<float>0</float>
+						</speed>
+						<acceleration>
+							<float>0</float>
+						</acceleration>
+					</axis_info>
+					<axis_info axis="robot0_kinematics/axis_info_inst19">
+						<speed>
+							<float>0</float>
+						</speed>
+						<acceleration>
+							<float>0</float>
+						</acceleration>
+					</axis_info>
+				</technique_common>
+			</motion>
+		</articulated_system>
+		<articulated_system id="robot0_kinematics">
+			<kinematics>
+				<instance_kinematics_model url="#kmodel0" sid="kmodel0_inst">
+					<newparam sid="robot0_kinematics_kmodel0_inst">
+						<SIDREF>robot0_kinematics/kmodel0_inst</SIDREF>
+					</newparam>
+					<newparam sid="robot0_kinematics_kmodel0_inst_new_ragdoll__L_arm_joint2_axis0">
+						<SIDREF>robot0_kinematics/kmodel0_inst/new_ragdoll__L_arm_joint2/axis0</SIDREF>
+					</newparam>
+					<newparam sid="robot0_kinematics_kmodel0_inst_new_ragdoll__L_arm_joint2_axis0_value">
+						<float>0</float>
+					</newparam>
+					<newparam sid="robot0_kinematics_kmodel0_inst_new_ragdoll__L_thigh_joint2_axis0">
+						<SIDREF>robot0_kinematics/kmodel0_inst/new_ragdoll__L_thigh_joint2/axis0</SIDREF>
+					</newparam>
+					<newparam sid="robot0_kinematics_kmodel0_inst_new_ragdoll__L_thigh_joint2_axis0_value">
+						<float>0</float>
+					</newparam>
+					<newparam sid="robot0_kinematics_kmodel0_inst_new_ragdoll__R_arm_joint2_axis0">
+						<SIDREF>robot0_kinematics/kmodel0_inst/new_ragdoll__R_arm_joint2/axis0</SIDREF>
+					</newparam>
+					<newparam sid="robot0_kinematics_kmodel0_inst_new_ragdoll__R_arm_joint2_axis0_value">
+						<float>0</float>
+					</newparam>
+					<newparam sid="robot0_kinematics_kmodel0_inst_new_ragdoll__R_thigh_joint2_axis0">
+						<SIDREF>robot0_kinematics/kmodel0_inst/new_ragdoll__R_thigh_joint2/axis0</SIDREF>
+					</newparam>
+					<newparam sid="robot0_kinematics_kmodel0_inst_new_ragdoll__R_thigh_joint2_axis0_value">
+						<float>0</float>
+					</newparam>
+					<newparam sid="robot0_kinematics_kmodel0_inst_new_ragdoll__head_joint_axis0">
+						<SIDREF>robot0_kinematics/kmodel0_inst/new_ragdoll__head_joint/axis0</SIDREF>
+					</newparam>
+					<newparam sid="robot0_kinematics_kmodel0_inst_new_ragdoll__head_joint_axis0_value">
+						<float>0</float>
+					</newparam>
+					<newparam sid="robot0_kinematics_kmodel0_inst_new_ragdoll__l_arm_joint_axis0">
+						<SIDREF>robot0_kinematics/kmodel0_inst/new_ragdoll__l_arm_joint/axis0</SIDREF>
+					</newparam>
+					<newparam sid="robot0_kinematics_kmodel0_inst_new_ragdoll__l_arm_joint_axis0_value">
+						<float>0</float>
+					</newparam>
+					<newparam sid="robot0_kinematics_kmodel0_inst_new_ragdoll__l_foot_joint_axis0">
+						<SIDREF>robot0_kinematics/kmodel0_inst/new_ragdoll__l_foot_joint/axis0</SIDREF>
+					</newparam>
+					<newparam sid="robot0_kinematics_kmodel0_inst_new_ragdoll__l_foot_joint_axis0_value">
+						<float>0</float>
+					</newparam>
+					<newparam sid="robot0_kinematics_kmodel0_inst_new_ragdoll__l_hand_joint_axis0">
+						<SIDREF>robot0_kinematics/kmodel0_inst/new_ragdoll__l_hand_joint/axis0</SIDREF>
+					</newparam>
+					<newparam sid="robot0_kinematics_kmodel0_inst_new_ragdoll__l_hand_joint_axis0_value">
+						<float>0</float>
+					</newparam>
+					<newparam sid="robot0_kinematics_kmodel0_inst_new_ragdoll__l_shin_joint_axis0">
+						<SIDREF>robot0_kinematics/kmodel0_inst/new_ragdoll__l_shin_joint/axis0</SIDREF>
+					</newparam>
+					<newparam sid="robot0_kinematics_kmodel0_inst_new_ragdoll__l_shin_joint_axis0_value">
+						<float>0</float>
+					</newparam>
+					<newparam sid="robot0_kinematics_kmodel0_inst_new_ragdoll__l_thigh_joint_axis0">
+						<SIDREF>robot0_kinematics/kmodel0_inst/new_ragdoll__l_thigh_joint/axis0</SIDREF>
+					</newparam>
+					<newparam sid="robot0_kinematics_kmodel0_inst_new_ragdoll__l_thigh_joint_axis0_value">
+						<float>0</float>
+					</newparam>
+					<newparam sid="robot0_kinematics_kmodel0_inst_new_ragdoll__l_wrist_joint_axis0">
+						<SIDREF>robot0_kinematics/kmodel0_inst/new_ragdoll__l_wrist_joint/axis0</SIDREF>
+					</newparam>
+					<newparam sid="robot0_kinematics_kmodel0_inst_new_ragdoll__l_wrist_joint_axis0_value">
+						<float>0</float>
+					</newparam>
+					<newparam sid="robot0_kinematics_kmodel0_inst_new_ragdoll__middle_body_joint_axis0">
+						<SIDREF>robot0_kinematics/kmodel0_inst/new_ragdoll__middle_body_joint/axis0</SIDREF>
+					</newparam>
+					<newparam sid="robot0_kinematics_kmodel0_inst_new_ragdoll__middle_body_joint_axis0_value">
+						<float>0</float>
+					</newparam>
+					<newparam sid="robot0_kinematics_kmodel0_inst_new_ragdoll__neck_joint_axis0">
+						<SIDREF>robot0_kinematics/kmodel0_inst/new_ragdoll__neck_joint/axis0</SIDREF>
+					</newparam>
+					<newparam sid="robot0_kinematics_kmodel0_inst_new_ragdoll__neck_joint_axis0_value">
+						<float>0</float>
+					</newparam>
+					<newparam sid="robot0_kinematics_kmodel0_inst_new_ragdoll__r_arm_joint_axis0">
+						<SIDREF>robot0_kinematics/kmodel0_inst/new_ragdoll__r_arm_joint/axis0</SIDREF>
+					</newparam>
+					<newparam sid="robot0_kinematics_kmodel0_inst_new_ragdoll__r_arm_joint_axis0_value">
+						<float>0</float>
+					</newparam>
+					<newparam sid="robot0_kinematics_kmodel0_inst_new_ragdoll__r_foot_joint_axis0">
+						<SIDREF>robot0_kinematics/kmodel0_inst/new_ragdoll__r_foot_joint/axis0</SIDREF>
+					</newparam>
+					<newparam sid="robot0_kinematics_kmodel0_inst_new_ragdoll__r_foot_joint_axis0_value">
+						<float>0</float>
+					</newparam>
+					<newparam sid="robot0_kinematics_kmodel0_inst_new_ragdoll__r_hand_joint_axis0">
+						<SIDREF>robot0_kinematics/kmodel0_inst/new_ragdoll__r_hand_joint/axis0</SIDREF>
+					</newparam>
+					<newparam sid="robot0_kinematics_kmodel0_inst_new_ragdoll__r_hand_joint_axis0_value">
+						<float>0</float>
+					</newparam>
+					<newparam sid="robot0_kinematics_kmodel0_inst_new_ragdoll__r_shin_joint_axis0">
+						<SIDREF>robot0_kinematics/kmodel0_inst/new_ragdoll__r_shin_joint/axis0</SIDREF>
+					</newparam>
+					<newparam sid="robot0_kinematics_kmodel0_inst_new_ragdoll__r_shin_joint_axis0_value">
+						<float>0</float>
+					</newparam>
+					<newparam sid="robot0_kinematics_kmodel0_inst_new_ragdoll__r_thigh_joint_axis0">
+						<SIDREF>robot0_kinematics/kmodel0_inst/new_ragdoll__r_thigh_joint/axis0</SIDREF>
+					</newparam>
+					<newparam sid="robot0_kinematics_kmodel0_inst_new_ragdoll__r_thigh_joint_axis0_value">
+						<float>0</float>
+					</newparam>
+					<newparam sid="robot0_kinematics_kmodel0_inst_new_ragdoll__r_wrist_joint_axis0">
+						<SIDREF>robot0_kinematics/kmodel0_inst/new_ragdoll__r_wrist_joint/axis0</SIDREF>
+					</newparam>
+					<newparam sid="robot0_kinematics_kmodel0_inst_new_ragdoll__r_wrist_joint_axis0_value">
+						<float>0</float>
+					</newparam>
+					<newparam sid="robot0_kinematics_kmodel0_inst_new_ragdoll__upper_body_joint_axis0">
+						<SIDREF>robot0_kinematics/kmodel0_inst/new_ragdoll__upper_body_joint/axis0</SIDREF>
+					</newparam>
+					<newparam sid="robot0_kinematics_kmodel0_inst_new_ragdoll__upper_body_joint_axis0_value">
+						<float>0</float>
+					</newparam>
+				</instance_kinematics_model>
+				<technique_common>
+					<axis_info sid="axis_info_inst0" axis="kmodel0/new_ragdoll__L_arm_joint2/axis0">
+						<active>
+							<bool>false</bool>
+						</active>
+						<locked>
+							<bool>false</bool>
+						</locked>
+						<limits>
+							<min>
+								<float>-0</float>
+							</min>
+							<max>
+								<float>0</float>
+							</max>
+						</limits>
+					</axis_info>
+					<axis_info sid="axis_info_inst1" axis="kmodel0/new_ragdoll__L_thigh_joint2/axis0">
+						<active>
+							<bool>false</bool>
+						</active>
+						<locked>
+							<bool>false</bool>
+						</locked>
+						<limits>
+							<min>
+								<float>0</float>
+							</min>
+							<max>
+								<float>0</float>
+							</max>
+						</limits>
+					</axis_info>
+					<axis_info sid="axis_info_inst2" axis="kmodel0/new_ragdoll__R_arm_joint2/axis0">
+						<active>
+							<bool>false</bool>
+						</active>
+						<locked>
+							<bool>false</bool>
+						</locked>
+						<limits>
+							<min>
+								<float>0</float>
+							</min>
+							<max>
+								<float>0</float>
+							</max>
+						</limits>
+					</axis_info>
+					<axis_info sid="axis_info_inst3" axis="kmodel0/new_ragdoll__R_thigh_joint2/axis0">
+						<active>
+							<bool>false</bool>
+						</active>
+						<locked>
+							<bool>false</bool>
+						</locked>
+						<limits>
+							<min>
+								<float>0</float>
+							</min>
+							<max>
+								<float>0</float>
+							</max>
+						</limits>
+					</axis_info>
+					<axis_info sid="axis_info_inst4" axis="kmodel0/new_ragdoll__head_joint/axis0">
+						<active>
+							<bool>false</bool>
+						</active>
+						<locked>
+							<bool>false</bool>
+						</locked>
+						<limits>
+							<min>
+								<float>0</float>
+							</min>
+							<max>
+								<float>0</float>
+							</max>
+						</limits>
+					</axis_info>
+					<axis_info sid="axis_info_inst5" axis="kmodel0/new_ragdoll__l_arm_joint/axis0">
+						<active>
+							<bool>true</bool>
+						</active>
+						<locked>
+							<bool>false</bool>
+						</locked>
+						<limits>
+							<min>
+								<float>-177.2731418134767</float>
+							</min>
+							<max>
+								<float>58.72817400090938</float>
+							</max>
+						</limits>
+					</axis_info>
+					<axis_info sid="axis_info_inst6" axis="kmodel0/new_ragdoll__l_foot_joint/axis0">
+						<active>
+							<bool>true</bool>
+						</active>
+						<locked>
+							<bool>false</bool>
+						</locked>
+						<limits>
+							<min>
+								<float>-23.49126960036375</float>
+							</min>
+							<max>
+								<float>36.26822843178111</float>
+							</max>
+						</limits>
+					</axis_info>
+					<axis_info sid="axis_info_inst7" axis="kmodel0/new_ragdoll__l_hand_joint/axis0">
+						<active>
+							<bool>false</bool>
+						</active>
+						<locked>
+							<bool>false</bool>
+						</locked>
+						<limits>
+							<min>
+								<float>0</float>
+							</min>
+							<max>
+								<float>0</float>
+							</max>
+						</limits>
+					</axis_info>
+					<axis_info sid="axis_info_inst8" axis="kmodel0/new_ragdoll__l_shin_joint/axis0">
+						<active>
+							<bool>true</bool>
+						</active>
+						<locked>
+							<bool>false</bool>
+						</locked>
+						<limits>
+							<min>
+								<float>0</float>
+							</min>
+							<max>
+								<float>104.5075018318622</float>
+							</max>
+						</limits>
+					</axis_info>
+					<axis_info sid="axis_info_inst9" axis="kmodel0/new_ragdoll__l_thigh_joint/axis0">
+						<active>
+							<bool>true</bool>
+						</active>
+						<locked>
+							<bool>false</bool>
+						</locked>
+						<limits>
+							<min>
+								<float>-117.5136437813319</float>
+							</min>
+							<max>
+								<float>44.97718691776962</float>
+							</max>
+						</limits>
+					</axis_info>
+					<axis_info sid="axis_info_inst10" axis="kmodel0/new_ragdoll__l_wrist_joint/axis0">
+						<active>
+							<bool>true</bool>
+						</active>
+						<locked>
+							<bool>false</bool>
+						</locked>
+						<limits>
+							<min>
+								<float>-136.2493636821098</float>
+							</min>
+							<max>
+								<float>0</float>
+							</max>
+						</limits>
+					</axis_info>
+					<axis_info sid="axis_info_inst11" axis="kmodel0/new_ragdoll__middle_body_joint/axis0">
+						<active>
+							<bool>true</bool>
+						</active>
+						<locked>
+							<bool>false</bool>
+						</locked>
+						<limits>
+							<min>
+								<float>-15.01149423242757</float>
+							</min>
+							<max>
+								<float>35.0077212824933</float>
+							</max>
+						</limits>
+					</axis_info>
+					<axis_info sid="axis_info_inst12" axis="kmodel0/new_ragdoll__neck_joint/axis0">
+						<active>
+							<bool>false</bool>
+						</active>
+						<locked>
+							<bool>false</bool>
+						</locked>
+						<limits>
+							<min>
+								<float>0</float>
+							</min>
+							<max>
+								<float>0</float>
+							</max>
+						</limits>
+					</axis_info>
+					<axis_info sid="axis_info_inst13" axis="kmodel0/new_ragdoll__r_arm_joint/axis0">
+						<active>
+							<bool>true</bool>
+						</active>
+						<locked>
+							<bool>false</bool>
+						</locked>
+						<limits>
+							<min>
+								<float>-177.2731418134767</float>
+							</min>
+							<max>
+								<float>58.72817400090938</float>
+							</max>
+						</limits>
+					</axis_info>
+					<axis_info sid="axis_info_inst14" axis="kmodel0/new_ragdoll__r_foot_joint/axis0">
+						<active>
+							<bool>true</bool>
+						</active>
+						<locked>
+							<bool>false</bool>
+						</locked>
+						<limits>
+							<min>
+								<float>-23.49126960036375</float>
+							</min>
+							<max>
+								<float>36.26822843178111</float>
+							</max>
+						</limits>
+					</axis_info>
+					<axis_info sid="axis_info_inst15" axis="kmodel0/new_ragdoll__r_hand_joint/axis0">
+						<active>
+							<bool>false</bool>
+						</active>
+						<locked>
+							<bool>false</bool>
+						</locked>
+						<limits>
+							<min>
+								<float>0</float>
+							</min>
+							<max>
+								<float>0</float>
+							</max>
+						</limits>
+					</axis_info>
+					<axis_info sid="axis_info_inst16" axis="kmodel0/new_ragdoll__r_shin_joint/axis0">
+						<active>
+							<bool>true</bool>
+						</active>
+						<locked>
+							<bool>false</bool>
+						</locked>
+						<limits>
+							<min>
+								<float>0</float>
+							</min>
+							<max>
+								<float>104.5075018318622</float>
+							</max>
+						</limits>
+					</axis_info>
+					<axis_info sid="axis_info_inst17" axis="kmodel0/new_ragdoll__r_thigh_joint/axis0">
+						<active>
+							<bool>true</bool>
+						</active>
+						<locked>
+							<bool>false</bool>
+						</locked>
+						<limits>
+							<min>
+								<float>-117.5136437813319</float>
+							</min>
+							<max>
+								<float>44.97718691776962</float>
+							</max>
+						</limits>
+					</axis_info>
+					<axis_info sid="axis_info_inst18" axis="kmodel0/new_ragdoll__r_wrist_joint/axis0">
+						<active>
+							<bool>false</bool>
+						</active>
+						<locked>
+							<bool>false</bool>
+						</locked>
+						<limits>
+							<min>
+								<float>0</float>
+							</min>
+							<max>
+								<float>0</float>
+							</max>
+						</limits>
+					</axis_info>
+					<axis_info sid="axis_info_inst19" axis="kmodel0/new_ragdoll__upper_body_joint/axis0">
+						<active>
+							<bool>true</bool>
+						</active>
+						<locked>
+							<bool>false</bool>
+						</locked>
+						<limits>
+							<min>
+								<float>-15.01149423242757</float>
+							</min>
+							<max>
+								<float>35.0077212824933</float>
+							</max>
+						</limits>
+					</axis_info>
+				</technique_common>
+			</kinematics>
+		</articulated_system>
+	</library_articulated_systems>
+	<library_kinematics_scenes id="kscenes">
+		<kinematics_scene id="kscene" name="URDF Kinematics Scene">
+			<instance_articulated_system sid="robot0_motion_inst" url="#robot0_motion" name="new_ragdoll">
+				<bind symbol="kscene_kmodel0_inst">
+					<param ref="robot0_motion/robot0_motion_kmodel0_inst"/>
+				</bind>
+				<bind symbol="kscene_kmodel0_inst_robot0_kinematics_kmodel0_inst_new_ragdoll__L_arm_joint2_axis0">
+					<param ref="robot0_motion/robot0_motion_robot0_kinematics_kmodel0_inst_new_ragdoll__L_arm_joint2_axis0"/>
+				</bind>
+				<bind symbol="kscene_kmodel0_inst_robot0_kinematics_kmodel0_inst_new_ragdoll__L_arm_joint2_axis0_value">
+					<param ref="robot0_motion/robot0_motion_robot0_kinematics_kmodel0_inst_new_ragdoll__L_arm_joint2_axis0_value"/>
+				</bind>
+				<bind symbol="kscene_kmodel0_inst_robot0_kinematics_kmodel0_inst_new_ragdoll__L_thigh_joint2_axis0">
+					<param ref="robot0_motion/robot0_motion_robot0_kinematics_kmodel0_inst_new_ragdoll__L_thigh_joint2_axis0"/>
+				</bind>
+				<bind symbol="kscene_kmodel0_inst_robot0_kinematics_kmodel0_inst_new_ragdoll__L_thigh_joint2_axis0_value">
+					<param ref="robot0_motion/robot0_motion_robot0_kinematics_kmodel0_inst_new_ragdoll__L_thigh_joint2_axis0_value"/>
+				</bind>
+				<bind symbol="kscene_kmodel0_inst_robot0_kinematics_kmodel0_inst_new_ragdoll__R_arm_joint2_axis0">
+					<param ref="robot0_motion/robot0_motion_robot0_kinematics_kmodel0_inst_new_ragdoll__R_arm_joint2_axis0"/>
+				</bind>
+				<bind symbol="kscene_kmodel0_inst_robot0_kinematics_kmodel0_inst_new_ragdoll__R_arm_joint2_axis0_value">
+					<param ref="robot0_motion/robot0_motion_robot0_kinematics_kmodel0_inst_new_ragdoll__R_arm_joint2_axis0_value"/>
+				</bind>
+				<bind symbol="kscene_kmodel0_inst_robot0_kinematics_kmodel0_inst_new_ragdoll__R_thigh_joint2_axis0">
+					<param ref="robot0_motion/robot0_motion_robot0_kinematics_kmodel0_inst_new_ragdoll__R_thigh_joint2_axis0"/>
+				</bind>
+				<bind symbol="kscene_kmodel0_inst_robot0_kinematics_kmodel0_inst_new_ragdoll__R_thigh_joint2_axis0_value">
+					<param ref="robot0_motion/robot0_motion_robot0_kinematics_kmodel0_inst_new_ragdoll__R_thigh_joint2_axis0_value"/>
+				</bind>
+				<bind symbol="kscene_kmodel0_inst_robot0_kinematics_kmodel0_inst_new_ragdoll__head_joint_axis0">
+					<param ref="robot0_motion/robot0_motion_robot0_kinematics_kmodel0_inst_new_ragdoll__head_joint_axis0"/>
+				</bind>
+				<bind symbol="kscene_kmodel0_inst_robot0_kinematics_kmodel0_inst_new_ragdoll__head_joint_axis0_value">
+					<param ref="robot0_motion/robot0_motion_robot0_kinematics_kmodel0_inst_new_ragdoll__head_joint_axis0_value"/>
+				</bind>
+				<bind symbol="kscene_kmodel0_inst_robot0_kinematics_kmodel0_inst_new_ragdoll__l_arm_joint_axis0">
+					<param ref="robot0_motion/robot0_motion_robot0_kinematics_kmodel0_inst_new_ragdoll__l_arm_joint_axis0"/>
+				</bind>
+				<bind symbol="kscene_kmodel0_inst_robot0_kinematics_kmodel0_inst_new_ragdoll__l_arm_joint_axis0_value">
+					<param ref="robot0_motion/robot0_motion_robot0_kinematics_kmodel0_inst_new_ragdoll__l_arm_joint_axis0_value"/>
+				</bind>
+				<bind symbol="kscene_kmodel0_inst_robot0_kinematics_kmodel0_inst_new_ragdoll__l_foot_joint_axis0">
+					<param ref="robot0_motion/robot0_motion_robot0_kinematics_kmodel0_inst_new_ragdoll__l_foot_joint_axis0"/>
+				</bind>
+				<bind symbol="kscene_kmodel0_inst_robot0_kinematics_kmodel0_inst_new_ragdoll__l_foot_joint_axis0_value">
+					<param ref="robot0_motion/robot0_motion_robot0_kinematics_kmodel0_inst_new_ragdoll__l_foot_joint_axis0_value"/>
+				</bind>
+				<bind symbol="kscene_kmodel0_inst_robot0_kinematics_kmodel0_inst_new_ragdoll__l_hand_joint_axis0">
+					<param ref="robot0_motion/robot0_motion_robot0_kinematics_kmodel0_inst_new_ragdoll__l_hand_joint_axis0"/>
+				</bind>
+				<bind symbol="kscene_kmodel0_inst_robot0_kinematics_kmodel0_inst_new_ragdoll__l_hand_joint_axis0_value">
+					<param ref="robot0_motion/robot0_motion_robot0_kinematics_kmodel0_inst_new_ragdoll__l_hand_joint_axis0_value"/>
+				</bind>
+				<bind symbol="kscene_kmodel0_inst_robot0_kinematics_kmodel0_inst_new_ragdoll__l_shin_joint_axis0">
+					<param ref="robot0_motion/robot0_motion_robot0_kinematics_kmodel0_inst_new_ragdoll__l_shin_joint_axis0"/>
+				</bind>
+				<bind symbol="kscene_kmodel0_inst_robot0_kinematics_kmodel0_inst_new_ragdoll__l_shin_joint_axis0_value">
+					<param ref="robot0_motion/robot0_motion_robot0_kinematics_kmodel0_inst_new_ragdoll__l_shin_joint_axis0_value"/>
+				</bind>
+				<bind symbol="kscene_kmodel0_inst_robot0_kinematics_kmodel0_inst_new_ragdoll__l_thigh_joint_axis0">
+					<param ref="robot0_motion/robot0_motion_robot0_kinematics_kmodel0_inst_new_ragdoll__l_thigh_joint_axis0"/>
+				</bind>
+				<bind symbol="kscene_kmodel0_inst_robot0_kinematics_kmodel0_inst_new_ragdoll__l_thigh_joint_axis0_value">
+					<param ref="robot0_motion/robot0_motion_robot0_kinematics_kmodel0_inst_new_ragdoll__l_thigh_joint_axis0_value"/>
+				</bind>
+				<bind symbol="kscene_kmodel0_inst_robot0_kinematics_kmodel0_inst_new_ragdoll__l_wrist_joint_axis0">
+					<param ref="robot0_motion/robot0_motion_robot0_kinematics_kmodel0_inst_new_ragdoll__l_wrist_joint_axis0"/>
+				</bind>
+				<bind symbol="kscene_kmodel0_inst_robot0_kinematics_kmodel0_inst_new_ragdoll__l_wrist_joint_axis0_value">
+					<param ref="robot0_motion/robot0_motion_robot0_kinematics_kmodel0_inst_new_ragdoll__l_wrist_joint_axis0_value"/>
+				</bind>
+				<bind symbol="kscene_kmodel0_inst_robot0_kinematics_kmodel0_inst_new_ragdoll__middle_body_joint_axis0">
+					<param ref="robot0_motion/robot0_motion_robot0_kinematics_kmodel0_inst_new_ragdoll__middle_body_joint_axis0"/>
+				</bind>
+				<bind symbol="kscene_kmodel0_inst_robot0_kinematics_kmodel0_inst_new_ragdoll__middle_body_joint_axis0_value">
+					<param ref="robot0_motion/robot0_motion_robot0_kinematics_kmodel0_inst_new_ragdoll__middle_body_joint_axis0_value"/>
+				</bind>
+				<bind symbol="kscene_kmodel0_inst_robot0_kinematics_kmodel0_inst_new_ragdoll__neck_joint_axis0">
+					<param ref="robot0_motion/robot0_motion_robot0_kinematics_kmodel0_inst_new_ragdoll__neck_joint_axis0"/>
+				</bind>
+				<bind symbol="kscene_kmodel0_inst_robot0_kinematics_kmodel0_inst_new_ragdoll__neck_joint_axis0_value">
+					<param ref="robot0_motion/robot0_motion_robot0_kinematics_kmodel0_inst_new_ragdoll__neck_joint_axis0_value"/>
+				</bind>
+				<bind symbol="kscene_kmodel0_inst_robot0_kinematics_kmodel0_inst_new_ragdoll__r_arm_joint_axis0">
+					<param ref="robot0_motion/robot0_motion_robot0_kinematics_kmodel0_inst_new_ragdoll__r_arm_joint_axis0"/>
+				</bind>
+				<bind symbol="kscene_kmodel0_inst_robot0_kinematics_kmodel0_inst_new_ragdoll__r_arm_joint_axis0_value">
+					<param ref="robot0_motion/robot0_motion_robot0_kinematics_kmodel0_inst_new_ragdoll__r_arm_joint_axis0_value"/>
+				</bind>
+				<bind symbol="kscene_kmodel0_inst_robot0_kinematics_kmodel0_inst_new_ragdoll__r_foot_joint_axis0">
+					<param ref="robot0_motion/robot0_motion_robot0_kinematics_kmodel0_inst_new_ragdoll__r_foot_joint_axis0"/>
+				</bind>
+				<bind symbol="kscene_kmodel0_inst_robot0_kinematics_kmodel0_inst_new_ragdoll__r_foot_joint_axis0_value">
+					<param ref="robot0_motion/robot0_motion_robot0_kinematics_kmodel0_inst_new_ragdoll__r_foot_joint_axis0_value"/>
+				</bind>
+				<bind symbol="kscene_kmodel0_inst_robot0_kinematics_kmodel0_inst_new_ragdoll__r_hand_joint_axis0">
+					<param ref="robot0_motion/robot0_motion_robot0_kinematics_kmodel0_inst_new_ragdoll__r_hand_joint_axis0"/>
+				</bind>
+				<bind symbol="kscene_kmodel0_inst_robot0_kinematics_kmodel0_inst_new_ragdoll__r_hand_joint_axis0_value">
+					<param ref="robot0_motion/robot0_motion_robot0_kinematics_kmodel0_inst_new_ragdoll__r_hand_joint_axis0_value"/>
+				</bind>
+				<bind symbol="kscene_kmodel0_inst_robot0_kinematics_kmodel0_inst_new_ragdoll__r_shin_joint_axis0">
+					<param ref="robot0_motion/robot0_motion_robot0_kinematics_kmodel0_inst_new_ragdoll__r_shin_joint_axis0"/>
+				</bind>
+				<bind symbol="kscene_kmodel0_inst_robot0_kinematics_kmodel0_inst_new_ragdoll__r_shin_joint_axis0_value">
+					<param ref="robot0_motion/robot0_motion_robot0_kinematics_kmodel0_inst_new_ragdoll__r_shin_joint_axis0_value"/>
+				</bind>
+				<bind symbol="kscene_kmodel0_inst_robot0_kinematics_kmodel0_inst_new_ragdoll__r_thigh_joint_axis0">
+					<param ref="robot0_motion/robot0_motion_robot0_kinematics_kmodel0_inst_new_ragdoll__r_thigh_joint_axis0"/>
+				</bind>
+				<bind symbol="kscene_kmodel0_inst_robot0_kinematics_kmodel0_inst_new_ragdoll__r_thigh_joint_axis0_value">
+					<param ref="robot0_motion/robot0_motion_robot0_kinematics_kmodel0_inst_new_ragdoll__r_thigh_joint_axis0_value"/>
+				</bind>
+				<bind symbol="kscene_kmodel0_inst_robot0_kinematics_kmodel0_inst_new_ragdoll__r_wrist_joint_axis0">
+					<param ref="robot0_motion/robot0_motion_robot0_kinematics_kmodel0_inst_new_ragdoll__r_wrist_joint_axis0"/>
+				</bind>
+				<bind symbol="kscene_kmodel0_inst_robot0_kinematics_kmodel0_inst_new_ragdoll__r_wrist_joint_axis0_value">
+					<param ref="robot0_motion/robot0_motion_robot0_kinematics_kmodel0_inst_new_ragdoll__r_wrist_joint_axis0_value"/>
+				</bind>
+				<bind symbol="kscene_kmodel0_inst_robot0_kinematics_kmodel0_inst_new_ragdoll__upper_body_joint_axis0">
+					<param ref="robot0_motion/robot0_motion_robot0_kinematics_kmodel0_inst_new_ragdoll__upper_body_joint_axis0"/>
+				</bind>
+				<bind symbol="kscene_kmodel0_inst_robot0_kinematics_kmodel0_inst_new_ragdoll__upper_body_joint_axis0_value">
+					<param ref="robot0_motion/robot0_motion_robot0_kinematics_kmodel0_inst_new_ragdoll__upper_body_joint_axis0_value"/>
+				</bind>
+			</instance_articulated_system>
+		</kinematics_scene>
+	</library_kinematics_scenes>
+	<library_physics_scenes id="pscenes">
+		<physics_scene id="pscene" name="URDF Physics Scene">
+			<instance_physics_model url="#pmodel0" sid="pmodel0_inst" parent="#visual0">
+				<instance_rigid_body body="rigid0" target="#vkmodel0_node0"/>
+				<instance_rigid_body body="rigid1" target="#vkmodel0_node1"/>
+				<instance_rigid_body body="rigid2" target="#vkmodel0_node2"/>
+				<instance_rigid_body body="rigid3" target="#vkmodel0_node3"/>
+				<instance_rigid_body body="rigid4" target="#vkmodel0_node4"/>
+				<instance_rigid_body body="rigid5" target="#vkmodel0_node5"/>
+				<instance_rigid_body body="rigid6" target="#vkmodel0_node6"/>
+				<instance_rigid_body body="rigid7" target="#vkmodel0_node7"/>
+				<instance_rigid_body body="rigid8" target="#vkmodel0_node8"/>
+				<instance_rigid_body body="rigid9" target="#vkmodel0_node9"/>
+				<instance_rigid_body body="rigid10" target="#vkmodel0_node10"/>
+				<instance_rigid_body body="rigid11" target="#vkmodel0_node11"/>
+				<instance_rigid_body body="rigid12" target="#vkmodel0_node12"/>
+				<instance_rigid_body body="rigid13" target="#vkmodel0_node13"/>
+				<instance_rigid_body body="rigid14" target="#vkmodel0_node14"/>
+				<instance_rigid_body body="rigid15" target="#vkmodel0_node15"/>
+				<instance_rigid_body body="rigid16" target="#vkmodel0_node16"/>
+				<instance_rigid_body body="rigid17" target="#vkmodel0_node17"/>
+				<instance_rigid_body body="rigid18" target="#vkmodel0_node18"/>
+				<instance_rigid_body body="rigid19" target="#vkmodel0_node19"/>
+				<instance_rigid_body body="rigid20" target="#vkmodel0_node20"/>
+			</instance_physics_model>
+			<technique_common>
+				<gravity>0 0 0</gravity>
+			</technique_common>
+		</physics_scene>
+	</library_physics_scenes>
+	<library_physics_models id="pmodels">
+		<physics_model id="pmodel0" name="new_ragdoll">
+			<rigid_body sid="rigid0" name="new_ragdoll__head">
+				<technique_common>
+					<dynamic>true</dynamic>
+					<mass>6.02</mass>
+					<mass_frame>
+						<translate>0.000574980247537714 0.0508 10.72387978699044</translate>
+						<rotate>0 -1 0 89.95437383553926</rotate>
+					</mass_frame>
+					<inertia>0.0206 0.0235 0.0153</inertia>
+				</technique_common>
+			</rigid_body>
+			<rigid_body sid="rigid1" name="new_ragdoll__l_arm">
+				<technique_common>
+					<dynamic>true</dynamic>
+					<mass>2.35</mass>
+					<mass_frame>
+						<translate>-0.2245395790256069 0 10.31639892252775</translate>
+						<rotate>0 -1 0 89.95437383553926</rotate>
+					</mass_frame>
+					<inertia>0.0141 0.0141 0.0029</inertia>
+				</technique_common>
+			</rigid_body>
+			<rigid_body sid="rigid2" name="new_ragdoll__l_foot">
+				<technique_common>
+					<dynamic>true</dynamic>
+					<mass>1.19</mass>
+					<mass_frame>
+						<translate>-0.08711663033352308 0.0508 9.100140285335984</translate>
+						<rotate>0 -1 0 89.95437383553926</rotate>
+					</mass_frame>
+					<inertia>0.0008 0.0044 0.0046</inertia>
+				</technique_common>
+			</rigid_body>
+			<rigid_body sid="rigid3" name="new_ragdoll__l_hand">
+				<technique_common>
+					<dynamic>true</dynamic>
+					<mass>0.5</mass>
+					<mass_frame>
+						<translate>-0.2249357674907309 0 9.818879080275504</translate>
+						<rotate>0 -1 0 89.95437383553926</rotate>
+					</mass_frame>
+					<inertia>0.0013 0.0011 0.0004</inertia>
+				</technique_common>
+			</rigid_body>
+			<rigid_body sid="rigid4" name="new_ragdoll__l_shin">
+				<technique_common>
+					<dynamic>true</dynamic>
+					<mass>3.76</mass>
+					<mass_frame>
+						<translate>-0.086904656126393 0 9.366330200935607</translate>
+						<rotate>0 -1 0 89.95437383553926</rotate>
+					</mass_frame>
+					<inertia>0.0606 0.0606 0.0071</inertia>
+				</technique_common>
+			</rigid_body>
+			<rigid_body sid="rigid5" name="new_ragdoll__l_thigh">
+				<technique_common>
+					<dynamic>true</dynamic>
+					<mass>12.3</mass>
+					<mass_frame>
+						<translate>-0.08656990426700205 0 9.786700067649663</translate>
+						<rotate>0 -1 0 89.95437383553926</rotate>
+					</mass_frame>
+					<inertia>0.1652 0.1652 0.0452</inertia>
+				</technique_common>
+			</rigid_body>
+			<rigid_body sid="rigid6" name="new_ragdoll__l_wrist">
+				<technique_common>
+					<dynamic>true</dynamic>
+					<mass>1.4</mass>
+					<mass_frame>
+						<translate>-0.2247519752858937 0 10.04967900709617</translate>
+						<rotate>0 -1 0 89.95437383553926</rotate>
+					</mass_frame>
+					<inertia>0.008999999999999999 0.008999999999999999 0.0014</inertia>
+				</technique_common>
+			</rigid_body>
+			<rigid_body sid="rigid7" name="new_ragdoll__lower_body">
+				<technique_common>
+					<dynamic>true</dynamic>
+					<mass>9.699999999999999</mass>
+					<mass_frame>
+						<translate>0.0762 0 0</translate>
+						<rotate>1 0 0 0</rotate>
+					</mass_frame>
+					<inertia>0.1116 0.1028 0.1298</inertia>
+				</technique_common>
+			</rigid_body>
+			<rigid_body sid="rigid8" name="new_ragdoll__middle_body">
+				<technique_common>
+					<dynamic>true</dynamic>
+					<mass>14.2</mass>
+					<mass_frame>
+						<translate>0.0001805755542457431 0 10.22859994402796</translate>
+						<rotate>0 -1 0 89.95437383553926</rotate>
+					</mass_frame>
+					<inertia>0.1116 0.1028 0.1298</inertia>
+				</technique_common>
+			</rigid_body>
+			<rigid_body sid="rigid9" name="new_ragdoll__neck">
+				<technique_common>
+					<dynamic>true</dynamic>
+					<mass>1.03</mass>
+					<mass_frame>
+						<translate>0.00049154909805419 0 10.61910982020967</translate>
+						<rotate>0 -1 0 89.95437383553926</rotate>
+					</mass_frame>
+					<inertia>0.0018 0.0022 0.0028</inertia>
+				</technique_common>
+			</rigid_body>
+			<rigid_body sid="rigid10" name="new_ragdoll__r_arm">
+				<technique_common>
+					<dynamic>true</dynamic>
+					<mass>2.35</mass>
+					<mass_frame>
+						<translate>0.225040254537086 0 10.31601090997465</translate>
+						<rotate>0 -1 0 89.95437383553926</rotate>
+					</mass_frame>
+					<inertia>0.0141 0.0141 0.0029</inertia>
+				</technique_common>
+			</rigid_body>
+			<rigid_body sid="rigid11" name="new_ragdoll__r_foot">
+				<technique_common>
+					<dynamic>true</dynamic>
+					<mass>1.19</mass>
+					<mass_frame>
+						<translate>0.08568336966647692 0.0508 9.100010285335985</translate>
+						<rotate>0 -1 0 89.95437383553926</rotate>
+					</mass_frame>
+					<inertia>0.0008 0.0044 0.0046</inertia>
+				</technique_common>
+			</rigid_body>
+			<rigid_body sid="rigid12" name="new_ragdoll__r_hand">
+				<technique_common>
+					<dynamic>true</dynamic>
+					<mass>0.5</mass>
+					<mass_frame>
+						<translate>0.2246440899617633 0 9.818521067712894</translate>
+						<rotate>0 -1 0 89.95437383553926</rotate>
+					</mass_frame>
+					<inertia>0.0013 0.0011 0.0004</inertia>
+				</technique_common>
+			</rigid_body>
+			<rigid_body sid="rigid13" name="new_ragdoll__r_shin">
+				<technique_common>
+					<dynamic>true</dynamic>
+					<mass>3.76</mass>
+					<mass_frame>
+						<translate>0.08589534387360701 0 9.366200200935609</translate>
+						<rotate>0 -1 0 89.95437383553926</rotate>
+					</mass_frame>
+					<inertia>0.0606 0.0606 0.0071</inertia>
+				</technique_common>
+			</rigid_body>
+			<rigid_body sid="rigid14" name="new_ragdoll__r_thigh">
+				<technique_common>
+					<dynamic>true</dynamic>
+					<mass>12.3</mass>
+					<mass_frame>
+						<translate>0.08623009573299796 0 9.786570067649665</translate>
+						<rotate>0 -1 0 89.95437383553926</rotate>
+					</mass_frame>
+					<inertia>0.1652 0.1652 0.0452</inertia>
+				</technique_common>
+			</rigid_body>
+			<rigid_body sid="rigid15" name="new_ragdoll__r_wrist">
+				<technique_common>
+					<dynamic>true</dynamic>
+					<mass>1.4</mass>
+					<mass_frame>
+						<translate>0.2248278821666005 0 10.04932099453356</translate>
+						<rotate>0 -1 0 89.95437383553926</rotate>
+					</mass_frame>
+					<inertia>0.008999999999999999 0.008999999999999999 0.0014</inertia>
+				</technique_common>
+			</rigid_body>
+			<rigid_body sid="rigid16" name="new_ragdoll__upper_body">
+				<technique_common>
+					<dynamic>true</dynamic>
+					<mass>12.82</mass>
+					<mass_frame>
+						<translate>0.0003019277816943852 0 10.38098989570994</translate>
+						<rotate>0 -1 0 89.95437383553926</rotate>
+					</mass_frame>
+					<inertia>0.1116 0.1028 0.1298</inertia>
+				</technique_common>
+			</rigid_body>
+			<rigid_body sid="rigid17" name="new_ragdoll__v_l_arm">
+				<technique_common>
+					<dynamic>true</dynamic>
+					<mass>0</mass>
+					<mass_frame>
+						<translate>-0.1748973365535811 0 10.45732943576867</translate>
+						<rotate>0.7073881571113269 -0.0005628638608372367 0.7068250691386907 179.9354491763952</rotate>
+					</mass_frame>
+					<inertia>0 0 0</inertia>
+				</technique_common>
+			</rigid_body>
+			<rigid_body sid="rigid18" name="new_ragdoll__v_l_thigh">
+				<technique_common>
+					<dynamic>true</dynamic>
+					<mass>0</mass>
+					<mass_frame>
+						<translate>-0.0864 0 10.00006</translate>
+						<rotate>0 -1 0 89.95437383553926</rotate>
+					</mass_frame>
+					<inertia>0 0 0</inertia>
+				</technique_common>
+			</rigid_body>
+			<rigid_body sid="rigid19" name="new_ragdoll__v_r_arm">
+				<technique_common>
+					<dynamic>true</dynamic>
+					<mass>0</mass>
+					<mass_frame>
+						<translate>0.1756225523076856 0 10.45705030733002</translate>
+						<rotate>0 -1 0 89.95437383553926</rotate>
+					</mass_frame>
+					<inertia>0 0 0</inertia>
+				</technique_common>
+			</rigid_body>
+			<rigid_body sid="rigid20" name="new_ragdoll__v_r_thigh">
+				<technique_common>
+					<dynamic>true</dynamic>
+					<mass>0</mass>
+					<mass_frame>
+						<translate>0.0864 0 9.999930000000001</translate>
+						<rotate>0 -1 0 89.95437383553926</rotate>
+					</mass_frame>
+					<inertia>0 0 0</inertia>
+				</technique_common>
+			</rigid_body>
+		</physics_model>
+	</library_physics_models>
+	<scene>
+		<instance_physics_scene url="#pscene"/>
+		<instance_visual_scene url="#vscene"/>
+		<instance_kinematics_scene url="#kscene">
+			<bind_kinematics_model node="visual0/node7">
+				<param>kscene_kmodel0_inst</param>
+			</bind_kinematics_model>
+			<bind_joint_axis target="node7/node8/node16/node1/node_new_ragdoll__L_arm_joint2_axis0">
+				<axis>
+					<param>kscene_kmodel0_inst_robot0_kinematics_kmodel0_inst_new_ragdoll__L_arm_joint2_axis0</param>
+				</axis>
+				<value>
+					<param>kscene_kmodel0_inst_robot0_kinematics_kmodel0_inst_new_ragdoll__L_arm_joint2_axis0_value</param>
+				</value>
+			</bind_joint_axis>
+			<bind_joint_axis target="node7/node5/node_new_ragdoll__L_thigh_joint2_axis0">
+				<axis>
+					<param>kscene_kmodel0_inst_robot0_kinematics_kmodel0_inst_new_ragdoll__L_thigh_joint2_axis0</param>
+				</axis>
+				<value>
+					<param>kscene_kmodel0_inst_robot0_kinematics_kmodel0_inst_new_ragdoll__L_thigh_joint2_axis0_value</param>
+				</value>
+			</bind_joint_axis>
+			<bind_joint_axis target="node7/node8/node16/node10/node_new_ragdoll__R_arm_joint2_axis0">
+				<axis>
+					<param>kscene_kmodel0_inst_robot0_kinematics_kmodel0_inst_new_ragdoll__R_arm_joint2_axis0</param>
+				</axis>
+				<value>
+					<param>kscene_kmodel0_inst_robot0_kinematics_kmodel0_inst_new_ragdoll__R_arm_joint2_axis0_value</param>
+				</value>
+			</bind_joint_axis>
+			<bind_joint_axis target="node7/node14/node_new_ragdoll__R_thigh_joint2_axis0">
+				<axis>
+					<param>kscene_kmodel0_inst_robot0_kinematics_kmodel0_inst_new_ragdoll__R_thigh_joint2_axis0</param>
+				</axis>
+				<value>
+					<param>kscene_kmodel0_inst_robot0_kinematics_kmodel0_inst_new_ragdoll__R_thigh_joint2_axis0_value</param>
+				</value>
+			</bind_joint_axis>
+			<bind_joint_axis target="node7/node8/node16/node0/node_new_ragdoll__head_joint_axis0">
+				<axis>
+					<param>kscene_kmodel0_inst_robot0_kinematics_kmodel0_inst_new_ragdoll__head_joint_axis0</param>
+				</axis>
+				<value>
+					<param>kscene_kmodel0_inst_robot0_kinematics_kmodel0_inst_new_ragdoll__head_joint_axis0_value</param>
+				</value>
+			</bind_joint_axis>
+			<bind_joint_axis target="node7/node8/node17/node_new_ragdoll__l_arm_joint_axis0">
+				<axis>
+					<param>kscene_kmodel0_inst_robot0_kinematics_kmodel0_inst_new_ragdoll__l_arm_joint_axis0</param>
+				</axis>
+				<value>
+					<param>kscene_kmodel0_inst_robot0_kinematics_kmodel0_inst_new_ragdoll__l_arm_joint_axis0_value</param>
+				</value>
+			</bind_joint_axis>
+			<bind_joint_axis target="node7/node18/node5/node2/node_new_ragdoll__l_foot_joint_axis0">
+				<axis>
+					<param>kscene_kmodel0_inst_robot0_kinematics_kmodel0_inst_new_ragdoll__l_foot_joint_axis0</param>
+				</axis>
+				<value>
+					<param>kscene_kmodel0_inst_robot0_kinematics_kmodel0_inst_new_ragdoll__l_foot_joint_axis0_value</param>
+				</value>
+			</bind_joint_axis>
+			<bind_joint_axis target="node7/node8/node16/node17/node1/node3/node_new_ragdoll__l_hand_joint_axis0">
+				<axis>
+					<param>kscene_kmodel0_inst_robot0_kinematics_kmodel0_inst_new_ragdoll__l_hand_joint_axis0</param>
+				</axis>
+				<value>
+					<param>kscene_kmodel0_inst_robot0_kinematics_kmodel0_inst_new_ragdoll__l_hand_joint_axis0_value</param>
+				</value>
+			</bind_joint_axis>
+			<bind_joint_axis target="node7/node18/node4/node_new_ragdoll__l_shin_joint_axis0">
+				<axis>
+					<param>kscene_kmodel0_inst_robot0_kinematics_kmodel0_inst_new_ragdoll__l_shin_joint_axis0</param>
+				</axis>
+				<value>
+					<param>kscene_kmodel0_inst_robot0_kinematics_kmodel0_inst_new_ragdoll__l_shin_joint_axis0_value</param>
+				</value>
+			</bind_joint_axis>
+			<bind_joint_axis target="node18/node_new_ragdoll__l_thigh_joint_axis0">
+				<axis>
+					<param>kscene_kmodel0_inst_robot0_kinematics_kmodel0_inst_new_ragdoll__l_thigh_joint_axis0</param>
+				</axis>
+				<value>
+					<param>kscene_kmodel0_inst_robot0_kinematics_kmodel0_inst_new_ragdoll__l_thigh_joint_axis0_value</param>
+				</value>
+			</bind_joint_axis>
+			<bind_joint_axis target="node7/node8/node16/node17/node6/node_new_ragdoll__l_wrist_joint_axis0">
+				<axis>
+					<param>kscene_kmodel0_inst_robot0_kinematics_kmodel0_inst_new_ragdoll__l_wrist_joint_axis0</param>
+				</axis>
+				<value>
+					<param>kscene_kmodel0_inst_robot0_kinematics_kmodel0_inst_new_ragdoll__l_wrist_joint_axis0_value</param>
+				</value>
+			</bind_joint_axis>
+			<bind_joint_axis target="node8/node_new_ragdoll__middle_body_joint_axis0">
+				<axis>
+					<param>kscene_kmodel0_inst_robot0_kinematics_kmodel0_inst_new_ragdoll__middle_body_joint_axis0</param>
+				</axis>
+				<value>
+					<param>kscene_kmodel0_inst_robot0_kinematics_kmodel0_inst_new_ragdoll__middle_body_joint_axis0_value</param>
+				</value>
+			</bind_joint_axis>
+			<bind_joint_axis target="node7/node8/node9/node_new_ragdoll__neck_joint_axis0">
+				<axis>
+					<param>kscene_kmodel0_inst_robot0_kinematics_kmodel0_inst_new_ragdoll__neck_joint_axis0</param>
+				</axis>
+				<value>
+					<param>kscene_kmodel0_inst_robot0_kinematics_kmodel0_inst_new_ragdoll__neck_joint_axis0_value</param>
+				</value>
+			</bind_joint_axis>
+			<bind_joint_axis target="node7/node8/node19/node_new_ragdoll__r_arm_joint_axis0">
+				<axis>
+					<param>kscene_kmodel0_inst_robot0_kinematics_kmodel0_inst_new_ragdoll__r_arm_joint_axis0</param>
+				</axis>
+				<value>
+					<param>kscene_kmodel0_inst_robot0_kinematics_kmodel0_inst_new_ragdoll__r_arm_joint_axis0_value</param>
+				</value>
+			</bind_joint_axis>
+			<bind_joint_axis target="node7/node20/node14/node11/node_new_ragdoll__r_foot_joint_axis0">
+				<axis>
+					<param>kscene_kmodel0_inst_robot0_kinematics_kmodel0_inst_new_ragdoll__r_foot_joint_axis0</param>
+				</axis>
+				<value>
+					<param>kscene_kmodel0_inst_robot0_kinematics_kmodel0_inst_new_ragdoll__r_foot_joint_axis0_value</param>
+				</value>
+			</bind_joint_axis>
+			<bind_joint_axis target="node7/node8/node16/node19/node10/node12/node_new_ragdoll__r_hand_joint_axis0">
+				<axis>
+					<param>kscene_kmodel0_inst_robot0_kinematics_kmodel0_inst_new_ragdoll__r_hand_joint_axis0</param>
+				</axis>
+				<value>
+					<param>kscene_kmodel0_inst_robot0_kinematics_kmodel0_inst_new_ragdoll__r_hand_joint_axis0_value</param>
+				</value>
+			</bind_joint_axis>
+			<bind_joint_axis target="node7/node20/node13/node_new_ragdoll__r_shin_joint_axis0">
+				<axis>
+					<param>kscene_kmodel0_inst_robot0_kinematics_kmodel0_inst_new_ragdoll__r_shin_joint_axis0</param>
+				</axis>
+				<value>
+					<param>kscene_kmodel0_inst_robot0_kinematics_kmodel0_inst_new_ragdoll__r_shin_joint_axis0_value</param>
+				</value>
+			</bind_joint_axis>
+			<bind_joint_axis target="node20/node_new_ragdoll__r_thigh_joint_axis0">
+				<axis>
+					<param>kscene_kmodel0_inst_robot0_kinematics_kmodel0_inst_new_ragdoll__r_thigh_joint_axis0</param>
+				</axis>
+				<value>
+					<param>kscene_kmodel0_inst_robot0_kinematics_kmodel0_inst_new_ragdoll__r_thigh_joint_axis0_value</param>
+				</value>
+			</bind_joint_axis>
+			<bind_joint_axis target="node7/node8/node16/node19/node15/node_new_ragdoll__r_wrist_joint_axis0">
+				<axis>
+					<param>kscene_kmodel0_inst_robot0_kinematics_kmodel0_inst_new_ragdoll__r_wrist_joint_axis0</param>
+				</axis>
+				<value>
+					<param>kscene_kmodel0_inst_robot0_kinematics_kmodel0_inst_new_ragdoll__r_wrist_joint_axis0_value</param>
+				</value>
+			</bind_joint_axis>
+			<bind_joint_axis target="node7/node16/node_new_ragdoll__upper_body_joint_axis0">
+				<axis>
+					<param>kscene_kmodel0_inst_robot0_kinematics_kmodel0_inst_new_ragdoll__upper_body_joint_axis0</param>
+				</axis>
+				<value>
+					<param>kscene_kmodel0_inst_robot0_kinematics_kmodel0_inst_new_ragdoll__upper_body_joint_axis0_value</param>
+				</value>
+			</bind_joint_axis>
+		</instance_kinematics_scene>
+	</scene>
+	<extra id="sensors" type="library_sensors">
+		<technique profile="OpenRAVE"/>
+	</extra>
+</COLLADA>
