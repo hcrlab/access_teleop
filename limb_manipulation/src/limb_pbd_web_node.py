@@ -9,7 +9,7 @@ import camera_info_messages
 from shared_teleop_functions_and_vars import publish_camera_transforms, publish_camera_info, camera_names
 
 def main():
-  print("\n**************** LIMB PBD *****************")
+  print("\n***************** LIMB PBD *****************")
 
   rospy.init_node('limb_pbd_web_node')
   wait_for_time()

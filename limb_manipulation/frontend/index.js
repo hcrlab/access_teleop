@@ -5,8 +5,15 @@ $(function() {
     let CAMERA_TOPICS = ['/head_camera/rgb/image_raw', '/rviz1/camera1/image', '/rviz1/camera2/image', '/rviz1/camera3/image'];
     let self = this;
 
+    // Note: everything is string
     let parts = new Map();  // body part full name ---> body part id
-    let actions = new Map();  // body part id ---> [action full name, action abbr]
+    let actions = new Map();  // body part id ---> action full name
+    let actionsAbbr = new Map();  // action full name ---> action ABBR
+
+    let selectedId = "";  // id of the currently selected body part
+    let selectedGrasp = "";  // currently selected grasp type
+    let selectedAction = "";  // ABBR of the currently selected action
+    let running = false;  // is the program running? (i.e. is "RUN" button clicked?)
 
     $(document).ready(function() {
         // ROS setup
@@ -81,13 +88,25 @@ $(function() {
         document.getElementById("record_btn").addEventListener("click", recordScene);
         document.getElementById("yes_octo").addEventListener("click", recordSceneConfirmed);
         document.getElementById("no_octo").addEventListener("click", recordSceneConfirmed);
-        document.getElementById("record_action_btn").addEventListener("click", recordAction);
+        document.getElementById("sake_gripper_btn").addEventListener("click", releaseSakeGripper);
+
         document.getElementById("action_panel_btn").addEventListener("click", showPanel);
+        document.getElementById("run_btn").addEventListener("click", run);
+        document.getElementById("estop_btn").addEventListener("click", estop);
+
         document.getElementById("record_panel_btn").addEventListener("click", showPanel);
+        document.getElementById("record_action_btn").addEventListener("click", recordAction);
+
         let graspDropdownLists = document.querySelectorAll(".grasp_dropdown_content a");
         for (let i = 0; i < graspDropdownLists.length; i++) {
             graspDropdownLists[i].addEventListener("click", makeGraspSelection);
         }
+
+        let subGoBtns = document.querySelectorAll(".sub_go_btn");
+        for (let i = 0; i < subGoBtns.length; i++) {
+            subGoBtns[i].addEventListener("click", doSubAction);
+        }
+
         // camera views
         let cameraViews = document.querySelectorAll(".camera_container");
         for (let i = 0; i < cameraViews.length; i++) {
@@ -96,6 +115,9 @@ $(function() {
     });
 
     function publishRosMsg(type, args) {
+        // disable all the buttons!!!
+        $(':button:not(#estop_btn)').prop('disabled', true);
+        // publish msg
         let msg = new ROSLIB.Message({
             type: type,
             args: args
@@ -110,6 +132,10 @@ $(function() {
         } else {
             this.innerHTML = "Attach Gripper";
         }
+    }
+
+    function releaseSakeGripper() {
+        publishRosMsg("release", []);
     }
 
     function recordScene() {
@@ -165,7 +191,7 @@ $(function() {
     }
 
     function markDropdownSelection(selectedItem) {
-        // mark the selection
+        // mark the selection and return the selected item name
         selectedItem.parentElement.parentElement.querySelector(".dropbtn").innerHTML = selectedItem.innerHTML;
         return selectedItem.innerHTML;
     }
@@ -173,12 +199,21 @@ $(function() {
     function makeBodyPartSelection() {
         // mark the selection
         let itemName = markDropdownSelection(this);
+        // get the item id
+        let itemId = "";
+        if (parts.has(itemName.toLowerCase())) {
+            // a body part is selected
+            itemId = parts.get(itemName.toLowerCase());
+        }
+        selectedId = itemId;
+        // mark the selection in video stream
+        publishRosMsg("prev_id", [selectedId]);
         // update available actions
         let actionDropdownLists = document.querySelectorAll(".action_dropdown_content");
-        let availableActions = actions.get(parts.get(itemName.toLowerCase()));
+        let availableActions = actions.get(itemId);
         for (let i = 0; i < actionDropdownLists.length; i++) {
             actionDropdownLists[i].innerHTML = "";
-            if (parts.has(itemName.toLowerCase())) {
+            if (selectedId != "") {
                 for (let j = -1; j < availableActions.length; j++) {
                     // add DOM element
                     let entry = document.createElement("a");
@@ -186,7 +221,7 @@ $(function() {
                     if (j == -1) {
                         entry.innerHTML = "Select an action";
                     } else {
-                        let entryRaw = availableActions[j][0];
+                        let entryRaw = availableActions[j];
                         entry.innerHTML = entryRaw.length > 1 ? entryRaw.charAt(0).toUpperCase() + entryRaw.slice(1) : entryRaw;
                     }
                     actionDropdownLists[i].appendChild(entry);
@@ -199,16 +234,84 @@ $(function() {
 
     function makeActionSelection() {
         // mark the selection
-        markDropdownSelection(this);
+        let actionName = markDropdownSelection(this).toLowerCase();
+        // preview the action in video stream
+        if (actionsAbbr.has(actionName)) {
+            selectedAction = actionsAbbr.get(actionName);
+            publishRosMsg("prev", [selectedAction, selectedId]);
+        } else {
+            selectedAction = "";
+        }
     }
 
     function makeGraspSelection() {
         // mark the selection
-        markDropdownSelection(this);
+        let graspType = markDropdownSelection(this).substring(0, 4);
+        // record selected grasp type
+        if (graspType == "Soft" || graspType == "Hard") {
+            selectedGrasp = graspType[0].toLowerCase();
+        } else {
+            selectedGrasp = "";
+        }
+    }
+
+    function doSubAction() {
+        // get the action type
+        let stepAction = this.parentElement.id.split("_")[0];
+        if (stepAction == "go" && selectedId != "") {
+            publishRosMsg("go", [selectedId]);
+        } else if (stepAction == "grasp" && selectedId != "" && selectedGrasp != "") {
+            publishRosMsg("grasp", [selectedGrasp]);
+        } else if (stepAction == "action" && selectedId != "" && selectedGrasp != "" && selectedAction != "") {
+            publishRosMsg("do", [selectedAction]);
+        } else if (stepAction == "relax" || stepAction == "freeze") {
+            publishRosMsg(stepAction, []);
+        } else {
+            console.log(stepAction);
+        }
+    }
+
+    function run() {
+        if (selectedId != "" && selectedGrasp != "" && selectedAction != "") {
+            publishRosMsg("run", [selectedId, selectedGrasp, selectedAction]);
+            running = true;
+        } else {
+            document.getElementById("status_bar").innerHTML = "Please make your selections for each step";
+        }
+    }
+
+    function estop() {
+        if (this.innerHTML == "STOP") {
+            this.innerHTML = "RESET";
+            publishRosMsg("stop", []);
+        } else {
+            this.innerHTML = "STOP";
+            publishRosMsg("reset", []);
+        }
     }
 
     function handleServerStatusResponse(msg) {
-        document.getElementById("status_bar").innerHTML = msg.msg;
+        if (msg.type == "run" && msg.msg == "DONE") {
+            running = false;
+        }
+        if (msg.status && msg.type != "run" && !running) {
+            // enable all the buttons
+            $(':button').prop('disabled', false);
+        }
+        // show status
+        if (msg.type == "attach" || msg.type == "remove" || msg.type == "record" || msg.type == "parts" || 
+            msg.type == "actions" || msg.type == "prev" || msg.type == "prev_id" || msg.type == "reset" || 
+            msg.type == "stop" || msg.type == "release" || msg.type == "run") {
+            // main status bar
+            document.getElementById("status_bar").innerHTML = msg.msg;
+        } else {
+            // status bar for each step
+            let statusBars = document.querySelectorAll("." + msg.type + "_status");
+            for (let i = 0; i < statusBars.length; i++) {
+                statusBars[i].innerHTML = msg.msg;
+            }
+        }
+        // process returned data
         if (msg.type == "parts" && msg.args.length > 0) {
             // add the list contents to dropdown menu
             let recordDropdownLists = document.querySelectorAll(".go_dropdown_content");
@@ -244,8 +347,9 @@ $(function() {
                     actions.set(msgArgs[0], []);
                 }
                 let value = actions.get(msgArgs[0]);
-                value.push([msgArgs[1], msgArgs[2]]);
+                value.push(msgArgs[1]);
                 actions.set(msgArgs[0], value);
+                actionsAbbr.set(msgArgs[1], msgArgs[2]);
             }
         }
     }

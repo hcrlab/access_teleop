@@ -14,6 +14,7 @@ def print_usage():
   print("    -o: update octomap as well")
   print("  parts: show a list of body parts (eg: right lower leg (ID#))")
   print("  actions: show a list of available actions (eg: leg abduction (ABBREVIATION))")
+  print("  prev_id ID: preview the body part with ID#")
   print("  prev ABBR ID: preview the trajectory of action ABBR with respect to body part ID#\n")
   print("  go ID#: move the gripper to a place 10cm from the body part specified by ID#")
   print("  grasp: if followed by \"go ID#\", move the gripper down to grasp the body part with these options (default: -s)")
@@ -32,7 +33,7 @@ def print_usage():
   print("  quit: shutdown the program\n")
 
 def main():
-  print("\n**************** LIMB PBD *****************")
+  print("\n***************** LIMB PBD *****************")
 
   rospy.init_node('limb_pbd')
   wait_for_time()
@@ -136,6 +137,17 @@ def main():
                 print("Part ID " + str(part.id) + " has no action available")
           else:
             print("No action found")
+
+        elif command[:7] == "prev_id" and len(command) > 8:
+          try:
+            id_num = int(command[8:])  # convert from string to int
+            if id_num not in BODY_PARTS:
+              print("Given number is invalid!")
+            else:
+              print("Previewing body part with id " + command[8:] + "...")
+              server.preview_body_part_with_id(id_num)
+          except ValueError:
+            print("Please enter an integer!")
 
         elif command[:4] == "prev" and len(command) > 5:
           prev_args = command.split()

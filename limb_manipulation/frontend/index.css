@@ -121,6 +121,16 @@ button:active {
     background-color: #f67e85 !important;
 }
 
+.status {
+    height: 5em;
+    margin: 0.5em;
+}
+
+.sub_go_btn {
+    background-color: #ffe4ca !important;
+    width: 30% !important;
+}
+
 /* Dropdown Button Layout */
 .dropdown {
     position: relative;

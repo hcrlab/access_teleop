@@ -268,131 +268,6 @@ Visualization Manager:
           Expand Link Details: false
           Expand Tree: false
           Link Tree Style: Links in Alphabetic Order
-          base_link:
-            Alpha: 1
-            Show Axes: false
-            Show Trail: false
-            Value: true
-          bellows_link:
-            Alpha: 1
-            Show Axes: false
-            Show Trail: false
-            Value: true
-          bellows_link2:
-            Alpha: 1
-            Show Axes: false
-            Show Trail: false
-            Value: true
-          elbow_flex_link:
-            Alpha: 1
-            Show Axes: false
-            Show Trail: false
-            Value: true
-          estop_link:
-            Alpha: 1
-            Show Axes: false
-            Show Trail: false
-            Value: true
-          forearm_roll_link:
-            Alpha: 1
-            Show Axes: false
-            Show Trail: false
-            Value: true
-          gripper_link:
-            Alpha: 1
-            Show Axes: false
-            Show Trail: false
-            Value: true
-          head_camera_depth_frame:
-            Alpha: 1
-            Show Axes: false
-            Show Trail: false
-          head_camera_depth_optical_frame:
-            Alpha: 1
-            Show Axes: false
-            Show Trail: false
-          head_camera_link:
-            Alpha: 1
-            Show Axes: false
-            Show Trail: false
-          head_camera_rgb_frame:
-            Alpha: 1
-            Show Axes: false
-            Show Trail: false
-          head_camera_rgb_optical_frame:
-            Alpha: 1
-            Show Axes: false
-            Show Trail: false
-          head_pan_link:
-            Alpha: 1
-            Show Axes: false
-            Show Trail: false
-            Value: true
-          head_tilt_link:
-            Alpha: 1
-            Show Axes: false
-            Show Trail: false
-            Value: true
-          l_gripper_finger_link:
-            Alpha: 1
-            Show Axes: false
-            Show Trail: false
-            Value: true
-          l_wheel_link:
-            Alpha: 1
-            Show Axes: false
-            Show Trail: false
-            Value: true
-          laser_link:
-            Alpha: 1
-            Show Axes: false
-            Show Trail: false
-            Value: true
-          r_gripper_finger_link:
-            Alpha: 1
-            Show Axes: false
-            Show Trail: false
-            Value: true
-          r_wheel_link:
-            Alpha: 1
-            Show Axes: false
-            Show Trail: false
-            Value: true
-          shoulder_lift_link:
-            Alpha: 1
-            Show Axes: false
-            Show Trail: false
-            Value: true
-          shoulder_pan_link:
-            Alpha: 1
-            Show Axes: false
-            Show Trail: false
-            Value: true
-          torso_fixed_link:
-            Alpha: 1
-            Show Axes: false
-            Show Trail: false
-            Value: true
-          torso_lift_link:
-            Alpha: 1
-            Show Axes: false
-            Show Trail: false
-            Value: true
-          upperarm_roll_link:
-            Alpha: 1
-            Show Axes: false
-            Show Trail: false
-            Value: true
-          wrist_flex_link:
-            Alpha: 1
-            Show Axes: false
-            Show Trail: false
-            Value: true
-          wrist_roll_link:
-            Alpha: 1
-            Show Axes: false
-            Show Trail: false
-            Value: true
         Robot Alpha: 1
         Show Robot Collision: false
         Show Robot Visual: true
@@ -494,7 +369,6 @@ Visualization Manager:
       Queue Size: 2
       Value: false
       Visibility:
-        "": true
         ArTagAxisMarker: true
         CameraPub2: true
         CameraPub3: true
@@ -505,6 +379,7 @@ Visualization Manager:
         Image3: true
         InteractiveMarkers: true
         Marker: true
+        MarkerArray: true
         MotionPlanning: true
         PlanningScene: true
         PointCloud2: true
@@ -533,7 +408,6 @@ Visualization Manager:
       Queue Size: 2
       Value: false
       Visibility:
-        "": true
         ArTagAxisMarker: true
         CameraPub1: true
         CameraPub3: true
@@ -544,6 +418,7 @@ Visualization Manager:
         Image3: true
         InteractiveMarkers: true
         Marker: true
+        MarkerArray: true
         MotionPlanning: true
         PlanningScene: true
         PointCloud2: true
@@ -572,7 +447,6 @@ Visualization Manager:
       Queue Size: 2
       Value: false
       Visibility:
-        "": true
         ArTagAxisMarker: true
         CameraPub1: true
         CameraPub2: true
@@ -583,6 +457,7 @@ Visualization Manager:
         Image3: true
         InteractiveMarkers: true
         Marker: true
+        MarkerArray: true
         MotionPlanning: true
         PlanningScene: true
         PointCloud2: true
@@ -644,10 +519,10 @@ Visualization Manager:
         Z: 0.710553
       Name: Current View
       Near Clip Distance: 0.01
-      Pitch: 0.514796
+      Pitch: 0.529796
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 2.47099
+      Yaw: 0.75599
     Saved: ~
 Window Geometry:
   Displays:
