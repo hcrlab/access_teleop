@@ -1,11 +1,15 @@
 "use strict";
 
 $(function() {
-    let CAMERA_NAMES = ["TOP", "FRONT", "LEFT"];
-    let CAMERA_TOPICS = ['/head_camera/rgb/image_raw', '/rviz1/camera1/image', '/rviz1/camera2/image', '/rviz1/camera3/image'];
     let self = this;
 
-    // Note: everything is string
+    // Cameras
+    let CAMERA_NAMES = ["TOP", "FRONT", "LEFT"];
+    let CAMERA_TOPICS = ['/head_camera/rgb/image_raw', '/rviz1/camera1/image', '/rviz1/camera2/image', '/rviz1/camera3/image'];
+    let cameraLargeSize = "350px";
+    let cameraSmallSize = "150px";
+    
+    // Data structures for storing info received from backend (note: everything is string)
     let parts = new Map();  // body part full name ---> body part id
     let actions = new Map();  // body part id ---> action full name
     let actionsAbbr = new Map();  // action full name ---> action ABBR
@@ -45,7 +49,7 @@ $(function() {
         });
         self.serverResponse.subscribe(handleServerStatusResponse);
 
-        // add camera views
+        // Add camera views
         for (let i = 0; i < 3; i++) {
             let cameraDiv = document.createElement("div");
             cameraDiv.className = "camera_container";
@@ -73,16 +77,16 @@ $(function() {
                 height : 480,
                 topic : CAMERA_TOPICS[i]
             });
-            let cameraSize = i == 0 ? "350px" : "150px";
+            let cameraSize = i == 0 ? cameraLargeSize : cameraSmallSize;
             camera.firstChild.style.width = cameraSize;
             camera.firstChild.style.height = cameraSize;
         }
         
-        // initial button states
+        // Initial button states
         $("#action_panel_btn").css({"background-color": "#abaee1", "font-weight": "600"});
         $("#record_panel_btn").css({"background-color": "#d1d4fb", "font-weight": "400"});
 
-        // event handlers
+        // Event handlers
         // buttons
         document.getElementById("gripper_btn").addEventListener("click", addOrRemoveSakeGripper);
         document.getElementById("record_btn").addEventListener("click", recordScene);
@@ -107,7 +111,7 @@ $(function() {
             subGoBtns[i].addEventListener("click", doSubAction);
         }
 
-        // camera views
+        // Camera views
         let cameraViews = document.querySelectorAll(".camera_container");
         for (let i = 0; i < cameraViews.length; i++) {
             cameraViews[i].addEventListener("click", switchCamera);
@@ -139,10 +143,12 @@ $(function() {
     }
 
     function recordScene() {
+        // display the pop up window
         $("#record_btn_confirm").css("display", "block");
     }
 
     function recordSceneConfirmed() {
+        // close the pop up window and publish ros message
         $("#record_btn_confirm").css("display", "none");
         let recordOcto = this.innerHTML == "Yes" ? "True" : "";
         publishRosMsg("record", [recordOcto]);
@@ -158,6 +164,7 @@ $(function() {
     }
 
     function showPanel() {
+        // switch between action panel and record panel
         if (this.innerHTML.substring(0, 6) == "Action") {
             $("#action_panel_btn").css({"background-color": "#abaee1", "font-weight": "600"});
             $("#record_panel_btn").css({"background-color": "#d1d4fb", "font-weight": "400"});
@@ -172,21 +179,20 @@ $(function() {
     }
 
     function switchCamera() {
-        // remove the large view
+        // minimize the large view and maximize the selected view
         let selectedView = this.parentElement.querySelector(".camera_container");
         let largeView = document.getElementById("camera_large").querySelector(".camera_container");
         if (largeView != selectedView) {
-            let largeSize = largeView.querySelector(".camera_view").firstChild.style.width;
-            let smallSize = selectedView.querySelector(".camera_view").firstChild.style.width;
+            // remove the large view
             $("#camera_large").remove(largeView);
             $("#camera_small").append(largeView);
-            largeView.querySelector(".camera_view").firstChild.style.width = smallSize;
-            largeView.querySelector(".camera_view").firstChild.style.height = smallSize;
+            largeView.querySelector(".camera_view").firstChild.style.width = cameraSmallSize;
+            largeView.querySelector(".camera_view").firstChild.style.height = cameraSmallSize;
             // add the selected view
             $("#camera_large").append(selectedView);
             $("#camera_small").remove(selectedView);
-            selectedView.querySelector(".camera_view").firstChild.style.width = largeSize;
-            selectedView.querySelector(".camera_view").firstChild.style.height = largeSize;
+            selectedView.querySelector(".camera_view").firstChild.style.width = cameraLargeSize;
+            selectedView.querySelector(".camera_view").firstChild.style.height = cameraLargeSize;
         }
     }
 
@@ -208,17 +214,18 @@ $(function() {
         selectedId = itemId;
         // mark the selection in video stream
         publishRosMsg("prev_id", [selectedId]);
-        // update available actions
+        // update available actions for each action dropdown list
         let actionDropdownLists = document.querySelectorAll(".action_dropdown_content");
         let availableActions = actions.get(itemId);
         for (let i = 0; i < actionDropdownLists.length; i++) {
+            // clear previous entiries
             actionDropdownLists[i].innerHTML = "";
             if (selectedId != "") {
                 for (let j = -1; j < availableActions.length; j++) {
                     // add DOM element
                     let entry = document.createElement("a");
                     entry.href = "#";
-                    if (j == -1) {
+                    if (j == -1) {  // the first entry is always "Select an action"
                         entry.innerHTML = "Select an action";
                     } else {
                         let entryRaw = availableActions[j];
@@ -258,6 +265,7 @@ $(function() {
     function doSubAction() {
         // get the action type
         let stepAction = this.parentElement.id.split("_")[0];
+        // publish ros message associated with the action type
         if (stepAction == "go" && selectedId != "") {
             publishRosMsg("go", [selectedId]);
         } else if (stepAction == "grasp" && selectedId != "" && selectedGrasp != "") {
@@ -266,12 +274,13 @@ $(function() {
             publishRosMsg("do", [selectedAction]);
         } else if (stepAction == "relax" || stepAction == "freeze") {
             publishRosMsg(stepAction, []);
-        } else {
+        } else {  // unknown action
             console.log(stepAction);
         }
     }
 
     function run() {
+        // run all the steps at once
         if (selectedId != "" && selectedGrasp != "" && selectedAction != "") {
             publishRosMsg("run", [selectedId, selectedGrasp, selectedAction]);
             running = true;
@@ -292,6 +301,7 @@ $(function() {
 
     function handleServerStatusResponse(msg) {
         if (msg.type == "run" && msg.msg == "DONE") {
+            // the program is still running
             running = false;
         }
         if (msg.status && msg.type != "run" && !running) {
@@ -313,9 +323,10 @@ $(function() {
         }
         // process returned data
         if (msg.type == "parts" && msg.args.length > 0) {
+            // clear previous data
+            parts.clear();
             // add the list contents to dropdown menu
             let recordDropdownLists = document.querySelectorAll(".go_dropdown_content");
-            parts.clear();
             for (let i = 0; i < recordDropdownLists.length; i++) {
                 recordDropdownLists[i].innerHTML = "";
                 for (let j = -1; j < msg.args.length; j++) {
@@ -339,6 +350,9 @@ $(function() {
                 }
             }
         } else if (msg.type == "actions" && msg.args.length > 0) {
+            // clear previous data
+            actions.clear();
+            actionsAbbr.clear();
             // update action information
             for (let i = 0; i < msg.args.length; i++) {
                 let msgArgs = msg.args[i].split(":");
