@@ -238,13 +238,86 @@ class Arm(object):
         else:
             return moveit_error_string(MoveItErrorCodes.TIMED_OUT)
 
+    # def straight_move_to_pose(self,
+    #                           group,
+    #                           pose_stamped,
+    #                           ee_step=0.025,
+    #                           jump_threshold=2.0,
+    #                           avoid_collisions=True):
+    #     """Moves the end-effector to a pose in a straight line.
+
+    #     Args:
+    #       group: moveit_commander.MoveGroupCommander. The planning group for
+    #         the arm.
+    #       pose_stamped: geometry_msgs/PoseStamped. The goal pose for the
+    #         gripper.
+    #       ee_step: float. The distance in meters to interpolate the path.
+    #       jump_threshold: float. The maximum allowable distance in the arm's
+    #         configuration space allowed between two poses in the path. Used to
+    #         prevent "jumps" in the IK solution.
+    #       avoid_collisions: bool. Whether to check for obstacles or not.
+
+    #     Returns:
+    #         string describing the error if an error occurred, else None.
+    #     """
+    #     # Transform pose into planning frame
+    #     self._tf_listener.waitForTransform(pose_stamped.header.frame_id,
+    #                                        group.get_planning_frame(),
+    #                                        rospy.Time.now(),
+    #                                        rospy.Duration(1.0))
+    #     try:
+    #         pose_transformed = self._tf_listener.transformPose(
+    #             group.get_planning_frame(), pose_stamped)
+    #     except (tf.LookupException, tf.ConnectivityException):
+    #         rospy.logerr('Unable to transform pose from frame {} to {}'.format(
+    #             pose_stamped.header.frame_id, group.get_planning_frame()))
+    #         return moveit_error_string(
+    #             MoveItErrorCodes.FRAME_TRANSFORM_FAILURE)
+
+    #     # Compute path
+    #     plan, fraction = group.compute_cartesian_path(
+    #         [group.get_current_pose().pose,
+    #          pose_transformed.pose], ee_step, jump_threshold, avoid_collisions)
+    #     if fraction < 1 and fraction > 0:
+    #         rospy.logerr(
+    #             'Only able to compute {}% of the path'.format(fraction * 100))
+    #     if fraction == 0:
+    #         return moveit_error_string(MoveItErrorCodes.PLANNING_FAILED)
+
+    #     # Execute path
+    #     result = group.execute(plan, wait=True)
+    #     if not result:
+    #         return moveit_error_string(MoveItErrorCodes.INVALID_MOTION_PLAN)
+    #     else:
+    #         return None
+
     def straight_move_to_pose(self,
+                              group,
+                              plan):
+        """Moves the end-effector to a pose in a straight line.
+
+        Args:
+          group: moveit_commander.MoveGroupCommander. The planning group for
+            the arm.
+          plan: the plan for the arm to follow
+
+        Returns:
+            string describing the error if an error occurred, else None.
+        """
+        # Execute path
+        result = group.execute(plan, wait=True)
+        if not result:
+            return moveit_error_string(MoveItErrorCodes.INVALID_MOTION_PLAN)
+        else:
+            return None
+
+    def straight_move_to_pose_check(self,
                               group,
                               pose_stamped,
                               ee_step=0.025,
                               jump_threshold=2.0,
                               avoid_collisions=True):
-        """Moves the end-effector to a pose in a straight line.
+        """Checks if we can move the end-effector to a pose in a straight line.
 
         Args:
           group: moveit_commander.MoveGroupCommander. The planning group for
@@ -258,7 +331,7 @@ class Arm(object):
           avoid_collisions: bool. Whether to check for obstacles or not.
 
         Returns:
-            string describing the error if an error occurred, else None.
+            the generated plan if the arm can move ina straight line, else None.
         """
         # Transform pose into planning frame
         self._tf_listener.waitForTransform(pose_stamped.header.frame_id,
@@ -278,18 +351,10 @@ class Arm(object):
         plan, fraction = group.compute_cartesian_path(
             [group.get_current_pose().pose,
              pose_transformed.pose], ee_step, jump_threshold, avoid_collisions)
-        if fraction < 1 and fraction > 0:
-            rospy.logerr(
-                'Only able to compute {}% of the path'.format(fraction * 100))
-        if fraction == 0:
-            return moveit_error_string(MoveItErrorCodes.PLANNING_FAILED)
-
-        # Execute path
-        result = group.execute(plan, wait=True)
-        if not result:
-            return moveit_error_string(MoveItErrorCodes.INVALID_MOTION_PLAN)
-        else:
+        if fraction < 1:
             return None
+        else:
+            return plan
 
     def check_pose(self,
                    pose_stamped,

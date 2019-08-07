@@ -24,8 +24,15 @@
     
     <div id="main_interface">
         <div id="cameras">
-            <div id="camera_large"></div>
             <div id="camera_small"></div>
+            <div id="camera_large">
+                <div id="arrows">
+                    <img id="up_btn" src="pics/up.png" alt="up" />
+                    <img id="down_btn" src="pics/down.png" alt="down" />
+                    <img id="left_btn" src="pics/left.png" alt="left" />
+                    <img id="right_btn" src="pics/right.png" alt="right" />
+                </div>
+            </div>
         </div>
 
         <div id="general_ctrl">
@@ -70,6 +77,7 @@
                             <div class="dropdown_content action_dropdown_content"></div>
                         </div>
                         <p class="status do_status"></p>
+                        <button id="edit_traj_btn">Edit</button>
                         <button class="sub_go_btn">GO</button>
                     </div>
                     <div>
@@ -109,10 +117,8 @@
                             <button id="select_action_btn" class="dropbtn">Select an action</button>
                             <div class="dropdown_content action_dropdown_content"></div>
                         </div>
-                        <div>
-                            <button id="record_action_btn">Record</button>
-                            <p class="status"></p>
-                        </div>
+                        <p class="status"></p>
+                        <button id="record_action_btn" class="sub_go_btn">Record</button>
                     </div>
                     <div id="freeze_container">
                         <button id="freeze_btn">Freeze</button>
@@ -143,6 +149,17 @@
                 <button id="no_octo">No</button>
             </div>
         </div>
+
+        <div id="edit_traj_popup" style="display:none">
+            <p>Please select the waypoint you want to edit, and modify the waypoint using buttons in camera view</p>
+            <div id="waypoints_container">
+                <div id="waypoints"></div>
+                <button id="cancel_edit" class="waypoints_btn">Cancel</button>
+                <button id="save_edit" class="waypoints_btn">Save</button>
+            </div>
+        </div>
+
+        <div id="disable_div"></div>
     </div>
 </body>
 

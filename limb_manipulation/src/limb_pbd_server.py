@@ -28,16 +28,17 @@ import actionlib
 import rosbag
 import os
 from colour import Color
+import sys
 
 
 # maximum times to retry if a transform lookup fails
 TRANSFROM_LOOKUP_RETRY = 10
 # the threshold to distinguish joint state points
-ARM_TRAJ_TRESHOLD = 0.1
+ARM_TRAJ_TRESHOLD = 0.05 # 0.1
 
 # Colors for trajectory visualization
-ORANGE = Color("orange")
-BLUE = Color("blue")
+START_COLOR = Color("LightGreen")
+END_COLOR = Color("DarkGreen")
 
 # body parts and their corresponding ID# and actions
 BODY_PARTS = {0: "right wrist", 1: "lower right leg",
@@ -128,10 +129,10 @@ class PbdServer():
     self._planning_scene.clear()
     # moveit: query controller
     self._controller_client = actionlib.SimpleActionClient('/query_controller_states', QueryControllerStatesAction)
-    # # moveit: move group commander
-    # moveit_commander.roscpp_initialize(sys.argv)
-    # moveit_robot = moveit_commander.RobotCommander()
-    # self._moveit_group = moveit_commander.MoveGroupCommander('arm')
+    # moveit: move group commander
+    moveit_commander.roscpp_initialize(sys.argv)
+    moveit_robot = moveit_commander.RobotCommander()
+    self._moveit_group = moveit_commander.MoveGroupCommander('arm')
 
     # visualization
     self._viz_pub = rospy.Publisher('visualization_marker', Marker, queue_size=5)
@@ -179,6 +180,7 @@ class PbdServer():
     self._grasp_position_ready = False
     self._do_position_ready = False
     self._do_position_id = -1
+    self._preview_traj = []
 
     rospy.sleep(0.5)
 
@@ -196,14 +198,18 @@ class PbdServer():
   def shutdown(self):
     """ Handler for robot shutdown """
     print("\nShutting down... Bye :-)\n")
+    # display
+    self._viz_markers_pub.publish(MarkerArray(markers=[]))
+    # moveit
     self.freeze_arm()
     self._planning_scene.removeAttachedObject('sake')
     self._planning_scene.clear()
     self._arm.cancel_all_goals()
+    # database
     self._db.save()
-    # # moveit: move group commander
-    # self._moveit_group.stop()
-    # moveit_commander.roscpp_shutdown()
+    # moveit: move group commander
+    self._moveit_group.stop()
+    moveit_commander.roscpp_shutdown()
 
   def attach_sake_gripper(self):
     """
@@ -292,23 +298,19 @@ class PbdServer():
     self._db.save()
 
   def calibrate_sake_gripper(self):
-    print("Calibrating SAKE gripper, please wait...")
-    self._web_app_response_pub.publish(WebAppResponse(type="", status=False, args=[], msg="Calibrating SAKE gripper, please wait..."))
+    self._publish_server_response(msg="Calibrating SAKE gripper, please wait...")
     self._sake_gripper_pub.publish(EzgripperAccess(type="calibrate"))
 
   def hard_close_sake_gripper(self):
-    print("Hard closing SAKE gripper, please wait...")
-    self._web_app_response_pub.publish(WebAppResponse(type="", status=False, args=[], msg="Hard closing SAKE gripper, please wait..."))
+    self._publish_server_response(msg="Hard closing SAKE gripper, please wait...")
     self._sake_gripper_pub.publish(EzgripperAccess(type="h_close"))
 
   def soft_close_sake_gripper(self):
-    print("Soft closing SAKE gripper, please wait...")
-    self._web_app_response_pub.publish(WebAppResponse(type="", status=False, args=[], msg="Soft closing SAKE gripper, please wait..."))
+    self._publish_server_response(msg="Soft closing SAKE gripper, please wait...")
     self._sake_gripper_pub.publish(EzgripperAccess(type="s_close"))
   
   def open_sake_gripper(self):
-    print("Opening SAKE gripper, please wait...")
-    self._web_app_response_pub.publish(WebAppResponse(type="", status=False, args=[], msg="Opening SAKE gripper, please wait..."))
+    self._publish_server_response(msg="Opening SAKE gripper, please wait...")
     self._sake_gripper_pub.publish(EzgripperAccess(type="open"))
 
   def reset(self):
@@ -350,12 +352,15 @@ class PbdServer():
   def preview_action_with_abbr(self, abbr, id_num):
     """
       Publishes visualization markers to preview waypoints on the trajectory with given abbr.
+      Returns the waypoints with respect to the ar tag. 
     """
     # check the database for the action
     waypoints = self._db.get(abbr)
     if waypoints == None or len(waypoints) == 0:
       waypoints = self._save_traj_to_db(abbr, id_num)
 
+    self._preview_traj = []
+    waypoints_with_respect_to_tag = []
     if waypoints:
       raw_pose = self._get_tag_with_id(id_num)
       if raw_pose is not None:
@@ -363,41 +368,55 @@ class PbdServer():
         # markers
         marker_arr = []
         # marker color gradient
-        colors = list(ORANGE.range_to(BLUE, len(waypoints)))
-        # visualize the starting point
-        marker = Marker(
-                    type=Marker.SPHERE,
-                    id=0,
-                    pose=prev_pose.pose,
-                    scale=Vector3(0.05, 0.05, 0.05),
-                    header=prev_pose.header,
-                    color=ColorRGBA(colors[0].red, colors[0].green, colors[0].blue, 0.8))
-        marker_arr.append(marker)
+        colors = list(START_COLOR.range_to(END_COLOR, len(waypoints)))
         # visualize the trajectory
-        for i in range(len(waypoints) - 1):
-          # calculate offset between the previous point on the trajectory and the current point
-          r_pos = waypoints[i].pose  # previous point
-          r_mat = self._pose_to_transform(r_pos)
-          w_mat = self._pose_to_transform(waypoints[i + 1].pose)
-          offset = np.dot(np.linalg.inv(r_mat), w_mat)
-          prev_pose = self._move_arm_relative(prev_pose.pose, prev_pose.header, offset, preview_only=True)
+        for i in range(len(waypoints)):
           # visualize the current waypoint
           marker = Marker(
-                      type=Marker.SPHERE,
-                      id=i+1,
+                      type=Marker.ARROW,
+                      id=i,
                       pose=prev_pose.pose,
-                      scale=Vector3(0.03, 0.03, 0.03),
+                      scale=Vector3(0.03, 0.005, 0.005),
                       header=prev_pose.header,
-                      color=ColorRGBA(colors[i+1].red, colors[i+1].green, colors[i+1].blue, 0.8))
+                      color=ColorRGBA(colors[i].red, colors[i].green, colors[i].blue, 0.8))
           marker_arr.append(marker)
-          
+          waypoints_with_respect_to_tag.append(str(colors[i].hex))
+          self._preview_traj.append(prev_pose)
+
+          if i < len(waypoints) - 1:
+            # calculate offset between the current point on the trajectory and the next point
+            r_pos = waypoints[i].pose  # current point
+            r_mat = self._pose_to_transform(r_pos)
+            w_mat = self._pose_to_transform(waypoints[i + 1].pose)
+            offset = np.dot(np.linalg.inv(r_mat), w_mat)
+            prev_pose = self._move_arm_relative(prev_pose.pose, prev_pose.header, offset, preview_only=True)
+
+        # clear previous markers
+        self._viz_markers_pub.publish(MarkerArray(markers=[]))
+        # publish new markers
         self._viz_markers_pub.publish(MarkerArray(markers=marker_arr))
+
+    return waypoints_with_respect_to_tag
+
+  def highlight_waypoint(self, highlight_pose):
+    """ Publishes a marker at the specified location. """
+    marker = Marker(
+                  type=Marker.ARROW,
+                  id=0,
+                  pose=highlight_pose.pose,
+                  scale=Vector3(0.03, 0.007, 0.007),
+                  header=highlight_pose.header,
+                  color=ColorRGBA(0.0, 0.8, 1.0, 0.8))
+    self._viz_pub.publish(marker)
 
   def do_action_with_abbr(self, abbr, id_num):
     """ 
       Moves arm to perform the action specified by abbr, save the trajectory to database if neccessary.
       Returns true if succeed, false otherwise.
     """
+    # preview action
+    self.preview_action_with_abbr(abbr, id_num)
+
     self.freeze_arm()
 
     # get AR tag information
@@ -418,7 +437,7 @@ class PbdServer():
     # follow the trajectory
     prev_pose = self._current_pose
     prev_waypoint = waypoints[0].pose
-    action_result = None
+    succeed = False
     for i in range(len(waypoints) - 1):
       # calculate offset between the previous point on the trajectory and the current point
       r_pos = prev_waypoint
@@ -428,9 +447,10 @@ class PbdServer():
       # move arm relative to the previous pose, skip the current waypoint if the current action fails
       action_result = self._move_arm_relative(prev_pose.pose, prev_pose.header, offset)
       if action_result is not None:
+        succeed = True  # the whole action succeeds if at least one pose is reached
         prev_pose = action_result
         prev_waypoint = waypoints[i + 1].pose
-    return action_result is not None
+    return succeed
 
   def do_action_with_abbr_pose_or_traj(self, abbr, id_num):
     """ 
@@ -480,7 +500,7 @@ class PbdServer():
 
       # follow the trajectory
       prev_pose = self._current_pose
-      action_result = None
+      succeed = False
       for i in range(len(waypoints) - 1):
         # calculate offset between the previous point on the trajectory and the current point
         r_pos = waypoints[i].pose  # previous point
@@ -490,8 +510,9 @@ class PbdServer():
         # move arm relative to the previous pose, skip the current waypoint if the current action fails
         action_result = self._move_arm_relative(prev_pose.pose, prev_pose.header, offset)
         if action_result is not None:
+          succeed = True  # the whole action succeeds if at least one pose is reached
           prev_pose = action_result
-      return action_result is not None
+      return succeed
 
     else:
       rospy.logerr("Invalid action: " + abbr)
@@ -566,29 +587,29 @@ class PbdServer():
     if request_type == "attach":
       return_msg = "SAKE gripper has already attached!"
       if not self._sake_gripper_attached:
-        self._web_app_response_pub.publish(WebAppResponse(type=request_type, status=False, args=[], msg="Attaching SAKE gripper..."))
+        self._publish_server_response(type=request_type, msg="Attaching SAKE gripper...")
         self.attach_sake_gripper()
         self._sake_gripper_attached = True
         return_msg = "SAKE gripper attached"
-      self._web_app_response_pub.publish(WebAppResponse(type=request_type, status=True, args=[], msg=return_msg))
+      self._publish_server_response(type=request_type, status=True, msg=return_msg)
 
     elif request_type == "remove":
       return_msg = "SAKE gripper has already removed!"
       if self._sake_gripper_attached:
-        self._web_app_response_pub.publish(WebAppResponse(type=request_type, status=False, args=[], msg="Removing SAKE gripper..."))
+        self._publish_server_response(type=request_type, msg="Removing SAKE gripper...")
         self.remove_sake_gripper()
         self._sake_gripper_attached = False
         return_msg = "SAKE gripper removed"
-      self._web_app_response_pub.publish(WebAppResponse(type=request_type, status=True, args=[], msg=return_msg))
+      self._publish_server_response(type=request_type, status=True, msg=return_msg)
 
     elif not self._sake_gripper_attached:
       # need to attach SAKE gripper first
-      self._web_app_response_pub.publish(WebAppResponse(type="", status=True, args=[], msg="Please attach SAKE gripper first!"))
+      self._publish_server_response(status=True, msg="Please attach SAKE gripper first!")
 
     else:
       # SAKE gripper has already attached
       if request_type == "record":
-        self._web_app_response_pub.publish(WebAppResponse(type=request_type, status=False, args=[], msg="Recording the current scene..."))
+        self._publish_server_response(type=request_type, msg="Recording the current scene...")
         if self.update_env(update_octo=bool(request_args[0])):
           # get the list of body parts and actions
           parts = self.get_list()
@@ -600,114 +621,119 @@ class PbdServer():
                 parts_info.append(str(part.id) + ":" + BODY_PARTS[part.id])
                 for action in ACTIONS[part.id]:
                   actions_info.append(str(part.id) + ":" + action + ":" + ABBR[action])
-          self._web_app_response_pub.publish(WebAppResponse(type="parts", args=parts_info, msg=""))
-          self._web_app_response_pub.publish(WebAppResponse(type="actions", status=True, args=actions_info, msg="Scene recorded"))
+          self._publish_server_response(type="parts", args=parts_info)
+          self._publish_server_response(type="actions", status=True, args=actions_info, msg="Scene recorded")
         else:
-          self._web_app_response_pub.publish(WebAppResponse(type=request_type, status=True, args=[], msg="Failed to record the current scene!"))
+          self._publish_server_response(type=request_type, status=True, msg="Failed to record the current scene!")
 
       elif request_type == "prev_id" and len(request_args) == 1:
         id_num = int(request_args[0])  # convert from string to int
-        self._web_app_response_pub.publish(WebAppResponse(type=request_type, status=True, args=[], msg="Previewing " + BODY_PARTS[id_num] + "..."))
+        self._publish_server_response(type=request_type, status=True, msg="Previewing " + BODY_PARTS[id_num] + "...")
         self.preview_body_part_with_id(id_num)
 
       elif request_type == "prev" and len(request_args) == 2:
         abbr = request_args[0]
         id_num = int(request_args[1])
-        self._web_app_response_pub.publish(WebAppResponse(type=request_type, status=True, args=[], msg="Previewing action " + abbr + " with respect to body part " + BODY_PARTS[id_num] + "..."))
-        self.preview_action_with_abbr(abbr, int(id_num))
+        waypoints_with_respect_to_tag = self.preview_action_with_abbr(abbr, int(id_num))
+        self._publish_server_response(type=request_type, status=True, args=waypoints_with_respect_to_tag, msg="Previewing action " + abbr + " with respect to body part " + BODY_PARTS[id_num] + "...")
+
+      elif request_type == "highlight" and len(request_args) == 1:
+        waypoint_id = int(request_args[0])
+        self.highlight_waypoint(self._preview_traj[waypoint_id])
+        self._publish_server_response(type=request_type, status=True)
 
       elif request_type == "reset":
-        self._web_app_response_pub.publish(WebAppResponse(type=request_type, status=False, args=[], msg="Resetting..."))
+        self._publish_server_response(type=request_type, msg="Resetting...")
         self.reset()
         self._robot_stopped = False
         self._grasp_position_ready = False
         self._do_position_ready = False
         self._do_position_id = -1
-        self._web_app_response_pub.publish(WebAppResponse(type=request_type, status=True, args=[], msg="Done"))
+        self._publish_server_response(type=request_type, status=True, msg="Done")
 
       elif not self._robot_stopped: 
         # moveit controller is running
         if request_type == "go" and len(request_args) == 1:
           self._do_position_ready = False
           id_num = int(request_args[0])
-          self._web_app_response_pub.publish(WebAppResponse(type=request_type, status=False, args=[], msg="Moving towards body part " + BODY_PARTS[id_num] + "..."))
+          self._publish_server_response(type=request_type, msg="Moving towards body part " + BODY_PARTS[id_num] + "...")
           if self.goto_part_with_id(id_num):
             self._grasp_position_ready = True
             self._do_position_id = id_num
-            self._web_app_response_pub.publish(WebAppResponse(type=request_type, status=True, args=[], msg="Done, ready to grasp"))
+            self._publish_server_response(type=request_type, status=True, msg="Done, ready to grasp")
           else:
-            self._web_app_response_pub.publish(WebAppResponse(type=request_type, status=True, args=[], msg="Fail to move!"))
+            self._publish_server_response(type=request_type, status=True, msg="Fail to move!")
 
         elif request_type == "grasp" and self._grasp_position_ready and len(request_args) == 1:
-          self._web_app_response_pub.publish(WebAppResponse(type=request_type, status=False, args=[], msg="Grasping..."))
+          self._publish_server_response(type=request_type, msg="Grasping...")
           if request_args[0] == "h":
             self.hard_close_sake_gripper()
           else:
             self.soft_close_sake_gripper()
           self._grasp_position_ready = False
           self._do_position_ready = True
-          self._web_app_response_pub.publish(WebAppResponse(type=request_type, status=True, args=[], msg="Grasped"))
+          self._publish_server_response(type=request_type, status=True, msg="Grasped")
 
         elif request_type == "relax":
-          self._web_app_response_pub.publish(WebAppResponse(type=request_type, status=False, args=[], msg="Relaxing arm..."))
+          self._publish_server_response(type=request_type, msg="Relaxing arm...")
           self.relax_arm()
-          self._web_app_response_pub.publish(WebAppResponse(type=request_type, status=True, args=[], msg="Arm relaxed"))
+          self._publish_server_response(type=request_type, status=True, msg="Arm relaxed")
 
         elif request_type == "freeze":
-          self._web_app_response_pub.publish(WebAppResponse(type=request_type, status=False, args=[], msg="Freezing arm..."))
+          self._publish_server_response(type=request_type, msg="Freezing arm...")
           self.freeze_arm()
-          self._web_app_response_pub.publish(WebAppResponse(type=request_type, status=True, args=[], msg="Arm froze"))
+          self._publish_server_response(type=request_type, status=True, msg="Arm froze")
 
         elif request_type == "do" and len(request_args) > 0:
           if self._do_position_ready:
             # performing mode
-            self._web_app_response_pub.publish(WebAppResponse(type=request_type, status=False, args=[], msg="Performing " + request_args[0] + "..."))
+            self._publish_server_response(type=request_type, msg="Performing " + request_args[0] + "...")
             if self.do_action_with_abbr(request_args[0], self._do_position_id):
-              self._web_app_response_pub.publish(WebAppResponse(type=request_type, status=False, args=[], msg="Action succeeded"))
+              self._publish_server_response(type=request_type, msg="Action succeeded")
             else:
-              self._web_app_response_pub.publish(WebAppResponse(type=request_type, status=False, args=[], msg="Action failed!"))
+              self._publish_server_response(type=request_type, msg="Action failed!")
             self._do_position_ready = False
           elif len(request_args) == 2 and request_args[1] == "r":
             # recording mode
-            self._web_app_response_pub.publish(WebAppResponse(type=request_type, status=False, args=[], msg="Recording " + request_args[0] + ", please don't move the robot arm..."))
+            self._publish_server_response(type=request_type, msg="Recording " + request_args[0] + ", please don't move the robot arm...")
             if self.record_action_with_abbr(request_args[0], self._do_position_id):
               self._do_position_ready = False
               # freeze the arm
-              self._web_app_response_pub.publish(WebAppResponse(type=request_type, status=False, args=[], msg="Action recorded, freezing the robot arm..."))
+              self._publish_server_response(type=request_type, msg="Action recorded, freezing the robot arm...")
             else:
-              self._web_app_response_pub.publish(WebAppResponse(type=request_type, status=False, args=[], msg="Fail to record this action! Freezing robot arm..."))
+              self._publish_server_response(type=request_type, msg="Fail to record this action! Freezing robot arm...")
             self.freeze_arm()
           else:
-            self._web_app_response_pub.publish(WebAppResponse(type=request_type, status=False, args=[], msg="Unknown action for body part with ID: " + str(self._do_position_id)))
+            self._publish_server_response(type=request_type, msg="Unknown action for body part with ID: " + str(self._do_position_id))
           # always release gripper
-          self._web_app_response_pub.publish(WebAppResponse(type=request_type, status=False, args=[], msg="Releasing the gripper..."))
+          self._publish_server_response(type=request_type, msg="Releasing the gripper...")
           self.open_sake_gripper()
           self._do_position_ready = False
-          self._web_app_response_pub.publish(WebAppResponse(type=request_type, status=True, args=[], msg="Done"))
+          self._publish_server_response(type=request_type, status=True, msg="Done")
 
         elif request_type == "release":
-          self._web_app_response_pub.publish(WebAppResponse(type=request_type, status=False, args=[], msg="Releasing the gripper..."))
+          self._publish_server_response(type=request_type, msg="Releasing the gripper...")
           self.open_sake_gripper()
           self._do_position_ready = False
-          self._web_app_response_pub.publish(WebAppResponse(type=request_type, status=True, args=[], msg="Gripper released"))
+          self._publish_server_response(type=request_type, status=True, msg="Gripper released")
 
         elif request_type == "stop":
-          self._web_app_response_pub.publish(WebAppResponse(type=request_type, status=False, args=[], msg="Stopping the robot..."))
+          self._publish_server_response(type=request_type, msg="Stopping the robot...")
           self.relax_arm()
           self._robot_stopped = True
           self._grasp_position_ready = False
           self._do_position_ready = False
           self._do_position_id = -1
-          self._web_app_response_pub.publish(WebAppResponse(type=request_type, status=True, args=[], msg="Robot stopped, please \"RESET\" if you want to continue using it"))
+          self._publish_server_response(type=request_type, status=True, msg="Robot stopped, please \"RESET\" if you want to continue using it")
 
         elif request_type == "run" and len(request_args) == 3:
           self.web_app_request_callback(WebAppRequest(type="go", args=[request_args[0]]))
           self.web_app_request_callback(WebAppRequest(type="grasp", args=[request_args[1]]))
           self.web_app_request_callback(WebAppRequest(type="do", args=[request_args[2]]))
-          self._web_app_response_pub.publish(WebAppResponse(type=request_type, status=True, args=[], msg="DONE"))
+          self._publish_server_response(type=request_type, status=True, msg="DONE")
 
       else: 
-        self._web_app_response_pub.publish(WebAppResponse(type=request_type, status=True, args=[], msg="Invalid command :)"))
+        self._publish_server_response(type=request_type, status=True, msg="Invalid command :)")
 
 
   def _move_arm_relative(self, ref_pose, ref_header, offset, preview_only=False):
@@ -735,9 +761,9 @@ class PbdServer():
                   type=Marker.SPHERE,
                   id=0,
                   pose=goal_pose.pose,
-                  scale=Vector3(0.06, 0.06, 0.06),
+                  scale=Vector3(0.03, 0.03, 0.03),
                   header=goal_pose.header,
-                  color=ColorRGBA(0.0, 1.0, 0.0, 0.8))
+                  color=ColorRGBA(1.0, 0.0, 0.0, 0.8))
       self._viz_pub.publish(marker)
       return goal_pose if self._move_arm(goal_pose, final_state=True) else None
 
@@ -753,12 +779,15 @@ class PbdServer():
       self._current_pose = goal_pose
     else:
       # go to goal_pose while avoiding unreasonable trajectories!
-      # # OPTION 1: 
-      # # moveit: move group commander
-      # error = self._arm.straight_move_to_pose(self._moveit_group, goal_pose)
+      # OPTION 1: 
+      # moveit: move group commander
+      # check if the pose can be reached in a straight line motion
+      plan = self._arm.straight_move_to_pose_check(self._moveit_group, goal_pose)
+      if plan:
+        error = self._arm.straight_move_to_pose(self._moveit_group, plan)
 
       # OPTION 2: ############################################ TODO: change code below ##########################
-      error = self._arm.move_to_pose(goal_pose, **self._kwargs)
+      # error = self._arm.move_to_pose(goal_pose, **self._kwargs)
       
       # reset current pose to none
       self._current_pose = None
@@ -858,3 +887,9 @@ class PbdServer():
     self._db.add(abbr, waypoints)
     self._db.save()
     return waypoints
+
+  def _publish_server_response(self, console_output=False, type="", status=False, args=[], msg=""):
+    """ Publishes the server response message, and prints the message in console if needed. """
+    if console_output:
+      print(msg)
+    self._web_app_response_pub.publish(WebAppResponse(type=type, status=status, args=args, msg=msg))

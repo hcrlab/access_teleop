@@ -7,6 +7,7 @@ from image_geometry import PinholeCameraModel
 from tf import TransformBroadcaster
 import camera_info_messages
 from shared_teleop_functions_and_vars import publish_camera_transforms, publish_camera_info, camera_names
+from visualization_msgs.msg import Marker
 
 def main():
   print("\n***************** LIMB PBD *****************")
@@ -25,6 +26,9 @@ def main():
   for camera_name in camera_names:
     info_pubs.append([camera_name,
                       rospy.Publisher(camera_name + '/camera_info', camera_info_messages.CameraInfo, queue_size=1)])
+
+  # visualization publisher (for debug)
+  # vis_pub = rospy.Publisher('visualization_marker', Marker, queue_size=5)
 
   rospy.sleep(0.5)
 
