@@ -29,6 +29,7 @@ import rosbag
 import os
 from colour import Color
 import sys
+from shared_teleop_functions_and_vars import dpx_to_distance, delta_modified_stamped_pose
 
 
 # maximum times to retry if a transform lookup fails
@@ -39,6 +40,9 @@ ARM_TRAJ_TRESHOLD = 0.05 # 0.1
 # Colors for trajectory visualization
 START_COLOR = Color("LightGreen")
 END_COLOR = Color("DarkGreen")
+TRAJ_HIGHLIGHT_SCALE = Vector3(0.05, 0.008, 0.008)
+WAYPOINT_HIGHLIGHT_SCALE = Vector3(0.055, 0.009, 0.009)
+WAYPOINT_HIGHLIGHT_COLOR = ColorRGBA(0.0, 0.8, 1.0, 0.8)
 
 # body parts and their corresponding ID# and actions
 BODY_PARTS = {0: "right wrist", 1: "lower right leg",
@@ -141,7 +145,7 @@ class PbdServer():
     # initial position of robot arm
     self._arm_initial_poses = [
         ("shoulder_pan_joint", 1.296), ("shoulder_lift_joint", 1.480), ("upperarm_roll_joint", -0.904), ("elbow_flex_joint", 2.251), 
-        ("forearm_roll_joint", -2.021), ("wrist_flex_joint", 1.113), ("wrist_roll_joint", -0.864)]
+        ("forearm_roll_joint", -2.021), ("wrist_flex_joint", -1.113), ("wrist_roll_joint", -0.864)]
     
     # orientation constraint
     self._gripper_oc = OrientationConstraint()
@@ -180,7 +184,8 @@ class PbdServer():
     self._grasp_position_ready = False
     self._do_position_ready = False
     self._do_position_id = -1
-    self._preview_traj = []
+    self._preview_action_abbr = ""
+    self._preview_traj = []  # the trajectory being previewed currently
 
     rospy.sleep(0.5)
 
@@ -359,6 +364,7 @@ class PbdServer():
     if waypoints == None or len(waypoints) == 0:
       waypoints = self._save_traj_to_db(abbr, id_num)
 
+    self._preview_action_abbr = ""
     self._preview_traj = []
     waypoints_with_respect_to_tag = []
     if waypoints:
@@ -376,10 +382,11 @@ class PbdServer():
                       type=Marker.ARROW,
                       id=i,
                       pose=prev_pose.pose,
-                      scale=Vector3(0.03, 0.005, 0.005),
+                      scale=TRAJ_HIGHLIGHT_SCALE,
                       header=prev_pose.header,
                       color=ColorRGBA(colors[i].red, colors[i].green, colors[i].blue, 0.8))
           marker_arr.append(marker)
+          # record the waypoint
           waypoints_with_respect_to_tag.append(str(colors[i].hex))
           self._preview_traj.append(prev_pose)
 
@@ -395,19 +402,57 @@ class PbdServer():
         self._viz_markers_pub.publish(MarkerArray(markers=[]))
         # publish new markers
         self._viz_markers_pub.publish(MarkerArray(markers=marker_arr))
+        # record the action name
+        self._preview_action_abbr = abbr
 
     return waypoints_with_respect_to_tag
 
-  def highlight_waypoint(self, highlight_pose):
+  def highlight_waypoint(self, highlight_pose, color):
     """ Publishes a marker at the specified location. """
     marker = Marker(
                   type=Marker.ARROW,
                   id=0,
                   pose=highlight_pose.pose,
-                  scale=Vector3(0.03, 0.007, 0.007),
+                  scale=WAYPOINT_HIGHLIGHT_SCALE,
                   header=highlight_pose.header,
-                  color=ColorRGBA(0.0, 0.8, 1.0, 0.8))
+                  color=color)
     self._viz_pub.publish(marker)
+
+  def edit_waypoint(self, waypoint_id, delta_x, delta_y, camera):
+    """ Temporarily saves the changes to the specified waypoint, and highlights the resulting pose. """
+    # calculate the resulting pose
+    new_pose = self._computePoseByDelta(self._preview_traj[waypoint_id], delta_x, delta_y, camera)
+    # save the new pose
+    self._preview_traj[waypoint_id] = new_pose
+
+    # preview the new trajectory
+    marker_arr = []
+    # marker color gradient
+    colors = list(START_COLOR.range_to(END_COLOR, len(self._preview_traj)))
+    # visualize the trajectory
+    for i in range(len(self._preview_traj)):
+      # highlight the waypoint that is being editing
+      color = WAYPOINT_HIGHLIGHT_COLOR if i == waypoint_id else ColorRGBA(colors[i].red, colors[i].green, colors[i].blue, 0.8)
+      marker = Marker(
+                    type=Marker.ARROW,
+                    id=i,
+                    pose=self._preview_traj[i].pose,
+                    scale=TRAJ_HIGHLIGHT_SCALE,
+                    header=self._preview_traj[i].header,
+                    color=color)
+      marker_arr.append(marker)
+    # clear previous markers
+    self._viz_markers_pub.publish(MarkerArray(markers=[]))
+    # publish new markers
+    self._viz_markers_pub.publish(MarkerArray(markers=marker_arr))
+
+  def modify_traj_in_db(self, cancel_change=True):
+    """ Overwrites the previous trajectory in database. """
+    if not cancel_change:
+      self._db.delete(self._preview_action_abbr)
+      self._db.add(self._preview_action_abbr, self._preview_traj)
+    self._preview_action_abbr = ""
+    self._preview_traj = []
 
   def do_action_with_abbr(self, abbr, id_num):
     """ 
@@ -450,6 +495,8 @@ class PbdServer():
         succeed = True  # the whole action succeeds if at least one pose is reached
         prev_pose = action_result
         prev_waypoint = waypoints[i + 1].pose
+      else:
+        rospy.logerr("Fail to reach waypoint " + str(i + 1))
     return succeed
 
   def do_action_with_abbr_pose_or_traj(self, abbr, id_num):
@@ -578,8 +625,7 @@ class PbdServer():
     """
       Parse the request given by the wee application, and call the corresponding functions.
     """
-    request_type = msg.type
-    request_args = msg.args
+    request_type, request_args = msg.type, msg.args
 
     print("type: " + request_type)
     print("args: " + str(request_args) + "\n")
@@ -632,15 +678,26 @@ class PbdServer():
         self.preview_body_part_with_id(id_num)
 
       elif request_type == "prev" and len(request_args) == 2:
-        abbr = request_args[0]
-        id_num = int(request_args[1])
-        waypoints_with_respect_to_tag = self.preview_action_with_abbr(abbr, int(id_num))
+        abbr, id_num = request_args[0], int(request_args[1])
+        waypoints_with_respect_to_tag = self.preview_action_with_abbr(abbr, id_num)
         self._publish_server_response(type=request_type, status=True, args=waypoints_with_respect_to_tag, msg="Previewing action " + abbr + " with respect to body part " + BODY_PARTS[id_num] + "...")
 
       elif request_type == "highlight" and len(request_args) == 1:
         waypoint_id = int(request_args[0])
-        self.highlight_waypoint(self._preview_traj[waypoint_id])
-        self._publish_server_response(type=request_type, status=True)
+        self.highlight_waypoint(self._preview_traj[waypoint_id], WAYPOINT_HIGHLIGHT_COLOR)
+        self._publish_server_response(status=True)
+
+      elif request_type == "edit" and len(request_args) == 4:
+        waypoint_id, delta_x, delta_y, camera = int(request_args[0]), int(request_args[1]), int(request_args[2]), request_args[3]
+        self.edit_waypoint(waypoint_id, delta_x, delta_y, camera)
+        self._publish_server_response(status=True)
+
+      elif request_type == "save_edit" or request_type == "cancel_edit":
+        if request_type == "save_edit":
+          self.modify_traj_in_db(cancel_change=False)
+        else:
+          self.modify_traj_in_db()  # cancel all the changes
+        self._publish_server_response(status=True)
 
       elif request_type == "reset":
         self._publish_server_response(type=request_type, msg="Resetting...")
@@ -685,31 +742,22 @@ class PbdServer():
           self._publish_server_response(type=request_type, status=True, msg="Arm froze")
 
         elif request_type == "do" and len(request_args) > 0:
+          return_msg = ""
           if self._do_position_ready:
             # performing mode
             self._publish_server_response(type=request_type, msg="Performing " + request_args[0] + "...")
             if self.do_action_with_abbr(request_args[0], self._do_position_id):
-              self._publish_server_response(type=request_type, msg="Action succeeded")
+              return_msg = "Action succeeded"
             else:
-              self._publish_server_response(type=request_type, msg="Action failed!")
+              return_msg = "Action failed!"
             self._do_position_ready = False
-          elif len(request_args) == 2 and request_args[1] == "r":
-            # recording mode
-            self._publish_server_response(type=request_type, msg="Recording " + request_args[0] + ", please don't move the robot arm...")
-            if self.record_action_with_abbr(request_args[0], self._do_position_id):
-              self._do_position_ready = False
-              # freeze the arm
-              self._publish_server_response(type=request_type, msg="Action recorded, freezing the robot arm...")
-            else:
-              self._publish_server_response(type=request_type, msg="Fail to record this action! Freezing robot arm...")
-            self.freeze_arm()
           else:
-            self._publish_server_response(type=request_type, msg="Unknown action for body part with ID: " + str(self._do_position_id))
+            return_msg = "Unknown action for body part with ID: " + str(self._do_position_id)
           # always release gripper
           self._publish_server_response(type=request_type, msg="Releasing the gripper...")
           self.open_sake_gripper()
           self._do_position_ready = False
-          self._publish_server_response(type=request_type, status=True, msg="Done")
+          self._publish_server_response(type=request_type, status=True, msg=return_msg)
 
         elif request_type == "release":
           self._publish_server_response(type=request_type, msg="Releasing the gripper...")
@@ -757,14 +805,7 @@ class PbdServer():
       # hard close SAKE gripper again to ensure the limb is grasped
       self.hard_close_sake_gripper()
       # visualize goal pose
-      marker = Marker(
-                  type=Marker.SPHERE,
-                  id=0,
-                  pose=goal_pose.pose,
-                  scale=Vector3(0.03, 0.03, 0.03),
-                  header=goal_pose.header,
-                  color=ColorRGBA(1.0, 0.0, 0.0, 0.8))
-      self._viz_pub.publish(marker)
+      self.highlight_waypoint(goal_pose, ColorRGBA(1.0, 1.0, 0.0, 0.8))
       return goal_pose if self._move_arm(goal_pose, final_state=True) else None
 
   def _move_arm(self, goal_pose, final_state=False):
@@ -785,6 +826,8 @@ class PbdServer():
       plan = self._arm.straight_move_to_pose_check(self._moveit_group, goal_pose)
       if plan:
         error = self._arm.straight_move_to_pose(self._moveit_group, plan)
+      else:
+        error = 'PLANNING_FAILED'
 
       # OPTION 2: ############################################ TODO: change code below ##########################
       # error = self._arm.move_to_pose(goal_pose, **self._kwargs)
@@ -849,6 +892,16 @@ class PbdServer():
     """
       Calculates the grasp pose of gripper given the AR tag pose, returns the gripper pose.
     """
+    # grasp_offset = self._db.get("GRASP")[0][0]
+    # # current pose is valid, perform action
+    # t_mat = self._pose_to_transform(ar_pose.pose.pose)
+    # # compute the new coordinate
+    # new_trans = np.dot(t_mat, grasp_offset)
+    # pose = self._transform_to_pose(new_trans)
+    # goal_pose = PoseStamped()
+    # goal_pose.pose = pose
+    # goal_pose.header.frame_id = "base_link"
+    # return goal_pose
     goal_pose = PoseStamped()
     goal_pose.pose.position.x = ar_pose.pose.pose.position.x - 0.18  # let SAKE gripper align with the marker
     goal_pose.pose.position.y = ar_pose.pose.pose.position.y
@@ -888,8 +941,16 @@ class PbdServer():
     self._db.save()
     return waypoints
 
-  def _publish_server_response(self, console_output=False, type="", status=False, args=[], msg=""):
+  def _publish_server_response(self, type="", status=False, args=[], msg=""):
     """ Publishes the server response message, and prints the message in console if needed. """
-    if console_output:
+    if rospy.get_param("console_output"):
       print(msg)
     self._web_app_response_pub.publish(WebAppResponse(type=type, status=status, args=args, msg=msg))
+
+  def _computePoseByDelta(self, current_pose, delta_x, delta_y, camera):
+    """ 
+      Computes and returns the new pose with respect to base_link after applying 
+      delta_x and delta_y to the current pose in the specified camera view.
+    """
+    x_distance, y_distance = dpx_to_distance(delta_x, delta_y, camera, current_pose, True)
+    return delta_modified_stamped_pose(x_distance, y_distance, camera, current_pose)

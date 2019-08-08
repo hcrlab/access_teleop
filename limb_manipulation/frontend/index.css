@@ -108,6 +108,14 @@ button:active {
     width: 40% !important;
 }
 
+.base_arrow {
+    position: absolute;
+    padding: 0.3em;
+    margin: 0;
+    width: 40px;
+    height: 40px;
+}
+
 /* Dropdown Button Layout */
 .dropdown {
     position: relative;
@@ -207,11 +215,47 @@ button:active {
 }
 
 /* Arrow buttons */
-#arrows img {
-    width: 40px;
-    height: 40px;
+#camera_large {
+    position: relative;
 }
 
-#arrows img:hover {
+.arrow {
+    position: absolute;
+    padding: 0.3em;
+    margin: 0;
+    width: 40px;
+    height: 40px;
+    display: none;
+}
+
+.arrow:hover {
     cursor: pointer;
+}
+
+#up_btn, #down_btn {
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+#left_btn, #right_btn {
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+#up_btn {
+    top: 1em;
+}
+
+#down_btn {
+    bottom: 0;
+}
+
+#left_btn {
+    left: 0;
+    padding-left: 0;
+}
+
+#right_btn {
+    right: 0;
+    padding-right: 0;
 }

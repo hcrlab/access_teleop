@@ -103,7 +103,7 @@ def main():
         if command[:6] == "record":
           print("Recording the current scene...")
           result = False
-          if len(command) > 7 and command[7] == "o":
+          if len(command) > 8 and command[8] == "o":
             result = server.update_env()
           else:
             result = server.update_env(update_octo=False)
@@ -212,7 +212,7 @@ def main():
               else:
                 print("Action failed!")
               do_position_ready = False
-            elif command[:5] == "do -r" and len(command) > 6 and command[6:] in ABBR.values():
+            elif command[:5] == "do -r" and len(command) > 6: # and command[6:] in ABBR.values():
               # recording mode
               print("Recording " + command[6:] + ", please don't move the robot arm...")
               if server.record_action_with_abbr(command[6:], do_position_id):

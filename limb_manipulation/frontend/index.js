@@ -4,7 +4,7 @@ $(function() {
     let self = this;
 
     // Cameras
-    let CAMERA_NAMES = ["TOP", "FRONT", "LEFT", "HEAD CAMERA"];
+    let CAMERA_NAMES = ["TOP", "LEFT", "FRONT", "HEAD CAMERA"];
     let CAMERA_TOPICS = ['/rviz1/camera1/image', '/rviz1/camera2/image', '/rviz1/camera3/image', '/head_camera/rgb/image_raw'];
     let cameraLargeW = "450px";
     let cameraLargeH = "380px";
@@ -15,7 +15,7 @@ $(function() {
     let parts = new Map();  // body part full name ---> body part id
     let actions = new Map();  // body part id ---> action full name
     let actionsAbbr = new Map();  // action full name ---> action ABBR
-    let previewTraj = new Array();
+    let previewTraj = new Array();  // array of colors of waypoints on the trajectory being previewed
 
     let selectedId = "";  // id of the currently selected body part
     let selectedGrasp = "";  // currently selected grasp type
@@ -38,7 +38,7 @@ $(function() {
         });
         self.ros.on('close', function(error) {
             document.getElementById("status_bar").innerHTML = 'We lost connection with ROS. All is lost';
-            console.error('We lost connection with ROS. All is lost');
+            console.error('We lost connection with ROS.');
         });
         // ros topic
         self.serverRequest = new ROSLIB.Topic({
@@ -77,7 +77,7 @@ $(function() {
             let cameraViewer = new MJPEGCANVAS.Viewer({
                 divID : camera.id,
                 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                host : 'localhost', // 'localhost:8080',
+                host : 'localhost:8080',
                 width : 640,
                 height : 480,
                 topic : CAMERA_TOPICS[i]
@@ -97,6 +97,7 @@ $(function() {
         document.getElementById("yes_octo").addEventListener("click", recordSceneConfirmed);
         document.getElementById("no_octo").addEventListener("click", recordSceneConfirmed);
         document.getElementById("sake_gripper_btn").addEventListener("click", releaseSakeGripper);
+        document.getElementById("base_btn").addEventListener("click", showBaseControl);
 
         document.getElementById("action_panel_btn").addEventListener("click", showPanel);
         document.getElementById("run_btn").addEventListener("click", run);
@@ -119,6 +120,11 @@ $(function() {
             subGoBtns[i].addEventListener("click", doSubAction);
         }
 
+        let arrowBtns = document.querySelectorAll(".arrow");
+        for (let i = 0; i < arrowBtns.length; i++) {
+            arrowBtns[i].addEventListener("click", recordWaypointChange);
+        }
+        
         // Camera views
         let cameraViews = document.querySelectorAll(".camera_container");
         for (let i = 0; i < cameraViews.length; i++) {
@@ -176,6 +182,15 @@ $(function() {
         }
     }
 
+    function showBaseControl() {
+        let baseCtrlPanel = document.getElementById("base_ctrl");
+        if (baseCtrlPanel.style.display == "none") {
+            baseCtrlPanel.style.display = "block";
+        } else {
+            baseCtrlPanel.style.display = "none";
+        }
+    }
+
     function showPanel() {
         // switch between action panel and record panel
         if (this.innerHTML.substring(0, 6) == "Action") {
@@ -192,6 +207,8 @@ $(function() {
     }
 
     function showTraj() {
+        // preview the trajectory
+        publishRosMsg("prev", [selectedAction, selectedId]);
         // display the popup window
         $("#edit_traj_popup").css("display", "block");
         // clear previous waypoints
@@ -217,13 +234,14 @@ $(function() {
         prevSelectedWaypoint = null;
         // close the popup window
         $("#edit_traj_popup").css("display", "none");
-        // save the trajectory
+        // hide arrows
+        $(".arrow").css("display", "none");
         if (this.innerHTML == "Save") {
-            
-
-
+            // save the trajectory
+            publishRosMsg("save_edit", []);
         } else {
-            
+            // unsave the trajectory
+            publishRosMsg("cancel_edit", []);
         }
         // enable buttons in the background
         $(':button').prop('disabled', false);
@@ -233,16 +251,73 @@ $(function() {
     }
 
     function highlightWaypoint() {
-        // clear the previous highlight
-        if (prevSelectedWaypoint != null) {
-            prevSelectedWaypoint.style.backgroundColor = previewTraj[parseInt(prevSelectedWaypoint.innerHTML)];
-        }
-        // record the selected waypoint
-        prevSelectedWaypoint = this;
-        // highlight the selected button
-        this.style.backgroundColor = "#00CCFF";
+        let waypointId = this.innerHTML;
         // highlight the selected waypoint in camera
-        publishRosMsg("highlight", [this.innerHTML]);
+        publishRosMsg("highlight", [waypointId]);
+        if (waypointId == "0") {
+            // starting point selected, the user cannot edit the starting point
+            alert("Cannot edit the starting point!");
+            // highlight the selected button
+            this.style.backgroundColor = "#008fb3";
+        } else {
+            // highlight the selected button
+            this.style.backgroundColor = "#00CCFF";
+            // clear the previous highlight
+            if (prevSelectedWaypoint != null) {
+                prevSelectedWaypoint.style.backgroundColor = previewTraj[parseInt(prevSelectedWaypoint.innerHTML)];
+            } else {
+                document.querySelector("#waypoints button").style.backgroundColor = previewTraj[0];
+            }
+            // record the selected waypoint
+            prevSelectedWaypoint = this;
+            // show arrows
+            if (document.querySelector("#camera_large p").innerHTML != "HEAD CAMERA") {
+                $(".arrow").css("display", "block");
+            }            
+        }
+    }
+
+    function recordWaypointChange() {
+        // get the button type
+        let type = this.id.split("_")[0];
+        // get the camera name
+        let cameraTitle = document.querySelector("#camera_large p").innerHTML;
+        let camera = "camera1";
+        if (cameraTitle == "LEFT") {
+            camera = "camera2";
+        } else if (cameraTitle == "FRONT") {
+            camera = "camera3";
+        }
+        // highlight the selected waypoint with the change applied
+        // one button click represents 2cm change
+        let deltaX = "0";
+        let deltaY = "0";
+        if (type == "up") {
+            if (cameraTitle == "TOP") {
+                deltaX = "-2";
+            } else {
+                deltaY = "-2";
+            }
+        } else if (type == "down") {
+            if (cameraTitle == "TOP") {
+                deltaX = "2";
+            } else {
+                deltaY = "2";
+            }
+        } else if (type == "left") {
+            if (cameraTitle == "TOP") {
+                deltaY = "2";
+            } else {
+                deltaX = "-2";
+            }
+        } else {  //right
+            if (cameraTitle == "TOP") {
+                deltaY = "-2";
+            } else {
+                deltaX = "2";
+            }
+        }
+        publishRosMsg("edit", [prevSelectedWaypoint.innerHTML, deltaX, deltaY, camera]);
     }
 
     function switchCamera() {
@@ -260,6 +335,12 @@ $(function() {
             let smallCameraStyle = selectedView.querySelector(".camera_view").firstChild.style;
             smallCameraStyle.width = cameraLargeW;
             smallCameraStyle.height = cameraLargeH;
+        }
+        // hide arrows if the large camera view is the head camera
+        if (selectedView.firstChild.innerHTML == "HEAD CAMERA") {
+            $(".arrow").css("display", "none");
+        } else if (prevSelectedWaypoint != null) {
+            $(".arrow").css("display", "block");
         }
     }
 
@@ -371,9 +452,13 @@ $(function() {
             // the program is still running
             running = false;
         }
-        if (msg.status && msg.type != "run" && !running) {
+        if (msg.status && !running) {
             // enable all the buttons
             $(':button').prop('disabled', false);
+        }
+        if (msg.msg == "") {
+            // add something fun
+            msg.msg = "^0^";
         }
         // show status
         if (msg.type == "attach" || msg.type == "remove" || msg.type == "record" || msg.type == "parts" || 

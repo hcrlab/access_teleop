@@ -120,3 +120,39 @@ def getCameraDistances(camera_name, ps):
     return x,y,z
 
 
+def dpx_to_distance(dx, dy, camera_name, current_ps, offset):
+    big_z_mappings = {'camera1': transform_broadcaster_mapping['camera1'][0][2] - current_ps.pose.position.z, # x-y plane
+                      'camera2': transform_broadcaster_mapping['camera2'][0][1] - current_ps.pose.position.y, # x-z plane
+                      'camera3': transform_broadcaster_mapping['camera3'][0][0] - current_ps.pose.position.x} # y-z plane
+
+    camera_model = PinholeCameraModel()
+    camera_model.fromCameraInfo(camera_info_mapping[camera_name])
+    x, y, z = camera_model.projectPixelTo3dRay((dx, dy))
+    x_center, y_center, z_center = camera_model.projectPixelTo3dRay((0, 0))
+    big_z = abs(big_z_mappings[camera_name])
+    big_x = (x / z) * big_z  # Use law of similar trianges to solve
+    big_y = (y / z) * big_z
+
+    big_x_center = (x_center / z_center) * big_z
+    big_y_center = (y_center / z_center) * big_z
+
+    if offset:
+        return big_x - big_x_center, big_y - big_y_center
+    else:
+        return big_x, big_y
+
+
+def delta_modified_stamped_pose(x_distance, y_distance, camera_name, original_pose_stamped):
+    modified_ps = original_pose_stamped
+    if camera_name == 'camera1':
+        modified_ps.pose.position.x += x_distance  # These directions came from looking at the cameras in rviz
+        modified_ps.pose.position.y -= y_distance
+    elif camera_name == 'camera2':
+        modified_ps.pose.position.x += x_distance
+        modified_ps.pose.position.z -= y_distance
+    elif camera_name == 'camera3':
+        modified_ps.pose.position.y += x_distance
+        modified_ps.pose.position.z -= y_distance
+    else:
+        raise ValueError('Did not pass in a valid camera_name')
+    return modified_ps

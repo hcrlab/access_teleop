@@ -26,12 +26,16 @@
         <div id="cameras">
             <div id="camera_small"></div>
             <div id="camera_large">
-                <div id="arrows">
-                    <img id="up_btn" src="pics/up.png" alt="up" />
-                    <img id="down_btn" src="pics/down.png" alt="down" />
-                    <img id="left_btn" src="pics/left.png" alt="left" />
-                    <img id="right_btn" src="pics/right.png" alt="right" />
-                </div>
+                <img id="up_btn" class="arrow" src="pics/up.png" alt="up" />
+                <img id="down_btn" class="arrow" src="pics/down.png" alt="down" />
+                <img id="left_btn" class="arrow" src="pics/left.png" alt="left" />
+                <img id="right_btn" class="arrow" src="pics/right.png" alt="right" />
+            </div>
+            <div id="base_ctrl" style="display:none">
+                <img class="base_arrow" on-down="_startForward" on-up="_endBaseCommand" src="pics/black_arrow/up.png" alt="up" />
+                <img class="base_arrow" on-down="_startLeft" on-up="_endBaseCommand" src="pics/black_arrow/down.png" alt="down" />
+                <img class="base_arrow" on-down="_startBack" on-up="_endBaseCommand" src="pics/black_arrow/left.png" alt="left" />
+                <img class="base_arrow" on-down="_startRight" on-up="_endBaseCommand" src="pics/black_arrow/right.png" alt="right" />
             </div>
         </div>
 
@@ -129,17 +133,6 @@
                 </div>
             </div>
             
-        </div>
-
-        <div id="base_ctrl" style="display:none">
-            <div>
-                <button id="forward_btn" on-down="_startForward" on-up="_endBaseCommand">Forward</button>
-            </div>
-            <div>
-                <button on-down="_startLeft" on-up="_endBaseCommand">Left</button>
-                <button on-down="_startBack" on-up="_endBaseCommand">Back</button>
-                <button on-down="_startRight" on-up="_endBaseCommand">Right</button>
-            </div>
         </div>
 
         <div id="record_btn_confirm" style="display:none">
