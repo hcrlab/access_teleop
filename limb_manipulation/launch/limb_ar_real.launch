@@ -1,8 +1,6 @@
 <?xml version="1.0"?>
 <launch>
-<!--   <include file="$(find limb_manipulation)/launch/ar.launch">
-    <arg name="cam_image_topic" default="/head_camera/depth_registered/points" />
-  </include> -->
+	<param name="use_sim" value="false" />
 
 	<include file="$(find fetch_api)/launch/move_group.launch" />
 
@@ -13,5 +11,9 @@
 
     <node pkg="web_video_server" type="web_video_server" name="web_video_server_node" />
 	<include file="$(find rosbridge_server)/launch/rosbridge_websocket.launch" />
+
+	<!--   <include file="$(find limb_manipulation)/launch/ar.launch">
+    <arg name="cam_image_topic" default="/head_camera/depth_registered/points" />
+  </include> -->
  
 </launch>

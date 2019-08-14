@@ -4,6 +4,7 @@ import rospy
 from ezgripper_libs.ezgripper_interface import EZGripper
 from limb_manipulation_msgs.msg import EzgripperAccess
 import time
+from std_msgs.msg import Bool
 
 class SakeEzGripper(object):
     """
@@ -23,6 +24,9 @@ class SakeEzGripper(object):
 
     def start(self):
         rospy.Subscriber("/ezgripper_access", EzgripperAccess, self.callback)
+        ####################################################################################################
+        self.status_pub = rospy.Publisher('/ezgripper_access_status', Bool, queue_size=1)
+        ####################################################################################################
 
     def callback(self, data):
         if (rospy.get_rostime() - self.last_command_end_time).to_sec() > 0.2:
@@ -50,6 +54,9 @@ class SakeEzGripper(object):
             if data.type == "calibrate":  # calibrate
                 gripper.calibrate()
                 self.last_command_end_time = rospy.get_rostime()
+        ####################################################################################################
+        self.status_pub.publish(Bool(data=true))
+        ####################################################################################################
 
 
 if __name__ == "__main__":

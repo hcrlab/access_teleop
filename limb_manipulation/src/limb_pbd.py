@@ -23,12 +23,14 @@ def print_usage():
   print("  relax: relax the robot arm")
   print("  freeze: freeze the robot arm")
   print("  do ABBR: perform the action specified by ABBR")
+  print("    -s: do the action smoothly")
   print("    -r: if the robot arm is relaxed, save the current pose as ABBR")
   print("  release: if the gripper is closed, open it")
   print("  reset: move Fetch's arm to its initial position, open the gripper if it's closed\n")
   print("  stop: emergency stop\n")
   print("  help: print program usage\n")
   print("  db_list: list entries in database")
+  print("  db_print ABBR: print values associated with the entry")
   print("  db_delete ABBR: delete the entry in database")
   print("  quit: shutdown the program\n")
 
@@ -70,8 +72,20 @@ def main():
 
     elif command[:7] == "db_list":
       print("Entries in the database:")
-      list = server.get_db_entry()
+      list = server.get_db_list()
       print(list)
+
+    elif command[:8] == "db_print" and len(command) > 9:
+      print("Printing: " + command[9:] + "...")
+      values = server.get_db_entry(command[9:])
+      if values:
+        id_num = 0
+        for v in values:
+          print(str(id_num) + ": ")
+          print(v)
+          id_num += 1
+      else:
+        print("Entry not found!")
 
     elif command[:9] == "db_delete" and len(command) > 10:
       print("Deleting: " + command[10:] + "...")
@@ -204,7 +218,15 @@ def main():
             server.freeze_arm()
 
           elif command[:2] == "do" and len(command) > 3:
-            if len(command) > 3 and command[3:] in ABBR.values() and do_position_ready:
+            if command[:5] == "do -s" and len(command) > 6 and command[6:] in ABBR.values() and do_position_ready:
+              # performing mode (smooth)
+              print("Performing " + command[6:] + "... (smooth)")
+              if server.do_action_with_abbr_smooth(command[6:], do_position_id):
+                print("Action succeed")
+              else:
+                print("Action failed!")
+              do_position_ready = False
+            elif len(command) > 3 and command[3:] in ABBR.values() and do_position_ready:
               # performing mode
               print("Performing " + command[3:] + "...")
               if server.do_action_with_abbr(command[3:], do_position_id):

@@ -1,6 +1,6 @@
 from geometry_msgs.msg import *
 from moveit_msgs.msg import (Constraints, JointConstraint, PositionConstraint,
-                             OrientationConstraint, BoundingVolume)
+                             OrientationConstraint, BoundingVolume, TrajectoryConstraints)
 from moveit_msgs.msg import MoveGroupAction, MoveGroupGoal
 from shape_msgs.msg import SolidPrimitive
 from tf.listener import TransformListener
@@ -66,6 +66,7 @@ class MoveItGoalBuilder(object):
         self.start_state.is_diff = True
         self.tolerance = 0.01
         self._orientation_constraints = []
+        self._trajectory_constraints = []
         self._pose_goal = None
         self._joint_names = None
         self._joint_positions = None
@@ -102,6 +103,16 @@ class MoveItGoalBuilder(object):
             o_constraint: A moveit_msgs/OrientationConstraint.
         """
         self._orientation_constraints.append(copy.deepcopy(o_constraint))
+        self.planner_id = 'RRTConnectkConfigDefault'
+
+    def add_trajectory_orientation_constraint(self, t_constraints):
+        """Adds trajectory constraints to the path.
+
+        Args:
+            t_constraints: Array of moveit_msgs/Constraints.
+        """
+        for constraint in t_constraints:
+            self._trajectory_constraints.append(copy.deepcopy(constraint))
         self.planner_id = 'RRTConnectkConfigDefault'
 
     def build(self, tf_timeout=rospy.Duration(5.0)):
@@ -174,6 +185,7 @@ class MoveItGoalBuilder(object):
         goal.request.path_constraints.orientation_constraints = self._orientation_constraints 
 
         # Set trajectory constraints
+        goal.request.trajectory_constraints.constraints = self._trajectory_constraints
 
         # Set planner ID (name of motion planner to use)
         goal.request.planner_id = self.planner_id

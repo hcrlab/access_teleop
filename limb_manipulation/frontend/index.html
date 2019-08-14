@@ -31,11 +31,90 @@
                 <img id="left_btn" class="arrow" src="pics/left.png" alt="left" />
                 <img id="right_btn" class="arrow" src="pics/right.png" alt="right" />
             </div>
-            <div id="base_ctrl" style="display:none">
-                <img class="base_arrow" on-down="_startForward" on-up="_endBaseCommand" src="pics/black_arrow/up.png" alt="up" />
-                <img class="base_arrow" on-down="_startLeft" on-up="_endBaseCommand" src="pics/black_arrow/down.png" alt="down" />
-                <img class="base_arrow" on-down="_startBack" on-up="_endBaseCommand" src="pics/black_arrow/left.png" alt="left" />
-                <img class="base_arrow" on-down="_startRight" on-up="_endBaseCommand" src="pics/black_arrow/right.png" alt="right" />
+            <div id="main_panel">
+                <div id="mode_ctrl">
+                    <button id="action_panel_btn">Action<br>Panel</button>
+                    <button id="record_panel_btn">Record<br>Panel</button>
+                </div>
+
+                <div id="main_ctrl">
+                    <div id="action_step_container">
+                        <div id="go_container_0">
+                            <div class="dropdown">
+                                <button id="go_btn_0" class="dropbtn">Select a body part</button>
+                                <div class="dropdown_content go_dropdown_content"></div>
+                            </div>
+                        </div>
+                        <div id="action_container" style="display:none">
+                            <div class="dropdown">
+                                <button id="action_btn" class="dropbtn">Select an action</button>
+                                <div class="dropdown_content action_dropdown_content"></div>
+                            </div>
+                            <button id="edit_traj_btn">Edit</button>
+                            <button id="go_traj_btn">GO</button>
+                        </div>
+                        <div id="grasp_container_0" style="display:none">
+                            <div class="dropdown">
+                                <button id="grasp_btn_0" class="dropbtn">Select grasp type</button>
+                                <div class="dropdown_content grasp_dropdown_content">
+                                    <a href="#">Select grasp type</a>
+                                    <a href="#">Soft grasp</a>
+                                    <a href="#">Hard grasp</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="run_container" style="display:none">
+                            <p class="status grasp_status"></p>
+                            <button id="prev_strp_btn"><<</button>
+                            <button id="next_strp_btn">>></button>
+                            <button id="run_btn">RUN</button><br>
+                            <button id="estop_btn">STOP</button>
+                        </div>
+                    </div>
+        
+                    <div id="record_step_container" style="display:none">
+                        <div id="go_container_1">
+                            <div class="dropdown">
+                                <button id="go_btn_1" class="dropbtn">Select a body part</button>
+                                <div class="dropdown_content go_dropdown_content"></div>
+                            </div>
+                            <p class="status go_status"></p>
+                            <button class="sub_go_btn">GO</button>
+                        </div>
+                        <div id="grasp_container_1">
+                            <div class="dropdown">
+                                <button id="grasp_btn_1" class="dropbtn">Select grasp type</button>
+                                <div class="dropdown_content grasp_dropdown_content">
+                                    <a href="#">Select grasp type</a>
+                                    <a href="#">Soft grasp</a>
+                                    <a href="#">Hard grasp</a>
+                                </div>
+                            </div>
+                            <p class="status grasp_status"></p>
+                            <button class="sub_go_btn">GO</button>
+                        </div>
+                        <div id="relax_container">
+                            <button id="relax_btn">Relax</button>
+                            <p class="status relax_status"></p>
+                            <button class="sub_go_btn">GO</button>
+                        </div>
+                        <div id="record_container">
+                            <div class="dropdown">
+                                <button id="select_action_btn" class="dropbtn">Select an action</button>
+                                <div class="dropdown_content action_dropdown_content"></div>
+                            </div>
+                            <p class="status"></p>
+                            <button id="record_action_btn" class="sub_go_btn">Record</button>
+                        </div>
+                        <div id="freeze_container">
+                            <button id="freeze_btn">Freeze</button>
+                            <p class="status freeze_status"></p>
+                            <button class="sub_go_btn">GO</button>
+                        </div>
+                        <button id="reset_btn">RESET</button>
+                    </div>
+                </div>
+                
             </div>
         </div>
 
@@ -45,94 +124,6 @@
             <button id="base_btn">Base Control</button>
             <button id="sake_gripper_btn">Open Gripper</button>
             <button id="help_btn">Help</button>
-        </div>
- 
-        <div id="main_panel">
-            <div id="mode_ctrl">
-                <button id="action_panel_btn">Action<br>Panel</button>
-                <button id="record_panel_btn">Record<br>Panel</button>
-            </div>
-
-            <div id="main_ctrl">
-                <div id="action_step_container">
-                    <div id="go_container_0">
-                        <div class="dropdown">
-                            <button id="go_btn_0" class="dropbtn">Select a body part</button>
-                            <div class="dropdown_content go_dropdown_content"></div>
-                        </div>
-                        <p class="status go_status"></p>
-                        <button class="sub_go_btn">GO</button>
-                    </div>
-                    <div id="grasp_container_0">
-                        <div class="dropdown">
-                            <button id="grasp_btn_0" class="dropbtn">Select grasp type</button>
-                            <div class="dropdown_content grasp_dropdown_content">
-                                <a href="#">Select grasp type</a>
-                                <a href="#">Soft grasp</a>
-                                <a href="#">Hard grasp</a>
-                            </div>
-                        </div>
-                        <p class="status grasp_status"></p>
-                        <button class="sub_go_btn">GO</button>
-                    </div>
-                    <div id="action_container">
-                        <div class="dropdown">
-                            <button id="action_btn" class="dropbtn">Select an action</button>
-                            <div class="dropdown_content action_dropdown_content"></div>
-                        </div>
-                        <p class="status do_status"></p>
-                        <button id="edit_traj_btn">Edit</button>
-                        <button class="sub_go_btn">GO</button>
-                    </div>
-                    <div>
-                        <button id="run_btn">RUN</button><br>
-                        <button id="estop_btn">STOP</button>
-                    </div>
-                </div>
-    
-                <div id="record_step_container" style="display:none">
-                    <div id="go_container_1">
-                        <div class="dropdown">
-                            <button id="go_btn_1" class="dropbtn">Select a body part</button>
-                            <div class="dropdown_content go_dropdown_content"></div>
-                        </div>
-                        <p class="status go_status"></p>
-                        <button class="sub_go_btn">GO</button>
-                    </div>
-                    <div id="grasp_container_1">
-                        <div class="dropdown">
-                            <button id="grasp_btn_1" class="dropbtn">Select grasp type</button>
-                            <div class="dropdown_content grasp_dropdown_content">
-                                <a href="#">Select grasp type</a>
-                                <a href="#">Soft grasp</a>
-                                <a href="#">Hard grasp</a>
-                            </div>
-                        </div>
-                        <p class="status grasp_status"></p>
-                        <button class="sub_go_btn">GO</button>
-                    </div>
-                    <div id="relax_container">
-                        <button id="relax_btn">Relax</button>
-                        <p class="status relax_status"></p>
-                        <button class="sub_go_btn">GO</button>
-                    </div>
-                    <div id="record_container">
-                        <div class="dropdown">
-                            <button id="select_action_btn" class="dropbtn">Select an action</button>
-                            <div class="dropdown_content action_dropdown_content"></div>
-                        </div>
-                        <p class="status"></p>
-                        <button id="record_action_btn" class="sub_go_btn">Record</button>
-                    </div>
-                    <div id="freeze_container">
-                        <button id="freeze_btn">Freeze</button>
-                        <p class="status freeze_status"></p>
-                        <button class="sub_go_btn">GO</button>
-                    </div>
-                    <button id="reset_btn">RESET</button>
-                </div>
-            </div>
-            
         </div>
 
         <div id="record_btn_confirm" style="display:none">
@@ -150,6 +141,13 @@
                 <button id="cancel_edit" class="waypoints_btn">Cancel</button>
                 <button id="save_edit" class="waypoints_btn">Save</button>
             </div>
+        </div>
+
+        <div id="base_ctrl" style="display:none">
+            <img class="base_arrow" on-down="_startForward" on-up="_endBaseCommand" src="pics/black_arrow/up.png" alt="up" />
+            <img class="base_arrow" on-down="_startLeft" on-up="_endBaseCommand" src="pics/black_arrow/down.png" alt="down" />
+            <img class="base_arrow" on-down="_startBack" on-up="_endBaseCommand" src="pics/black_arrow/left.png" alt="left" />
+            <img class="base_arrow" on-down="_startRight" on-up="_endBaseCommand" src="pics/black_arrow/right.png" alt="right" />
         </div>
 
         <div id="disable_div"></div>

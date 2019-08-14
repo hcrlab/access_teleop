@@ -33,7 +33,7 @@ button:active {
 }
 
 /* Container Layout */
-#cameras, #main_panel, #general_ctrl {
+#cameras, #general_ctrl {
     margin: 2em;
 }
 
@@ -42,18 +42,24 @@ button:active {
 }
 
 /* Camera Layout */
-#cameras, #camera_small, #main_panel, #action_step_container, #record_step_container {
+#cameras, #camera_small, #main_panel, #record_step_container, #mode_ctrl {
     display: grid;
 }
 
 #cameras {
     position: relative;
-    grid-template-columns: repeat(5, 1fr);
+    grid-template-columns: repeat(4, 1fr);
+    height: 100%;
 }
 
 #camera_small {
-    grid-column-start: 2;
+    grid-column-start: 1;
     grid-template-rows: repeat(3, 1fr);
+}
+
+#camera_large {
+    grid-column-start: 2;
+    grid-column-end: 3;
 }
 
 /* Control Layout */
@@ -62,15 +68,23 @@ button:active {
 }
 
 #main_panel {
-    grid-template-columns: 0.1fr 1fr;
+    grid-column-start: 3;
+    grid-column-end: 5;
+    grid-template-rows: 0.1fr 1fr;
+    height: 100%;
+    width: 80%;
 }
 
 #main_panel button {
     width: 90%;
 }
 
-#action_step_container {
-    grid-template-columns: repeat(4, 1fr);
+#mode_ctrl, #mode_ctrl button {
+    width: 100%;
+}
+
+#mode_ctrl {
+    grid-template-columns: repeat(2, 1fr);
 }
 
 #action_step_container button, #record_step_container button {
@@ -87,7 +101,7 @@ button:active {
 }
 
 #record_step_container {
-    grid-template-columns: repeat(6, 1fr);
+    grid-template-rows: repeat(6, 1fr);
 }
 
 #run_btn, #reset_btn {
@@ -98,12 +112,16 @@ button:active {
     background-color: #f67e85 !important;
 }
 
+#reset_btn {
+    margin: auto;
+}
+
 .status {
-    height: 5em;
+    /*height: 50%;*/
     margin: 0.5em;
 }
 
-.sub_go_btn, #edit_traj_btn {
+.sub_go_btn, #go_traj_btn, #edit_traj_btn, #prev_strp_btn, #next_strp_btn {
     background-color: #ffe4ca !important;
     width: 40% !important;
 }
@@ -202,9 +220,8 @@ button:active {
 
 #edit_traj_popup {
     max-height: 30%;
-    left: 50%;
-    transform: translateX(-50%);
-    top: 60%;
+    left: 70%;
+    top: 15%;
     overflow: scroll;
     max-width: 80%;
 }
