@@ -202,9 +202,9 @@ def main():
           elif command[:5] == "grasp" and grasp_position_ready:
             print("Grasping...")
             if len(command) > 7 and command[7] == "h":
-              server.hard_close_sake_gripper()
+              server.do_sake_gripper_action("h_close")
             else:
-              server.soft_close_sake_gripper()
+              server.do_sake_gripper_action("s_close")
             grasp_position_ready = False
             do_position_ready = True
 
@@ -248,12 +248,12 @@ def main():
               print("Unknown action for body part with ID: " + str(do_position_id))
             # always release gripper
             print("Releasing the gripper...")
-            server.open_sake_gripper()
+            server.do_sake_gripper_action("open")
             do_position_ready = False
 
           elif command[:7] == "release":
             print("Releasing the gripper...")
-            server.open_sake_gripper()
+            server.do_sake_gripper_action("open")
             do_position_ready = False
 
           elif command[:4] == "stop":

@@ -17,7 +17,6 @@ from visualization_msgs.msg import Marker, MarkerArray, InteractiveMarker, Inter
 from sensor_msgs.msg import PointCloud2, JointState
 from ar_track_alvar_msgs.msg import AlvarMarkers
 from limb_manipulation_msgs.msg import EzgripperAccess, WebAppRequest, WebAppResponse
-from sake_gripper import SakeEzGripper
 import moveit_commander
 from moveit_python import PlanningSceneInterface
 from moveit_msgs.msg import OrientationConstraint
@@ -130,9 +129,7 @@ class PbdServer():
     self._db.load()
     # publisher and subscriber for controls of SAKE gripper
     self._sake_gripper_pub = rospy.Publisher('/ezgripper_access', EzgripperAccess, queue_size=1)
-
-    #################################################################################
-    # self._sake_gripper_sub = rospy.Subscriber('/ezgripper_access_status', Bool, callback=self._continue_exec)
+    self._sake_gripper_sub = rospy.Subscriber('/ezgripper_access_status', EzgripperAccess, callback=self._set_sake_gripper_action_status)
 
 
     # motion planning scene
@@ -187,6 +184,8 @@ class PbdServer():
     self._web_app_response_pub = rospy.Publisher('web_app_response', WebAppResponse, queue_size=5)
     # variables representing the program state
     self._sake_gripper_attached = False
+    self._sake_gripper_action_finished = False
+    self._sake_gripper_effort = "100"
     self._robot_stopped = False
     self._grasp_position_ready = False
     self._do_position_ready = False
@@ -253,7 +252,7 @@ class PbdServer():
     self._planning_scene.sendColors()
 
     # calibrate SAKE gripper
-    self.calibrate_sake_gripper()
+    self.do_sake_gripper_action("calibrate")
 
   def remove_sake_gripper(self):
     """
@@ -313,28 +312,34 @@ class PbdServer():
     self._db.delete(name)
     self._db.save()
 
-  ######################################################################## wait for response
-  def calibrate_sake_gripper(self):
-    self._publish_server_response(msg="Calibrating SAKE gripper, please wait...")
-    self._sake_gripper_pub.publish(EzgripperAccess(type="calibrate"))
+  def do_sake_gripper_action(self, command):
+    if command == "calibrate":
+      self._publish_server_response(msg="Calibrating SAKE gripper, please wait...")
+    elif command == "h_close":
+      self._publish_server_response(msg="Hard closing SAKE gripper, please wait...")
+    elif command == "s_close":
+      self._publish_server_response(msg="Soft closing SAKE gripper, please wait...")
+    elif command == "open":
+      self._publish_server_response(msg="Opening SAKE gripper, please wait...")
+    else:
+      args = command.split(" ")  # [percentage open, effort]
+      if len(args) == 2:
+        self._publish_server_response(msg=args[0] + "\% closing SAKE gripper with effort " + args[1] + "\%...")
 
-  def hard_close_sake_gripper(self):
-    self._publish_server_response(msg="Hard closing SAKE gripper, please wait...")
-    self._sake_gripper_pub.publish(EzgripperAccess(type="h_close"))
-
-  def soft_close_sake_gripper(self):
-    self._publish_server_response(msg="Soft closing SAKE gripper, please wait...")
-    self._sake_gripper_pub.publish(EzgripperAccess(type="s_close"))
-  
-  def open_sake_gripper(self):
-    self._publish_server_response(msg="Opening SAKE gripper, please wait...")
-    self._sake_gripper_pub.publish(EzgripperAccess(type="open"))
+    # publish command
+    self._sake_gripper_pub.publish(EzgripperAccess(type=command))
+    # wait for the action to finish if in real
+    if not rospy.get_param("use_sim"):
+      while not self._sake_gripper_action_finished:
+        continue
+      # finished, reset
+      self._sake_gripper_action_finished = False
 
   def reset(self):
     """ Moves arm to its initial position and calibrates gripper """
     self.freeze_arm()
     self._arm.move_to_joint_goal(self._arm_initial_poses, replan=True)    
-    self.calibrate_sake_gripper()
+    self.do_sake_gripper_action("calibrate")
 
   def preview_body_part_with_id(self, id_num):
     """
@@ -361,6 +366,7 @@ class PbdServer():
     raw_pose = self._get_tag_with_id(id_num)
     if raw_pose is not None:
       # found marker, move towards it
+      self.do_sake_gripper_action("40 " + self._sake_gripper_effort)
       return self._move_arm(self._get_goto_pose(raw_pose), final_state=False)
     else:
       # marker with id_num is not found
@@ -682,9 +688,9 @@ class PbdServer():
         elif request_type == "grasp" and self._grasp_position_ready and len(request_args) == 1:
           self._publish_server_response(type=request_type, msg="Grasping...")
           if request_args[0] == "h":
-            self.hard_close_sake_gripper()
+            self.do_sake_gripper_action("h_close")
           else:
-            self.soft_close_sake_gripper()
+            self.do_sake_gripper_action("s_close")
           self._grasp_position_ready = False
           self._do_position_ready = True
           self._publish_server_response(type=request_type, status=True, msg="Grasped")
@@ -713,13 +719,13 @@ class PbdServer():
             return_msg = "Unknown action for body part with ID: " + str(self._do_position_id)
           # always release gripper
           self._publish_server_response(type=request_type, msg="Releasing the gripper...")
-          self.open_sake_gripper()
+          self.do_sake_gripper_action("40 " + self._sake_gripper_effort)
           self._do_position_ready = False
           self._publish_server_response(type=request_type, status=True, msg=return_msg)
 
         elif request_type == "release":
           self._publish_server_response(type=request_type, msg="Releasing the gripper...")
-          self.open_sake_gripper()
+          self.do_sake_gripper_action("open")
           self._do_position_ready = False
           self._publish_server_response(type=request_type, status=True, msg="Gripper released")
 
@@ -766,7 +772,7 @@ class PbdServer():
     else:
       # move to the goal position while avoiding unreasonable trajectories!
       # hard close SAKE gripper again to ensure the limb is grasped
-      self.hard_close_sake_gripper()
+      self.do_sake_gripper_action("h_close")
       # visualize goal pose
       self.highlight_waypoint(goal_pose, ColorRGBA(1.0, 1.0, 0.0, 0.8))
       return goal_pose if self._move_arm(goal_pose, final_state=True, seed_state=seed_state) else None
@@ -922,3 +928,7 @@ class PbdServer():
     seed_state.name = self._arm_joints.names()
     seed_state.position = self._arm_joints.values()
     return seed_state
+
+  def _set_sake_gripper_action_status(self):
+    """ This is the callback of sake gripper status. """
+    self._sake_gripper_action_finished = True

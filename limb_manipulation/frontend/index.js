@@ -77,7 +77,8 @@ $(function() {
             let cameraViewer = new MJPEGCANVAS.Viewer({
                 divID : camera.id,
                 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                host : 'localhost:8080',
+                // host : 'localhost:8080',
+                host : 'localhost',
                 width : 640,
                 height : 480,
                 topic : CAMERA_TOPICS[i]
@@ -351,7 +352,7 @@ $(function() {
         } else if (prevSelectedWaypoint != null) {
             $(".arrow").css("display", "block");
         }
-    }
+    }        
 
     function markDropdownSelection(selectedItem) {
         // mark the selection and return the selected item name
@@ -443,8 +444,8 @@ $(function() {
     }
 
     function run() {
-        if (this.innerhtml == "RUN") {
-            this.innerhtml == "PAUSE";
+        if (this.innerHTML == "RUN") {
+            this.innerHTML == "PAUSE";
             // run all the steps at once
             if (selectedId != "" && selectedGrasp != "" && selectedAction != "") {
                 publishRosMsg("run", [selectedId, selectedGrasp, selectedAction]);
@@ -453,7 +454,7 @@ $(function() {
                 document.getElementById("status_bar").innerHTML = "Please make your selections for each step";
             }
         } else {
-            this.innerhtml == "RUN";
+            this.innerHTML == "RUN";
             // pause //////////////////////////////////////////////////////////////////////////
         }
     }
