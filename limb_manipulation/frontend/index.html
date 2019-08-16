@@ -50,8 +50,8 @@
                                 <button id="action_btn" class="dropbtn">Select an action</button>
                                 <div class="dropdown_content action_dropdown_content"></div>
                             </div>
-                            <button id="edit_traj_btn">Edit</button>
-                            <button id="go_traj_btn">GO</button>
+                            <button id="edit_traj_btn" class="ctrl_btn">Edit</button>
+                            <button id="go_traj_btn" class="ctrl_btn">GO</button>
                         </div>
                         <div id="grasp_container_0" style="display:none">
                             <div class="dropdown">
@@ -64,11 +64,11 @@
                             </div>
                         </div>
                         <div id="run_container" style="display:none">
-                            <p class="status grasp_status"></p>
-                            <button id="prev_strp_btn"><<</button>
-                            <button id="next_strp_btn">>></button>
-                            <button id="run_btn">RUN</button><br>
-                            <button id="estop_btn">STOP</button>
+                            <button id="ready_for_step_btn" class="ctrl_btn">Get Ready</button>
+                            <button id="prev_step_btn" class="ctrl_btn">&lt;&lt;</button>
+                            <button id="next_step_btn" class="ctrl_btn">&gt;&gt;</button>
+                            <button id="run_btn" class="ctrl_btn">RUN</button><br>
+                            <button id="estop_btn" class="ctrl_btn">STOP</button>
                         </div>
                     </div>
         
@@ -79,7 +79,7 @@
                                 <div class="dropdown_content go_dropdown_content"></div>
                             </div>
                             <p class="status go_status"></p>
-                            <button class="sub_go_btn">GO</button>
+                            <button class="sub_go_btn ctrl_btn">GO</button>
                         </div>
                         <div id="grasp_container_1">
                             <div class="dropdown">
@@ -91,12 +91,12 @@
                                 </div>
                             </div>
                             <p class="status grasp_status"></p>
-                            <button class="sub_go_btn">GO</button>
+                            <button class="sub_go_btn ctrl_btn">GO</button>
                         </div>
                         <div id="relax_container">
                             <button id="relax_btn">Relax</button>
                             <p class="status relax_status"></p>
-                            <button class="sub_go_btn">GO</button>
+                            <button class="sub_go_btn ctrl_btn">GO</button>
                         </div>
                         <div id="record_container">
                             <div class="dropdown">
@@ -104,14 +104,14 @@
                                 <div class="dropdown_content action_dropdown_content"></div>
                             </div>
                             <p class="status"></p>
-                            <button id="record_action_btn" class="sub_go_btn">Record</button>
+                            <button id="record_action_btn" class="sub_go_btn ctrl_btn">Record</button>
                         </div>
                         <div id="freeze_container">
                             <button id="freeze_btn">Freeze</button>
                             <p class="status freeze_status"></p>
-                            <button class="sub_go_btn">GO</button>
+                            <button class="sub_go_btn ctrl_btn">GO</button>
                         </div>
-                        <button id="reset_btn">RESET</button>
+                        <button id="reset_btn ctrl_btn">RESET</button>
                     </div>
                 </div>
                 
@@ -119,18 +119,18 @@
         </div>
 
         <div id="general_ctrl">
-            <button id="gripper_btn">Attach Gripper</button>
-            <button id="record_btn">Update Scene</button>
-            <button id="base_btn">Base Control</button>
-            <button id="sake_gripper_btn">Open Gripper</button>
-            <button id="help_btn">Help</button>
+            <button id="gripper_btn" class="ctrl_btn">Attach Gripper</button>
+            <button id="record_btn" class="ctrl_btn">Update Scene</button>
+            <button id="base_btn" class="ctrl_btn">Base Control</button>
+            <button id="sake_gripper_btn" class="ctrl_btn">Open Gripper</button>
+            <button id="help_btn" class="ctrl_btn">Help</button>
         </div>
 
         <div id="record_btn_confirm" style="display:none">
             <p>Would you like to update the octomap as well?</p>
             <div>
-                <button id="yes_octo">Yes</button>
-                <button id="no_octo">No</button>
+                <button id="yes_octo" class="ctrl_btn">Yes</button>
+                <button id="no_octo" class="ctrl_btn">No</button>
             </div>
         </div>
 
@@ -138,8 +138,8 @@
             <p>Please select the waypoint you want to edit, and modify the waypoint using buttons in camera view</p>
             <div id="waypoints_container">
                 <div id="waypoints"></div>
-                <button id="cancel_edit" class="waypoints_btn">Cancel</button>
-                <button id="save_edit" class="waypoints_btn">Save</button>
+                <button id="cancel_edit" class="waypoints_btn ctrl_btn">Cancel</button>
+                <button id="save_edit" class="waypoints_btn ctrl_btn">Save</button>
             </div>
         </div>
 

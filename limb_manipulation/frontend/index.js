@@ -2,6 +2,7 @@
 
 $(function() {
     let self = this;
+    let TRAJ_EDIT_SIZE = "2";  // one button click represents 2cm change
 
     // Cameras
     let CAMERA_NAMES = ["TOP", "LEFT", "FRONT", "HEAD CAMERA"];
@@ -11,17 +12,20 @@ $(function() {
     let cameraSmallW = "115px";
     let cameraSmallH = "100px";
     
-    // Data structures for storing info received from backend (note: everything is string)
-    let parts = new Map();  // body part full name ---> body part id
-    let actions = new Map();  // body part id ---> action full name
-    let actionsAbbr = new Map();  // action full name ---> action ABBR
-    let previewTraj = new Array();  // array of colors of waypoints on the trajectory being previewed
-
+    // Variables representing program states
     let selectedId = "";  // id of the currently selected body part
     let selectedGrasp = "";  // currently selected grasp type
     let selectedAction = "";  // ABBR of the currently selected action
     let running = false;  // is the program running? (i.e. is "RUN" button clicked?)
     let prevSelectedWaypoint = null;  // the previously selected waypoint during trajectory editing
+    let currentStep = -1;  // the current number of step in the current action
+    let totalStep = -1;  // the total number of steps in the current action
+
+    // Data structures for storing info received from backend (note: everything is string)
+    let parts = new Map();  // body part full name ---> body part id
+    let actions = new Map();  // body part id ---> action full name
+    let actionsAbbr = new Map();  // action full name ---> action ABBR
+    let previewTraj = new Array();  // array of colors of waypoints on the trajectory being previewed
 
     $(document).ready(function() {
         // ROS setup
@@ -104,6 +108,10 @@ $(function() {
         document.getElementById("go_traj_btn").addEventListener("click", showGrasp);
         document.getElementById("run_btn").addEventListener("click", run);
         document.getElementById("estop_btn").addEventListener("click", estop);
+        
+        document.getElementById("ready_for_step_btn").addEventListener("click", getReadyForRun);
+        document.getElementById("prev_step_btn").addEventListener("click", gotoPrevStep);
+        document.getElementById("next_step_btn").addEventListener("click", gotoNextStep);
 
         document.getElementById("edit_traj_btn").addEventListener("click", showTraj);
         document.getElementById("cancel_edit").addEventListener("click", saveTraj);
@@ -134,16 +142,44 @@ $(function() {
         }
     });
 
-    function publishRosMsg(type, args) {
-        // disable all the buttons!!!
-        $(':button:not(#estop_btn)').prop('disabled', true);
-        // publish msg
-        let msg = new ROSLIB.Message({
-            type: type,
-            args: args
-        });
-        self.serverRequest.publish(msg);
-    };
+    function showPanel() {
+        // switch between action panel and record panel
+        if (this.innerHTML.substring(0, 6) == "Action") {
+            $("#action_panel_btn").css({"background-color": "#abaee1", "font-weight": "600"});
+            $("#record_panel_btn").css({"background-color": "#d1d4fb", "font-weight": "400"});
+            $("#action_step_container").css("display", "grid");
+            $("#record_step_container").css("display", "none");
+        } else {
+            $("#action_panel_btn").css({"background-color": "#d1d4fb", "font-weight": "400"});
+            $("#record_panel_btn").css({"background-color": "#abaee1", "font-weight": "600"});
+            $("#action_step_container").css("display", "none");
+            $("#record_step_container").css("display", "grid");
+        }
+    }
+
+    function switchCamera() {
+        // minimize the large view and maximize the selected view
+        let selectedView = this;
+        let largeView = document.getElementById("camera_large").querySelector(".camera_container");
+        if (largeView != selectedView) {
+            // switch DOM element
+            document.getElementById("camera_small").replaceChild(largeView, selectedView);
+            $("#camera_large").append(selectedView);
+            // adjust camera view size
+            let largeCameraStyle = largeView.querySelector(".camera_view").firstChild.style;
+            largeCameraStyle.width = cameraSmallW;
+            largeCameraStyle.height = cameraSmallH;
+            let smallCameraStyle = selectedView.querySelector(".camera_view").firstChild.style;
+            smallCameraStyle.width = cameraLargeW;
+            smallCameraStyle.height = cameraLargeH;
+        }
+        // hide arrows if the large camera view is the head camera
+        if (selectedView.firstChild.innerHTML == "HEAD CAMERA") {
+            $(".arrow").css("display", "none");
+        } else if (prevSelectedWaypoint != null) {
+            $(".arrow").css("display", "block");
+        }
+    }
 
     function addOrRemoveSakeGripper() {
         publishRosMsg(this.innerHTML.substring(0, 6).toLowerCase(), []);
@@ -194,18 +230,56 @@ $(function() {
         }
     }
 
-    function showPanel() {
-        // switch between action panel and record panel
-        if (this.innerHTML.substring(0, 6) == "Action") {
-            $("#action_panel_btn").css({"background-color": "#abaee1", "font-weight": "600"});
-            $("#record_panel_btn").css({"background-color": "#d1d4fb", "font-weight": "400"});
-            $("#action_step_container").css("display", "grid");
-            $("#record_step_container").css("display", "none");
+    function makeBodyPartSelection() {
+        // show action dropdown list
+        $("#action_container").css("display", "block");
+        // mark the selection
+        let itemName = markDropdownSelection(this);
+        // get the item id
+        if (parts.has(itemName.toLowerCase())) {
+            // a body part is selected
+            selectedId = parts.get(itemName.toLowerCase());
+            // mark the selection in video stream
+            publishRosMsg("prev_id", [selectedId]);
         } else {
-            $("#action_panel_btn").css({"background-color": "#d1d4fb", "font-weight": "400"});
-            $("#record_panel_btn").css({"background-color": "#abaee1", "font-weight": "600"});
-            $("#action_step_container").css("display", "none");
-            $("#record_step_container").css("display", "grid");
+            selectedId = "";
+            hideControls(3);
+        }
+        // update available actions for each action dropdown list
+        let actionDropdownLists = document.querySelectorAll(".action_dropdown_content");
+        let availableActions = actions.get(selectedId);
+        for (let i = 0; i < actionDropdownLists.length; i++) {
+            // clear previous entiries
+            actionDropdownLists[i].innerHTML = "";
+            if (selectedId != "") {
+                for (let j = -1; j < availableActions.length; j++) {
+                    // add DOM element
+                    let entry = document.createElement("a");
+                    entry.href = "#";
+                    if (j == -1) {  // the first entry is always "Select an action"
+                        entry.innerHTML = "Select an action";
+                    } else {
+                        let entryRaw = availableActions[j];
+                        entry.innerHTML = entryRaw.length > 1 ? entryRaw.charAt(0).toUpperCase() + entryRaw.slice(1) : entryRaw;
+                    }
+                    actionDropdownLists[i].appendChild(entry);
+                    // add event listener
+                    entry.addEventListener("click", makeActionSelection);
+                }
+            }
+        }
+    }
+
+    function makeActionSelection() {
+        // mark the selection
+        let actionName = markDropdownSelection(this).toLowerCase();
+        // preview the action in video stream
+        if (actionsAbbr.has(actionName)) {
+            selectedAction = actionsAbbr.get(actionName);
+            publishRosMsg("prev", [selectedAction, selectedId]);
+        } else {
+            selectedAction = "";
+            hideControls(2);
         }
     }
 
@@ -292,32 +366,31 @@ $(function() {
             camera = "camera3";
         }
         // highlight the selected waypoint with the change applied
-        // one button click represents 2cm change
         let deltaX = "0";
         let deltaY = "0";
         if (type == "up") {
             if (cameraTitle == "TOP") {
-                deltaX = "-2";
+                deltaX = "-" + TRAJ_EDIT_SIZE;
             } else {
-                deltaY = "-2";
+                deltaY = "-" + TRAJ_EDIT_SIZE;
             }
         } else if (type == "down") {
             if (cameraTitle == "TOP") {
-                deltaX = "2";
+                deltaX = TRAJ_EDIT_SIZE;
             } else {
-                deltaY = "2";
+                deltaY = TRAJ_EDIT_SIZE;
             }
         } else if (type == "left") {
             if (cameraTitle == "TOP") {
-                deltaY = "2";
+                deltaY = TRAJ_EDIT_SIZE;
             } else {
-                deltaX = "-2";
+                deltaX = "-" + TRAJ_EDIT_SIZE;
             }
         } else {  //right
             if (cameraTitle == "TOP") {
-                deltaY = "-2";
+                deltaY = "-" + TRAJ_EDIT_SIZE;
             } else {
-                deltaX = "2";
+                deltaX = TRAJ_EDIT_SIZE;
             }
         }
         publishRosMsg("edit", [prevSelectedWaypoint.innerHTML, deltaX, deltaY, camera]);
@@ -327,89 +400,6 @@ $(function() {
         if (selectedAction != "" && selectedId != "") {
             // show grasp selection dropdown list
             $("#grasp_container_0").css("display", "block");
-        }
-    }
-
-    function switchCamera() {
-        // minimize the large view and maximize the selected view
-        let selectedView = this;
-        let largeView = document.getElementById("camera_large").querySelector(".camera_container");
-        if (largeView != selectedView) {
-            // switch DOM element
-            document.getElementById("camera_small").replaceChild(largeView, selectedView);
-            $("#camera_large").append(selectedView);
-            // adjust camera view size
-            let largeCameraStyle = largeView.querySelector(".camera_view").firstChild.style;
-            largeCameraStyle.width = cameraSmallW;
-            largeCameraStyle.height = cameraSmallH;
-            let smallCameraStyle = selectedView.querySelector(".camera_view").firstChild.style;
-            smallCameraStyle.width = cameraLargeW;
-            smallCameraStyle.height = cameraLargeH;
-        }
-        // hide arrows if the large camera view is the head camera
-        if (selectedView.firstChild.innerHTML == "HEAD CAMERA") {
-            $(".arrow").css("display", "none");
-        } else if (prevSelectedWaypoint != null) {
-            $(".arrow").css("display", "block");
-        }
-    }        
-
-    function markDropdownSelection(selectedItem) {
-        // mark the selection and return the selected item name
-        selectedItem.parentElement.parentElement.querySelector(".dropbtn").innerHTML = selectedItem.innerHTML;
-        return selectedItem.innerHTML;
-    }
-
-    function makeBodyPartSelection() {
-        // show action dropdown list
-        $("#action_container").css("display", "block");
-        // mark the selection
-        let itemName = markDropdownSelection(this);
-        // get the item id
-        if (parts.has(itemName.toLowerCase())) {
-            // a body part is selected
-            selectedId = parts.get(itemName.toLowerCase());
-            // mark the selection in video stream
-            publishRosMsg("prev_id", [selectedId]);
-        } else {
-            selectedId = "";
-            hideControls(3);
-        }
-        // update available actions for each action dropdown list
-        let actionDropdownLists = document.querySelectorAll(".action_dropdown_content");
-        let availableActions = actions.get(selectedId);
-        for (let i = 0; i < actionDropdownLists.length; i++) {
-            // clear previous entiries
-            actionDropdownLists[i].innerHTML = "";
-            if (selectedId != "") {
-                for (let j = -1; j < availableActions.length; j++) {
-                    // add DOM element
-                    let entry = document.createElement("a");
-                    entry.href = "#";
-                    if (j == -1) {  // the first entry is always "Select an action"
-                        entry.innerHTML = "Select an action";
-                    } else {
-                        let entryRaw = availableActions[j];
-                        entry.innerHTML = entryRaw.length > 1 ? entryRaw.charAt(0).toUpperCase() + entryRaw.slice(1) : entryRaw;
-                    }
-                    actionDropdownLists[i].appendChild(entry);
-                    // add event listener
-                    entry.addEventListener("click", makeActionSelection);
-                }
-            }
-        }
-    }
-
-    function makeActionSelection() {
-        // mark the selection
-        let actionName = markDropdownSelection(this).toLowerCase();
-        // preview the action in video stream
-        if (actionsAbbr.has(actionName)) {
-            selectedAction = actionsAbbr.get(actionName);
-            publishRosMsg("prev", [selectedAction, selectedId]);
-        } else {
-            selectedAction = "";
-            hideControls(2);
         }
     }
 
@@ -427,19 +417,24 @@ $(function() {
         }
     }
 
-    function doSubAction() {
-        let stepAction = this.parentElement.id.split("_")[0];
-        // publish ros message associated with the action type
-        if (stepAction == "go" && selectedId != "") {
-            publishRosMsg("go", [selectedId]);
-        } else if (stepAction == "grasp" && selectedId != "" && selectedGrasp != "") {
-            publishRosMsg("grasp", [selectedGrasp]);
-        } else if (stepAction == "action" && selectedId != "" && selectedGrasp != "" && selectedAction != "") {
-            publishRosMsg("do", [selectedAction]);
-        } else if (stepAction == "relax" || stepAction == "freeze") {
-            publishRosMsg(stepAction, []);
-        } else {  // unknown action
-            console.log(stepAction);
+    function getReadyForRun() {
+        if (previewTraj.length > 0) {  // goto and grasp
+            publishRosMsg("step", ["-1"]);
+            running = true;
+        }
+    }
+
+    function gotoPrevStep() {
+        currentStep--;
+        if (currentStep >= 0) {  // go to previous step
+            publishRosMsg("step", [currentStep.toString()]);
+        }
+    }
+
+    function gotoNextStep() {
+        currentStep++;
+        if (currentStep < totalStep) {  // go to next step
+            publishRosMsg("step", [currentStep.toString()]);
         }
     }
 
@@ -469,9 +464,26 @@ $(function() {
         }
     }
 
+    function doSubAction() {
+        ////////////// UNUSED ///////////////////////////////////////////////////
+        let stepAction = this.parentElement.id.split("_")[0];
+        // publish ros message associated with the action type
+        if (stepAction == "go" && selectedId != "") {
+            publishRosMsg("go", [selectedId]);
+        } else if (stepAction == "grasp" && selectedId != "" && selectedGrasp != "") {
+            publishRosMsg("grasp", [selectedGrasp]);
+        } else if (stepAction == "action" && selectedId != "" && selectedGrasp != "" && selectedAction != "") {
+            publishRosMsg("do", [selectedAction]);
+        } else if (stepAction == "relax" || stepAction == "freeze") {
+            publishRosMsg(stepAction, []);
+        } else {  // unknown action
+            console.log(stepAction);
+        }
+    }
+
     function handleServerStatusResponse(msg) {
-        if (msg.type == "run" && msg.msg == "DONE") {
-            // the program is still running
+        if ((msg.type == "run" && msg.msg == "DONE") || msg.type == "prev") {
+            // the program has finished running
             running = false;
         }
         if (msg.status && !running) {
@@ -533,7 +545,51 @@ $(function() {
             // clear previous data
             previewTraj.length = 0;
             previewTraj = msg.args;
+        } else if (msg.type == "step" && msg.args.length == 1) {
+            let stepId = parseInt(msg.args[0]);
+            // enable/disable step buttons
+            if (stepId == -1) {
+                document.getElementById("ready_for_step_btn").disabled = true;
+                document.getElementById("prev_step_btn").disabled = false;
+                document.getElementById("next_step_btn").disabled = false;
+                totalStep = previewTraj.length;
+                currentStep = -1;
+            }
+            if (stepId == totalStep - 2) {
+                document.getElementById("next_step_btn").disabled = false;
+            }
+            if (stepId == 0) {
+                document.getElementById("prev_step_btn").disabled = true;
+            }
+            if (stepId == 1) {
+                document.getElementById("prev_step_btn").disabled = false;
+            }
+            if (stepId == totalStep - 1) {
+                document.getElementById("ready_for_step_btn").disabled = false;
+                document.getElementById("prev_step_btn").disabled = true;
+                document.getElementById("next_step_btn").disabled = true;
+                totalStep = -1;
+                currentStep = -1;
+            }
         }
+    }
+
+    /////////////////// Helper functions ///////////////////
+    function publishRosMsg(type, args) {
+        // disable all the buttons!!!
+        $(':button:not(#estop_btn)').prop('disabled', true);
+        // publish msg
+        let msg = new ROSLIB.Message({
+            type: type,
+            args: args
+        });
+        self.serverRequest.publish(msg);
+    }
+
+    function markDropdownSelection(selectedItem) {
+        // mark the selection and return the selected item name
+        selectedItem.parentElement.parentElement.querySelector(".dropbtn").innerHTML = selectedItem.innerHTML;
+        return selectedItem.innerHTML;
     }
 
     function hideControls(num) {

@@ -26,6 +26,10 @@ button:active {
     filter: invert(100%);;
 }
 
+.ctrl_btn {
+    border-radius: 8px;
+}
+
 /* Status bar */
 #status_bar {
     margin-top: 1em;
@@ -121,9 +125,16 @@ button:active {
     margin: 0.5em;
 }
 
-.sub_go_btn, #go_traj_btn, #edit_traj_btn, #prev_strp_btn, #next_strp_btn {
+.sub_go_btn, #go_traj_btn, #edit_traj_btn {
     background-color: #ffe4ca !important;
+}
+
+.sub_go_btn, #go_traj_btn, #edit_traj_btn {
     width: 40% !important;
+}
+
+#prev_step_btn, #next_step_btn, #ready_for_step_btn {
+    width: 25% !important;
 }
 
 .base_arrow {

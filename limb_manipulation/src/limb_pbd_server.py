@@ -230,6 +230,7 @@ class PbdServer():
     # attach SAKE gripper to Fetch's gripper
     self._fetch_gripper.open()  # make sure Fetch's gripper is open
     self._fetch_gripper.close()
+    self._sake_gripper_attached = True
 
     # add SAKE gripper to the planning scene
     self._planning_scene.removeAttachedObject('sake')
@@ -262,6 +263,7 @@ class PbdServer():
     # remove SAKE gripper from Fetch's gripper
     self._fetch_gripper.close()  # make sure Fetch's gripper is close
     self._fetch_gripper.open()
+    self._sake_gripper_attached = False
     # remove SAKE gripper from the planning scene
     self._planning_scene.removeAttachedObject('sake')
 
@@ -340,6 +342,14 @@ class PbdServer():
     self.freeze_arm()
     self._arm.move_to_joint_goal(self._arm_initial_poses, replan=True)    
     self.do_sake_gripper_action("calibrate")
+    self._robot_stopped = False
+    self._reset_program_state()
+  
+  def estop(self):
+    """ Emergency stop. """
+    self.relax_arm()
+    self._robot_stopped = True
+    self._reset_program_state()
 
   def preview_body_part_with_id(self, id_num):
     """
@@ -479,55 +489,24 @@ class PbdServer():
       Moves arm to perform the action specified by abbr, save the trajectory to database if neccessary.
       Returns true if succeed, false otherwise.
     """
-    # preview action
-    self.preview_action_with_abbr(abbr, id_num)
-
-    self.freeze_arm()
-
-    # get AR tag information
-    tag_pose = self._get_tag_with_id(id_num)
-    if tag_pose == None or self._current_pose == None:
-      return False
-
-    # move arm to the starting position relative to AR tag
-    if not self._preview_traj or not self.goto_part_with_id(id_num):
-      rospy.logerr("Fail to move to the starting position for action: " + abbr)
-      return False
-
-    # follow the trajectory
-    succeed = False
-    for i in range(len(self._preview_traj) - 1):
-      goal_pose = self._preview_traj[i + 1]
-      # move arm relative to the previous pose (use seed), skip the current waypoint if the current action fails
-      action_result = self._move_arm_relative(goal_pose.pose, goal_pose.header, seed_state=self._get_seed_state())
-      if action_result is not None:
-        succeed = True  # the whole action succeeds if at least one pose is reached
-      else:
-        rospy.logerr("Fail to reach waypoint " + str(i + 1))
-    return succeed
+    action_result = False
+    if self._prepare_action(abbr, id_num):
+      action_result = self._follow_traj_step_by_step()
+    return action_result
 
   def do_action_with_abbr_smooth(self, abbr, id_num):
     """
       Moves arm to perform the action specified by abbr smoothly.
       Returns true if succeed, false otherwise.
     """
-    # preview action
-    self.preview_action_with_abbr(abbr, id_num)
-
-    self.freeze_arm()
-
-    # get AR tag information
-    tag_pose = self._get_tag_with_id(id_num)
-    if tag_pose == None or self._current_pose == None:
-      return False
-
-    # move arm to the starting position relative to AR tag
-    if not self._preview_traj or not self.goto_part_with_id(id_num):
-      rospy.logerr("Fail to move to the starting position for action: " + abbr)
-      return False
-
-    # calculate a smooth trajectory passing through all the waypoints and move the arm
-    return self._move_arm(None, trajectory_waypoint=self._preview_traj, final_state=True, seed_state=self._get_seed_state())
+    action_result = False
+    if self._prepare_action(abbr, id_num):
+      # calculate a smooth trajectory passing through all the waypoints and move the arm
+      action_result = self._move_arm(None, trajectory_waypoint=self._preview_traj, final_state=True, seed_state=self._get_seed_state())
+      if not action_result:
+        # smooth action fails, do the action step by step instead
+        action_result = self._follow_traj_step_by_step()
+    return action_result
 
   def record_action_with_abbr(self, abbr, id_num):
     """
@@ -597,20 +576,18 @@ class PbdServer():
     if request_type == "attach":
       return_msg = "SAKE gripper has already attached!"
       if not self._sake_gripper_attached:
-        self._publish_server_response(type=request_type, msg="Attaching SAKE gripper...")
+        self._publish_server_response(msg="Attaching SAKE gripper...")
         self.attach_sake_gripper()
-        self._sake_gripper_attached = True
         return_msg = "SAKE gripper attached"
-      self._publish_server_response(type=request_type, status=True, msg=return_msg)
+      self._publish_server_response(status=True, msg=return_msg)
 
     elif request_type == "remove":
       return_msg = "SAKE gripper has already removed!"
       if self._sake_gripper_attached:
-        self._publish_server_response(type=request_type, msg="Removing SAKE gripper...")
+        self._publish_server_response(msg="Removing SAKE gripper...")
         self.remove_sake_gripper()
-        self._sake_gripper_attached = False
         return_msg = "SAKE gripper removed"
-      self._publish_server_response(type=request_type, status=True, msg=return_msg)
+      self._publish_server_response(status=True, msg=return_msg)
 
     elif not self._sake_gripper_attached:
       # need to attach SAKE gripper first
@@ -619,12 +596,11 @@ class PbdServer():
     else:
       # SAKE gripper has already attached
       if request_type == "record":
-        self._publish_server_response(type=request_type, msg="Recording the current scene...")
+        self._publish_server_response(msg="Recording the current scene...")
         if self.update_env(update_octo=bool(request_args[0])):
           # get the list of body parts and actions
           parts = self.get_list()
-          parts_info = []
-          actions_info = []
+          parts_info, actions_info = [], []
           if len(parts):
             for part in parts:
               if part.id in BODY_PARTS and part.id in ACTIONS:
@@ -634,11 +610,11 @@ class PbdServer():
           self._publish_server_response(type="parts", args=parts_info)
           self._publish_server_response(type="actions", status=True, args=actions_info, msg="Scene recorded")
         else:
-          self._publish_server_response(type=request_type, status=True, msg="Failed to record the current scene!")
+          self._publish_server_response(status=True, msg="Failed to record the current scene!")
 
       elif request_type == "prev_id" and len(request_args) == 1:
         id_num = int(request_args[0])  # convert from string to int
-        self._publish_server_response(type=request_type, status=True, msg="Previewing " + BODY_PARTS[id_num] + "...")
+        self._publish_server_response(status=True, msg="Previewing " + BODY_PARTS[id_num] + "...")
         self.preview_body_part_with_id(id_num)
 
       elif request_type == "prev" and len(request_args) == 2:
@@ -664,89 +640,106 @@ class PbdServer():
         self._publish_server_response(status=True)
 
       elif request_type == "reset":
-        self._publish_server_response(type=request_type, msg="Resetting...")
+        self._publish_server_response(msg="Resetting...")
         self.reset()
-        self._robot_stopped = False
-        self._grasp_position_ready = False
-        self._do_position_ready = False
-        self._do_position_id = -1
-        self._publish_server_response(type=request_type, status=True, msg="Done")
+        self._publish_server_response(status=True, msg="Done")
 
       elif not self._robot_stopped: 
         # moveit controller is running
         if request_type == "go" and len(request_args) == 1:
           self._do_position_ready = False
           id_num = int(request_args[0])
-          self._publish_server_response(type=request_type, msg="Moving towards body part " + BODY_PARTS[id_num] + "...")
+          self._publish_server_response(msg="Moving towards body part " + BODY_PARTS[id_num] + "...")
           if self.goto_part_with_id(id_num):
             self._grasp_position_ready = True
             self._do_position_id = id_num
-            self._publish_server_response(type=request_type, status=True, msg="Done, ready to grasp")
+            self._publish_server_response(status=True, msg="Done, ready to grasp")
           else:
-            self._publish_server_response(type=request_type, status=True, msg="Fail to move!")
+            self._publish_server_response(status=True, msg="Fail to move!")
 
         elif request_type == "grasp" and self._grasp_position_ready and len(request_args) == 1:
-          self._publish_server_response(type=request_type, msg="Grasping...")
+          self._publish_server_response(msg="Grasping...")
           if request_args[0] == "h":
             self.do_sake_gripper_action("h_close")
           else:
             self.do_sake_gripper_action("s_close")
           self._grasp_position_ready = False
           self._do_position_ready = True
-          self._publish_server_response(type=request_type, status=True, msg="Grasped")
+          self._publish_server_response(status=True, msg="Grasped")
 
         elif request_type == "relax":
-          self._publish_server_response(type=request_type, msg="Relaxing arm...")
+          self._publish_server_response(msg="Relaxing arm...")
           self.relax_arm()
-          self._publish_server_response(type=request_type, status=True, msg="Arm relaxed")
+          self._publish_server_response(status=True, msg="Arm relaxed")
 
         elif request_type == "freeze":
-          self._publish_server_response(type=request_type, msg="Freezing arm...")
+          self._publish_server_response(msg="Freezing arm...")
           self.freeze_arm()
-          self._publish_server_response(type=request_type, status=True, msg="Arm froze")
+          self._publish_server_response(status=True, msg="Arm froze")
 
-        elif request_type == "do" and len(request_args) > 0:
-          return_msg = ""
+        elif (request_type == "do" or request_type == "do_s") and len(request_args) > 0:
+          return_msg = "Action failed!"
           if self._do_position_ready:
             # performing mode
-            self._publish_server_response(type=request_type, msg="Performing " + request_args[0] + "...")
-            if self.do_action_with_abbr(request_args[0], self._do_position_id):
+            self._publish_server_response(msg="Performing " + request_args[0] + "...")
+            result = False
+            if request_type == "do":  # step by step
+              result = self.do_action_with_abbr(request_args[0], self._do_position_id)
+            else:  # smooth
+              result = self.do_action_with_abbr_smooth(request_args[0], self._do_position_id)
+            if result:
               return_msg = "Action succeeded"
-            else:
-              return_msg = "Action failed!"
-            self._do_position_ready = False
           else:
             return_msg = "Unknown action for body part with ID: " + str(self._do_position_id)
           # always release gripper
-          self._publish_server_response(type=request_type, msg="Releasing the gripper...")
+          self._publish_server_response(msg="Releasing the gripper...")
           self.do_sake_gripper_action("40 " + self._sake_gripper_effort)
           self._do_position_ready = False
-          self._publish_server_response(type=request_type, status=True, msg=return_msg)
+          self._publish_server_response(status=True, msg=return_msg)
 
         elif request_type == "release":
-          self._publish_server_response(type=request_type, msg="Releasing the gripper...")
+          self._publish_server_response(msg="Releasing the gripper...")
           self.do_sake_gripper_action("open")
           self._do_position_ready = False
-          self._publish_server_response(type=request_type, status=True, msg="Gripper released")
+          self._publish_server_response(status=True, msg="Gripper released")
 
         elif request_type == "stop":
-          self._publish_server_response(type=request_type, msg="Stopping the robot...")
-          self.relax_arm()
-          self._robot_stopped = True
-          self._grasp_position_ready = False
-          self._do_position_ready = False
-          self._do_position_id = -1
-          self._publish_server_response(type=request_type, status=True, msg="Robot stopped, please \"RESET\" if you want to continue using it")
+          self._publish_server_response(msg="Stopping the robot...")
+          self.estop()
+          self._publish_server_response(status=True, msg="Robot stopped, please \"RESET\" if you want to continue using it")
 
         elif request_type == "run" and len(request_args) == 3:
           self.web_app_request_callback(WebAppRequest(type="go", args=[request_args[0]]))
           self.web_app_request_callback(WebAppRequest(type="grasp", args=[request_args[1]]))
-          self.web_app_request_callback(WebAppRequest(type="do", args=[request_args[2]]))
+          self.web_app_request_callback(WebAppRequest(type="do_s", args=[request_args[2]]))
           self._publish_server_response(type=request_type, status=True, msg="DONE")
 
-      else: 
-        self._publish_server_response(type=request_type, status=True, msg="Invalid command :)")
+        elif request_type == "step" and len(request_args) == 1:
+          return_msg = "Ready!"
+          waypoint_id = int(request_args[0])
+          if waypoint_id == -1:  # goto tag and grasp
+            self.web_app_request_callback(WebAppRequest(type="go", args=[request_args[0]]))
+            self.web_app_request_callback(WebAppRequest(type="grasp", args=[request_args[1]]))
+          else:  # move along trajectory
+            return_msg = "Fail to reach waypoint #" + request_args[0]
+            result = self._goto_waypoint_on_traj_with_id(waypoint_id)
+            if waypoint_id == len(self._preview_traj) - 1:  # last point
+              self._publish_server_response(msg="Releasing the gripper...")
+              self.do_sake_gripper_action("40 " + self._sake_gripper_effort)
+              self._do_position_ready = False
+            if result:
+              return_msg = "Reached waypoint #" + request_args[0]
+          self._publish_server_response(type=request_type, status=True, args=request_args, msg=return_msg)
 
+      else: 
+        self._publish_server_response(status=True, msg="Invalid command :)")
+
+
+  def _reset_program_state(self):
+    """ Resets program state. """
+    self._grasp_position_ready = False
+    self._do_position_ready = False
+    self._do_position_id = -1
 
   def _move_arm_relative(self, ref_pose, ref_header, offset=None, preview_only=False, seed_state=None):
     """ 
@@ -791,7 +784,6 @@ class PbdServer():
       # go to goal_pose while avoiding unreasonable trajectories!
       if trajectory_waypoint:
         # create an array of waypoints
-        ################################################################################################
         waypoints = []
         for tw in trajectory_waypoint:
           waypoints.append(tw.pose)
@@ -876,6 +868,54 @@ class PbdServer():
     goal_pose = self._move_arm_relative(ar_pose.pose.pose, ar_pose.header, offset=grasp_offset, preview_only=True)
     self.highlight_waypoint(goal_pose, WAYPOINT_HIGHLIGHT_COLOR)
     return goal_pose
+
+  def _prepare_action(self, abbr, id_num):
+    """
+      Previews the action trajectory, moves robot arm to the starting position of the action and
+      grasps the limb. Returns true if succeeds, false otherwise.
+    """
+    # preview action
+    self.preview_action_with_abbr(abbr, id_num)
+    # freeze arm for moveit
+    self.freeze_arm()
+    # get AR tag information
+    tag_pose = self._get_tag_with_id(id_num)
+    if tag_pose == None or self._current_pose == None:
+      return False
+    # move arm to the starting position relative to AR tag
+    if not self._preview_traj or not self.goto_part_with_id(id_num):
+      rospy.logerr("Fail to move to the starting position for action: " + abbr)
+      return False
+    return True
+
+  def _follow_traj_step_by_step(self):
+    """
+      Follows the current trajectory step by step. Returns true if at least one waypoint is reached, false otherwise.
+    """
+    succeed = False
+    for i in range(len(self._preview_traj) - 1):
+      goal_pose = self._preview_traj[i + 1]
+      # move arm relative to the previous pose (use seed), skip the current waypoint if the current action fails
+      action_result = self._move_arm_relative(goal_pose.pose, goal_pose.header, seed_state=self._get_seed_state())
+      if action_result is not None:
+        succeed = True  # the whole action succeeds if at least one pose is reached
+      else:
+        rospy.logerr("Fail to reach waypoint " + str(i + 1))
+    return succeed
+
+  def _goto_waypoint_on_traj_with_id(self, waypoint_id):
+    """
+      Go to the specific waypoint on the trajectory. Returns true if succeeds, false otherwise.
+    """
+    succeed = False
+    if -1 < waypoint_id < len(self._preview_traj):
+      goal_pose = self._preview_traj[waypoint_id]
+      action_result = self._move_arm_relative(goal_pose.pose, goal_pose.header, seed_state=self._get_seed_state())
+      if action_result is not None:
+        succeed = True
+      else:
+        rospy.logerr("Fail to reach waypoint " + str(i + 1))
+    return succeed
 
   def _save_traj_to_db(self, abbr, id_num):
     """
