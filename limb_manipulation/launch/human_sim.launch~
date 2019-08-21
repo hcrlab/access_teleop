@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<!-- Launch file for action test world model -->
+<!-- Launch file for Gazebo simulation of limb repositioning -->
 <launch>
 
   <env name="GAZEBO_MODEL_PATH" value="$(find limb_manipulation)/models:$(find fetch_gazebo)/models:$(optenv GAZEBO_MODEL_PATH)" />
@@ -23,7 +23,7 @@
   <!-- Oh, you wanted a robot? -->
   <include file="$(find fetch_gazebo)/launch/include/$(arg robot).launch.xml">
     <!-- set robot's default position -->
-    <arg name="x" value="2.8" />
+    <arg name="x" value="2.5" />
     <arg name="y" value="2.8" />
   </include>
 

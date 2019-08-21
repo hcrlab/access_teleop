@@ -1,10 +1,13 @@
 <?xml version="1.0"?>
 <launch>
-  <param name="use_traj" value="true" />
-  <param name="console_output" value="false" />
-  <!-- the threshold to distinguish joint state points -->
-  <param name="arm_traj_threshold" value="0.1" />
-  
-  <node pkg="limb_manipulation" type="limb_pbd.py" name="limb_pbd" output="screen"/>
+	<!-- true: use trajectory playback; false: use pose offset (not supported in the current version) -->
+	<param name="use_traj" value="true" />
+	<!-- true: show console output; false: suppress console output -->
+	<param name="console_output" value="false" />
+	<!-- true: use SAKE gripper urdf in the planning scene; false: use a box to represent the SAKE gripper in the planning scene -->
+	<param name="use_urdf" value="false" />
+	<!-- the threshold to distinguish joint state points -->
+	<param name="arm_traj_threshold" value="0.1" />
 
+	<node pkg="limb_manipulation" type="limb_pbd.py" name="limb_pbd" output="screen"/>
 </launch>

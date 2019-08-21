@@ -25,7 +25,7 @@ def print_usage():
   print("  do ABBR: perform the action specified by ABBR")
   print("    -s: do the action smoothly")
   print("    -r: if the robot arm is relaxed, save the current pose as ABBR")
-  print("  release: if the gripper is closed, open it")
+  print("  open: if the gripper is closed, open it")
   print("  reset: move Fetch's arm to its initial position, open the gripper if it's closed\n")
   print("  stop: emergency stop\n")
   print("  help: print program usage\n")
@@ -251,8 +251,8 @@ def main():
             server.do_sake_gripper_action("open")
             do_position_ready = False
 
-          elif command[:7] == "release":
-            print("Releasing the gripper...")
+          elif command[:7] == "open":
+            print("Opening the gripper...")
             server.do_sake_gripper_action("open")
             do_position_ready = False
 

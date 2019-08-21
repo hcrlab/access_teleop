@@ -3,7 +3,7 @@
   <!-- Params for the octomap monitor -->
   <param name="octomap_frame" type="string" value="base_link" />
   <!-- Change this to actually change the octomap resolution !!! -->
-  <param name="octomap_resolution" type="double" value="0.01" />
+  <param name="octomap_resolution" type="double" value="0.005" />
   <param name="max_range" type="double" value="5.0" />  
 
   <!-- Set the file describing which sensor(s) to use to build the octomap  -->

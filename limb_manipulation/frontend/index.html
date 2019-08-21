@@ -64,9 +64,9 @@
                             </div>
                         </div>
                         <div id="run_container" style="display:none">
-                            <button id="ready_for_step_btn" class="ctrl_btn">Get Ready</button>
-                            <button id="prev_step_btn" class="ctrl_btn">&lt;&lt;</button>
-                            <button id="next_step_btn" class="ctrl_btn">&gt;&gt;</button>
+                            <button id="ready_for_step_btn" class="ctrl_btn step_ctrl_btn">Get Ready</button>
+                            <button id="prev_step_btn" class="ctrl_btn step_ctrl_btn">&lt;&lt;</button>
+                            <button id="next_step_btn" class="ctrl_btn step_ctrl_btn">&gt;&gt;</button>
                             <button id="run_btn" class="ctrl_btn">RUN</button><br>
                             <button id="estop_btn" class="ctrl_btn">STOP</button>
                         </div>
@@ -111,7 +111,7 @@
                             <p class="status freeze_status"></p>
                             <button class="sub_go_btn ctrl_btn">GO</button>
                         </div>
-                        <button id="reset_btn ctrl_btn">RESET</button>
+                        <button id="reset_btn_1" class="ctrl_btn">RESET</button>
                     </div>
                 </div>
                 
@@ -123,6 +123,7 @@
             <button id="record_btn" class="ctrl_btn">Update Scene</button>
             <button id="base_btn" class="ctrl_btn">Base Control</button>
             <button id="sake_gripper_btn" class="ctrl_btn">Open Gripper</button>
+            <button id="reset_btn_0" class="ctrl_btn">Reset</button>
             <button id="help_btn" class="ctrl_btn">Help</button>
         </div>
 
@@ -141,6 +142,30 @@
                 <button id="cancel_edit" class="waypoints_btn ctrl_btn">Cancel</button>
                 <button id="save_edit" class="waypoints_btn ctrl_btn">Save</button>
             </div>
+        </div>
+
+        <div id="help_popup" style="display:none">
+            <button id="close_help_window_btn" class="ctrl_btn">&#x2716;</button>
+            <h3>&#x2726; General Control &#x2726;</h3>
+            <p><b>Attach/Remove Gripper</b>: close/open the robot's gripper to hold/remove SAKE gripper</p>
+            <p><b>Update Scene</b>: record the current scene and update body parts known to the robot
+            <p><b>Base Control</b>: moves the robot's base to the front/back/left/right</p>
+            <p><b>Open Gripper</b>: open SAKE gripper</p>
+            <p><b>Reset</b>: move the robot's arm to its initial position, open SAKE gripper if it's closed</p>
+            <p><b>Help</b>: show help information</p></br>
+
+            <h3>&#x2726; Camera Views &#x2726;</h3>
+            <p>Click on the camera image to maximize the view</p></br>
+
+            <h3>&#x2726; Action Panel &#x2726;</h3>
+            <p>To do an action, you need to:</p>
+            <ol>
+                <li>Select a body part, the selected part will be highlighted in camera views</li>
+                <li>Select an action, the trajectory of selected action will show up in camera views. Click "<b>Edit</b>" if you want to edit the trajectory. Click "<b>GO</b>" to confirm your selection</li>
+                <li>Select a grasp type: hard grasp or soft grasp</li>
+                <li>You can either do the action at once by clicking "<b>RUN</b>", or do the action step by step by clicking "<b>Get Ready</b>" and then using two arrow buttons to go to previous/next waypoint on the trajectory</li>
+            </ol>
+            <p><b>STEP</b>: emergency stop button</p></br>
         </div>
 
         <div id="base_ctrl" style="display:none">

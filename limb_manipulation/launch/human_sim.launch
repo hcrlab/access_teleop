@@ -6,7 +6,7 @@
 
   <arg name="robot" default="fetch"/>
   <arg name="debug" default="false"/>
-  <arg name="gui" default="true"/>
+  <arg name="gui" default="false"/>
   <arg name="headless" default="false"/>
 
   <!-- Start Gazebo with a blank world -->

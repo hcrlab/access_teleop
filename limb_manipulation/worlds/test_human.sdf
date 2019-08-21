@@ -12,10 +12,10 @@
     </include>
 
     <!-- Human -->
-    <include>
+    <!-- <include>
       <uri>model://person_standing</uri>
       <pose>3.98 2 0.3 -1.5707 0 0</pose>
-    </include>
+    </include> --->
 
     <!-- Bed -->
     <include>
@@ -24,7 +24,7 @@
       <pose>4 3 0 0 0 -1.5707</pose>
     </include>
 
-    <!-- Block -->
+    <!-- Table -->
     <include>
       <uri>model://cafe_table</uri>
       <name>cafe_table</name>

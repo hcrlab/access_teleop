@@ -108,7 +108,7 @@ button:active {
     grid-template-rows: repeat(6, 1fr);
 }
 
-#run_btn, #reset_btn {
+#run_btn, #reset_btn_1 {
     background-color: #F6B37E !important;
 }
 
@@ -116,7 +116,7 @@ button:active {
     background-color: #f67e85 !important;
 }
 
-#reset_btn {
+#reset_btn_1 {
     margin: auto;
 }
 
@@ -143,6 +143,10 @@ button:active {
     margin: 0;
     width: 40px;
     height: 40px;
+}
+
+.step_ctrl_btn {
+    background-color: #F1EACF !important;
 }
 
 /* Dropdown Button Layout */
@@ -200,15 +204,44 @@ button:active {
     display: none;
 }
 
-#record_btn_confirm, #edit_traj_popup {
-    background-color: #FDF8E0;
+#record_btn_confirm, #edit_traj_popup, #help_popup {
     border-style: solid;
     border-width: 0.2em;
-    border-color: #ffa98c;
     padding: 2em;
     margin: auto;
     z-index: 2;
     position: fixed;
+}
+
+#record_btn_confirm, #edit_traj_popup {
+    background-color: #FDF8E0;
+    border-color: #ffa98c;
+}
+
+#help_popup {
+    background-color: #f2f9fd;
+    border-color: #82c3ef;
+    top: 12%;
+    left: 5%;
+    overflow: scroll;
+    max-height: 60%;
+    right: 5%;
+}
+
+#help_popup h3, #help_popup p, #help_popup li {
+    text-align: left;
+    line-height: 1.5em;
+}
+
+#help_popup h3 {
+    color: #273a47;
+    margin-bottom: 0.5em;
+}
+
+#close_help_window_btn {
+    position: absolute;
+    right: 1em;
+    top: 1em;
 }
 
 #record_btn_confirm {

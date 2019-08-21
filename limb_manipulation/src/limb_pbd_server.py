@@ -34,10 +34,7 @@ import copy
 
 # maximum times to retry if a transform lookup fails
 TRANSFROM_LOOKUP_RETRY = 10
-# the threshold to distinguish joint state points
-ARM_TRAJ_THRESHOLD = 0.1
-
-# Colors for trajectory visualization
+# colors for trajectory visualization
 START_COLOR = Color("LightGreen")
 END_COLOR = Color("DarkGreen")
 TRAJ_HIGHLIGHT_SCALE = Vector3(0.05, 0.008, 0.008)
@@ -49,26 +46,23 @@ BODY_PARTS = {0: "right wrist", 1: "lower right leg",
               2: "left wrist", 3: "lower left leg"}
 
 ACTIONS = {0: ["right arm elbow extension", "right arm elbow flexion"],
-           1: ["right leg adduction", "right leg abduction", "right leg medial rotation", "right leg lateral rotation"],
+           1: ["right leg abduction and adduction"],  # , "right leg medial rotation", "right leg lateral rotation"],
            2: ["left arm elbow extension", "left arm elbow flexion"],
-           3: ["left leg adduction", "left leg abduction", "left leg medial rotation", "left leg lateral rotation"]
+           3: ["left leg abduction and adduction"]  #, "left leg medial rotation", "left leg lateral rotation"]
           }
 
-ABBR = {"right leg adduction": "RLAD", "right leg abduction": "RLAB",
-        "right leg medial rotation": "RLMR", "right leg lateral rotation": "RLLR",
-        "left leg adduction" : "LLAD", "left leg abduction": "LLAB",
-        "left leg medial rotation": "LLMR", "left leg lateral rotation": "LLLR",
+ABBR = {"right leg abduction and adduction": "RLAA",
+        # "right leg medial rotation": "RLMR", "right leg lateral rotation": "RLLR",
+        "left abduction and adduction": "LLAA",
+        # "left leg medial rotation": "LLMR", "left leg lateral rotation": "LLLR",
         "right arm elbow extension": "RAEE", "right arm elbow flexion": "RAEF",
         "left arm elbow extension": "LAEE", "left arm elbow flexion": "LAEF"
        }
 
 # leg medial rotation, leg lateral rotation
-
-
 # shoulder flexion, shoulder abduction, shoulder adduction, shoulder medial rotation, shoulder lateral rotation, 
 # forearm pronation, forearm supination, 
 # knee flexion, knee extension (seems to be performed when seated?)
-
 
 
 def wait_for_time():
@@ -131,7 +125,6 @@ class PbdServer():
     self._sake_gripper_pub = rospy.Publisher('/ezgripper_access', EzgripperAccess, queue_size=1)
     self._sake_gripper_sub = rospy.Subscriber('/ezgripper_access_status', EzgripperAccess, callback=self._set_sake_gripper_action_status)
 
-
     # motion planning scene
     self._planning_scene = PlanningSceneInterface('base_link')
     self._planning_scene.clear()
@@ -151,7 +144,7 @@ class PbdServer():
         ("shoulder_pan_joint", 1.296), ("shoulder_lift_joint", 1.480), ("upperarm_roll_joint", -0.904), ("elbow_flex_joint", 2.251), 
         ("forearm_roll_joint", -2.021), ("wrist_flex_joint", -1.113), ("wrist_roll_joint", -0.864)]
     
-    # orientation constraint
+    # orientation constraint (unused)
     self._gripper_oc = OrientationConstraint()
     self._gripper_oc.header.frame_id = 'base_link'
     self._gripper_oc.link_name = 'wrist_roll_link'
@@ -188,10 +181,12 @@ class PbdServer():
     self._sake_gripper_effort = "100"
     self._robot_stopped = False
     self._grasp_position_ready = False
+    self._grasp_type = "h_close"
     self._do_position_ready = False
     self._do_position_id = -1
     self._preview_action_abbr = ""
     self._preview_traj = []  # the trajectory being previewed currently
+    self._current_waypoint_id = -1
 
     rospy.sleep(0.5)
 
@@ -201,22 +196,21 @@ class PbdServer():
     # set robot's initial state
     self._torso.set_height(0)
     self._head.pan_tilt(0, 0.8)
-
     # move arm to the initial position (with collision detection)
     self._arm.move_to_joint_goal(self._arm_initial_poses, replan=True)
+
     print("\nThe program is ready to use :-)\n")
 
   def shutdown(self):
     """ Handler for robot shutdown """
     print("\nShutting down... Bye :-)\n")
-    # display
+    # clear display
     self._viz_markers_pub.publish(MarkerArray(markers=[]))
     # moveit
     self.freeze_arm()
-    self._planning_scene.removeAttachedObject('sake')
     self._planning_scene.clear()
     self._arm.cancel_all_goals()
-    # database
+    # save the database
     self._db.save()
     # moveit: move group commander
     self._moveit_group.stop()
@@ -233,24 +227,31 @@ class PbdServer():
     self._sake_gripper_attached = True
 
     # add SAKE gripper to the planning scene
-    self._planning_scene.removeAttachedObject('sake')
-
-    # # real sake gripper mesh
-    # sake_gripper_pose = Pose(Point(0, 0, 0), Quaternion(0, 0, 0, 1))
-    # pack_path = subprocess.check_output("rospack find ezgripper_driver", shell=True).replace('\n','')
-    # sake_gripper_mesh_file = pack_path + "/meshes/ezgripper_gen2/SAKE_Palm_Dual_Gen2.stl"
-    # self._planning_scene.attachMesh('sake', sake_gripper_pose, sake_gripper_mesh_file, True)
-
-    # a box
     frame_attached_to = 'gripper_link'
-    frames_okay_to_collide_with = [
-        'gripper_link', 'l_gripper_finger_link', 'r_gripper_finger_link'
-    ]
-    self._planning_scene.attachBox('sake', 0.08, 0.07, 0.06, 0, 0, 0,
-                             frame_attached_to,
-                             frames_okay_to_collide_with)
-    self._planning_scene.setColor('sake', 1, 0, 1)
-    self._planning_scene.sendColors()
+    frames_okay_to_collide_with = ['gripper_link', 'l_gripper_finger_link', 'r_gripper_finger_link']
+    package_path = subprocess.check_output("rospack find ezgripper_driver", shell=True).replace('\n','')
+
+    if rospy.get_param("use_urdf"):  # use real sake gripper mesh
+      # palm
+      sake_palm_pose = Pose(Point(-0.01, 0, 0.05), Quaternion(-0.7, 0, 0.7, 0))
+      sake_palm_mesh_file = package_path + "/meshes/visual/SAKE_Palm_Dual.stl"
+      self._planning_scene.attachMesh('sake_palm', sake_palm_pose, sake_palm_mesh_file, 
+                                      frame_attached_to, touch_links=frames_okay_to_collide_with)
+      # fingers
+      sake_finger_1_pose = Pose(Point(0, -0.03, -0.055), Quaternion(0.5, -0.5, 0.5, 0.5))
+      sake_finger_1_mesh_file = package_path + "/meshes/visual/SAKE_Finger.stl"
+      self._planning_scene.attachMesh('sake_finger_1', sake_finger_1_pose, sake_finger_1_mesh_file, 
+                                      frame_attached_to, touch_links=frames_okay_to_collide_with)
+      sake_finger_2_pose = Pose(Point(0, 0.03, -0.055), Quaternion(-0.5, -0.5, -0.5, 0.5))
+      sake_finger_2_mesh_file = package_path + "/meshes/visual/SAKE_Finger.stl"
+      self._planning_scene.attachMesh('sake_finger_2', sake_finger_2_pose, sake_finger_2_mesh_file, 
+                                      frame_attached_to, touch_links=frames_okay_to_collide_with)
+    else:  # use a box to represent the sake gripper
+      self._planning_scene.attachBox('sake', 0.03, 0.09, 0.15, 0, 0, -0.05,
+                                     frame_attached_to,
+                                     frames_okay_to_collide_with)
+      self._planning_scene.setColor('sake', 1, 0, 1)
+      self._planning_scene.sendColors()
 
     # calibrate SAKE gripper
     self.do_sake_gripper_action("calibrate")
@@ -265,7 +266,12 @@ class PbdServer():
     self._fetch_gripper.open()
     self._sake_gripper_attached = False
     # remove SAKE gripper from the planning scene
-    self._planning_scene.removeAttachedObject('sake')
+    if rospy.get_param("use_urdf"):
+      self._planning_scene.removeAttachedObject('sake_palm')
+      self._planning_scene.removeAttachedObject('sake_finger_1')
+      self._planning_scene.removeAttachedObject('sake_finger_2')
+    else:
+      self._planning_scene.removeAttachedObject('sake')
 
   def update_env(self, update_octo=True):
     """
@@ -274,16 +280,10 @@ class PbdServer():
     """
     # update markers
     self._reader.update()
-
+    # update octomap
     if update_octo:
-      # update octomap
       # clear previous octomap
-      rospy.wait_for_service('clear_octomap')
-      try:
-        clear_octo = rospy.ServiceProxy('clear_octomap', Empty)
-        clear_octo()
-      except rospy.ServiceException, e:
-        rospy.logerr('Fail to move to the starting position for action: {}'.format(e))
+      if not self._clear_octomap():
         return False
       # scan the range: pan -0.75~0.75, tilt 0~0.7
       for i in range(6):
@@ -296,25 +296,9 @@ class PbdServer():
       # move the head back to initial position
       self._head.pan_tilt(0, 0.7)
     return True
-  
-  def get_list(self):
-    """ Returns a list of AR tags recognized by the robot. """
-    return self._reader.get_list()
-
-  def get_db_list(self):
-    """ Returns list of entries in the database. """
-    return self._db.list()
-
-  def get_db_entry(self, entry):
-    """ Returns values associated with the given entry in the database. """
-    return self._db.get(entry)
-
-  def delete_db_entry(self, name):
-    """ Delete the database entry with the given name """
-    self._db.delete(name)
-    self._db.save()
 
   def do_sake_gripper_action(self, command):
+    # publish response message
     if command == "calibrate":
       self._publish_server_response(msg="Calibrating SAKE gripper, please wait...")
     elif command == "h_close":
@@ -323,11 +307,8 @@ class PbdServer():
       self._publish_server_response(msg="Soft closing SAKE gripper, please wait...")
     elif command == "open":
       self._publish_server_response(msg="Opening SAKE gripper, please wait...")
-    else:
-      args = command.split(" ")  # [percentage open, effort]
-      if len(args) == 2:
-        self._publish_server_response(msg=args[0] + "\% closing SAKE gripper with effort " + args[1] + "\%...")
-
+    else:  # [percentage open, effort]
+      self._publish_server_response(msg="Closing SAKE gripper, please wait...")
     # publish command
     self._sake_gripper_pub.publish(EzgripperAccess(type=command))
     # wait for the action to finish if in real
@@ -340,11 +321,11 @@ class PbdServer():
   def reset(self):
     """ Moves arm to its initial position and calibrates gripper """
     self.freeze_arm()
-    self._arm.move_to_joint_goal(self._arm_initial_poses, replan=True)    
+    self._arm.move_to_joint_goal(self._arm_initial_poses, replan=True)
     self.do_sake_gripper_action("calibrate")
     self._robot_stopped = False
     self._reset_program_state()
-  
+
   def estop(self):
     """ Emergency stop. """
     self.relax_arm()
@@ -358,13 +339,12 @@ class PbdServer():
     raw_pose = self._get_tag_with_id(id_num)
     if raw_pose is not None:
       # visualize goal pose
-      marker = Marker(
-                  type=Marker.CUBE,
-                  id=0,
-                  pose=raw_pose.pose.pose,
-                  scale=Vector3(0.06, 0.06, 0.06),
-                  header=raw_pose.header,
-                  color=ColorRGBA(1.0, 0.75, 0.3, 0.8))
+      marker = Marker(type=Marker.CUBE,
+                      id=0,
+                      pose=raw_pose.pose.pose,
+                      scale=Vector3(0.06, 0.06, 0.06),
+                      header=raw_pose.header,
+                      color=ColorRGBA(1.0, 0.75, 0.3, 0.8))
       self._viz_pub.publish(marker)
 
   def goto_part_with_id(self, id_num):
@@ -377,10 +357,15 @@ class PbdServer():
     if raw_pose is not None:
       # found marker, move towards it
       self.do_sake_gripper_action("40 " + self._sake_gripper_effort)
-      return self._move_arm(self._get_goto_pose(raw_pose), final_state=False)
-    else:
-      # marker with id_num is not found
-      return False
+      # move to the pre-grasp pose
+      pre_grasp_offset = self._db.get("PREGRASP")
+      pre_grasp_pose = self._move_arm_relative(raw_pose.pose.pose, raw_pose.header, offset=pre_grasp_offset, preview_only=True)
+      if self._move_arm(pre_grasp_pose, final_state=False):
+        # move to the grasp pose, clear octomap to ignore collision only at this point
+        if self._clear_octomap():
+          return self._move_arm(self._get_goto_pose(raw_pose), final_state=False, seed_state=self._get_seed_state())
+    # marker with id_num is not found, or some error occured
+    return False
 
   def preview_action_with_abbr(self, abbr, id_num):
     """
@@ -439,13 +424,12 @@ class PbdServer():
 
   def highlight_waypoint(self, highlight_pose, color):
     """ Publishes a marker at the specified location. """
-    marker = Marker(
-                  type=Marker.ARROW,
-                  id=0,
-                  pose=highlight_pose.pose,
-                  scale=WAYPOINT_HIGHLIGHT_SCALE,
-                  header=highlight_pose.header,
-                  color=color)
+    marker = Marker(type=Marker.ARROW,
+                    id=0,
+                    pose=highlight_pose.pose,
+                    scale=WAYPOINT_HIGHLIGHT_SCALE,
+                    header=highlight_pose.header,
+                    color=color)
     self._viz_pub.publish(marker)
 
   def edit_waypoint(self, waypoint_id, delta_x, delta_y, camera):
@@ -463,13 +447,12 @@ class PbdServer():
     for i in range(len(self._preview_traj)):
       # highlight the waypoint that is being editing
       color = WAYPOINT_HIGHLIGHT_COLOR if i == waypoint_id else ColorRGBA(colors[i].red, colors[i].green, colors[i].blue, 0.8)
-      marker = Marker(
-                    type=Marker.ARROW,
-                    id=i,
-                    pose=self._preview_traj[i].pose,
-                    scale=TRAJ_HIGHLIGHT_SCALE,
-                    header=self._preview_traj[i].header,
-                    color=color)
+      marker = Marker(type=Marker.ARROW,
+                      id=i,
+                      pose=self._preview_traj[i].pose,
+                      scale=TRAJ_HIGHLIGHT_SCALE,
+                      header=self._preview_traj[i].header,
+                      color=color)
       marker_arr.append(marker)
     # clear previous markers
     self._viz_markers_pub.publish(MarkerArray(markers=[]))
@@ -507,6 +490,21 @@ class PbdServer():
         # smooth action fails, do the action step by step instead
         action_result = self._follow_traj_step_by_step()
     return action_result
+
+  def pause_action(self):
+    """ Pause the current action. """
+    self.relax_arm()
+    # if _follow_traj_step_by_step, record the current waypoint
+    print(self._current_waypoint_id)
+
+  def continue_action(self):
+    """ Continue the current action. """
+    self.freeze_arm()
+    # if _follow_traj_step_by_step, continue from previous waypoint
+    print(self._current_waypoint_id)
+    # if self._current_waypoint_id > -1:
+      # # continue going to the next waypoint
+      # self._current_waypoint_id + 1
 
   def record_action_with_abbr(self, abbr, id_num):
     """
@@ -564,6 +562,23 @@ class PbdServer():
       self._controller_client.wait_for_result()
       self._arm_relaxed = False
 
+  def get_list(self):
+    """ Returns a list of AR tags recognized by the robot. """
+    return self._reader.get_list()
+
+  def get_db_list(self):
+    """ Returns list of entries in the database. """
+    return self._db.list()
+
+  def get_db_entry(self, entry):
+    """ Returns values associated with the given entry in the database. """
+    return self._db.get(entry)
+
+  def delete_db_entry(self, name):
+    """ Delete the database entry with the given name """
+    self._db.delete(name)
+    self._db.save()
+
   def web_app_request_callback(self, msg):
     """
       Parse the request given by the wee application, and call the corresponding functions.
@@ -620,7 +635,8 @@ class PbdServer():
       elif request_type == "prev" and len(request_args) == 2:
         abbr, id_num = request_args[0], int(request_args[1])
         waypoints_with_respect_to_tag = self.preview_action_with_abbr(abbr, id_num)
-        self._publish_server_response(type=request_type, status=True, args=waypoints_with_respect_to_tag, msg="Previewing action " + abbr + " with respect to body part " + BODY_PARTS[id_num] + "...")
+        self._publish_server_response(type=request_type, status=True, args=waypoints_with_respect_to_tag, 
+                        msg="Previewing the action with respect to body part " + BODY_PARTS[id_num] + "...")
 
       elif request_type == "highlight" and len(request_args) == 1:
         waypoint_id = int(request_args[0])
@@ -659,10 +675,8 @@ class PbdServer():
 
         elif request_type == "grasp" and self._grasp_position_ready and len(request_args) == 1:
           self._publish_server_response(msg="Grasping...")
-          if request_args[0] == "h":
-            self.do_sake_gripper_action("h_close")
-          else:
-            self.do_sake_gripper_action("s_close")
+          self._grasp_type = "h_close" if request_args[0] == "h" else "s_close"
+          self.do_sake_gripper_action(self._grasp_type)
           self._grasp_position_ready = False
           self._do_position_ready = True
           self._publish_server_response(status=True, msg="Grasped")
@@ -678,15 +692,16 @@ class PbdServer():
           self._publish_server_response(status=True, msg="Arm froze")
 
         elif (request_type == "do" or request_type == "do_s") and len(request_args) > 0:
+          action_abbr = request_args[0]
           return_msg = "Action failed!"
           if self._do_position_ready:
             # performing mode
-            self._publish_server_response(msg="Performing " + request_args[0] + "...")
+            self._publish_server_response(msg="Performing " + action_abbr + "...")
             result = False
             if request_type == "do":  # step by step
-              result = self.do_action_with_abbr(request_args[0], self._do_position_id)
-            else:  # smooth
-              result = self.do_action_with_abbr_smooth(request_args[0], self._do_position_id)
+              result = self.do_action_with_abbr(action_abbr, self._do_position_id)
+            else:  # "do_s": smooth
+              result = self.do_action_with_abbr_smooth(action_abbr, self._do_position_id)
             if result:
               return_msg = "Action succeeded"
           else:
@@ -697,11 +712,11 @@ class PbdServer():
           self._do_position_ready = False
           self._publish_server_response(status=True, msg=return_msg)
 
-        elif request_type == "release":
-          self._publish_server_response(msg="Releasing the gripper...")
+        elif request_type == "open":
+          self._publish_server_response(msg="Opening the gripper...")
           self.do_sake_gripper_action("open")
           self._do_position_ready = False
-          self._publish_server_response(status=True, msg="Gripper released")
+          self._publish_server_response(status=True, msg="Gripper opened")
 
         elif request_type == "stop":
           self._publish_server_response(msg="Stopping the robot...")
@@ -714,13 +729,14 @@ class PbdServer():
           self.web_app_request_callback(WebAppRequest(type="do_s", args=[request_args[2]]))
           self._publish_server_response(type=request_type, status=True, msg="DONE")
 
-        elif request_type == "step" and len(request_args) == 1:
+        elif request_type == "step":
           return_msg = "Ready!"
           waypoint_id = int(request_args[0])
           if waypoint_id == -1:  # goto tag and grasp
-            self.web_app_request_callback(WebAppRequest(type="go", args=[request_args[0]]))
-            self.web_app_request_callback(WebAppRequest(type="grasp", args=[request_args[1]]))
+            self.web_app_request_callback(WebAppRequest(type="go", args=[request_args[1]]))
+            self.web_app_request_callback(WebAppRequest(type="grasp", args=[request_args[2]]))
           else:  # move along trajectory
+            self._grasp_type = "h_close" if request_args[1] == "h" else "s_close"
             return_msg = "Fail to reach waypoint #" + request_args[0]
             result = self._goto_waypoint_on_traj_with_id(waypoint_id)
             if waypoint_id == len(self._preview_traj) - 1:  # last point
@@ -729,7 +745,17 @@ class PbdServer():
               self._do_position_ready = False
             if result:
               return_msg = "Reached waypoint #" + request_args[0]
-          self._publish_server_response(type=request_type, status=True, args=request_args, msg=return_msg)
+          self._publish_server_response(type=request_type, status=True, args=[request_args[0]], msg=return_msg)
+
+        elif request_type == "pause":
+          self._publish_server_response(msg="Pausing...")
+          self.pause_action()
+          self._publish_server_response(type=request_type, status=True, msg="PAUSED")
+
+        elif request_type == "continue":
+          self._publish_server_response(msg="Continuing...")
+          self.continue_action()
+          self._publish_server_response(type=request_type, status=True, msg="CONTINUED")
 
       else: 
         self._publish_server_response(status=True, msg="Invalid command :)")
@@ -740,6 +766,17 @@ class PbdServer():
     self._grasp_position_ready = False
     self._do_position_ready = False
     self._do_position_id = -1
+
+  def _clear_octomap(self):
+    """ Clears the octomap. Returns true if succeeds, false otherwise. """
+    rospy.wait_for_service('clear_octomap')
+    try:
+      clear_octo = rospy.ServiceProxy('clear_octomap', Empty)
+      clear_octo()
+    except rospy.ServiceException, e:
+      rospy.logerr('Fail clear octomap: {}'.format(e))
+      return False
+    return True
 
   def _move_arm_relative(self, ref_pose, ref_header, offset=None, preview_only=False, seed_state=None):
     """ 
@@ -764,8 +801,8 @@ class PbdServer():
       return goal_pose
     else:
       # move to the goal position while avoiding unreasonable trajectories!
-      # hard close SAKE gripper again to ensure the limb is grasped
-      self.do_sake_gripper_action("h_close")
+      # close SAKE gripper again to ensure the limb is grasped
+      self.do_sake_gripper_action(self._grasp_type)
       # visualize goal pose
       self.highlight_waypoint(goal_pose, ColorRGBA(1.0, 1.0, 0.0, 0.8))
       return goal_pose if self._move_arm(goal_pose, final_state=True, seed_state=seed_state) else None
@@ -837,7 +874,6 @@ class PbdServer():
     tag_pose = self._reader.get_tag(id_num)
     if tag_pose == None:
       rospy.logerr("AR tag lookup error: Invalid ID# " + str(id_num))
-      return None
     return tag_pose
 
   def _tf_lookup(self):
@@ -897,10 +933,14 @@ class PbdServer():
       goal_pose = self._preview_traj[i + 1]
       # move arm relative to the previous pose (use seed), skip the current waypoint if the current action fails
       action_result = self._move_arm_relative(goal_pose.pose, goal_pose.header, seed_state=self._get_seed_state())
+      # record the current waypoint id
+      self._current_waypoint_id = i + 1
+      # check action result
       if action_result is not None:
         succeed = True  # the whole action succeeds if at least one pose is reached
       else:
         rospy.logerr("Fail to reach waypoint " + str(i + 1))
+    self._current_waypoint_id = -1
     return succeed
 
   def _goto_waypoint_on_traj_with_id(self, waypoint_id):
@@ -939,7 +979,8 @@ class PbdServer():
           waypoints.append(point[0])
     bag.close()
 
-    if len(waypoints) < 2:  # empty trajectory
+    if len(waypoints) < 2:
+      # this trajectory is empty because it only contains the starting point
       rospy.logerr("Empty trajectory for action: " + abbr)
       return None
     
@@ -969,6 +1010,6 @@ class PbdServer():
     seed_state.position = self._arm_joints.values()
     return seed_state
 
-  def _set_sake_gripper_action_status(self):
+  def _set_sake_gripper_action_status(self, msg):
     """ This is the callback of sake gripper status. """
     self._sake_gripper_action_finished = True
