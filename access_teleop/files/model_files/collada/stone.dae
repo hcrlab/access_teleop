@@ -4,8 +4,8 @@
 		<contributor>
 			<authoring_tool>URDF Collada Writer</authoring_tool>
 		</contributor>
-		<created>2019-07-29T14:08:24.000000</created>
-		<modified>2019-07-29T14:08:24.000000</modified>
+		<created>2019-08-22T16:46:55.000000</created>
+		<modified>2019-08-22T16:46:55.000000</modified>
 		<unit/>
 		<up_axis>Z_UP</up_axis>
 	</asset>
@@ -14,7 +14,7 @@
 			<node id="visual0" name="stone" sid="visual0">
 				<node id="vkmodel0_node0" name="stone__link" sid="node0">
 					<translate>0 0 0</translate>
-					<rotate>1 0 0 89.95437383553926</rotate>
+					<rotate>1 0 0 0</rotate>
 					<instance_geometry url="#gkmodel0_stone__link_geom0">
 						<bind_material>
 							<technique_common>
@@ -55,10 +55,10 @@
 				<technique sid="">
 					<phong>
 						<ambient>
-							<color>0.1000000014901161 0.1000000014901161 0.1000000014901161 0</color>
+							<color>1 0.6499999761581421 0 1</color>
 						</ambient>
 						<diffuse>
-							<color>1 1 1 0</color>
+							<color>1 0.6499999761581421 0 1</color>
 						</diffuse>
 					</phong>
 				</technique>
@@ -69,10 +69,10 @@
 				<technique sid="">
 					<phong>
 						<ambient>
-							<color>0.1000000014901161 0.1000000014901161 0.1000000014901161 0</color>
+							<color>1 0.6499999761581421 0 1</color>
 						</ambient>
 						<diffuse>
-							<color>1 1 1 0</color>
+							<color>1 0.6499999761581421 0 1</color>
 						</diffuse>
 					</phong>
 				</technique>
