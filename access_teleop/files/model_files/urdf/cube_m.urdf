@@ -7,16 +7,19 @@
       <inertia ixx="0.001" ixy="0.000000" ixz="0.000000" iyy="0.001" iyz="0.000000" izz="0.001"/>
     </inertial>
     <collision name="cube_m__collision">
-      <origin rpy="0  0  0" xyz="0  0  0"/>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
         <box size="0.050 0.050 0.050"/>
       </geometry>
     </collision>
     <visual name="cube_m__visual">
-      <origin rpy="0  0  0" xyz="0  0  0"/>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
         <box size="0.050 0.050 0.050"/>
       </geometry>
+      <material name="Yellow">
+        <color rgba="1.0 1.0 0.0 1.0"/>
+      </material>
     </visual>
   </link>
 </robot>

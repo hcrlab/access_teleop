@@ -3,20 +3,23 @@
   <link name="cube_l__link">
     <inertial>
       <mass value="0.2249"/>
-      <origin rpy="0  0  0" xyz="0  0  0"/>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
       <inertia ixx="0.00021084374999999999" ixy="0" ixz="0" iyy="0.00021084374999999999" iyz="0" izz="0.00021084374999999999"/>
     </inertial>
     <collision name="cube_l__collision">
-      <origin rpy="0  0  0" xyz="0  0  0"/>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
         <box size="0.060 0.060 0.060"/>
       </geometry>
     </collision>
     <visual name="cube_l__visual">
-      <origin rpy="0  0  0" xyz="0  0  0"/>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
-        <box size="0.075 0.075 0.075"/>
+        <box size="0.060 0.060 0.060"/>
       </geometry>
+      <material name="Blue">
+        <color rgba="0.0 0.0 1.0 1.0"/>
+      </material>
     </visual>
   </link>
 </robot>

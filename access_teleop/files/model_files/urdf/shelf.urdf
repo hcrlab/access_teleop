@@ -3,56 +3,72 @@
   <link name="shelf__link">
     <inertial>
       <mass value="1.0"/>
-      <origin rpy="0  0  0" xyz="0  0  0"/>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
       <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
     </inertial>
+
     <collision name="shelf__left_side">
-      <origin rpy="0  0  0" xyz="0.245 -0.065  0.1"/>
+      <origin rpy="0 0 0" xyz="0.245 -0.065 0.1"/>
       <geometry>
         <box size="0.01 0.13 0.355"/>
       </geometry>
     </collision>
+    <visual>
+      <origin rpy="0 0 0" xyz="0.245 -0.065 0.1"/>
+      <geometry>
+        <box size="0.01 0.13 0.355"/>
+      </geometry>
+      <material name="Wood">
+        <color rgba="0.5 0.32 0.0 1.0"/>
+      </material>
+    </visual>
+
     <collision name="shelf__right_side">
-      <origin rpy="0  0  0" xyz="-0.245 -0.065  0.1"/>
+      <origin rpy="0 0 0" xyz="-0.245 -0.065 0.1"/>
       <geometry>
         <box size="0.01 0.13 0.355"/>
       </geometry>
     </collision>
+    <visual>
+      <origin rpy="0 0 0" xyz="-0.245 -0.065 0.1"/>
+      <geometry>
+        <box size="0.01 0.13 0.355"/>
+      </geometry>
+      <material name="Wood">
+        <color rgba="0.5 0.32 0.0 1.0"/>
+      </material>
+    </visual>
+
     <collision name="shelf__bottom">
-      <origin rpy="0  0  0" xyz="0    -0.065  0"/>
+      <origin rpy="0 0 0" xyz="0 -0.065 0"/>
       <geometry>
         <box size="0.48 0.13 0.01"/>
       </geometry>
     </collision>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 -0.065 0"/>
+      <geometry>
+        <box size="0.48 0.13 0.01"/>
+      </geometry>
+      <material name="Wood">
+        <color rgba="0.5 0.32 0.0 1.0"/>
+      </material>
+    </visual>
+
     <collision name="shelf__top">
-      <origin rpy="0  0  0" xyz="0    -0.065  0.27"/>
+      <origin rpy="0 0 0" xyz="0 -0.065 0.27"/>
       <geometry>
         <box size="0.48 0.13 0.01"/>
       </geometry>
     </collision>
-    <visual name="shelf__visual2">
-      <origin rpy="0  0  0" xyz="0.245 -0.065  0.1"/>
-      <geometry>
-        <box size="0.01 0.13 0.355"/>
-      </geometry>
-    </visual>
-    <visual name="shelf__visual3">
-      <origin rpy="0  0  0" xyz="-0.245 -0.065  0.1"/>
-      <geometry>
-        <box size="0.01 0.13 0.355"/>
-      </geometry>
-    </visual>
-    <visual name="shelf__visual4">
-      <origin rpy="0  0  0" xyz="0    -0.065  0"/>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 -0.065 0.27"/>
       <geometry>
         <box size="0.48 0.13 0.01"/>
       </geometry>
-    </visual>
-    <visual name="shelf__visual5">
-      <origin rpy="0  0  0" xyz="0    -0.065  0.27"/>
-      <geometry>
-        <box size="0.48 0.13 0.01"/>
-      </geometry>
+      <material name="Wood">
+        <color rgba="0.5 0.32 0.0 1.0"/>
+      </material>
     </visual>
   </link>
 </robot>
