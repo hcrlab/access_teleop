@@ -357,6 +357,8 @@ class PbdServer():
     if raw_pose is not None:
       # found marker, move towards it
       self.do_sake_gripper_action("40 " + self._sake_gripper_effort)
+
+      # OPTION 1: pregrasp ---> grasp
       # move to the pre-grasp pose
       pre_grasp_offset = self._db.get("PREGRASP")
       pre_grasp_pose = self._move_arm_relative(raw_pose.pose.pose, raw_pose.header, offset=pre_grasp_offset, preview_only=True)
@@ -364,6 +366,9 @@ class PbdServer():
         # move to the grasp pose, clear octomap to ignore collision only at this point
         if self._clear_octomap():
           return self._move_arm(self._get_goto_pose(raw_pose), final_state=False, seed_state=self._get_seed_state())
+      
+      # # OPTION 2: grasp
+      # return self._move_arm(self._get_goto_pose(raw_pose), final_state=False)
     # marker with id_num is not found, or some error occured
     return False
 
@@ -395,13 +400,12 @@ class PbdServer():
         # visualize the trajectory
         for i in range(len(waypoints)):
           # visualize the current waypoint
-          marker = Marker(
-                      type=Marker.ARROW,
-                      id=i,
-                      pose=prev_pose.pose,
-                      scale=TRAJ_HIGHLIGHT_SCALE,
-                      header=prev_pose.header,
-                      color=ColorRGBA(colors[i].red, colors[i].green, colors[i].blue, 0.8))
+          marker = Marker(type=Marker.ARROW,
+                          id=i,
+                          pose=prev_pose.pose,
+                          scale=TRAJ_HIGHLIGHT_SCALE,
+                          header=prev_pose.header,
+                          color=ColorRGBA(colors[i].red, colors[i].green, colors[i].blue, 0.8))
           marker_arr.append(marker)
           # record the waypoint
           waypoints_with_respect_to_tag.append(str(colors[i].hex))
@@ -474,7 +478,7 @@ class PbdServer():
     """
     action_result = False
     if self._prepare_action(abbr, id_num):
-      action_result = self._follow_traj_step_by_step()
+      action_result = self._follow_traj_step_by_step(0)
     return action_result
 
   def do_action_with_abbr_smooth(self, abbr, id_num):
@@ -488,23 +492,21 @@ class PbdServer():
       action_result = self._move_arm(None, trajectory_waypoint=self._preview_traj, final_state=True, seed_state=self._get_seed_state())
       if not action_result:
         # smooth action fails, do the action step by step instead
-        action_result = self._follow_traj_step_by_step()
+        action_result = self._follow_traj_step_by_step(0)
     return action_result
 
   def pause_action(self):
     """ Pause the current action. """
-    self.relax_arm()
-    # if _follow_traj_step_by_step, record the current waypoint
+    # self.relax_arm()
     print(self._current_waypoint_id)
 
   def continue_action(self):
     """ Continue the current action. """
-    self.freeze_arm()
-    # if _follow_traj_step_by_step, continue from previous waypoint
+    # self.freeze_arm()
     print(self._current_waypoint_id)
     # if self._current_waypoint_id > -1:
       # # continue going to the next waypoint
-      # self._current_waypoint_id + 1
+      # self._follow_traj_step_by_step(self._current_waypoint_id + 1)
 
   def record_action_with_abbr(self, abbr, id_num):
     """
@@ -924,12 +926,12 @@ class PbdServer():
       return False
     return True
 
-  def _follow_traj_step_by_step(self):
+  def _follow_traj_step_by_step(self, start_id):
     """
       Follows the current trajectory step by step. Returns true if at least one waypoint is reached, false otherwise.
     """
     succeed = False
-    for i in range(len(self._preview_traj) - 1):
+    for i in range(start_id, len(self._preview_traj) - 1):
       goal_pose = self._preview_traj[i + 1]
       # move arm relative to the previous pose (use seed), skip the current waypoint if the current action fails
       action_result = self._move_arm_relative(goal_pose.pose, goal_pose.header, seed_state=self._get_seed_state())
@@ -940,6 +942,7 @@ class PbdServer():
         succeed = True  # the whole action succeeds if at least one pose is reached
       else:
         rospy.logerr("Fail to reach waypoint " + str(i + 1))
+    # action finished, reset the current waypoint
     self._current_waypoint_id = -1
     return succeed
 
