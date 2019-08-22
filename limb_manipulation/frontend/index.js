@@ -44,7 +44,7 @@ $(function() {
             document.getElementById("status_bar").innerHTML = 'We lost connection with ROS. All is lost';
             console.error('We lost connection with ROS.');
         });
-        // ros topic
+        // ROS topic
         self.serverRequest = new ROSLIB.Topic({
             ros: self.ros,
             name: 'web_app_request',
@@ -80,9 +80,7 @@ $(function() {
             // add the video stream
             let cameraViewer = new MJPEGCANVAS.Viewer({
                 divID : camera.id,
-                /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                // host : 'localhost:8080',
-                host : 'localhost',
+                host : 'localhost:8080',
                 width : 640,
                 height : 480,
                 topic : CAMERA_TOPICS[i]
@@ -251,12 +249,11 @@ $(function() {
         // mark the selection
         let itemName = markDropdownSelection(this);
         // get the item id
-        if (parts.has(itemName.toLowerCase())) {
-            // a body part is selected
+        if (parts.has(itemName.toLowerCase())) {  // a body part is selected
             selectedId = parts.get(itemName.toLowerCase());
             // mark the selection in video stream
             publishRosMsg("prev_id", [selectedId]);
-        } else {
+        } else {  // nothing selected
             selectedId = "";
             hideControls(3);
         }
@@ -289,14 +286,14 @@ $(function() {
     function makeActionSelection() {
         // mark the selection
         let actionName = markDropdownSelection(this).toLowerCase();
-        // preview the action in video stream
-        if (actionsAbbr.has(actionName)) {
+        if (actionsAbbr.has(actionName)) {  // an action is selected
             selectedAction = actionsAbbr.get(actionName);
+            // preview the action in video stream
             publishRosMsg("prev", [selectedAction, selectedId]);
             // show trajectory editing buttons
             $("#edit_traj_btn").css("display", "inline-block");
             $("#go_traj_btn").css("display", "inline-block");
-        } else {
+        } else {  // nothing selected
             selectedAction = "";
             hideControls(2);
         }
@@ -317,7 +314,6 @@ $(function() {
                 point.innerHTML = i;
                 point.style.backgroundColor = previewTraj[i];
                 point.addEventListener("click", highlightWaypoint);
-
                 $("#waypoints").append(point);
             }
             // disable everything in the background
@@ -333,11 +329,9 @@ $(function() {
         $("#edit_traj_popup").css("display", "none");
         // hide arrows
         $(".arrow").css("display", "none");
-        if (this.innerHTML === "Save") {
-            // save the trajectory
+        if (this.innerHTML === "Save") {  // save the trajectory
             publishRosMsg("save_edit", []);
-        } else {
-            // unsave the trajectory
+        } else {  // unsave the trajectory
             publishRosMsg("cancel_edit", []);
         }
         // enable buttons in the background
@@ -405,7 +399,7 @@ $(function() {
             } else {
                 deltaX = "-" + TRAJ_EDIT_SIZE;
             }
-        } else {  //right
+        } else {  // type === right
             if (cameraTitle === "TOP") {
                 deltaY = "-" + TRAJ_EDIT_SIZE;
             } else {
@@ -434,17 +428,17 @@ $(function() {
         $("#run_container").css("display", "block");
         // mark the selection
         let graspType = markDropdownSelection(this).substring(0, 4);
-        // record selected grasp type
-        if (graspType === "Soft" || graspType === "Hard") {
+        if (graspType === "Soft" || graspType === "Hard") {  // record selected grasp type
             selectedGrasp = graspType[0].toLowerCase();
-        } else {
+        } else {  // nothing selected
             selectedGrasp = "";
             hideControls(1);
         }
     }
 
     function getReadyForRun() {
-        if (previewTraj.length > 0) {  // goto and grasp
+        if (previewTraj.length > 0) {  
+            // valid trajectory, goto the body part and grasp
             publishRosMsg("step", ["-1", selectedId, selectedGrasp]);
             running = true;
             currentStep++;
@@ -452,14 +446,16 @@ $(function() {
     }
 
     function gotoPrevStep() {
-        if (currentStep - 1 > -1) {  // go to previous step
+        if (currentStep - 1 > -1) {
+            // not at the first step, go to the previous step
             currentStep--;
             publishRosMsg("step", [currentStep.toString(), selectedGrasp]);
         }
     }
 
     function gotoNextStep() {
-        if (currentStep + 1 < totalStep) {  // go to next step
+        if (currentStep + 1 < totalStep) {
+            // not at the last step, go to the next step
             currentStep++;
             publishRosMsg("step", [currentStep.toString(), selectedGrasp]);
         }
@@ -472,8 +468,7 @@ $(function() {
                 if (selectedId != "" && selectedGrasp != "" && selectedAction != "") {
                     publishRosMsg("run", [selectedId, selectedGrasp, selectedAction]);
                     running = true;
-                    // enable this button
-                    this.disabled = false;
+                    this.disabled = false;  // enable this button so that the user can pause
                 } else {
                     document.getElementById("status_bar").innerHTML = "Please make your selections for each step";
                 }                
@@ -533,8 +528,7 @@ $(function() {
             // enable all the buttons
             $(':button').prop('disabled', false);
         }
-        if (msg.msg === "") {
-            // add something fun
+        if (msg.msg === "") {  // add something fun
             msg.msg = "^0^";
         }
         // show status

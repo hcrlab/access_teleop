@@ -359,11 +359,12 @@ class PbdServer():
       self.do_sake_gripper_action("40 " + self._sake_gripper_effort)
 
       # OPTION 1: pregrasp ---> grasp
-      # move to the pre-grasp pose
+      # highlight and move to the pre-grasp pose
       pre_grasp_offset = self._db.get("PREGRASP")
       pre_grasp_pose = self._move_arm_relative(raw_pose.pose.pose, raw_pose.header, offset=pre_grasp_offset, preview_only=True)
+      self.highlight_waypoint(pre_grasp_pose, WAYPOINT_HIGHLIGHT_COLOR)
       if self._move_arm(pre_grasp_pose, final_state=False):
-        # move to the grasp pose, clear octomap to ignore collision only at this point
+        # highlight and move to the grasp pose, clear octomap to ignore collision only at this point
         if self._clear_octomap():
           return self._move_arm(self._get_goto_pose(raw_pose), final_state=False, seed_state=self._get_seed_state())
       
