@@ -241,8 +241,6 @@ $(function() {
     }
 
     function makeBodyPartSelection() {
-        /////////////////////////////////////////////TODO: 
-        //////////////////////change into: get avaliable actions, and add corresponding buttons on top of the body part image
         // show action dropdown list
         $("#action_container").css("display", "block");
         // hide trajectory editing buttons
@@ -540,12 +538,8 @@ $(function() {
         if (msg.type === "parts" && msg.args.length > 0) {
             // clear previous data
             parts.clear();
-            //////////////////////////////////////
-            // add the list contents to menu
+            // add the list contents to dropdown menu
             let recordDropdownLists = document.querySelectorAll(".go_dropdown_content");
-            // NEW
-            let bodyPartButtonContainer = document.getElementById("go_btn");
-            /////////////////////////////////
             for (let i = 0; i < recordDropdownLists.length; i++) {
                 document.getElementById("go_btn_0").innerHTML = "Select a body part";
                 selectedId = "";
@@ -554,9 +548,6 @@ $(function() {
                     // add DOM element
                     let entry = document.createElement("a");
                     entry.href = "#";
-                    ////////////////////////////////
-                    entry.className = "body_selection_btn";
-                    //////////////////////////////////
                     if (j === -1) {
                         entry.innerHTML = "Select a body part";
                     } else {
@@ -568,11 +559,7 @@ $(function() {
                         let entryRaw = msgArgs[1];
                         entry.innerHTML = entryRaw.length > 1 ? entryRaw.charAt(0).toUpperCase() + entryRaw.slice(1) : entryRaw;
                     }
-                    ////////////////////////////////////////////////
                     recordDropdownLists[i].appendChild(entry);
-                    // NEW
-                    bodyPartButtonContainer.appendChild(entry);
-                    //////////////////////////////////////////////////
                     // add event listener
                     entry.addEventListener("click", makeBodyPartSelection);
                 }

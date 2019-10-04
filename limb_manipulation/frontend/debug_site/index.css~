@@ -323,25 +323,6 @@ button:active {
 
 /* Body part and action selection */
 #selection {
-    position: relative;
-    height: 500px;
-}
+    background-color: grey;
 
-#selection img {
-    position: absolute;
-    z-index: -1;
-    left: 50%;
-    transform: translateX(-50%);
-    max-height: 100%;
-}
-
-#go_btn {
-    z-index: 1;
-    height: 100%;
-}
-
-#go_btn a {
-    position: absolute;
-    top: 10%;
-    left: 40%;
 }

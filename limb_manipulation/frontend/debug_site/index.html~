@@ -129,12 +129,9 @@
 
 
 
-        <!-- <div id="selection">
+        <div id="selection">
             <img src="pics/body.jpg" alt="body part picture" />
-            <div id="go_btn">
-                <a class="body_selection_btn" href="#">TEMP</a>
-            </div>
-        </div> -->
+        </div>
 
 
 
