@@ -22,8 +22,8 @@ $(function() {
     let totalStep = -1;  // the total number of steps in the current action
 
     // Data structures for storing info received from backend (note: everything is string)
-    let parts = new Map();  // body part full name ---> body part id
-    let actions = new Map();  // body part id ---> action full name
+    let parts = new Map();  // body part full name (all lowercase) ---> body part id
+    let actions = new Map();  // body part id ---> action full name (all lowercase)
     let actionsAbbr = new Map();  // action full name ---> action ABBR
     let previewTraj = new Array();  // array of colors of waypoints on the trajectory being previewed
 
@@ -57,37 +57,37 @@ $(function() {
         });
         self.serverResponse.subscribe(handleServerStatusResponse);
 
-        // Add camera views
-        for (let i = 0; i < CAMERA_NAMES.length; i++) {
-            let cameraDiv = document.createElement("div");
-            cameraDiv.className = "camera_container";
+        // // Add camera views
+        // for (let i = 0; i < CAMERA_NAMES.length; i++) {
+        //     let cameraDiv = document.createElement("div");
+        //     cameraDiv.className = "camera_container";
 
-            let title = document.createElement("p");
-            title.innerHTML = CAMERA_NAMES[i];
-            let camera = document.createElement("div");
-            camera.id = "camera_view_div" + i;
-            camera.className = "camera_view";
+        //     let title = document.createElement("p");
+        //     title.innerHTML = CAMERA_NAMES[i];
+        //     let camera = document.createElement("div");
+        //     camera.id = "camera_view_div" + i;
+        //     camera.className = "camera_view";
 
-            cameraDiv.appendChild(title);
-            cameraDiv.appendChild(camera);
+        //     cameraDiv.appendChild(title);
+        //     cameraDiv.appendChild(camera);
 
-            if (i === 0) {
-                $("#camera_large").append(cameraDiv);
-            } else {
-                $("#camera_small").append(cameraDiv);
-            }
+        //     if (i === 0) {
+        //         $("#camera_large").append(cameraDiv);
+        //     } else {
+        //         $("#camera_small").append(cameraDiv);
+        //     }
 
-            // add the video stream
-            let cameraViewer = new MJPEGCANVAS.Viewer({
-                divID : camera.id,
-                host : 'localhost:8080',
-                width : 640,
-                height : 480,
-                topic : CAMERA_TOPICS[i]
-            });
-            camera.firstChild.style.width = i === 0 ? cameraLargeW : cameraSmallW;
-            camera.firstChild.style.height = i === 0 ? cameraLargeH : cameraSmallH;
-        }
+        //     // add the video stream
+        //     let cameraViewer = new MJPEGCANVAS.Viewer({
+        //         divID : camera.id,
+        //         host : 'localhost:8080',
+        //         width : 640,
+        //         height : 480,
+        //         topic : CAMERA_TOPICS[i]
+        //     });
+        //     camera.firstChild.style.width = i === 0 ? cameraLargeW : cameraSmallW;
+        //     camera.firstChild.style.height = i === 0 ? cameraLargeH : cameraSmallH;
+        // }
         
         // Initial button states
         $("#action_panel_btn").css({"background-color": "#abaee1", "font-weight": "600"});
@@ -103,7 +103,6 @@ $(function() {
         $("#sake_gripper_btn").click(openSakeGripper);
         $("#reset_btn_0").click(resetArm);
         $("#help_btn").click(showHelpInfo);
-        $("#close_help_window_btn").click(closeHelpInfo);
 
         $("#action_panel_btn").click(showPanel);
         $("#edit_traj_btn").click(showTraj);
@@ -119,6 +118,21 @@ $(function() {
         $("#record_panel_btn").click(showPanel);
         $("#record_action_btn").click(recordAction);
         $("#reset_btn_1").click(resetArm);
+
+        //////////////////////////////////////////////////////
+        // NEW ///////////////////////////
+        $("#back_to_selection").click(backToSelection);
+
+        let bodySelectionBtns = document.querySelectorAll(".body_selection_btn");
+        for (let i = 0; i < bodySelectionBtns.length; i++) {
+            bodySelectionBtns[i].addEventListener("click", makeBodyPartSelection);
+        }
+        // END NEW ///////////////////////////////////////
+
+        let popupCloseBtns = document.querySelectorAll(".popup_close_btn");
+        for (let i = 0; i < popupCloseBtns.length; i++) {
+            popupCloseBtns[i].addEventListener("click", closePopup);
+        }
 
         let graspDropdownLists = document.querySelectorAll(".grasp_dropdown_content a");
         for (let i = 0; i < graspDropdownLists.length; i++) {
@@ -233,72 +247,139 @@ $(function() {
         $("#disable_div").css("display", "block");
     }
 
-    function closeHelpInfo() {
+    function closePopup() {
         // close the pop up window
-        $("#help_popup").css("display", "none");
+        this.parentElement.style.display = "none";
         // enable everything in the background
         $("#disable_div").css("display", "none");
     }
 
-    function makeBodyPartSelection() {
-        /////////////////////////////////////////////TODO: 
-        //////////////////////change into: get avaliable actions, and add corresponding buttons on top of the body part image
-        // show action dropdown list
-        $("#action_container").css("display", "block");
-        // hide trajectory editing buttons
-        $("#edit_traj_btn").css("display", "none");
-        $("#go_traj_btn").css("display", "none");
+    function makeBodyPartSelection() {        
+        // OLD ////////////////////////////////////////////////////////////////////
+        // // show action dropdown list
+        // $("#action_container").css("display", "block");
+        // // hide trajectory editing buttons
+        // $("#edit_traj_btn").css("display", "none");
+        // $("#go_traj_btn").css("display", "none");
+        // // mark the selection
+        // let itemName = markDropdownSelection(this);
+        // // get the item id
+        // if (parts.has(itemName.toLowerCase())) {  // a body part is selected
+        //     selectedId = parts.get(itemName.toLowerCase());
+        //     // mark the selection in video stream
+        //     publishRosMsg("prev_id", [selectedId]);
+        // } else {  // nothing selected
+        //     selectedId = "";
+        //     hideControls(3);
+        // }
+        // // update available actions for each action dropdown list
+        // let actionDropdownLists = document.querySelectorAll(".action_dropdown_content");
+        // let availableActions = actions.get(selectedId);
+        // for (let i = 0; i < actionDropdownLists.length; i++) {
+        //     // clear previous entiries
+        //     document.getElementById("action_btn").innerHTML = "Select an action";
+        //     actionDropdownLists[i].innerHTML = "";
+        //     if (selectedId != "") {
+        //         for (let j = -1; j < availableActions.length; j++) {
+        //             // add DOM element
+        //             let entry = document.createElement("a");
+        //             entry.href = "#";
+        //             if (j === -1) {  // the first entry is always "Select an action"
+        //                 entry.innerHTML = "Select an action";
+        //             } else {
+        //                 let entryRaw = availableActions[j];
+        //                 entry.innerHTML = capitalize(entryRaw);
+        //             }
+        //             actionDropdownLists[i].appendChild(entry);
+        //             // add event listener
+        //             entry.addEventListener("click", makeActionSelection);
+        //         }
+        //     }
+        // }
+        // END OLD ////////////////////////////////////////////////////////////
+
+        ///////////////////////////////////////////////////////////////
+        // NEW //////////////////////////////////////////////////////
         // mark the selection
-        let itemName = markDropdownSelection(this);
+        let itemName = this.innerHTML.split("<br>").join(" ").toLowerCase();
+        // show action selection popup window
+        document.getElementById("body_actions_target").innerHTML += itemName + ":";
+        $("#body_actions_popup").css("display", "block");
         // get the item id
-        if (parts.has(itemName.toLowerCase())) {  // a body part is selected
+        ///////////////// CHANGED TO true FOR TESTING
+        if (true || parts.has(itemName.toLowerCase())) {  // a body part is selected
             selectedId = parts.get(itemName.toLowerCase());
             // mark the selection in video stream
             publishRosMsg("prev_id", [selectedId]);
+            // add available actions to the pop up window
+            let bodyActionsList = document.getElementById("body_actions_list");
+            let availableActions = actions.get(selectedId);
+            /////////////////// CHANGED FOR TESTING
+            availableActions = ["ABD"];
+            /////////////////// CHANGED FOR TESTING
+
+            // clear previous entiries
+            bodyActionsList.innerHTML = "";
+            for (let i = 0; i < availableActions.length; i++) {
+                // add DOM element
+                let entry = document.createElement("button");
+                entry.className = "body_action_btn";
+                let entryRaw = availableActions[i];
+                entry.innerHTML = capitalize(entryRaw);
+                bodyActionsList.appendChild(entry);
+                // add event listener
+                entry.addEventListener("click", makeActionSelection);
+            }
         } else {  // nothing selected
             selectedId = "";
-            hideControls(3);
         }
-        // update available actions for each action dropdown list
-        let actionDropdownLists = document.querySelectorAll(".action_dropdown_content");
-        let availableActions = actions.get(selectedId);
-        for (let i = 0; i < actionDropdownLists.length; i++) {
-            // clear previous entiries
-            document.getElementById("action_btn").innerHTML = "Select an action";
-            actionDropdownLists[i].innerHTML = "";
-            if (selectedId != "") {
-                for (let j = -1; j < availableActions.length; j++) {
-                    // add DOM element
-                    let entry = document.createElement("a");
-                    entry.href = "#";
-                    if (j === -1) {  // the first entry is always "Select an action"
-                        entry.innerHTML = "Select an action";
-                    } else {
-                        let entryRaw = availableActions[j];
-                        entry.innerHTML = entryRaw.length > 1 ? entryRaw.charAt(0).toUpperCase() + entryRaw.slice(1) : entryRaw;
-                    }
-                    actionDropdownLists[i].appendChild(entry);
-                    // add event listener
-                    entry.addEventListener("click", makeActionSelection);
-                }
-            }
-        }
+        // END NEW //////////////////////////////////////////////////////////
     }
 
     function makeActionSelection() {
+        ///////////////////////////////////////////////////////
+        // OLD ////////////////////////////////////////////////////////////////////
+        // // mark the selection
+        // let actionName = markDropdownSelection(this).toLowerCase();
+        // if (actionsAbbr.has(actionName)) {  // an action is selected
+        //     selectedAction = actionsAbbr.get(actionName);
+        //     // preview the action in video stream
+        //     publishRosMsg("prev", [selectedAction, selectedId]);
+        //     // show trajectory editing buttons
+        //     $("#edit_traj_btn").css("display", "inline-block");
+        //     $("#go_traj_btn").css("display", "inline-block");
+        // } else {  // nothing selected
+        //     selectedAction = "";
+        //     hideControls(2);
+        // }
+        // END OLD ///////////////////////////////////////////////
+
+        /////////////////////////////////////////////////
+        // NEW /////////////////////////////////////////////////
+        // show the window for robot controls
+        $("#main_window").css("display", "block");
+        // hide the window for selection
+        $("#selection").css("display", "none");
         // mark the selection
-        let actionName = markDropdownSelection(this).toLowerCase();
-        if (actionsAbbr.has(actionName)) {  // an action is selected
+        let actionName = this.innerHTML.toLowerCase();
+        ///////////////// CHANGED TO true FOR TESTING
+        if (true || actionsAbbr.has(actionName)) {  // an action is selected
             selectedAction = actionsAbbr.get(actionName);
             // preview the action in video stream
             publishRosMsg("prev", [selectedAction, selectedId]);
-            // show trajectory editing buttons
-            $("#edit_traj_btn").css("display", "inline-block");
-            $("#go_traj_btn").css("display", "inline-block");
+            // display the action name
+            document.getElementById("current_action_name").innerHTML = capitalize(actionName);
         } else {  // nothing selected
             selectedAction = "";
-            hideControls(2);
         }
+        // END NEW //////////////////////////////////////////////
+    }
+
+    function backToSelection() {
+        // hide the window for robot controls
+        $("#main_window").css("display", "none");
+        // show the window for selection
+        $("#selection").css("display", "block");
     }
 
     function showTraj() {
@@ -540,12 +621,11 @@ $(function() {
         if (msg.type === "parts" && msg.args.length > 0) {
             // clear previous data
             parts.clear();
-            //////////////////////////////////////
+
+            /////////////////////////////////////////////////////
+            // OLD ///////////////////////////////////
             // add the list contents to menu
             let recordDropdownLists = document.querySelectorAll(".go_dropdown_content");
-            // NEW
-            let bodyPartButtonContainer = document.getElementById("go_btn");
-            /////////////////////////////////
             for (let i = 0; i < recordDropdownLists.length; i++) {
                 document.getElementById("go_btn_0").innerHTML = "Select a body part";
                 selectedId = "";
@@ -554,9 +634,6 @@ $(function() {
                     // add DOM element
                     let entry = document.createElement("a");
                     entry.href = "#";
-                    ////////////////////////////////
-                    entry.className = "body_selection_btn";
-                    //////////////////////////////////
                     if (j === -1) {
                         entry.innerHTML = "Select a body part";
                     } else {
@@ -566,17 +643,32 @@ $(function() {
                             parts.set(msgArgs[1], msgArgs[0]);
                         }
                         let entryRaw = msgArgs[1];
-                        entry.innerHTML = entryRaw.length > 1 ? entryRaw.charAt(0).toUpperCase() + entryRaw.slice(1) : entryRaw;
+                        entry.innerHTML = capitalize(entryRaw);
                     }
-                    ////////////////////////////////////////////////
                     recordDropdownLists[i].appendChild(entry);
-                    // NEW
-                    bodyPartButtonContainer.appendChild(entry);
-                    //////////////////////////////////////////////////
                     // add event listener
                     entry.addEventListener("click", makeBodyPartSelection);
                 }
             }
+            // END OLD ////////////////////////////////////
+
+            ////////////////////////////////////////////////////
+            // NEW ////////////////////////////////////////////////
+            // disable all the body part selection buttons
+            $('.body_selection_btn').prop('disabled', true);
+            selectedId = "";
+            for (let i = 0; i < msg.args.length; i++) {
+                // update body part information
+                let msgArgs = msg.args[i].split(":");
+                parts.set(msgArgs[1], msgArgs[0]);
+                let entryIdName = msgArgs[1].split(" ").join("_").toLowerCase();
+                // enable body selection button corresponding to this msg
+                let bodyPartBtn = document.getElementById(entryIdName);
+                if (bodyPartBtn != null) {
+                    bodyPartBtn.disabled = false;
+                }
+            }
+            // END NEW ///////////////////////////////////////////////////
         } else if (msg.type === "actions" && msg.args.length > 0) {
             // clear previous data
             actions.clear();
@@ -650,6 +742,11 @@ $(function() {
             $("#action_container").css("display", "none");
             selectedAction = "";
         }
+    }
+
+    function capitalize(entryRaw) {
+        // return the capitalized entry
+        return entryRaw.length > 1 ? entryRaw.charAt(0).toUpperCase() + entryRaw.slice(1).toLowerCase() : entryRaw;
     }
 
 });
