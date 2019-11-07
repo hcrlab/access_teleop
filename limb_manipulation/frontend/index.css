@@ -330,7 +330,7 @@ button:active {
 }
 
 #body_selection_container, #body_actions_popup {
-    z-index: 1;
+    z-index: 2;
 }
 
 #selection a, .body_action_btn, #back_to_selection {
@@ -425,7 +425,6 @@ button:active {
 }
 
 #general_ctrl button {
-    width: 80%;
-    display: block;
+    min-width: 20%;
     margin-bottom: 1.5em;
 }

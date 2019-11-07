@@ -21,7 +21,7 @@
     <h1 id="title">Limb Repositioning Interface</h1>
 
     <p id="status_bar"></p>
-    
+
     <div id="main_interface">
         <!-- NEW !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
         <div id="selection">
@@ -35,10 +35,7 @@
             <div id="body_actions_popup" class="popup" style="display:none">
                 <button class="ctrl_btn popup_close_btn">&#x2716;</button>
                 <p id="body_actions_target">Please select an action for </p>
-                <div id="body_actions_list">
-                    <button class="body_action_btn">temp action 1</button>
-                    <button class="body_action_btn">temp action 2</button>
-                </div>
+                <div id="body_actions_list"></div>
             </div>
         </div>
 
@@ -64,23 +61,23 @@
             
                             <div id="main_ctrl">
                                 <div id="action_step_container">
-                                    <div id="go_container_0">
+                                    <!-- <div id="go_container">
                                         <div class="dropdown">
-                                            <button id="go_btn_0" class="dropbtn">Select a body part</button>
+                                            <button id="go_btn" class="dropbtn">Select a body part</button>
                                             <div class="dropdown_content go_dropdown_content"></div>
                                         </div>
-                                    </div>
-                                    <div id="action_container" style="display:none">
+                                    </div> -->
+                                    <!-- <div id="action_container">
                                         <div class="dropdown">
                                             <button id="action_btn" class="dropbtn">Select an action</button>
                                             <div class="dropdown_content action_dropdown_content"></div>
                                         </div>
                                         <button id="edit_traj_btn" class="ctrl_btn">Edit</button>
                                         <button id="go_traj_btn" class="ctrl_btn">GO</button>
-                                    </div>
-                                    <div id="grasp_container_0" style="display:none">
+                                    </div> -->
+                                    <div id="grasp_container">
                                         <div class="dropdown">
-                                            <button id="grasp_btn_0" class="dropbtn">Select grasp type</button>
+                                            <button id="grasp_btn" class="dropbtn">Select grasp type</button>
                                             <div class="dropdown_content grasp_dropdown_content">
                                                 <a href="#">Select grasp type</a>
                                                 <a href="#">Soft grasp</a>
@@ -88,55 +85,13 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div id="run_container" style="display:none">
+                                    <div id="run_container">
                                         <button id="ready_for_step_btn" class="ctrl_btn step_ctrl_btn">Get Ready</button>
                                         <button id="prev_step_btn" class="ctrl_btn step_ctrl_btn">&lt;&lt;</button>
                                         <button id="next_step_btn" class="ctrl_btn step_ctrl_btn">&gt;&gt;</button>
                                         <button id="run_btn" class="ctrl_btn">RUN</button><br>
                                         <button id="estop_btn" class="ctrl_btn">STOP</button>
                                     </div>
-                                </div>
-                    
-                                <div id="record_step_container" style="display:none">
-                                    <div id="go_container_1">
-                                        <div class="dropdown">
-                                            <button id="go_btn_1" class="dropbtn">Select a body part</button>
-                                            <div class="dropdown_content go_dropdown_content"></div>
-                                        </div>
-                                        <p class="status go_status"></p>
-                                        <button class="sub_go_btn ctrl_btn">GO</button>
-                                    </div>
-                                    <div id="grasp_container_1">
-                                        <div class="dropdown">
-                                            <button id="grasp_btn_1" class="dropbtn">Select grasp type</button>
-                                            <div class="dropdown_content grasp_dropdown_content">
-                                                <a href="#">Select grasp type</a>
-                                                <a href="#">Soft grasp</a>
-                                                <a href="#">Hard grasp</a>
-                                            </div>
-                                        </div>
-                                        <p class="status grasp_status"></p>
-                                        <button class="sub_go_btn ctrl_btn">GO</button>
-                                    </div>
-                                    <div id="relax_container">
-                                        <button id="relax_btn">Relax</button>
-                                        <p class="status relax_status"></p>
-                                        <button class="sub_go_btn ctrl_btn">GO</button>
-                                    </div>
-                                    <div id="record_container">
-                                        <div class="dropdown">
-                                            <button id="select_action_btn" class="dropbtn">Select an action</button>
-                                            <div class="dropdown_content action_dropdown_content"></div>
-                                        </div>
-                                        <p class="status"></p>
-                                        <button id="record_action_btn" class="sub_go_btn ctrl_btn">Record</button>
-                                    </div>
-                                    <div id="freeze_container">
-                                        <button id="freeze_btn">Freeze</button>
-                                        <p class="status freeze_status"></p>
-                                        <button class="sub_go_btn ctrl_btn">GO</button>
-                                    </div>
-                                    <button id="reset_btn_1" class="ctrl_btn">RESET</button>
                                 </div>
                             </div>
                                 
@@ -145,15 +100,15 @@
 
                 </div>
                 <!-- END NEED TO MODIFY !!!!!!!!!!!!!!!!!!!!!! -->
-                <div id="general_ctrl">
-                    <button id="gripper_btn" class="ctrl_btn">Attach Gripper</button>
-                    <button id="record_btn" class="ctrl_btn">Update Scene</button>
-                    <button id="base_btn" class="ctrl_btn">Base Control</button>
-                    <button id="sake_gripper_btn" class="ctrl_btn">Open Gripper</button>
-                    <button id="reset_btn_0" class="ctrl_btn">Reset</button>
-                    <button id="help_btn" class="ctrl_btn">Help</button>
-                </div>
             </div>
+        </div>
+        <div id="general_ctrl">
+            <button id="gripper_btn" class="ctrl_btn">Attach Gripper</button>
+            <button id="record_btn" class="ctrl_btn">Update Scene</button>
+            <button id="base_btn" class="ctrl_btn">Base Control</button>
+            <button id="sake_gripper_btn" class="ctrl_btn">Open Gripper</button>
+            <button id="reset_btn" class="ctrl_btn">Reset</button>
+            <button id="help_btn" class="ctrl_btn">Help</button>
         </div>
 
         <!-- END NEW !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->

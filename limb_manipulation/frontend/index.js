@@ -57,37 +57,37 @@ $(function() {
         });
         self.serverResponse.subscribe(handleServerStatusResponse);
 
-        // // Add camera views
-        // for (let i = 0; i < CAMERA_NAMES.length; i++) {
-        //     let cameraDiv = document.createElement("div");
-        //     cameraDiv.className = "camera_container";
+        // Add camera views
+        for (let i = 0; i < CAMERA_NAMES.length; i++) {
+            let cameraDiv = document.createElement("div");
+            cameraDiv.className = "camera_container";
 
-        //     let title = document.createElement("p");
-        //     title.innerHTML = CAMERA_NAMES[i];
-        //     let camera = document.createElement("div");
-        //     camera.id = "camera_view_div" + i;
-        //     camera.className = "camera_view";
+            let title = document.createElement("p");
+            title.innerHTML = CAMERA_NAMES[i];
+            let camera = document.createElement("div");
+            camera.id = "camera_view_div" + i;
+            camera.className = "camera_view";
 
-        //     cameraDiv.appendChild(title);
-        //     cameraDiv.appendChild(camera);
+            cameraDiv.appendChild(title);
+            cameraDiv.appendChild(camera);
 
-        //     if (i === 0) {
-        //         $("#camera_large").append(cameraDiv);
-        //     } else {
-        //         $("#camera_small").append(cameraDiv);
-        //     }
+            if (i === 0) {
+                $("#camera_large").append(cameraDiv);
+            } else {
+                $("#camera_small").append(cameraDiv);
+            }
 
-        //     // add the video stream
-        //     let cameraViewer = new MJPEGCANVAS.Viewer({
-        //         divID : camera.id,
-        //         host : 'localhost:8080',
-        //         width : 640,
-        //         height : 480,
-        //         topic : CAMERA_TOPICS[i]
-        //     });
-        //     camera.firstChild.style.width = i === 0 ? cameraLargeW : cameraSmallW;
-        //     camera.firstChild.style.height = i === 0 ? cameraLargeH : cameraSmallH;
-        // }
+            // add the video stream
+            let cameraViewer = new MJPEGCANVAS.Viewer({
+                divID : camera.id,
+                host : 'localhost:8080',
+                width : 640,
+                height : 480,
+                topic : CAMERA_TOPICS[i]
+            });
+            camera.firstChild.style.width = i === 0 ? cameraLargeW : cameraSmallW;
+            camera.firstChild.style.height = i === 0 ? cameraLargeH : cameraSmallH;
+        }
         
         // Initial button states
         $("#action_panel_btn").css({"background-color": "#abaee1", "font-weight": "600"});
@@ -101,7 +101,7 @@ $(function() {
         $("#no_octo").click(recordSceneConfirmed);
         $("#base_btn").click(showBaseControl);
         $("#sake_gripper_btn").click(openSakeGripper);
-        $("#reset_btn_0").click(resetArm);
+        $("#reset_btn").click(resetArm);
         $("#help_btn").click(showHelpInfo);
 
         $("#action_panel_btn").click(showPanel);
@@ -116,8 +116,6 @@ $(function() {
         $("#estop_btn").click(estop);
 
         $("#record_panel_btn").click(showPanel);
-        $("#record_action_btn").click(recordAction);
-        $("#reset_btn_1").click(resetArm);
 
         //////////////////////////////////////////////////////
         // NEW ///////////////////////////
@@ -212,8 +210,12 @@ $(function() {
     }
 
     function recordSceneConfirmed() {
-        // hide all the controls
-        hideControls(3);
+        //////////////////////////////////////////////////////////////////////////
+        // OLD
+        // // hide all the controls
+        // hideControls(3);
+        /////////////////////////////////////////////////////////////////////////
+
         // close the pop up window
         $("#record_btn_confirm").css("display", "none");
         // enable everything in the background
@@ -302,22 +304,19 @@ $(function() {
         // NEW //////////////////////////////////////////////////////
         // mark the selection
         let itemName = this.innerHTML.split("<br>").join(" ").toLowerCase();
-        // show action selection popup window
-        document.getElementById("body_actions_target").innerHTML += itemName + ":";
-        $("#body_actions_popup").css("display", "block");
         // get the item id
-        ///////////////// CHANGED TO true FOR TESTING
-        if (true || parts.has(itemName.toLowerCase())) {  // a body part is selected
+        if (parts.has(itemName.toLowerCase())) {  // a body part is selected
+            // show action selection popup window
+            document.getElementById("body_actions_target").innerHTML += itemName + ":";
+            $("#body_actions_popup").css("display", "block");
+            // disable everything in the background
+            $("#disable_div").css("display", "block");
             selectedId = parts.get(itemName.toLowerCase());
             // mark the selection in video stream
             publishRosMsg("prev_id", [selectedId]);
             // add available actions to the pop up window
             let bodyActionsList = document.getElementById("body_actions_list");
             let availableActions = actions.get(selectedId);
-            /////////////////// CHANGED FOR TESTING
-            availableActions = ["ABD"];
-            /////////////////// CHANGED FOR TESTING
-
             // clear previous entiries
             bodyActionsList.innerHTML = "";
             for (let i = 0; i < availableActions.length; i++) {
@@ -356,19 +355,20 @@ $(function() {
 
         /////////////////////////////////////////////////
         // NEW /////////////////////////////////////////////////
-        // show the window for robot controls
-        $("#main_window").css("display", "block");
-        // hide the window for selection
-        $("#selection").css("display", "none");
         // mark the selection
         let actionName = this.innerHTML.toLowerCase();
-        ///////////////// CHANGED TO true FOR TESTING
-        if (true || actionsAbbr.has(actionName)) {  // an action is selected
+        if (actionsAbbr.has(actionName)) {  // an action is selected
+            // enable everything in the background (remove the disable div)
+            $("#disable_div").css("display", "none");
             selectedAction = actionsAbbr.get(actionName);
             // preview the action in video stream
             publishRosMsg("prev", [selectedAction, selectedId]);
             // display the action name
             document.getElementById("current_action_name").innerHTML = capitalize(actionName);
+            // show the window for robot controls
+            $("#main_window").css("display", "block");
+            // hide the window for selection
+            $("#selection").css("display", "none");
         } else {  // nothing selected
             selectedAction = "";
         }
@@ -498,8 +498,8 @@ $(function() {
             $("#edit_traj_btn").css("display", "none");
             $("#go_traj_btn").css("display", "none");
             // show grasp selection dropdown list
-            document.getElementById("grasp_btn_0").innerHTML = "Select grasp type";
-            $("#grasp_container_0").css("display", "block");
+            document.getElementById("grasp_btn").innerHTML = "Select grasp type";
+            $("#grasp_container").css("display", "block");
             // disable step buttons
             document.getElementById("prev_step_btn").disabled = true;
             document.getElementById("next_step_btn").disabled = true;
@@ -575,15 +575,6 @@ $(function() {
         }
     }
 
-    function recordAction() {
-        if (this.innerHTML === "Record") {
-            this.innerHTML = "Stop";
-        } else {
-            this.innerHTML = "Record";
-            // TODO: ask to save action or not
-        }
-    }
-
     function doSubAction() {
         ////////////// UNUSED ///////////////////////////////////////////////////
         let stepAction = this.parentElement.id.split("_")[0];
@@ -622,35 +613,37 @@ $(function() {
             // clear previous data
             parts.clear();
 
-            /////////////////////////////////////////////////////
-            // OLD ///////////////////////////////////
-            // add the list contents to menu
-            let recordDropdownLists = document.querySelectorAll(".go_dropdown_content");
-            for (let i = 0; i < recordDropdownLists.length; i++) {
-                document.getElementById("go_btn_0").innerHTML = "Select a body part";
-                selectedId = "";
-                recordDropdownLists[i].innerHTML = "";
-                for (let j = -1; j < msg.args.length; j++) {
-                    // add DOM element
-                    let entry = document.createElement("a");
-                    entry.href = "#";
-                    if (j === -1) {
-                        entry.innerHTML = "Select a body part";
-                    } else {
-                        let msgArgs = msg.args[j].split(":");
-                        // update body part information
-                        if (i === 0) {
-                            parts.set(msgArgs[1], msgArgs[0]);
-                        }
-                        let entryRaw = msgArgs[1];
-                        entry.innerHTML = capitalize(entryRaw);
-                    }
-                    recordDropdownLists[i].appendChild(entry);
-                    // add event listener
-                    entry.addEventListener("click", makeBodyPartSelection);
-                }
-            }
-            // END OLD ////////////////////////////////////
+            // /////////////////////////////////////////////////////
+            // // OLD ///////////////////////////////////
+            // // add the list contents to menu
+            // let recordDropdownLists = document.querySelectorAll(".go_dropdown_content");
+            // for (let i = 0; i < recordDropdownLists.length; i++) {
+            //     document.getElementById("go_btn").innerHTML = "Select a body part";
+            //     selectedId = "";
+            //     recordDropdownLists[i].innerHTML = "";
+            //     for (let j = -1; j < msg.args.length; j++) {
+            //         // add DOM element
+            //         let entry = document.createElement("a");
+            //         entry.href = "#";
+            //         if (j === -1) {
+            //             entry.innerHTML = "Select a body part";
+            //         } else {
+            //             let msgArgs = msg.args[j].split(":");
+            //             // update body part information
+            //             if (i === 0) {
+            //                 parts.set(msgArgs[1], msgArgs[0]);
+            //             }
+            //             let entryRaw = msgArgs[1];
+            //             entry.innerHTML = capitalize(entryRaw);
+            //         }
+            //         recordDropdownLists[i].appendChild(entry);
+            //         // add event listener
+            //         entry.addEventListener("click", makeBodyPartSelection);
+            //     }
+            // }
+            // // END OLD ////////////////////////////////////
+
+
 
             ////////////////////////////////////////////////////
             // NEW ////////////////////////////////////////////////
@@ -669,6 +662,9 @@ $(function() {
                 }
             }
             // END NEW ///////////////////////////////////////////////////
+
+
+
         } else if (msg.type === "actions" && msg.args.length > 0) {
             // clear previous data
             actions.clear();
@@ -735,7 +731,7 @@ $(function() {
         // hide the main controls and reset the corresponding selections
         $("#run_container").css("display", "none");
         if (num >= 2) {
-            $("#grasp_container_0").css("display", "none");
+            $("#grasp_container").css("display", "none");
             selectedGrasp = "";
         }
         if (num >= 3) {

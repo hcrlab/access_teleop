@@ -6,6 +6,7 @@ Panels:
       Expanded:
         - /PlanningScene1/Scene Geometry1
         - /PlanningScene1/Scene Robot1
+        - /octoMarkerArray1
       Splitter Ratio: 0.488789
     Tree Height: 702
   - Class: rviz/Selection
@@ -475,13 +476,13 @@ Visualization Manager:
       Queue Size: 100
       Value: true
     - Class: rviz/MarkerArray
-      Enabled: false
+      Enabled: true
       Marker Topic: /occupied_cells_vis_array
       Name: octoMarkerArray
       Namespaces:
         {}
       Queue Size: 100
-      Value: false
+      Value: true
   Enabled: true
   Global Options:
     Background Color: 48; 48; 90
