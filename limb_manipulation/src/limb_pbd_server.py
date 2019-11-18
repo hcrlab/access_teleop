@@ -821,6 +821,18 @@ class PbdServer():
           self._publish_server_response(status=True, msg="Robot stopped, please \"RESET\" if you want to continue using it")
 
         elif request_type == "run" and len(request_args) == 3:
+          #######################################################################################
+
+
+
+
+
+          ############## todo
+          # start execution from the currect step in the action trajectory
+
+
+
+          # start execution from the very beginning
           self.web_app_request_callback(WebAppRequest(type="go", args=[request_args[0]]))
           self.web_app_request_callback(WebAppRequest(type="grasp", args=[request_args[1]]))
           self.web_app_request_callback(WebAppRequest(type="do_s", args=[request_args[2]]))

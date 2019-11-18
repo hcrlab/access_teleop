@@ -46,7 +46,7 @@ button:active {
 }
 
 /* Camera Layout */
-#cameras, #camera_small, #main_panel, #record_step_container, #mode_ctrl {
+#cameras, #camera_small, #main_panel, #mode_ctrl {
     display: grid;
 }
 
@@ -72,7 +72,6 @@ button:active {
     grid-column-start: 1;
     grid-column-end: 4;
     grid-template-rows: 0.1fr 1fr;
-    height: 100%;
     width: 80%;
 }
 
@@ -80,29 +79,35 @@ button:active {
     width: 90%;
 }
 
-#mode_ctrl, #mode_ctrl button {
-    width: 100%;
-}
-
 #mode_ctrl {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: 1fr 1fr;
 }
 
-#action_step_container button, #record_step_container button {
+#preview_checkbox {
+    background-color: transparent;
+    width: 30px !important;
+    height: 30px;
+    border: solid 3px #cccccc;
+    padding: 0;
+}
+
+#checkmark {
+    background-color: #abaee1;
+    width: 100%;
+    height: 100%;
+}
+
+#action_step_container button {
     background-color: #b6daf9;
 }
 
-#action_step_container div, #record_step_container div {
+#action_step_container div {
     margin: 0;
     width: 100%;
 }
 
 .dropdown button {
     width: 100%;
-}
-
-#record_step_container {
-    grid-template-rows: repeat(6, 1fr);
 }
 
 #run_btn, #reset_btn_1 {
@@ -113,20 +118,13 @@ button:active {
     background-color: #f67e85 !important;
 }
 
-#reset_btn_1 {
-    margin: auto;
-}
-
 .status {
     /*height: 50%;*/
     margin: 0.5em;
 }
 
-.sub_go_btn, #go_traj_btn, #edit_traj_btn {
+#edit_traj_btn {
     background-color: #ffe4ca !important;
-}
-
-.sub_go_btn, #go_traj_btn, #edit_traj_btn {
     width: 40% !important;
 }
 
@@ -411,11 +409,6 @@ button:active {
     position: absolute;
     left: 1em;
     top: 1em;
-}
-
-#ctrl_panel {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
 }
 
 #action_ctrl {

@@ -2,7 +2,9 @@
 
 $(function() {
     let self = this;
-    let TRAJ_EDIT_SIZE = "2";  // one button click represents 2cm change
+
+    // Constants
+    let TRAJ_EDIT_SIZE = "2";  // in trajectory editing: one button click represents 2cm change
 
     // Cameras
     let CAMERA_NAMES = ["HEAD CAMERA", "TOP", "LEFT", "FRONT"];
@@ -16,7 +18,9 @@ $(function() {
     let selectedId = "";  // id of the currently selected body part
     let selectedGrasp = "";  // currently selected grasp type
     let selectedAction = "";  // ABBR of the currently selected action
+    let isPreview = false;  // is the program in preview/execution mode?
     let running = false;  // is the program running? (i.e. is "RUN" button clicked?)
+
     let prevSelectedWaypoint = null;  // the previously selected waypoint during trajectory editing
     let currentStep = -1;  // the current number of step in the current action
     let totalStep = -1;  // the total number of steps in the current action
@@ -88,10 +92,6 @@ $(function() {
             camera.firstChild.style.width = i === 0 ? cameraLargeW : cameraSmallW;
             camera.firstChild.style.height = i === 0 ? cameraLargeH : cameraSmallH;
         }
-        
-        // Initial button states
-        $("#action_panel_btn").css({"background-color": "#abaee1", "font-weight": "600"});
-        $("#record_panel_btn").css({"background-color": "#d1d4fb", "font-weight": "400"});
 
         // Event handlers
         // buttons
@@ -104,18 +104,17 @@ $(function() {
         $("#reset_btn").click(resetArm);
         $("#help_btn").click(showHelpInfo);
 
-        $("#action_panel_btn").click(showPanel);
+        $("#preview_checkbox").click(showPreview);
+
         $("#edit_traj_btn").click(showTraj);
         $("#cancel_edit").click(saveTraj);
         $("#save_edit").click(saveTraj);
-        $("#go_traj_btn").click(showGrasp);
         $("#ready_for_step_btn").click(getReadyForRun);
         $("#prev_step_btn").click(gotoPrevStep);
         $("#next_step_btn").click(gotoNextStep);
         $("#run_btn").click(run);
         $("#estop_btn").click(estop);
 
-        $("#record_panel_btn").click(showPanel);
 
         //////////////////////////////////////////////////////
         // NEW ///////////////////////////
@@ -137,11 +136,6 @@ $(function() {
             graspDropdownLists[i].addEventListener("click", makeGraspSelection);
         }
 
-        let subGoBtns = document.querySelectorAll(".sub_go_btn");
-        for (let i = 0; i < subGoBtns.length; i++) {
-            subGoBtns[i].addEventListener("click", doSubAction);
-        }
-
         let arrowBtns = document.querySelectorAll(".arrow");
         for (let i = 0; i < arrowBtns.length; i++) {
             arrowBtns[i].addEventListener("click", recordWaypointChange);
@@ -154,19 +148,34 @@ $(function() {
         }
     });
 
-    function showPanel() {
-        // switch between action panel and record panel
-        if (this.innerHTML.substring(0, 6) === "Action") {
-            $("#action_panel_btn").css({"background-color": "#abaee1", "font-weight": "600"});
-            $("#record_panel_btn").css({"background-color": "#d1d4fb", "font-weight": "400"});
-            $("#action_step_container").css("display", "grid");
-            $("#record_step_container").css("display", "none");
+    function showPreview() {
+        // switch between preview mode and execution mode
+        let checkmark = document.getElementById("checkmark");
+        if (checkmark.style.display === "none") {
+            // change to preview mode
+            isPreview = true;
+            checkmark.style.display = "inline-block";
+            // hide grasp type selection dropdown menu
+            $("#grasp_container").css("display", "none");
         } else {
-            $("#action_panel_btn").css({"background-color": "#d1d4fb", "font-weight": "400"});
-            $("#record_panel_btn").css({"background-color": "#abaee1", "font-weight": "600"});
-            $("#action_step_container").css("display", "none");
-            $("#record_step_container").css("display", "grid");
+            // change to execution mode
+            isPreview = false;
+            checkmark.style.display = "none";
+            // show grasp type selection dropdown menu
+            $("#grasp_container").css("display", "block");
         }
+        // initialize the states
+        // disable prev step and next step buttons
+        document.getElementById("prev_step_btn").disabled = true;
+        document.getElementById("next_step_btn").disabled = true;
+        ////////////////////////////////////////////////////////////////////////////////////
+        // move the robot arm to the origianl position
+
+
+        // reset all the state variables
+        // let currentStep = -1;  // the current number of step in the current action
+        // let totalStep = -1;  // the total number of steps in the current action
+        ////////////////////////////////////////////////////////////////////////////////////
     }
 
     function switchCamera() {
@@ -492,20 +501,6 @@ $(function() {
         publishRosMsg("edit", [prevSelectedWaypoint.innerHTML, deltaX, deltaY, camera]);
     }
 
-    function showGrasp() {
-        if (selectedAction != "" && selectedId != "") {
-            // hide trajectory editing buttons
-            $("#edit_traj_btn").css("display", "none");
-            $("#go_traj_btn").css("display", "none");
-            // show grasp selection dropdown list
-            document.getElementById("grasp_btn").innerHTML = "Select grasp type";
-            $("#grasp_container").css("display", "block");
-            // disable step buttons
-            document.getElementById("prev_step_btn").disabled = true;
-            document.getElementById("next_step_btn").disabled = true;
-        }
-    }
-
     function makeGraspSelection() {
         // show run buttons
         $("#run_container").css("display", "block");
@@ -725,19 +720,6 @@ $(function() {
         // mark the selection and return the selected item name
         selectedItem.parentElement.parentElement.querySelector(".dropbtn").innerHTML = selectedItem.innerHTML;
         return selectedItem.innerHTML;
-    }
-
-    function hideControls(num) {
-        // hide the main controls and reset the corresponding selections
-        $("#run_container").css("display", "none");
-        if (num >= 2) {
-            $("#grasp_container").css("display", "none");
-            selectedGrasp = "";
-        }
-        if (num >= 3) {
-            $("#action_container").css("display", "none");
-            selectedAction = "";
-        }
     }
 
     function capitalize(entryRaw) {
