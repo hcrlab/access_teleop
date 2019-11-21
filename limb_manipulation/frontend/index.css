@@ -259,8 +259,8 @@ button:active {
 
 #edit_traj_popup {
     max-height: 30%;
-    left: 70%;
-    top: 15%;
+    left: 5%;
+    top: 60%;
     overflow: scroll;
     max-width: 80%;
 }

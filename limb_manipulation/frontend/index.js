@@ -397,6 +397,8 @@ $(function() {
             publishRosMsg("prev", [selectedAction, selectedId]);
             // display the popup window
             $("#edit_traj_popup").css("display", "block");
+            // disable everything in the background
+            $("#disable_div").css("display", "block");
             // clear previous waypoints
             $("#waypoints").empty();
             // add waypoints button to the popup window
@@ -419,6 +421,8 @@ $(function() {
         prevSelectedWaypoint = null;
         // close the popup window
         $("#edit_traj_popup").css("display", "none");
+        // enable everything in the background (remove the disable div)
+        $("#disable_div").css("display", "none");
         // hide arrows
         $(".arrow").css("display", "none");
         if (this.innerHTML === "Save") {  // save the trajectory
