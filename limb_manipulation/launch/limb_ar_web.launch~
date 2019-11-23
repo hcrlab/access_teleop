@@ -12,5 +12,5 @@
 	<node pkg="web_video_server" type="web_video_server" name="web_video_server_node" />
 	<include file="$(find rosbridge_server)/launch/rosbridge_websocket.launch" />
 
-	<node pkg="limb_manipulation" type="limb_pbd_web_node.py" name="limb_pbd_web_node" output="screen" respawn="true"/>
+	<node pkg="limb_manipulation" type="limb_pbd_web_node.py" name="limb_pbd_web_node" output="screen"/>
 </launch>

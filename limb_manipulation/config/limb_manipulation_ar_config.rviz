@@ -235,7 +235,7 @@ Visualization Manager:
       Size (Pixels): 3
       Size (m): 0.01
       Style: Flat Squares
-      Topic: /head_camera/depth_registered/points
+      Topic: /mock_point_cloud
       Unreliable: false
       Use Fixed Frame: true
       Use rainbow: true

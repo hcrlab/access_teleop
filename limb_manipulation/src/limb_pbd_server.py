@@ -35,11 +35,11 @@ import copy
 # maximum times to retry if a transform lookup fails
 TRANSFROM_LOOKUP_RETRY = 10
 # colors for trajectory visualization
-START_COLOR = Color("LightGreen")
-END_COLOR = Color("DarkGreen")
+START_COLOR = Color("Orange")
+END_COLOR = Color("Blue")
 TRAJ_HIGHLIGHT_SCALE = Vector3(0.05, 0.008, 0.008)
-WAYPOINT_HIGHLIGHT_SCALE = Vector3(0.055, 0.009, 0.009)
-WAYPOINT_HIGHLIGHT_COLOR = ColorRGBA(0.0, 0.8, 1.0, 0.8)
+WAYPOINT_HIGHLIGHT_SCALE = Vector3(0.05, 0.01, 0.01)  # Vector3(0.055, 0.009, 0.009)
+WAYPOINT_HIGHLIGHT_COLOR = ColorRGBA(1.0, 0.0, 0.0, 0.8)
 
 # body parts and their corresponding ID# and actions
 BODY_PARTS = {0: "right wrist", 1: "lower right leg",

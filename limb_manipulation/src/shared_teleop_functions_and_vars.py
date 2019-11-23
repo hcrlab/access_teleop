@@ -24,9 +24,9 @@ camera_info_mapping = {'camera1': camera_info_messages.camera1, 'camera2': camer
 #         }
 
 transform_broadcaster_mapping = {
-        'camera1': ((0.7, 0, 2.3), (-0.70711, -0.70711, 0, 0), rospy.Time(10), 'camera1', 'base_link'),
-        'camera2': ((0.9, -1.2, 0.8), (-0.70711, 0, 0, 0.70711), rospy.Time(10), 'camera2', 'base_link'),
-        'camera3': ((1.7, -0.1, 0.8), (0.5, 0.5, -0.5, -0.5), rospy.Time(10), 'camera3', 'base_link')
+        'camera1': ((0.7, 0, 2.0), (-0.70711, -0.70711, 0, 0), rospy.Time(10), 'camera1', 'base_link'),    # top
+        'camera2': ((0.7, -1.2, 0.8), (-0.70711, 0, 0, 0.70711), rospy.Time(10), 'camera2', 'base_link'),  # left
+        'camera3': ((1.5, 0, 0.8), (0.5, 0.5, -0.5, -0.5), rospy.Time(10), 'camera3', 'base_link')      # front
         }
 orientation_mapping = {'camera1': 2, 'camera2': 1, 'camera3': 1}
 orientation_sign_mapping = {'camera1': -1, 'camera2': 1, 'camera3': 1}
