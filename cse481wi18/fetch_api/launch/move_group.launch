@@ -6,7 +6,7 @@
   <arg name="debug" default="false" />
   <arg unless="$(arg debug)" name="launch_prefix" value="" />
   <arg     if="$(arg debug)" name="launch_prefix"
-	   value="gdb -x $(find fetch_moveit_config)/launch/gdb_settings.gdb --ex run --args" />
+     value="gdb -x $(find fetch_moveit_config)/launch/gdb_settings.gdb --ex run --args" />
 
   <!-- Verbose Mode Option -->
   <arg name="info" default="$(arg debug)" />
@@ -52,18 +52,7 @@
     <param name="jiggle_fraction" value="$(arg jiggle_fraction)" />
 
     <!-- MoveGroup capabilities to load -->
-    <param name="capabilities" value="move_group/MoveGroupCartesianPathService
-				      move_group/MoveGroupExecuteService
-				      move_group/MoveGroupKinematicsService
-				      move_group/MoveGroupMoveAction
-				      move_group/MoveGroupPickPlaceAction
-				      move_group/MoveGroupPlanService
-				      move_group/MoveGroupQueryPlannersService
-				      move_group/MoveGroupStateValidationService
-				      move_group/MoveGroupGetPlanningSceneService
-                                      move_group/ApplyPlanningSceneService
-				      move_group/ClearOctomapService
-				      " />
+    <param name="capabilities" value="move_group/MoveGroupCartesianPathService move_group/MoveGroupExecuteService move_group/MoveGroupKinematicsService move_group/MoveGroupMoveAction move_group/MoveGroupPickPlaceAction move_group/MoveGroupPlanService move_group/MoveGroupQueryPlannersService move_group/MoveGroupStateValidationService move_group/MoveGroupGetPlanningSceneService move_group/ApplyPlanningSceneService move_group/ClearOctomapService" />
 
     <!-- Publish the planning scene of the physical robot so that rviz plugin can know actual robot -->
     <param name="planning_scene_monitor/publish_planning_scene" value="$(arg publish_monitored_planning_scene)" />

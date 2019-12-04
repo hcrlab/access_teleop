@@ -22,7 +22,8 @@ find_package(catkin REQUIRED COMPONENTS
   perception_msgs
 )
 
-find_package(PCL REQUIRED)
+find_package(PCL 1.7 REQUIRED)
+set(PCL_INCLUDE_DIRS /usr/include/pcl-1.7)
 
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)

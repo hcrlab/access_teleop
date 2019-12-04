@@ -4,7 +4,7 @@
 
 	<env name="ROSCONSOLE_CONFIG_FILE" value="$(find limb_manipulation)/config/custom_rosconsole.conf"/>
 	
-	<include file="$(find fetch_api)/launch/move_group.launch" />
+	<!-- <include file="$(find fetch_api)/launch/move_group.launch" /> -->
 
 	<arg name="use_rviz" default="true" />
 	<node pkg="rviz" type="rviz" name="rviz"
@@ -12,6 +12,6 @@
     	if="$(arg use_rviz)" />
 
 	<include file="$(find limb_manipulation)/launch/ar.launch">
-    		<arg name="cam_image_topic" default="/head_camera/depth_registered/points" />
+    	<arg name="cam_image_topic" default="/head_camera/depth_registered/points" />
 	</include>
 </launch>

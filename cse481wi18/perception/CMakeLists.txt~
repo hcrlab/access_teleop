@@ -19,6 +19,7 @@ find_package(catkin REQUIRED COMPONENTS
   shape_msgs
   simple_grasping
   tf
+  perception_msgs
 )
 
 find_package(PCL REQUIRED)
