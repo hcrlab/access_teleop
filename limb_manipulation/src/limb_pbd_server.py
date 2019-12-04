@@ -99,6 +99,7 @@ class ArTagReader(object):
     return self.saved_markers
 
 
+#####################################################################
 import thread, copy
 import rospy
 
@@ -164,7 +165,7 @@ class Planning(object):
     rospy.Subscriber('move_group/monitored_planning_scene',
                      PlanningScene,
                      self.sceneCb)
-
+#####################################################################
 
 class PbdServer():
   """ Server for PBD """
@@ -195,12 +196,12 @@ class PbdServer():
 
     # moveit: query controller
     self._controller_client = actionlib.SimpleActionClient('/query_controller_states', QueryControllerStatesAction)
-    # moveit: move group commander
-    moveit_commander.roscpp_initialize(sys.argv)
-    moveit_robot = moveit_commander.RobotCommander()
-    self._moveit_group = moveit_commander.MoveGroupCommander('arm')
 
 
+    # # moveit: move group commander
+    # moveit_commander.roscpp_initialize(sys.argv)
+    # moveit_robot = moveit_commander.RobotCommander()
+    # self._moveit_group = moveit_commander.MoveGroupCommander('arm')
 
     #########################################################
 
@@ -297,9 +298,11 @@ class PbdServer():
     self._arm.cancel_all_goals()
     # save the database
     self._db.save()
-    # moveit: move group commander
-    self._moveit_group.stop()
-    moveit_commander.roscpp_shutdown()
+
+
+    # # moveit: move group commander
+    # self._moveit_group.stop()
+    # moveit_commander.roscpp_shutdown()
 
   def attach_sake_gripper(self):
     """
@@ -801,7 +804,14 @@ class PbdServer():
             if request_type == "do":  # step by step
               result = self.do_action_with_abbr(action_abbr, self._do_position_id)
             else:  # "do_s": smooth
-              result = self.do_action_with_abbr_smooth(action_abbr, self._do_position_id)
+              ##############################################################
+              # VERSION WITH MOVEIT COMMANDER
+              # result = self.do_action_with_abbr_smooth(action_abbr, self._do_position_id)
+
+              # VERSION WITHOUT MOVEIT COMMANDER
+              result = self.do_action_with_abbr(action_abbr, self._do_position_id)
+              ##############################################################
+
             if result:
               return_msg = "Action succeeded"
           else:
@@ -930,6 +940,9 @@ class PbdServer():
       # record the current pose because we still have the "do action" step to do
       self._current_pose = goal_pose
     else:
+      ##############################################################
+      # THIS PART OF THE CODE IS UNREACHABLE
+
       # go to goal_pose while avoiding unreasonable trajectories!
       if trajectory_waypoint:
         # create an array of waypoints
@@ -940,18 +953,29 @@ class PbdServer():
         plan = self._arm.get_cartesian_path(self._moveit_group, seed_state, waypoints)
         if plan:
           error = self._arm.execute_trajectory(self._moveit_group, plan)
+        else:
+          error = 'PLANNING_FAILED'
+      ##############################################################
+
       else:
         # using seed
         error = self._arm.move_to_pose_with_seed(goal_pose, seed_state, [], **self._kwargs)
         if error is not None:
-          # planning with seed failed, try without seed 
-          # moveit: move group commander
-          # check if the pose can be reached in a straight line motion
-          plan = self._arm.straight_move_to_pose_check(self._moveit_group, goal_pose)
-          if plan:
-            error = self._arm.straight_move_to_pose(self._moveit_group, plan)
-          else:
-            error = 'PLANNING_FAILED'
+          ##############################################################
+          # VERSION WITH MOVEIT COMMANDER
+          # # planning with seed failed, try without seed 
+          # # moveit: move group commander
+          # # check if the pose can be reached in a straight line motion
+          # plan = self._arm.straight_move_to_pose_check(self._moveit_group, goal_pose)
+          # if plan:
+          #   error = self._arm.straight_move_to_pose(self._moveit_group, plan)
+          # else:
+          #   error = 'PLANNING_FAILED'
+
+          # VERSION WITHOUT MOVEIT COMMANDER
+          error = 'PLANNING_FAILED'
+          ##############################################################
+
 
       # reset current pose to none
       self._current_pose = None
@@ -962,35 +986,6 @@ class PbdServer():
       return False
     # succeed
     return True
-
-  # def _move_arm(self, goal_pose, final_state=False):
-  #   """ 
-  #     Moves arm to the specified goal_pose. Returns true if succeed, false otherwise.
-  #   """
-  #   error = None
-  #   if not final_state:
-  #     # simply go to the goal_pose
-  #     error = self._arm.move_to_pose(goal_pose, **self._kwargs)
-  #     # record the current pose because we still have the "do action" step to do
-  #     self._current_pose = goal_pose
-  #   else:
-  #     # go to goal_pose while avoiding unreasonable trajectories!
-  #     # # OPTION 1: 
-  #     # # moveit: move group commander
-  #     # error = self._arm.straight_move_to_pose(self._moveit_group, goal_pose)
-
-  #     # OPTION 2: ############################################ TODO: change code below ##########################
-  #     error = self._arm.move_to_pose(goal_pose, **self._kwargs)
-      
-  #     # reset current pose to none
-  #     self._current_pose = None
-    
-  #   if error is not None:
-  #     self._arm.cancel_all_goals()
-  #     rospy.logerr("Fail to move: {}".format(error))
-  #     return False
-  #   # succeed
-  #   return True
 
   def _transform_to_pose(self, matrix):
     """ Matrix to pose """

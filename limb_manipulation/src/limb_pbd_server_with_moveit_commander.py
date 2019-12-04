@@ -99,73 +99,6 @@ class ArTagReader(object):
     return self.saved_markers
 
 
-import thread, copy
-import rospy
-
-from pyassimp import pyassimp
-
-from geometry_msgs.msg import Pose, PoseStamped, Point
-from moveit_msgs.msg import CollisionObject, AttachedCollisionObject
-from moveit_msgs.msg import PlanningScene, PlanningSceneComponents, ObjectColor
-from moveit_msgs.srv import GetPlanningScene
-from shape_msgs.msg import MeshTriangle, Mesh, SolidPrimitive, Plane
-
-class Planning(object):
-  def __init__(self, frame, init_from_service=True):
-    self._fixed_frame = frame
-
-    # publisher to send objects to MoveIt
-    self._pub = rospy.Publisher('collision_object',
-                                CollisionObject,
-                                queue_size=10)
-    self._attached_pub = rospy.Publisher('attached_collision_object',
-                                         AttachedCollisionObject,
-                                         queue_size=10)
-    self._scene_pub = rospy.Publisher('planning_scene',
-                                      PlanningScene,
-                                      queue_size=10)
-
-    # track the attached and collision objects
-    self._mutex = thread.allocate_lock()
-    # these are updated based what the planning scene actually contains
-    self._attached = list()
-    self._collision = list()
-    # these are updated based on internal state
-    self._objects = dict()
-    self._attached_objects = dict()
-    self._removed = dict()
-    self._attached_removed = dict()
-    self._colors = dict()
-
-    # get the initial planning scene
-    if init_from_service:
-        rospy.loginfo('Waiting for get_planning_scene')
-        rospy.wait_for_service('get_planning_scene')
-        self._service = rospy.ServiceProxy('get_planning_scene',
-                                           GetPlanningScene)
-        
-        try:
-          req = PlanningSceneComponents()
-          req.components = sum([
-              PlanningSceneComponents.WORLD_OBJECT_NAMES,
-              PlanningSceneComponents.WORLD_OBJECT_GEOMETRY,
-              PlanningSceneComponents.ROBOT_STATE_ATTACHED_OBJECTS])
-          print("33333333333333")
-          scene = self._service(req)
-          print("44444444444444444")
-          self.sceneCb(scene.scene, initial=True)
-          print("5555555555555")
-        except rospy.ServiceException as e:
-          rospy.logerr('Failed to get initial planning scene, results may be wonky: %s', e)
-
-    
-
-    # subscribe to planning scene
-    rospy.Subscriber('move_group/monitored_planning_scene',
-                     PlanningScene,
-                     self.sceneCb)
-
-
 class PbdServer():
   """ Server for PBD """
 
@@ -199,22 +132,9 @@ class PbdServer():
     moveit_commander.roscpp_initialize(sys.argv)
     moveit_robot = moveit_commander.RobotCommander()
     self._moveit_group = moveit_commander.MoveGroupCommander('arm')
-
-
-
-    #########################################################
-
-    # REAL CODE
-    # BUG: hangs on the service request call
     # motion planning scene
-    # self._planning_scene = PlanningSceneInterface('base_link')
-
-    # FOR DEBUG
-    # self._planning_scene = Planning('base_link')
-    #########################################################
-
-    # self._planning_scene.clear()
-    #########################################################
+    self._planning_scene = PlanningSceneInterface('base_link')
+    self._planning_scene.clear()
 
     # visualization
     self._viz_pub = rospy.Publisher('visualization_marker', Marker, queue_size=5)
@@ -289,11 +209,7 @@ class PbdServer():
     self._viz_markers_pub.publish(MarkerArray(markers=[]))
     # moveit
     self.freeze_arm()
-        
-    #########################################################
-    # self._planning_scene.clear()
-    #########################################################
-
+    self._planning_scene.clear()
     self._arm.cancel_all_goals()
     # save the database
     self._db.save()
@@ -316,32 +232,27 @@ class PbdServer():
     frames_okay_to_collide_with = ['gripper_link', 'l_gripper_finger_link', 'r_gripper_finger_link']
     package_path = subprocess.check_output("rospack find ezgripper_driver", shell=True).replace('\n','')
 
-    #########################################################
-
-    # if rospy.get_param("use_urdf"):  # use real sake gripper mesh
-    #   # palm
-    #   sake_palm_pose = Pose(Point(-0.01, 0, 0.05), Quaternion(-0.7, 0, 0.7, 0))
-    #   sake_palm_mesh_file = package_path + "/meshes/visual/SAKE_Palm_Dual.stl"
-    #   self._planning_scene.attachMesh('sake_palm', sake_palm_pose, sake_palm_mesh_file, 
-    #                                   frame_attached_to, touch_links=frames_okay_to_collide_with)
-    #   # fingers
-    #   sake_finger_1_pose = Pose(Point(0, -0.03, -0.055), Quaternion(0.5, -0.5, 0.5, 0.5))
-    #   sake_finger_1_mesh_file = package_path + "/meshes/visual/SAKE_Finger.stl"
-    #   self._planning_scene.attachMesh('sake_finger_1', sake_finger_1_pose, sake_finger_1_mesh_file, 
-    #                                   frame_attached_to, touch_links=frames_okay_to_collide_with)
-    #   sake_finger_2_pose = Pose(Point(0, 0.03, -0.055), Quaternion(-0.5, -0.5, -0.5, 0.5))
-    #   sake_finger_2_mesh_file = package_path + "/meshes/visual/SAKE_Finger.stl"
-    #   self._planning_scene.attachMesh('sake_finger_2', sake_finger_2_pose, sake_finger_2_mesh_file, 
-    #                                   frame_attached_to, touch_links=frames_okay_to_collide_with)
-    # else:  # use a box to represent the sake gripper
-    #   self._planning_scene.attachBox('sake', 0.03, 0.09, 0.15, 0, 0, -0.05,
-    #                                  frame_attached_to,
-    #                                  frames_okay_to_collide_with)
-    #   self._planning_scene.setColor('sake', 1, 0, 1)
-    #   self._planning_scene.sendColors()
-
-    #########################################################
-
+    if rospy.get_param("use_urdf"):  # use real sake gripper mesh
+      # palm
+      sake_palm_pose = Pose(Point(-0.01, 0, 0.05), Quaternion(-0.7, 0, 0.7, 0))
+      sake_palm_mesh_file = package_path + "/meshes/visual/SAKE_Palm_Dual.stl"
+      self._planning_scene.attachMesh('sake_palm', sake_palm_pose, sake_palm_mesh_file, 
+                                      frame_attached_to, touch_links=frames_okay_to_collide_with)
+      # fingers
+      sake_finger_1_pose = Pose(Point(0, -0.03, -0.055), Quaternion(0.5, -0.5, 0.5, 0.5))
+      sake_finger_1_mesh_file = package_path + "/meshes/visual/SAKE_Finger.stl"
+      self._planning_scene.attachMesh('sake_finger_1', sake_finger_1_pose, sake_finger_1_mesh_file, 
+                                      frame_attached_to, touch_links=frames_okay_to_collide_with)
+      sake_finger_2_pose = Pose(Point(0, 0.03, -0.055), Quaternion(-0.5, -0.5, -0.5, 0.5))
+      sake_finger_2_mesh_file = package_path + "/meshes/visual/SAKE_Finger.stl"
+      self._planning_scene.attachMesh('sake_finger_2', sake_finger_2_pose, sake_finger_2_mesh_file, 
+                                      frame_attached_to, touch_links=frames_okay_to_collide_with)
+    else:  # use a box to represent the sake gripper
+      self._planning_scene.attachBox('sake', 0.03, 0.09, 0.15, 0, 0, -0.05,
+                                     frame_attached_to,
+                                     frames_okay_to_collide_with)
+      self._planning_scene.setColor('sake', 1, 0, 1)
+      self._planning_scene.sendColors()
 
     # calibrate SAKE gripper
     self.do_sake_gripper_action("calibrate")
@@ -355,20 +266,13 @@ class PbdServer():
     self._fetch_gripper.close()  # make sure Fetch's gripper is close
     self._fetch_gripper.open()
     self._sake_gripper_attached = False
-
-
-    #########################################################
-
-    # # remove SAKE gripper from the planning scene
-    # if rospy.get_param("use_urdf"):
-    #   self._planning_scene.removeAttachedObject('sake_palm')
-    #   self._planning_scene.removeAttachedObject('sake_finger_1')
-    #   self._planning_scene.removeAttachedObject('sake_finger_2')
-    # else:
-    #   self._planning_scene.removeAttachedObject('sake')
-
-    #########################################################
-
+    # remove SAKE gripper from the planning scene
+    if rospy.get_param("use_urdf"):
+      self._planning_scene.removeAttachedObject('sake_palm')
+      self._planning_scene.removeAttachedObject('sake_finger_1')
+      self._planning_scene.removeAttachedObject('sake_finger_2')
+    else:
+      self._planning_scene.removeAttachedObject('sake')
 
   def update_env(self, update_octo=True):
     """
@@ -455,18 +359,19 @@ class PbdServer():
       # found marker, move towards it
       self.do_sake_gripper_action("40 " + self._sake_gripper_effort)
 
-      # # OPTION 1: pregrasp ---> grasp
-      # # highlight and move to the pre-grasp pose
-      # pre_grasp_offset = self._db.get("PREGRASP")
-      # pre_grasp_pose = self._move_arm_relative(raw_pose.pose.pose, raw_pose.header, offset=pre_grasp_offset, preview_only=True)
-      # self.highlight_waypoint(pre_grasp_pose, WAYPOINT_HIGHLIGHT_COLOR)
-      # if self._move_arm(pre_grasp_pose, final_state=False):
-      #   # highlight and move to the grasp pose, clear octomap to ignore collision only at this point
-      #   if self._clear_octomap():
-      #     return self._move_arm(self._get_goto_pose(raw_pose), final_state=False, seed_state=self._get_seed_state())
+      # OPTION 1: pregrasp ---> grasp
+      # highlight and move to the pre-grasp pose
+      pre_grasp_offset = self._db.get("PREGRASP")
+      pre_grasp_pose = self._move_arm_relative(raw_pose.pose.pose, raw_pose.header, offset=pre_grasp_offset, preview_only=True)
+      self.highlight_waypoint(pre_grasp_pose, WAYPOINT_HIGHLIGHT_COLOR)
+      if self._move_arm(pre_grasp_pose, final_state=False):
+        # highlight and move to the grasp pose, clear octomap to ignore collision only at this point
+        if self._clear_octomap():
+          return self._move_arm(self._get_goto_pose(raw_pose), final_state=False, seed_state=self._get_seed_state())
       
-      # OPTION 2: grasp
-      return self._move_arm(self._get_goto_pose(raw_pose), final_state=False)
+      # # OPTION 2: grasp
+      # return self._move_arm(self._get_goto_pose(raw_pose), final_state=False)
+
     # marker with id_num is not found, or some error occured
     return False
 
@@ -940,6 +845,8 @@ class PbdServer():
         plan = self._arm.get_cartesian_path(self._moveit_group, seed_state, waypoints)
         if plan:
           error = self._arm.execute_trajectory(self._moveit_group, plan)
+        else:
+          error = 'PLANNING_FAILED'
       else:
         # using seed
         error = self._arm.move_to_pose_with_seed(goal_pose, seed_state, [], **self._kwargs)
@@ -962,35 +869,6 @@ class PbdServer():
       return False
     # succeed
     return True
-
-  # def _move_arm(self, goal_pose, final_state=False):
-  #   """ 
-  #     Moves arm to the specified goal_pose. Returns true if succeed, false otherwise.
-  #   """
-  #   error = None
-  #   if not final_state:
-  #     # simply go to the goal_pose
-  #     error = self._arm.move_to_pose(goal_pose, **self._kwargs)
-  #     # record the current pose because we still have the "do action" step to do
-  #     self._current_pose = goal_pose
-  #   else:
-  #     # go to goal_pose while avoiding unreasonable trajectories!
-  #     # # OPTION 1: 
-  #     # # moveit: move group commander
-  #     # error = self._arm.straight_move_to_pose(self._moveit_group, goal_pose)
-
-  #     # OPTION 2: ############################################ TODO: change code below ##########################
-  #     error = self._arm.move_to_pose(goal_pose, **self._kwargs)
-      
-  #     # reset current pose to none
-  #     self._current_pose = None
-    
-  #   if error is not None:
-  #     self._arm.cancel_all_goals()
-  #     rospy.logerr("Fail to move: {}".format(error))
-  #     return False
-  #   # succeed
-  #   return True
 
   def _transform_to_pose(self, matrix):
     """ Matrix to pose """
