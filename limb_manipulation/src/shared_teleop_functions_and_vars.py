@@ -3,7 +3,7 @@
 import rospy
 import math
 from pprint import pprint
-from access_teleop_msgs.msg import DeltaPX, PX, PXAndTheta, Theta
+from limb_manipulation_msgs.msg import DeltaPX, PX, PXAndTheta, Theta
 from image_geometry import PinholeCameraModel
 from geometry_msgs.msg import Pose, PoseStamped, Quaternion, Point, Vector3
 from std_msgs.msg import Header, ColorRGBA

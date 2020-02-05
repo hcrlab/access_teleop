@@ -50,6 +50,10 @@ find_package(catkin REQUIRED COMPONENTS
    EzgripperAccess.msg
    WebAppRequest.msg
    WebAppResponse.msg
+   DeltaPX.msg
+   PX.msg
+   PXAndTheta.msg
+   Theta.msg
  )
 
 ## Generate services in the 'srv' folder

@@ -100,71 +100,71 @@ class ArTagReader(object):
 
 
 #####################################################################
-import thread, copy
-import rospy
+# import thread, copy
+# import rospy
 
-from pyassimp import pyassimp
+# from pyassimp import pyassimp
 
-from geometry_msgs.msg import Pose, PoseStamped, Point
-from moveit_msgs.msg import CollisionObject, AttachedCollisionObject
-from moveit_msgs.msg import PlanningScene, PlanningSceneComponents, ObjectColor
-from moveit_msgs.srv import GetPlanningScene
-from shape_msgs.msg import MeshTriangle, Mesh, SolidPrimitive, Plane
+# from geometry_msgs.msg import Pose, PoseStamped, Point
+# from moveit_msgs.msg import CollisionObject, AttachedCollisionObject
+# from moveit_msgs.msg import PlanningScene, PlanningSceneComponents, ObjectColor
+# from moveit_msgs.srv import GetPlanningScene
+# from shape_msgs.msg import MeshTriangle, Mesh, SolidPrimitive, Plane
 
-class Planning(object):
-  def __init__(self, frame, init_from_service=True):
-    self._fixed_frame = frame
+# class Planning(object):
+#   def __init__(self, frame, init_from_service=True):
+#     self._fixed_frame = frame
 
-    # publisher to send objects to MoveIt
-    self._pub = rospy.Publisher('collision_object',
-                                CollisionObject,
-                                queue_size=10)
-    self._attached_pub = rospy.Publisher('attached_collision_object',
-                                         AttachedCollisionObject,
-                                         queue_size=10)
-    self._scene_pub = rospy.Publisher('planning_scene',
-                                      PlanningScene,
-                                      queue_size=10)
+#     # publisher to send objects to MoveIt
+#     self._pub = rospy.Publisher('collision_object',
+#                                 CollisionObject,
+#                                 queue_size=10)
+#     self._attached_pub = rospy.Publisher('attached_collision_object',
+#                                          AttachedCollisionObject,
+#                                          queue_size=10)
+#     self._scene_pub = rospy.Publisher('planning_scene',
+#                                       PlanningScene,
+#                                       queue_size=10)
 
-    # track the attached and collision objects
-    self._mutex = thread.allocate_lock()
-    # these are updated based what the planning scene actually contains
-    self._attached = list()
-    self._collision = list()
-    # these are updated based on internal state
-    self._objects = dict()
-    self._attached_objects = dict()
-    self._removed = dict()
-    self._attached_removed = dict()
-    self._colors = dict()
+#     # track the attached and collision objects
+#     self._mutex = thread.allocate_lock()
+#     # these are updated based what the planning scene actually contains
+#     self._attached = list()
+#     self._collision = list()
+#     # these are updated based on internal state
+#     self._objects = dict()
+#     self._attached_objects = dict()
+#     self._removed = dict()
+#     self._attached_removed = dict()
+#     self._colors = dict()
 
-    # get the initial planning scene
-    if init_from_service:
-        rospy.loginfo('Waiting for get_planning_scene')
-        rospy.wait_for_service('get_planning_scene')
-        self._service = rospy.ServiceProxy('get_planning_scene',
-                                           GetPlanningScene)
+#     # get the initial planning scene
+#     if init_from_service:
+#         rospy.loginfo('Waiting for get_planning_scene')
+#         rospy.wait_for_service('get_planning_scene')
+#         self._service = rospy.ServiceProxy('get_planning_scene',
+#                                            GetPlanningScene)
         
-        try:
-          req = PlanningSceneComponents()
-          req.components = sum([
-              PlanningSceneComponents.WORLD_OBJECT_NAMES,
-              PlanningSceneComponents.WORLD_OBJECT_GEOMETRY,
-              PlanningSceneComponents.ROBOT_STATE_ATTACHED_OBJECTS])
-          print("33333333333333")
-          scene = self._service(req)
-          print("44444444444444444")
-          self.sceneCb(scene.scene, initial=True)
-          print("5555555555555")
-        except rospy.ServiceException as e:
-          rospy.logerr('Failed to get initial planning scene, results may be wonky: %s', e)
+#         try:
+#           req = PlanningSceneComponents()
+#           req.components = sum([
+#               PlanningSceneComponents.WORLD_OBJECT_NAMES,
+#               PlanningSceneComponents.WORLD_OBJECT_GEOMETRY,
+#               PlanningSceneComponents.ROBOT_STATE_ATTACHED_OBJECTS])
+#           print("33333333333333")
+#           scene = self._service(req)
+#           print("44444444444444444")
+#           self.sceneCb(scene.scene, initial=True)
+#           print("5555555555555")
+#         except rospy.ServiceException as e:
+#           rospy.logerr('Failed to get initial planning scene, results may be wonky: %s', e)
 
     
 
-    # subscribe to planning scene
-    rospy.Subscriber('move_group/monitored_planning_scene',
-                     PlanningScene,
-                     self.sceneCb)
+#     # subscribe to planning scene
+#     rospy.Subscriber('move_group/monitored_planning_scene',
+#                      PlanningScene,
+#                      self.sceneCb)
 #####################################################################
 
 class PbdServer():
@@ -199,9 +199,8 @@ class PbdServer():
 
 
     # # moveit: move group commander
-    # moveit_commander.roscpp_initialize(sys.argv)
-    # moveit_robot = moveit_commander.RobotCommander()
-    # self._moveit_group = moveit_commander.MoveGroupCommander('arm')
+    moveit_commander.roscpp_initialize(sys.argv)
+    self._moveit_group = moveit_commander.MoveGroupCommander('arm')
 
     #########################################################
 
@@ -301,8 +300,8 @@ class PbdServer():
 
 
     # # moveit: move group commander
-    # self._moveit_group.stop()
-    # moveit_commander.roscpp_shutdown()
+    self._moveit_group.stop()
+    moveit_commander.roscpp_shutdown()
 
   def attach_sake_gripper(self):
     """
@@ -458,18 +457,18 @@ class PbdServer():
       # found marker, move towards it
       self.do_sake_gripper_action("40 " + self._sake_gripper_effort)
 
-      # # OPTION 1: pregrasp ---> grasp
-      # # highlight and move to the pre-grasp pose
-      # pre_grasp_offset = self._db.get("PREGRASP")
-      # pre_grasp_pose = self._move_arm_relative(raw_pose.pose.pose, raw_pose.header, offset=pre_grasp_offset, preview_only=True)
-      # self.highlight_waypoint(pre_grasp_pose, WAYPOINT_HIGHLIGHT_COLOR)
-      # if self._move_arm(pre_grasp_pose, final_state=False):
-      #   # highlight and move to the grasp pose, clear octomap to ignore collision only at this point
-      #   if self._clear_octomap():
-      #     return self._move_arm(self._get_goto_pose(raw_pose), final_state=False, seed_state=self._get_seed_state())
+      # OPTION 1: pregrasp ---> grasp
+      # highlight and move to the pre-grasp pose
+      pre_grasp_offset = self._db.get("PREGRASP")
+      pre_grasp_pose = self._move_arm_relative(raw_pose.pose.pose, raw_pose.header, offset=pre_grasp_offset, preview_only=True)
+      self.highlight_waypoint(pre_grasp_pose, WAYPOINT_HIGHLIGHT_COLOR)
+      if self._move_arm(pre_grasp_pose, final_state=False):
+        # highlight and move to the grasp pose, clear octomap to ignore collision only at this point
+        if self._clear_octomap():
+          return self._move_arm(self._get_goto_pose(raw_pose), final_state=False, seed_state=self._get_seed_state())
       
       # OPTION 2: grasp
-      return self._move_arm(self._get_goto_pose(raw_pose), final_state=False)
+      # return self._move_arm(self._get_goto_pose(raw_pose), final_state=False)
     # marker with id_num is not found, or some error occured
     return False
 
@@ -806,10 +805,10 @@ class PbdServer():
             else:  # "do_s": smooth
               ##############################################################
               # VERSION WITH MOVEIT COMMANDER
-              # result = self.do_action_with_abbr_smooth(action_abbr, self._do_position_id)
+              result = self.do_action_with_abbr_smooth(action_abbr, self._do_position_id)
 
               # VERSION WITHOUT MOVEIT COMMANDER
-              result = self.do_action_with_abbr(action_abbr, self._do_position_id)
+              # result = self.do_action_with_abbr(action_abbr, self._do_position_id)
               ##############################################################
 
             if result:
@@ -940,9 +939,6 @@ class PbdServer():
       # record the current pose because we still have the "do action" step to do
       self._current_pose = goal_pose
     else:
-      ##############################################################
-      # THIS PART OF THE CODE IS UNREACHABLE
-
       # go to goal_pose while avoiding unreasonable trajectories!
       if trajectory_waypoint:
         # create an array of waypoints
@@ -955,25 +951,22 @@ class PbdServer():
           error = self._arm.execute_trajectory(self._moveit_group, plan)
         else:
           error = 'PLANNING_FAILED'
-      ##############################################################
-
       else:
         # using seed
         error = self._arm.move_to_pose_with_seed(goal_pose, seed_state, [], **self._kwargs)
         if error is not None:
           ##############################################################
           # VERSION WITH MOVEIT COMMANDER
-          # # planning with seed failed, try without seed 
-          # # moveit: move group commander
-          # # check if the pose can be reached in a straight line motion
-          # plan = self._arm.straight_move_to_pose_check(self._moveit_group, goal_pose)
-          # if plan:
-          #   error = self._arm.straight_move_to_pose(self._moveit_group, plan)
-          # else:
-          #   error = 'PLANNING_FAILED'
+          # planning with seed failed, try without seed 
+          # check if the pose can be reached in a straight line motion
+          plan = self._arm.straight_move_to_pose_check(self._moveit_group, goal_pose)
+          if plan:
+            error = self._arm.straight_move_to_pose(self._moveit_group, plan)
+          else:
+            error = 'PLANNING_FAILED'
 
           # VERSION WITHOUT MOVEIT COMMANDER
-          error = 'PLANNING_FAILED'
+          # error = 'PLANNING_FAILED'
           ##############################################################
 
 

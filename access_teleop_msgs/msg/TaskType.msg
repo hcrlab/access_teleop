@@ -1,2 +1,0 @@
-int16 delete_type
-int16 add_type

@@ -3,42 +3,32 @@ project(limb_manipulation)
 
 ## Compile as C++11, supported in ROS Kinetic and newer
 # add_compile_options(-std=c++11)
-add_definitions(${PCL_DEFINITIONS})
 
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
-  roscpp
   rospy
-  pcl_ros
   rosbag
   geometry_msgs
   sensor_msgs
-  shape_msgs
-  simple_grasping
   tf
-  perception
   limb_manipulation_msgs
   rviz_camera_stream
   theora_image_transport
   image_transport
-  access_teleop_msgs
-  fetch_api
 )
 
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
-find_package(PCL 1.7 REQUIRED)
 
 ## Uncomment this if the package has a setup.py. This macro ensures
 ## modules and global scripts declared therein get installed
 ## See http://ros.org/doc/api/catkin/html/user_guide/setup_dot_py.html
-# catkin_python_setup()
+catkin_python_setup()
 
 link_directories(
   ${catkin_LIBRARY_DIRS}
-  ${PCL_LIBRARY_DIRS}
 )
 
 ################################################
@@ -127,13 +117,9 @@ catkin_package(
     limb_manipulation
   CATKIN_DEPENDS
     geometry_msgs
-    pcl_ros
     rosbag
-    roscpp
     rospy
     sensor_msgs
-    shape_msgs
-    simple_grasping
     tf
 #  DEPENDS system_lib
 )
@@ -147,7 +133,6 @@ catkin_package(
 include_directories(
   include
   ${catkin_INCLUDE_DIRS}
-  ${PCL_INCLUDE_DIRS}
 )
 
 ## Declare a C++ library
@@ -181,22 +166,22 @@ include_directories(
 # )
 
 ## Declare libraries
-add_library(region_growing_rgb_segmentation src/region_growing_rgb_segmentation.cpp)
-add_dependencies(region_growing_rgb_segmentation ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
-target_link_libraries(region_growing_rgb_segmentation
-  ${PCL_LIBRARIES}
-  ${catkin_LIBRARIES}
-)
+# add_library(region_growing_rgb_segmentation src/region_growing_rgb_segmentation.cpp)
+# add_dependencies(region_growing_rgb_segmentation ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+# target_link_libraries(region_growing_rgb_segmentation
+#   ${PCL_LIBRARIES}
+#   ${catkin_LIBRARIES}
+# )
 
 ## Declare executables
-add_executable(limb_seg_demo src/limb_seg_demo.cpp)
-set_target_properties(limb_seg_demo PROPERTIES OUTPUT_NAME limb_seg_demo PREFIX "")
-add_dependencies(limb_seg_demo ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
-target_link_libraries(limb_seg_demo
-  region_growing_rgb_segmentation
-  ${catkin_LIBRARIES}
-  ${PCL_LIBRARIES}
-)
+# add_executable(limb_seg_demo src/limb_seg_demo.cpp)
+# set_target_properties(limb_seg_demo PROPERTIES OUTPUT_NAME limb_seg_demo PREFIX "")
+# add_dependencies(limb_seg_demo ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+# target_link_libraries(limb_seg_demo
+#   region_growing_rgb_segmentation
+#   ${catkin_LIBRARIES}
+#   ${PCL_LIBRARIES}
+# )
 
 #############
 ## Install ##

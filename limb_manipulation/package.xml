@@ -49,25 +49,17 @@
   <!-- Use doc_depend for packages you need only for building documentation: -->
   <!--   <doc_depend>doxygen</doc_depend> -->
   <buildtool_depend>catkin</buildtool_depend>
-  <build_depend>roscpp</build_depend>
   <build_depend>rospy</build_depend>
-  <build_export_depend>roscpp</build_export_depend>
   <build_export_depend>rospy</build_export_depend>
-  <exec_depend>roscpp</exec_depend>
   <exec_depend>rospy</exec_depend>
   <buildtool_depend>catkin</buildtool_depend>
 
   <depend>geometry_msgs</depend>
-  <depend>pcl_ros</depend>
   <depend>rosbag</depend>
   <depend>sensor_msgs</depend>
-  <depend>shape_msgs</depend>
-  <depend>simple_grasping</depend>
   <depend>tf</depend>
   <depend>limb_manipulation_msgs</depend>
-
   <depend>rviz_camera_stream</depend>
-  <depend>access_teleop_msgs</depend>
 
   <!-- The export tag contains other, unspecified, tags -->
   <export>

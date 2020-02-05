@@ -4,7 +4,7 @@
 
 	<env name="ROSCONSOLE_CONFIG_FILE" value="$(find limb_manipulation)/config/custom_rosconsole.conf"/>
 	
-	<!-- <include file="$(find fetch_api)/launch/move_group.launch" /> -->
+	<include file="$(find fetch_moveit_config)/launch/move_group.launch" />
 
 	<arg name="use_rviz" default="true" />
 	<node pkg="rviz" type="rviz" name="rviz"
