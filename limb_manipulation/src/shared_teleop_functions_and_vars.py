@@ -1,5 +1,6 @@
 #! /usr/bin/env python
 
+
 import rospy
 import math
 from pprint import pprint
@@ -29,9 +30,7 @@ transform_broadcaster_mapping = {
         'camera3': ((1.5, 0, 0.8), (0.5, 0.5, -0.5, -0.5), rospy.Time(10), 'camera3', 'base_link')      # front
         }
 orientation_mapping = {'camera1': 2, 'camera2': 1, 'camera3': 1}
-orientation_sign_mapping = {'camera1': -1, 'camera2': 1, 'camera3': 1}
 camera_names = ['camera1', 'camera2', 'camera3']
-pr2_move_group_name = "right_arm"
 
 
 def wait_for_time():

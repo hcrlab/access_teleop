@@ -1,12 +1,12 @@
 #! /usr/bin/env python
 
+
 import rospy
 from pprint import pprint
-from limb_pbd_server import wait_for_time, PbdServer
-from image_geometry import PinholeCameraModel
+from limb_pbd_server import PbdServer
 from tf import TransformBroadcaster
 import camera_info_messages
-from shared_teleop_functions_and_vars import publish_camera_transforms, publish_camera_info, camera_names
+from shared_teleop_functions_and_vars import wait_for_time, publish_camera_transforms, publish_camera_info, camera_names
 from visualization_msgs.msg import Marker
 
 def main():
@@ -20,7 +20,6 @@ def main():
   server.setup()
 
   # camera views
-  camera_model = PinholeCameraModel()
   tb = TransformBroadcaster()
   info_pubs = []
   for camera_name in camera_names:

@@ -164,7 +164,7 @@ $(function() {
         document.getElementById("prev_step_btn").disabled = true;
         document.getElementById("next_step_btn").disabled = true;
         ////////////////////////////////////////////////////////////////////////////////////
-        // move the robot arm to the origianl position
+        // TODO: move the robot arm to the origianl position??
 
 
         // reset all the state variables

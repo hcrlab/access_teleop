@@ -294,8 +294,8 @@ class Arm(object):
         goal_builder.replan = replan
         goal_builder.replan_attempts = replan_attempts
         goal_builder.tolerance = tolerance
-        # if seed_state:
-        #     goal_builder.start_state.joint_state = seed_state
+        if seed_state:
+            goal_builder.start_state.joint_state = seed_state
         if trajectory_constraint:
             goal_builder.add_trajectory_orientation_constraint(trajectory_constraint)
 

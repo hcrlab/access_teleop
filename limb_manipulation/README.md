@@ -1,11 +1,11 @@
 # limb_manipulation
 ## In Simulation  
 ```
-$ rosrun applications publish_saved_cloud.py /home/maru/catkin_ws/src/limb_manipulation/bags/ar1.bag  
+$ rosrun limb_manipulation publish_saved_cloud.py ~/catkin_ws/access_teleop/limb_manipulation/bags/ar5.bag  
 $ roslaunch limb_manipulation ar.launch cam_image_topic:=/mock_point_cloud  
 $ roslaunch limb_manipulation limb_ar_sim.launch  
 $ roslaunch limb_manipulation limb_ar_demo.launch  
-$ python -m SimpleHTTPServer 8082  
+$ python -m SimpleHTTPServer 8082 
 ```
 
 ## On Fetch  

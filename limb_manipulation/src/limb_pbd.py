@@ -1,9 +1,11 @@
 #! /usr/bin/env python
 
+
 import rospy
 import math
 from pprint import pprint
-from limb_pbd_server import wait_for_time, PbdServer, BODY_PARTS, ACTIONS, ABBR
+from limb_pbd_server import PbdServer, BODY_PARTS, ACTIONS, ABBR
+from shared_teleop_functions_and_vars import wait_for_time
 
 
 def print_usage():
