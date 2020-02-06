@@ -5,10 +5,12 @@
 	<!-- true: show console output; false: suppress console output -->
 	<param name="console_output" value="false" />
 	<!-- true: use SAKE gripper urdf in the planning scene; false: use a box to represent the SAKE gripper in the planning scene -->
-	<param name="use_urdf" value="false" />
+	<param name="use_urdf" value="true" />
 	<!-- the threshold to distinguish joint state points -->
-	<param name="arm_traj_threshold" value="0.1" />
+	<param name="arm_traj_threshold" value="0.5" />
 
-	<node pkg="limb_manipulation" type="limb_pbd.py" name="limb_pbd" output="screen"/>
+	<node pkg="web_video_server" type="web_video_server" name="web_video_server_node" />
+	<include file="$(find rosbridge_server)/launch/rosbridge_websocket.launch" />
 
+	<node pkg="limb_manipulation" type="limb_pbd_web_node.py" name="limb_pbd_web_node" output="screen"/>
 </launch>

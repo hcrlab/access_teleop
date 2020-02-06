@@ -1,6 +1,8 @@
 #! /usr/bin/env python
 
 
+from geometry_msgs.msg import PoseStamped
+
 class ArTagReader(object):
     def __init__(self):
         self.markers = []  # list of markers (update in real time)
