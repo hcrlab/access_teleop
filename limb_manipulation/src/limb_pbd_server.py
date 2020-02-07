@@ -385,6 +385,13 @@ class PbdServer():
         return False
 
 
+    def preview_moveit_plan(self):
+        """
+            Show the moveit motion plan preview.
+        """
+        pass
+
+
     def preview_action_with_abbr(self, abbr, id_num):
         """
             Publishes visualization markers to preview waypoints on the trajectory with given abbr.
