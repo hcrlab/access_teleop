@@ -10,7 +10,7 @@ def print_usage():
     print 'Example: rosrun limb_manipulation set_sake_gripper.py open\n'
     print 'Usage: <percentage open> <effort>'
     print 'Percentage open: 0% (close) ---> 100% (open)'
-	print 'Effort: >0 (min effort) ---> 100 (max effort)'
+    print 'Effort: >0 (min effort) ---> 100 (max effort)'
     print 'Example: rosrun limb_manipulation set_sake_gripper.py 20 100'
 
 
@@ -42,8 +42,6 @@ def main():
         move_sake_gripper(pub, argv[1] + " " + argv[2])
     else:
         move_sake_gripper(pub, argv[1])
-
-    rospy.spin()
 
 
 if __name__ == '__main__':

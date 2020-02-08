@@ -64,7 +64,7 @@ class EZGripperAccess(object):
 			self.pub.publish(data)
 
 if __name__ == "__main__":
-	rospy.init_node("access_ezgripper")
+	rospy.init_node("access_gripper")
 	rospy.sleep(0.5)
 
 	gripper_names = rospy.get_param('~grippers')

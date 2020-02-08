@@ -73,7 +73,7 @@ server.do_sake_gripper_action("h_close")
 ## Control SAKE Gripper Through Command-line
 #### 1. Plug the USB cable of SAKE gripper into the USB port of your computer.  
 #### 2. Launch the SAKE gripper driver:   
-`$ roslaunch ezgripper_driver sake_ezgripper.launch`
+`$ roslaunch limb_manipulation sake_ezgripper.launch`
 #### 3. Now you can control the SAKE gripper using:  
 - *Option 1*: Use default actions:  
 `calibrate, h_close, s_close, open`  
