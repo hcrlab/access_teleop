@@ -2,7 +2,7 @@
 
 import rospy
 from ezgripper_libs.ezgripper_interface import EZGripper
-from access_teleop_msgs.msg import EzgripperAccess
+from limb_manipulation_msgs.msg import EzgripperAccess
 
 class EZGripperAccess(object):
 	"""

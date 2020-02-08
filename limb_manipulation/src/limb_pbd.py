@@ -16,15 +16,16 @@ def print_usage():
   print("    -o: update octomap as well")
   print("  parts: show a list of body parts (eg: right lower leg (ID#))")
   print("  actions: show a list of available actions (eg: leg abduction (ABBREVIATION))")
-  print("  prev_id ID: preview the body part with ID#")
-  print("  prev ABBR ID: preview the trajectory of action ABBR with respect to body part ID#\n")
-  print("  go ID#: move the gripper to a place 10cm from the body part specified by ID#")
-  print("  grasp: if followed by \"go ID#\", move the gripper down to grasp the body part with these options (default: -s)")
+  print("  prev_id <ID#>: preview the body part with ID#")
+  print("  prev <ABBR> <ID#>: preview the trajectory of action ABBR with respect to body part ID#\n")
+  print("  go <ID#>: move the gripper to a place 10cm from the body part specified by ID#")
+  print("  grasp: if followed by \"go <ID#>\", move the gripper down to grasp the body part with these options (default: -s)")
   print("    -h: hard close gripper")
   print("    -s: soft close gripper")
+  print("    <PERCENTAGE_OPEN> <EFFORT>")
   print("  relax: relax the robot arm")
   print("  freeze: freeze the robot arm")
-  print("  do ABBR: perform the action specified by ABBR")
+  print("  do <ABBR>: perform the action specified by ABBR")
   print("    -s: do the action smoothly")
   print("    -r: if the robot arm is relaxed, save the current pose as ABBR")
   print("  open: if the gripper is closed, open it")
@@ -32,8 +33,8 @@ def print_usage():
   print("  stop: emergency stop\n")
   print("  help: print program usage\n")
   print("  db_list: list entries in database")
-  print("  db_print ABBR: print values associated with the entry")
-  print("  db_delete ABBR: delete the entry in database")
+  print("  db_print <ABBR>: print values associated with the entry")
+  print("  db_delete <ABBR>: delete the entry in database")
   print("  quit: shutdown the program\n")
 
 def main():
@@ -203,9 +204,16 @@ def main():
 
           elif command[:5] == "grasp" and grasp_position_ready:
             print("Grasping...")
-            if len(command) > 7 and command[7] == "h":
-              server.do_sake_gripper_action("h_close")
-            else:
+            args = command[6:].split(" ")
+            if len(args) == 1 and args[0] == "-h":  # hard close
+                server.do_sake_gripper_action("h_close")                
+            else if len(args) == 2:  # percentage_close effort
+              try:
+                percentage_open = int(args[0])
+                effort = int(args[1])
+              except ValueError:
+                print("Please enter an integer!")
+            else: 
               server.do_sake_gripper_action("s_close")
             grasp_position_ready = False
             do_position_ready = True
