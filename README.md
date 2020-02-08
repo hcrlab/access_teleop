@@ -7,10 +7,11 @@ A noval teleoperation interface to more easily and accessibly perform mobile man
 #### 2. Launch the AR marker detector:  
 `$ roslaunch limb_manipulation ar.launch cam_image_topic:=/mock_point_cloud`
 #### 3. Publish a fake point cloud: 
-Bag files of fake point clouds are in `access_teleop/limb_manipulation/bags/`. To publish a point cloud, do:  
+Bag files of fake point clouds are in `access_teleop/limb_manipulation/bags/` **with prefix `ar_`**.  
+To publish a point cloud, do:  
 `$ rosrun limb_manipulation publish_saved_cloud.py <PATH_TO_A_POINT_CLOUD_BAG_FILE>`  
 Below is one example:  
-`$ rosrun limb_manipulation publish_saved_cloud.py ~/catkin_ws/src/access_teleop/limb_manipulation/bags/right_wrist.bag`
+`$ rosrun limb_manipulation publish_saved_cloud.py ~/catkin_ws/src/access_teleop/limb_manipulation/bags/ar_right_wrist.bag`
 #### 4. Launch the interface:  
 There are two types of interface: command-line interface and web interface.  
 - To launch the command-line interface, do:  
@@ -21,6 +22,15 @@ Then, open another terminal and:
 `$ cd ~/catkin_ws/src/access_teleop/limb_manipulation/frontend`  
 `$ python -m SimpleHTTPServer 8082`  
 Now you can visit the site at `localhost:8082`
+
+### Example commands for performing a limb manipulation action
+1. `attach`: close Fetch's gripper for it to grasp SAKE gripper
+2. `record`: record the current AR markers the robot detects
+3. `parts`: list the current body parts the robot detects
+4. `go 0`: go to body part with ID number 0
+5. `grasp`: grasp the body part with ID number 0
+6. `actions`: list of available actions
+7. `do RAEF`: perform the action named: Right Arm Elbow Flexion
 
 ## Run the Limb Manipulation Program on Fetch  
 #### 1. On the lab machine
@@ -71,10 +81,8 @@ Example:
 `$ rosrun limb_manipulation set_sake_gripper.py open`
 - *Option 2*: Specify the percentage to open, and the force of the gripper on your own:  
 `$ rosrun limb_manipulation set_sake_gripper.py <percentage open> <effort>`  
-*Percentage open*:  
-0% (close) ---> 100% (open)  
-*Effort*:  
-0 (min effort) ---> 100 (max effort)  
+*Percentage open*: 0% (close) ---> 100% (open)  
+*Effort*: 0 (min effort) ---> 100 (max effort)  
 Example:  
 `$ rosrun limb_manipulation set_sake_gripper.py 20 100`
 

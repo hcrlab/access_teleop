@@ -207,7 +207,7 @@ def main():
             args = command[6:].split(" ")
             if len(args) == 1 and args[0] == "-h":  # hard close
                 server.do_sake_gripper_action("h_close")                
-            else if len(args) == 2:  # percentage_close effort
+            elif len(args) == 2:  # percentage_close effort
               try:
                 percentage_open = int(args[0])
                 effort = int(args[1])
