@@ -28,6 +28,7 @@ import sys
 import copy
 
 import fetch_api
+
 from limb_manipulation_msgs.msg import EzgripperAccess, WebAppRequest, WebAppResponse
 from ar_tag_reader import ArTagReader
 from shared_teleop_functions_and_vars import wait_for_time, dpx_to_distance, delta_modified_stamped_pose
@@ -364,19 +365,25 @@ class PbdServer():
             Returns true if succeed, false otherwise.
         """
         self.freeze_arm()
-        raw_pose = self._get_tag_with_id(id_num)
+        raw_pose = self._get_tag_with_id(id_num)        
+        print('RAW POSE', raw_pose.pose.pose.position)
+
+        # raw_pose.pose.pose.position.z = raw_pose.pose.pose.position.z+0.02
         if raw_pose is not None:
             # found marker, move towards it
+                       
             self.do_sake_gripper_action("40 " + self._sake_gripper_effort)
 
             # OPTION 1: pregrasp ---> grasp
             # highlight and move to the pre-grasp pose
             pre_grasp_offset = self._db.get("PREGRASP")
             pre_grasp_pose = self._move_arm_relative(raw_pose.pose.pose, raw_pose.header, offset=pre_grasp_offset, preview_only=True)
+            # print('PRE GRASP POSE',pre_grasp_pose)
             self.highlight_waypoint(pre_grasp_pose, WAYPOINT_HIGHLIGHT_COLOR)
             if self._move_arm(pre_grasp_pose, final_state=False):
                 # highlight and move to the grasp pose, clear octomap to ignore collision only at this point
                 if self._clear_octomap():
+                    # print('AFTER RAW POSE',raw_pose)
                     return self._move_arm(self._get_goto_pose(raw_pose), final_state=False, seed_state=self._get_seed_state())
 
             # OPTION 2: grasp
@@ -818,7 +825,7 @@ class PbdServer():
             if action_result is not None:
                 succeed = True
             else:
-                rospy.logerr("Fail to reach waypoint " + str(i + 1))
+                rospy.logerr("Fail to reach waypoint " + str(waypoint_id + 1))
         return succeed
 
 
@@ -1097,6 +1104,7 @@ class PbdServer():
         self.web_app_request_callback(WebAppRequest(type="go", args=[request_args[0]]))
         self.web_app_request_callback(WebAppRequest(type="grasp", args=[request_args[1]]))
         self.web_app_request_callback(WebAppRequest(type="do_s", args=[request_args[2]]))
+        # self.web_app_request_callback(WebAppRequest(type="do", args=[request_args[2]]))
         self._publish_server_response(type=request_type, status=True, msg="DONE")
 
 

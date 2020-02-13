@@ -15,4 +15,5 @@
 	<!-- <include file="$(find octomap_server)/launch/octomap_mapping.launch" /> -->
 
 	<include file="$(find fetch_moveit_config)/launch/move_group.launch" />
+	
 </launch>
