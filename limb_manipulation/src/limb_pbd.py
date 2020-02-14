@@ -239,7 +239,7 @@ def main():
             elif len(command) > 3 and command[3:] in ABBR.values() and do_position_ready:
               # performing mode
               print("Performing " + command[3:] + "...")
-              if server.do_action_with_abbr(command[3:], do_position_id):
+              if server.do_action_trajectory_with_abbr(command[3:], do_position_id):
                 print("Action succeed")
               else:
                 print("Action failed!")

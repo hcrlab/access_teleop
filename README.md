@@ -2,17 +2,15 @@
 A noval teleoperation interface to more easily and accessibly perform mobile manipulation operations
 
 ## Run the Limb Manipulation Program in Simulation  
-####  1. Launch the simulation:  
+#### 1. Launch the simulation:  
 `$ roslaunch limb_manipulation limb_sim.launch`
-#### 2. Launch the AR marker detector:  
-`$ roslaunch limb_manipulation ar.launch cam_image_topic:=/mock_point_cloud`
-#### 3. Publish a fake point cloud: 
+#### 2. Publish a fake point cloud: 
 Bag files of fake point clouds are in `access_teleop/limb_manipulation/bags/` **with prefix `ar_`**.  
 To publish a point cloud, do:  
 `$ rosrun limb_manipulation publish_saved_cloud.py <PATH_TO_A_POINT_CLOUD_BAG_FILE>`  
 Below is one example:  
 `$ rosrun limb_manipulation publish_saved_cloud.py ~/catkin_ws/src/access_teleop/limb_manipulation/bags/ar_right_wrist.bag`
-#### 4. Launch the interface:  
+#### 3. Launch the interface:  
 There are two types of interface: command-line interface and web interface.  
 - To launch the command-line interface, do:  
 `$ roslaunch limb_manipulation limb_demo.launch`

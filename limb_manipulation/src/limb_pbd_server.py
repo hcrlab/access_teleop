@@ -396,6 +396,7 @@ class PbdServer():
         """
             Show the moveit motion plan preview.
         """
+        ########################## TODO
         pass
 
 
@@ -500,6 +501,16 @@ class PbdServer():
             self._db.add(self._preview_action_abbr, self._preview_traj)
         self._preview_action_abbr = ""
         self._preview_traj = []
+
+    
+    def do_action_trajectory_with_abbr(self, abbr, id_num):
+        """ Perform only the action trajectory. """
+        # preview action
+        self.preview_action_with_abbr(abbr, id_num)
+        # freeze arm for moveit
+        self.freeze_arm()
+        # perform the trajectory and return the action result
+        return self._follow_traj_step_by_step(0)
 
 
     def do_action_with_abbr(self, abbr, id_num):
