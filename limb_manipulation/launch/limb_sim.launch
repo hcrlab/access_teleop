@@ -11,10 +11,7 @@
     	args="-d $(find limb_manipulation)/config/limb_manipulation_ar_config.rviz"
     	if="$(arg use_rviz)" />
 
-	<!-- The octomap outside Moveit package -->
-	<include file="$(find octomap_server)/launch/octomap_mapping.launch" />
-
-	<include file="$(find fetch_moveit_config)/launch/move_group.launch" />
+	<include file="$(find fetch_moveit_config)/launch/move_group_sim.launch" />
 	
 	<include file="$(find limb_manipulation)/launch/ar.launch">
     	<arg name="cam_image_topic" value="/mock_point_cloud" />

@@ -567,17 +567,17 @@ class PbdServer():
 
     def pause_action(self):
         """ Pause the current action. """
-        # self.relax_arm()
+        self.relax_arm()
         print(self._current_waypoint_id)
 
 
     def continue_action(self):
         """ Continue the current action. """
-        # self.freeze_arm()
+        self.freeze_arm()
         print(self._current_waypoint_id)
-        # if self._current_waypoint_id > -1:
-            # # continue going to the next waypoint
-            # self._follow_traj_step_by_step(self._current_waypoint_id + 1)
+        if self._current_waypoint_id > -1:
+            # continue going to the next waypoint
+            self._follow_traj_step_by_step(self._current_waypoint_id + 1)
 
 
     def record_action_with_abbr(self, abbr, id_num):
