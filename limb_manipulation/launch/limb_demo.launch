@@ -4,8 +4,7 @@
 	<param name="use_traj" value="true" />
 	<!-- true: show console output; false: suppress console output -->
 	<param name="console_output" value="false" />
-	<!-- true: use SAKE gripper urdf in the planning scene; 
-	false: use a box to represent the SAKE gripper in the planning scene -->
+	<!-- true: use SAKE gripper urdf in the planning scene -->
 	<param name="use_urdf" value="true" />
 	<!-- true: use the finger urdf of SAKE gripper as well as the palm urdf in the planning scene; 
 	false: only use the palm urdf of SAKE gripper in the planning scene -->

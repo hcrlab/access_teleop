@@ -16,7 +16,8 @@ from visualization_msgs.msg import Marker, MarkerArray, InteractiveMarker, Inter
 from sensor_msgs.msg import PointCloud2, JointState
 from ar_track_alvar_msgs.msg import AlvarMarkers
 import moveit_commander
-from moveit_msgs.msg import OrientationConstraint
+from moveit_msgs.msg import OrientationConstraint, PlanningScene, PlanningSceneComponents
+from moveit_msgs.srv import GetPlanningScene
 import subprocess
 from robot_controllers_msgs.msg import QueryControllerStatesAction, QueryControllerStatesGoal, ControllerState
 from database import Database
@@ -104,6 +105,7 @@ class PbdServer():
         self._moveit_group = moveit_commander.MoveGroupCommander('arm')
         # motion planning scene
         self._planning_scene = moveit_commander.PlanningSceneInterface()
+        self._planning_scene_pub = rospy.Publisher('planning_scene', moveit_commander.PlanningScene, queue_size=5)
 
         # visualization
         self._viz_pub = rospy.Publisher('visualization_marker', Marker, queue_size=5)
@@ -158,6 +160,7 @@ class PbdServer():
         self._preview_action_abbr = ""
         self._preview_traj = []  # the trajectory being previewed currently
         self._current_waypoint_id = -1
+        self._links = ["wrist_roll_link"]  # the links for robot end effector
 
         rospy.sleep(0.5)
 
@@ -213,7 +216,8 @@ class PbdServer():
                 sake_palm_pose.pose.orientation = Quaternion(-0.7, 0, 0.7, 0)
                 self._planning_scene.attach_mesh(LINK_ATTACHED_TO, 'sake_palm', pose=sake_palm_pose, 
                         filename=sake_palm_mesh_file, touch_links=LINKS_OKAY_TO_COLLIDE_WITH)
-
+                # update links
+                self._links += ["sake_palm"]
                 if rospy.get_param("use_finger_urdf"):
                     # finger 1 is the left finger in the top view
                     # finger 1 upper part
@@ -249,13 +253,15 @@ class PbdServer():
                     sake_finger_2_l_pose.pose.orientation = Quaternion(-0.5, 0.5, 0.5, 0.5)
                     self._planning_scene.attach_mesh(LINK_ATTACHED_TO, 'sake_finger_2_l', pose=sake_finger_2_l_pose, 
                             filename=sake_finger_2_l_mesh_file, touch_links=LINKS_OKAY_TO_COLLIDE_WITH)
-            else:  # use a box to represent the sake gripper
-                sake_pose = PoseStamped()
-                sake_pose.header.frame_id = LINK_ATTACHED_TO
-                sake_pose.pose.position = Point(0, 0, -0.05)
-                sake_pose.pose.orientation.w = 1.0
-                self._planning_scene.attach_box(LINK_ATTACHED_TO, 'sake', pose=sake_pose, 
-                        size=(0.03, 0.09, 0.15), touch_links=LINKS_OKAY_TO_COLLIDE_WITH)
+                    # update links
+                    self._links += ["sake_finger_1_u", "sake_finger_1_l", "sake_finger_2_u", "sake_finger_2_l"]
+            # else:  # use a box to represent the sake gripper
+            #     sake_pose = PoseStamped()
+            #     sake_pose.header.frame_id = LINK_ATTACHED_TO
+            #     sake_pose.pose.position = Point(0, 0, -0.05)
+            #     sake_pose.pose.orientation.w = 1.0
+            #     self._planning_scene.attach_box(LINK_ATTACHED_TO, 'sake', pose=sake_pose, 
+            #             size=(0.03, 0.09, 0.15), touch_links=LINKS_OKAY_TO_COLLIDE_WITH)
 
             # calibrate SAKE gripper
             self.do_sake_gripper_action("calibrate")
@@ -280,8 +286,8 @@ class PbdServer():
                     self._planning_scene.remove_attached_object(LINK_ATTACHED_TO, 'sake_finger_1_l')
                     self._planning_scene.remove_attached_object(LINK_ATTACHED_TO, 'sake_finger_2_u')
                     self._planning_scene.remove_attached_object(LINK_ATTACHED_TO, 'sake_finger_2_l')
-            else:
-                self._planning_scene.remove_attached_object(LINK_ATTACHED_TO, 'sake')
+            # else:
+            #     self._planning_scene.remove_attached_object(LINK_ATTACHED_TO, 'sake')
 
 
     def update_env(self, update_octo=True):
@@ -372,7 +378,7 @@ class PbdServer():
         
         if raw_pose is not None:
             # print('RAW POSE', raw_pose.pose.pose.position)
-            # raw_pose.pose.pose.position.z = raw_pose.pose.pose.position.z+0.02
+            # raw_pose.pose.pose.position.z = raw_pose.pose.pose.position.z + 0.02
 
             # found marker, move towards it
             self.do_sake_gripper_action("40 " + self._sake_gripper_effort)
@@ -381,13 +387,22 @@ class PbdServer():
             # highlight and move to the pre-grasp pose
             pre_grasp_offset = self._db.get("PREGRASP")
             pre_grasp_pose = self._move_arm_relative(raw_pose.pose.pose, raw_pose.header, offset=pre_grasp_offset, preview_only=True)
-            # print('PRE GRASP POSE',pre_grasp_pose)
+            # print('PRE GRASP POSE', pre_grasp_pose)
             self.highlight_waypoint(pre_grasp_pose, WAYPOINT_HIGHLIGHT_COLOR)
             if self._move_arm(pre_grasp_pose, final_state=False):
-                # highlight and move to the grasp pose, clear octomap to ignore collision only at this point
-                if self._clear_octomap():
-                    # print('AFTER RAW POSE',raw_pose)
-                    return self._move_arm(self._get_goto_pose(raw_pose), final_state=False, seed_state=self._get_seed_state())
+                # highlight and move to the grasp pose, ignore collision only at this point
+                if self._allow_collision():
+                    print "ALLOWED"
+                    # grasp
+                    result = self._move_arm(self._get_goto_pose(raw_pose), final_state=False, seed_state=self._get_seed_state())
+                    # re-enable the collision avoidance
+                    if self._disallow_collision() and result:
+                        return result
+                
+                # if self._clear_octomap():
+                #     print "OCTOMAP CLEARED"
+                #     # print('AFTER RAW POSE', raw_pose)
+                #     return self._move_arm(self._get_goto_pose(raw_pose), final_state=False, seed_state=self._get_seed_state())
 
             # OPTION 2: grasp
             # return self._move_arm(self._get_goto_pose(raw_pose), final_state=False)
@@ -654,6 +669,68 @@ class PbdServer():
             clear_octo()
         except rospy.ServiceException, e:
             rospy.logerr('Fail clear octomap: {}'.format(e))
+            return False
+        return True
+
+
+    def _allow_collision(self):
+        """ Allow the collision between the robot end effector and the moveit octomap. """
+        rospy.wait_for_service('/get_planning_scene', 10.0)
+        try:
+            get_planning_scene = rospy.ServiceProxy('/get_planning_scene', GetPlanningScene)
+            request = PlanningSceneComponents(components=PlanningSceneComponents.ALLOWED_COLLISION_MATRIX)
+            response = get_planning_scene(request)
+
+            acm = response.scene.allowed_collision_matrix
+
+            if self._links:
+                for link in self._links:
+                    if not link in acm.default_entry_names:
+                        # add the link to allowed collision matrix
+                        acm.default_entry_names += [link]
+                        acm.default_entry_values += [True]
+
+                planning_scene_diff = PlanningScene(
+                        is_diff=True,
+                        allowed_collision_matrix=acm)
+
+                self._planning_scene_pub.publish(planning_scene_diff)
+                rospy.sleep(1.0)
+            # print str(acm.default_entry_names)
+            # print str(acm.default_entry_values)
+        except rospy.ServiceException, e:
+            rospy.logerr('Fail to allow collision: {}'.format(e))
+            return False
+        return True
+        
+
+    def _disallow_collision(self):
+        """ Disallow the collision between the robot end effector and the moveit octomap. """
+        rospy.wait_for_service('/get_planning_scene', 10.0)
+        try:
+            get_planning_scene = rospy.ServiceProxy('/get_planning_scene', GetPlanningScene)
+            request = PlanningSceneComponents(components=PlanningSceneComponents.ALLOWED_COLLISION_MATRIX)
+            response = get_planning_scene(request)
+
+            acm = response.scene.allowed_collision_matrix
+
+            if self._links:
+                for link in self._links:
+                    if link in acm.default_entry_names:
+                        # remove the link from allowed collision matrix
+                        acm.default_entry_names.remove(link)
+                        acm.default_entry_values.remove(True)
+
+                planning_scene_diff = PlanningScene(
+                        is_diff=True,
+                        allowed_collision_matrix=acm)
+
+                self._planning_scene_pub.publish(planning_scene_diff)
+                rospy.sleep(1.0)
+            # print str(acm.default_entry_names)
+            # print str(acm.default_entry_values)
+        except rospy.ServiceException, e:
+            rospy.logerr('Fail to disallow collision: {}'.format(e))
             return False
         return True
 
