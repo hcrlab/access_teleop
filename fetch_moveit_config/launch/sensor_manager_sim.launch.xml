@@ -2,7 +2,7 @@
   <rosparam command="load" file="$(find fetch_moveit_config)/config/sensors_sim.yaml" />
 
   <param name="octomap_frame" type="string" value="base_link" />
-  <param name="octomap_resolution" type="double" value="0.05" />
+  <param name="octomap_resolution" type="double" value="0.01" />
   <param name="max_range" type="double" value="5.0" />
 
   <!-- Set the file describing which sensor(s) to use to build the octomap  -->

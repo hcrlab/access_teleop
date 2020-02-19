@@ -133,7 +133,7 @@ class PbdServer():
             # 'orientation_constraint': self._gripper_oc,
             'replan': True,
             'replan_attempts': 5,
-            'tolerance': 0.01
+            'tolerance': 0.05
         }
 
         # current pose of gripper (used in performing actions)
@@ -213,40 +213,42 @@ class PbdServer():
                 sake_palm_pose.pose.orientation = Quaternion(-0.7, 0, 0.7, 0)
                 self._planning_scene.attach_mesh(LINK_ATTACHED_TO, 'sake_palm', pose=sake_palm_pose, 
                         filename=sake_palm_mesh_file, touch_links=LINKS_OKAY_TO_COLLIDE_WITH)
-                # finger 1 is the left finger in the top view
-                # finger 1 upper part
-                sake_finger_1_u_mesh_file = package_path + "/meshes/ezgripper_gen2/SAKE_Finger_L1_Gen2.stl"
-                sake_finger_1_u_pose = PoseStamped()
-                sake_finger_1_u_pose.header.frame_id = LINK_ATTACHED_TO
-                sake_finger_1_u_pose.pose.position = Point(0, -0.03, -0.02)
-                sake_finger_1_u_pose.pose.orientation = Quaternion(0.5, 0.5, -0.5, 0.5)
-                self._planning_scene.attach_mesh(LINK_ATTACHED_TO, 'sake_finger_1_u', pose=sake_finger_1_u_pose, 
-                        filename=sake_finger_1_u_mesh_file, touch_links=LINKS_OKAY_TO_COLLIDE_WITH)
-                # finger 1 lower part
-                sake_finger_1_l_mesh_file = package_path + "/meshes/ezgripper_gen2/SAKE_Finger_L2_Gen2.stl"
-                sake_finger_1_l_pose = PoseStamped()
-                sake_finger_1_l_pose.header.frame_id = LINK_ATTACHED_TO
-                sake_finger_1_l_pose.pose.position = Point(0, -0.03, -0.08)
-                sake_finger_1_l_pose.pose.orientation = Quaternion(0.5, 0.5, -0.5, 0.5)
-                self._planning_scene.attach_mesh(LINK_ATTACHED_TO, 'sake_finger_1_l', pose=sake_finger_1_l_pose, 
-                        filename=sake_finger_1_l_mesh_file, touch_links=LINKS_OKAY_TO_COLLIDE_WITH)
-                # finger 2 is the right finger in the top view
-                # finger 2 upper part
-                sake_finger_2_u_mesh_file = package_path + "/meshes/ezgripper_gen2/SAKE_Finger_L1_Gen2.stl"
-                sake_finger_2_u_pose = PoseStamped()
-                sake_finger_2_u_pose.header.frame_id = LINK_ATTACHED_TO
-                sake_finger_2_u_pose.pose.position = Point(0, 0.03, -0.02)
-                sake_finger_2_u_pose.pose.orientation = Quaternion(-0.5, 0.5, 0.5, 0.5)
-                self._planning_scene.attach_mesh(LINK_ATTACHED_TO, 'sake_finger_2_u', pose=sake_finger_2_u_pose, 
-                        filename=sake_finger_2_u_mesh_file, touch_links=LINKS_OKAY_TO_COLLIDE_WITH)
-                # finger 2 lower part
-                sake_finger_2_l_mesh_file = package_path + "/meshes/ezgripper_gen2/SAKE_Finger_L2_Gen2.stl"
-                sake_finger_2_l_pose = PoseStamped()
-                sake_finger_2_l_pose.header.frame_id = LINK_ATTACHED_TO
-                sake_finger_2_l_pose.pose.position = Point(0, 0.03, -0.08)
-                sake_finger_2_l_pose.pose.orientation = Quaternion(-0.5, 0.5, 0.5, 0.5)
-                self._planning_scene.attach_mesh(LINK_ATTACHED_TO, 'sake_finger_2_l', pose=sake_finger_2_l_pose, 
-                        filename=sake_finger_2_l_mesh_file, touch_links=LINKS_OKAY_TO_COLLIDE_WITH)
+
+                if rospy.get_param("use_finger_urdf"):
+                    # finger 1 is the left finger in the top view
+                    # finger 1 upper part
+                    sake_finger_1_u_mesh_file = package_path + "/meshes/ezgripper_gen2/SAKE_Finger_L1_Gen2.stl"
+                    sake_finger_1_u_pose = PoseStamped()
+                    sake_finger_1_u_pose.header.frame_id = LINK_ATTACHED_TO
+                    sake_finger_1_u_pose.pose.position = Point(0, -0.03, -0.02)
+                    sake_finger_1_u_pose.pose.orientation = Quaternion(0.5, 0.5, -0.5, 0.5)
+                    self._planning_scene.attach_mesh(LINK_ATTACHED_TO, 'sake_finger_1_u', pose=sake_finger_1_u_pose, 
+                            filename=sake_finger_1_u_mesh_file, touch_links=LINKS_OKAY_TO_COLLIDE_WITH)
+                    # finger 1 lower part
+                    sake_finger_1_l_mesh_file = package_path + "/meshes/ezgripper_gen2/SAKE_Finger_L2_Gen2.stl"
+                    sake_finger_1_l_pose = PoseStamped()
+                    sake_finger_1_l_pose.header.frame_id = LINK_ATTACHED_TO
+                    sake_finger_1_l_pose.pose.position = Point(0, -0.03, -0.08)
+                    sake_finger_1_l_pose.pose.orientation = Quaternion(0.5, 0.5, -0.5, 0.5)
+                    self._planning_scene.attach_mesh(LINK_ATTACHED_TO, 'sake_finger_1_l', pose=sake_finger_1_l_pose, 
+                            filename=sake_finger_1_l_mesh_file, touch_links=LINKS_OKAY_TO_COLLIDE_WITH)
+                    # finger 2 is the right finger in the top view
+                    # finger 2 upper part
+                    sake_finger_2_u_mesh_file = package_path + "/meshes/ezgripper_gen2/SAKE_Finger_L1_Gen2.stl"
+                    sake_finger_2_u_pose = PoseStamped()
+                    sake_finger_2_u_pose.header.frame_id = LINK_ATTACHED_TO
+                    sake_finger_2_u_pose.pose.position = Point(0, 0.03, -0.02)
+                    sake_finger_2_u_pose.pose.orientation = Quaternion(-0.5, 0.5, 0.5, 0.5)
+                    self._planning_scene.attach_mesh(LINK_ATTACHED_TO, 'sake_finger_2_u', pose=sake_finger_2_u_pose, 
+                            filename=sake_finger_2_u_mesh_file, touch_links=LINKS_OKAY_TO_COLLIDE_WITH)
+                    # finger 2 lower part
+                    sake_finger_2_l_mesh_file = package_path + "/meshes/ezgripper_gen2/SAKE_Finger_L2_Gen2.stl"
+                    sake_finger_2_l_pose = PoseStamped()
+                    sake_finger_2_l_pose.header.frame_id = LINK_ATTACHED_TO
+                    sake_finger_2_l_pose.pose.position = Point(0, 0.03, -0.08)
+                    sake_finger_2_l_pose.pose.orientation = Quaternion(-0.5, 0.5, 0.5, 0.5)
+                    self._planning_scene.attach_mesh(LINK_ATTACHED_TO, 'sake_finger_2_l', pose=sake_finger_2_l_pose, 
+                            filename=sake_finger_2_l_mesh_file, touch_links=LINKS_OKAY_TO_COLLIDE_WITH)
             else:  # use a box to represent the sake gripper
                 sake_pose = PoseStamped()
                 sake_pose.header.frame_id = LINK_ATTACHED_TO
@@ -273,10 +275,11 @@ class PbdServer():
             self._planning_scene.is_diff = True
             if rospy.get_param("use_urdf"):
                 self._planning_scene.remove_attached_object(LINK_ATTACHED_TO, 'sake_palm')
-                self._planning_scene.remove_attached_object(LINK_ATTACHED_TO, 'sake_finger_1_u')
-                self._planning_scene.remove_attached_object(LINK_ATTACHED_TO, 'sake_finger_1_l')
-                self._planning_scene.remove_attached_object(LINK_ATTACHED_TO, 'sake_finger_2_u')
-                self._planning_scene.remove_attached_object(LINK_ATTACHED_TO, 'sake_finger_2_l')
+                if rospy.get_param("use_finger_urdf"):
+                    self._planning_scene.remove_attached_object(LINK_ATTACHED_TO, 'sake_finger_1_u')
+                    self._planning_scene.remove_attached_object(LINK_ATTACHED_TO, 'sake_finger_1_l')
+                    self._planning_scene.remove_attached_object(LINK_ATTACHED_TO, 'sake_finger_2_u')
+                    self._planning_scene.remove_attached_object(LINK_ATTACHED_TO, 'sake_finger_2_l')
             else:
                 self._planning_scene.remove_attached_object(LINK_ATTACHED_TO, 'sake')
 
@@ -366,12 +369,12 @@ class PbdServer():
         """
         self.freeze_arm()
         raw_pose = self._get_tag_with_id(id_num)        
-        print('RAW POSE', raw_pose.pose.pose.position)
-
-        # raw_pose.pose.pose.position.z = raw_pose.pose.pose.position.z+0.02
+        
         if raw_pose is not None:
+            # print('RAW POSE', raw_pose.pose.pose.position)
+            # raw_pose.pose.pose.position.z = raw_pose.pose.pose.position.z+0.02
+
             # found marker, move towards it
-                       
             self.do_sake_gripper_action("40 " + self._sake_gripper_effort)
 
             # OPTION 1: pregrasp ---> grasp
