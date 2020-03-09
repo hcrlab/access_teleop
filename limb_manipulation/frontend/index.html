@@ -133,25 +133,40 @@
         <div id="help_popup" class="popup" style="display:none">
             <button class="ctrl_btn popup_close_btn">&#x2716;</button>
             <h3>&#x2726; General Control &#x2726;</h3>
-            <p><b>Attach/Remove Gripper</b>: close/open the robot's gripper to hold/remove SAKE gripper</p>
-            <p><b>Update Scene</b>: record the current scene and update body parts known to the robot
+            <p><b>Attach/Remove Gripper</b>: close/open the robot's gripper to hold/remove SAKE EZGripper</p>
+            <p><b>Update Scene</b>: record the current scene and update body parts known to the robot</p>
             <p><b>Base Control</b>: moves the robot's base to the front/back/left/right</p>
-            <p><b>Open Gripper</b>: open SAKE gripper</p>
-            <p><b>Reset</b>: move the robot's arm to its initial position, open SAKE gripper if it's closed</p>
+            <p><b>Open Gripper</b>: open SAKE EZGripper</p>
+            <p><b>Reset</b>: move the robot's arm to its initial position, open SAKE EZGripper if it's closed</p>
             <p><b>Help</b>: show help information</p></br>
 
-            <h3>&#x2726; Camera Views &#x2726;</h3>
-            <p>Click on the camera image to maximize the view</p></br>
-
-            <h3>&#x2726; Action Panel &#x2726;</h3>
+            <h3>&#x2726; Program Usage &#x2726;</h3>
             <p>To do an action, you need to:</p>
             <ol>
-                <li>Select a body part, the selected part will be highlighted in camera views</li>
-                <li>Select an action, the trajectory of selected action will show up in camera views. Click "<b>Edit</b>" if you want to edit the trajectory. Click "<b>GO</b>" to confirm your selection</li>
+                <li>Click on the body part name to see available limb repositioning actions.</li>
+                <li>Click on one of the actions for the selected body part to see action details.</li>
+                <li>
+                    The trajectory of selected action will be displayed in camera views. 
+                    Click on the camera view to maximize it.
+                    Click "<b>Edit</b>" if you want to edit the trajectory, select the waypoint to edit 
+                    and use arrow buttons in each camera view to edit it.
+                </li>
                 <li>Select a grasp type: hard grasp or soft grasp</li>
-                <li>You can either do the action at once by clicking "<b>RUN</b>", or do the action step by step by clicking "<b>Get Ready</b>" and then using two arrow buttons to go to previous/next waypoint on the trajectory</li>
+                <li>
+                    You can either do the action at once by clicking "<b>RUN</b>", 
+                    or do the action step by step by clicking "<b>Get Ready</b>" 
+                    and then using two arrow buttons "<b>&#60;&#60;</b>" and "<b>&#62;&#62;</b>" 
+                    to go to previous/next waypoint on the trajectory
+                </li>
+                <li>Click "<b>STOP</b>" for emergency stop if necessary></li>
             </ol>
-            <p><b>STEP</b>: emergency stop button</p></br>
+            <br/>
+            <p>See these images for details:</p>
+            <div id="help_img">
+                <img src="pics/help1.jpeg" alt="help image 1" />
+                <br/><br/>
+                <img src="pics/help2.jpeg" alt="help image 2" />
+            </div>
         </div>
 
         <!-- Base control (display only when hover) -->

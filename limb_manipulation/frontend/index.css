@@ -421,3 +421,9 @@ button:active {
     min-width: 20%;
     margin-bottom: 1.5em;
 }
+
+/* Help popup */
+#help_img img {
+    margin: auto;
+    width: 90%;
+}

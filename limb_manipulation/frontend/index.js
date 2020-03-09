@@ -39,14 +39,20 @@ $(function() {
         self.ros.on('error', function(error) {
             document.getElementById("status_bar").innerHTML = 'Error connecting to websocket server.';
             console.log('Error connecting to websocket server.');
+            // disable all the buttons
+            $('#general_ctrl button').not("#help_btn").prop('disabled', true);
         });
         self.ros.on('connection', function () {
             document.getElementById("status_bar").innerHTML = "We are connected!";
             console.log("We are connected!");
+            // enable all the buttons
+            $('#general_ctrl button').not("#help_btn").prop('disabled', false);
         });
         self.ros.on('close', function(error) {
             document.getElementById("status_bar").innerHTML = 'We lost connection with ROS. All is lost';
             console.error('We lost connection with ROS.');
+            // disable all the buttons
+            $('#general_ctrl button').not("#help_btn").prop('disabled', true);
         });
         // ROS topic
         self.serverRequest = new ROSLIB.Topic({
