@@ -1,3 +1,0 @@
-log4j.logger.ros.fetch_api=ERROR
-log4j.logger.ros.move_group=ERROR
-# log4j.threshold=OFF
