@@ -22,18 +22,18 @@ $ ./ngrok start --all
 
 
 ## How to switch between localhost and nrgok  
-1. In `app.js`, set the `host` field when initializing `MJPEGCANVAS.Viewer`:  
+1. **In `app.js`, set the `host` field when initializing `MJPEGCANVAS.Viewer`:**  
 For `localhost`, use: `host : 'localhost'`.  
 For `ngrok`, use: `host : 'rosvideo.ngrok.io'`.  
-2. In `mjpegcanvas.js`:  
+2. **In `mjpegcanvas.js`:**  
 For `localhost`, uncomment line 328.  
 For `ngrok`, uncomment line 332.  
 
-* To change the settings for ngrok, see `ngrok.yml`.
+* **To change the settings for ngrok, see `ngrok.yml`.**
 
 
 ## Source Code
-### Frontend：in folder `frontend/html`
+### **Frontend：in folder `frontend/html`**
 #### In folder `common_js`:  
 * `app.js`:  
 Set up the gripper slider, freeze/unfreeze point cloud button, and three camera views.  
@@ -44,14 +44,14 @@ Set up the gripper slider, freeze/unfreeze point cloud button, and three camera 
 * Trajectory Plane Robot GUI: Click and Orient: `ClickAndOrient.html`, `clickAndOrient.js`.  
 * Trajectory Plane Robot GUI: One Touch: `OneTouch.html`, `oneTouch.js`.  
 
-### Backend: in folder `scripts`
+### **Backend: in folder `scripts`**
 * `access_pointcloud_pub.py`: Point cloud saver and publisher.  
 * `camera_info_messages.py`: Properties of camera views.  
 * `fetch_access_teleop.py`: Code for the main program. This is the place which sets the initial robot state.    
 * `shared_teleop_functions_and_vars.py`: Code for utility functions, camera positions, and end effector pose calculations based on camera positions.  
 * `switch_object.sh`: Bash script for deleting and adding models in Gazebo.  
 
-### Gazebo models and world
+### **Gazebo models and world**
 #### Models: in folder `models`  
 * `ball, cube_s/m/l/xl, stone` are the models of the six objects used for grasping acitity specified in ACTION RESEARCH ARM TEST.
 * `shelf` is the model of the shelf on the table.
@@ -59,3 +59,11 @@ Set up the gripper slider, freeze/unfreeze point cloud button, and three camera 
 * `test_zone.sdf`: The world which contains only a table and a shelf on it. Testing object needs to be added using `switch_object.sh`.  
 * `test_zone_all_objects.sdf`: The world which contains six tables, with one testing object and one shelf on each table.  
 
+## Ngrok Setup
+Settings for ngrok are specified in `.../.ngrok2/ngrok.yml`. You can do `$ locate ngrok.yml` to find the file location.  
+
+See [Ngrok documentation](https://ngrok.com/docs) for details. The [configuration section](https://ngrok.com/docs#config) has details on how to write the configuration file. 
+
+These are two other useful links for Apache setup: 
+* [Changing apache2 document root in ubuntu 14.x](https://julienrenaux.fr/2015/04/06/changing-apache2-document-root-in-ubuntu-14-x/)  
+* [How To Move an Apache Web Root to a New Location on Ubuntu 16.04](https://www.digitalocean.com/community/tutorials/how-to-move-an-apache-web-root-to-a-new-location-on-ubuntu-16-04)
