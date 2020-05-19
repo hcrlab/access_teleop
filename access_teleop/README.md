@@ -18,11 +18,14 @@ $ cd ~/catkin_ws/src/access_teleop/frontend/html
 $ ./ngrok start --all  
 ```
 
-#### 2. In browser, go to: http://accessteleop.ngrok.io (if using ngrok); go to: localhost:8082 (if using localhost).  
+#### 2. In browser:  
+* If using ngrok, go to: http://accessteleop.ngrok.io.  
+* If using localhost, go to: localhost:8082.  
 
 
 ## How to switch between localhost and nrgok  
-1. **In `app.js`, set the `host` field when initializing `MJPEGCANVAS.Viewer`:**  
+1. **In `app.js`:**  
+Set the `host` field when initializing `MJPEGCANVAS.Viewer`:  
 For `localhost`, use: `host : 'localhost'`.  
 For `ngrok`, use: `host : 'rosvideo.ngrok.io'`.  
 2. **In `mjpegcanvas.js`:**  
@@ -33,23 +36,40 @@ For `ngrok`, uncomment line 332.
 
 
 ## Source Code
-### **Frontend：in folder `frontend/html`**
+### **Frontend:** in folder `frontend/html`
 #### In folder `common_js`:  
 * `app.js`:  
 Set up the gripper slider, freeze/unfreeze point cloud button, and three camera views.  
-* `mjpegcanvas.js`: Source code for the `MJPEGCANVAS` used by camera views. This source code is copyed from GitHub because a minor change needs to be made when using ngrok.  
+* `mjpegcanvas.js`:  
+Source code for the `MJPEGCANVAS` used by camera views. This source code is copyed from GitHub because a minor change needs to be made when using ngrok.  
 
 #### Interface-specific code:  
 * Multi-View Robot Trajectory GUI: `Multi.html`, `multi.js`.  
 * Trajectory Plane Robot GUI: Click and Orient: `ClickAndOrient.html`, `clickAndOrient.js`.  
 * Trajectory Plane Robot GUI: One Touch: `OneTouch.html`, `oneTouch.js`.  
 
-### **Backend: in folder `scripts`**
+### **Backend:** in folder `scripts`
 * `access_pointcloud_pub.py`: Point cloud saver and publisher.  
 * `camera_info_messages.py`: Properties of camera views.  
-* `fetch_access_teleop.py`: Code for the main program. This is the place which sets the initial robot state.    
+* `fetch_access_teleop.py`: Code for the main program: set the initial robot state, move end effector based on frontend events, add/remove testing objects from Gazebo.   
 * `shared_teleop_functions_and_vars.py`: Code for utility functions, camera positions, and end effector pose calculations based on camera positions.  
 * `switch_object.sh`: Bash script for deleting and adding models in Gazebo.  
+  - Comman-line usage:  
+    ```
+    $(rospack find access_teleop)/scripts/switch_object.sh [MODEL TO DELETE] [MODEL TO ADD]
+    ```
+  - Set the first parameter to `NONE` when you only want to add object without deleting anything:  
+    ```
+    $(rospack find access_teleop)/scripts/switch_object.sh NONE [MODEL TO ADD]
+    ```
+  - Sample python code for invoking this script:
+    ```
+    os.system("$(rospack find access_teleop)/scripts/switch_object.sh cube_s cube_m")
+    ```  
+  - The position of the added testing object is fixed (x: 3.8, y: 3, z: 0.83), edit line 18 to modify the position:  
+    ```
+    rosrun gazebo_ros spawn_model -file $(rospack find access_teleop)/models/$2/model.sdf -sdf -model $2 -x 3.8 -y 3 -z 0.83
+    ```   
 
 ### **Gazebo models and world**
 #### Models: in folder `models`  
