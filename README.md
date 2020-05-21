@@ -1,6 +1,12 @@
 # access_teleop
 A noval teleoperation interface to more easily and accessibly perform mobile manipulation operations
 
+## Installation
+Dependencies:
+- Python driver for SAKE Robotics EZGripper: [libezgripper](https://github.com/SAKErobotics/libezgripper)
+- Python module used for calculating colors of Rviz markers: [colour](https://pypi.org/project/colour/)
+
+
 ## Run the Limb Manipulation Program in Simulation  
 #### 1. Launch the simulation:  
 `$ roslaunch limb_manipulation limb_sim.launch`
