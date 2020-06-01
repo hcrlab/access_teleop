@@ -74,7 +74,13 @@ Source code for the `MJPEGCANVAS` used by camera views. This source code is copy
 ### **Gazebo models and world**
 #### Models: in folder `models`  
 * `ball, cube_s/m/l/xl, stone` are the models of the six objects used for grasping acitity specified in ACTION RESEARCH ARM TEST.
-* `shelf` is the model of the shelf on the table.
+  - `cube_s`: Block, wood, 2.5 cm cube (red)
+  - `cube_m`: Block, wood, 5 cm cube (yellow)
+  - `cube_l`: Block, wood, 7.5 cm cube (blue)
+  - `cube_xl`: Block, wood, 10 cm cube (grey)
+  - `ball`: Ball (Cricket), 7.5 cm diameter (purple)
+  - `stone`: Stone 10x2.5x1cm (orange)
+* `shelf` is the model of the shelf on the table. Dimension: x: 50cm, y: 13cm, z: 35.5cm
 #### World: in folder `worlds`
 * `test_zone.sdf`: The world which contains only a table and a shelf on it. Testing object needs to be added using `switch_object.sh`.  
 * `test_zone_all_objects.sdf`: The world which contains six tables, with one testing object and one shelf on each table.  
