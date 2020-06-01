@@ -82,7 +82,10 @@ Source code for the `MJPEGCANVAS` used by camera views. This source code is copy
 ## Ngrok Setup
 Settings for ngrok are specified in `.../.ngrok2/ngrok.yml`. You can do `$ locate ngrok.yml` to find the file location.  
 
-See [Ngrok documentation](https://ngrok.com/docs) for details. The [configuration section](https://ngrok.com/docs#config) has details on how to write the configuration file. 
+The configurations that works on Ubuntu 14.04 is [here](./files/ngrok_setup.txt).  
+
+
+See [Ngrok documentation](https://ngrok.com/docs) for details. The [configuration section](https://ngrok.com/docs#config) has details on how to write the configuration file.  
 
 These are two other useful links for Apache setup: 
 * [Changing apache2 document root in ubuntu 14.x](https://julienrenaux.fr/2015/04/06/changing-apache2-document-root-in-ubuntu-14-x/)  

@@ -1,0 +1,50 @@
+(This setup works on Ubuntu 14.04)
+
+--- ngrok.yml ---
+authtoken: 2NLH1xGF8oN7dRpk9DxC5_3916rRJdi4GNxMHj1QJi8
+tunnels:
+  accessteleop:
+    proto: http
+    addr: 8082
+    subdomain: accessteleop
+  rosbridge:
+    proto: http
+    addr: 9090
+    subdomain: rosbridge
+  rosvideo:
+    proto: http
+    addr: 8080
+    hostname: rosvideo.ngrok.io
+
+
+--- 000-default.conf ---
+ServerAdmin webmaster@localhost
+DocumentRoot /home/maru/catkin_ws/src/access_teleop/frontend/html
+<Directory />
+        Options FollowSymLinks
+        AllowOverride None
+</Directory>
+
+<Directory /home/maru/catkin_ws/src/access_teleop/frontend/html/>
+        Options Indexes FollowSymLinks MultiViews
+        AllowOverride None
+        Require all granted
+</Directory>
+
+
+--- default-ssl.conf ---
+ServerAdmin webmaster@localhost
+
+DocumentRoot /home/maru/catkin_ws/src/access_teleop/frontend
+<Directory />
+        Options FollowSymLinks
+        AllowOverride None
+</Directory>
+
+<Directory /home/maru/catkin_ws/src/access_teleop/frontend/>
+        Options Indexes FollowSymLinks MultiViews
+        AllowOverride None
+        Order allow,deny
+        allow from all
+</Directory>
+
