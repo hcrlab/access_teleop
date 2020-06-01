@@ -79,8 +79,9 @@ Source code for the `MJPEGCANVAS` used by camera views. This source code is copy
   - `cube_l`: Block, wood, 7.5 cm cube (blue)
   - `cube_xl`: Block, wood, 10 cm cube (grey)
   - `ball`: Ball (Cricket), 7.5 cm diameter (purple)
-  - `stone`: Stone 10x2.5x1cm (orange)
-* `shelf` is the model of the shelf on the table. Dimension: x: 50cm, y: 13cm, z: 35.5cm
+  - `stone`: Stone 10x2.5x1 cm (orange)
+* `shelf` is the model of the shelf on the table. Dimension: x: 50 cm, y: 13 cm, z: 35.5 cm
+
 #### World: in folder `worlds`
 * `test_zone.sdf`: The world which contains only a table and a shelf on it. Testing object needs to be added using `switch_object.sh`.  
 * `test_zone_all_objects.sdf`: The world which contains six tables, with one testing object and one shelf on each table.  
